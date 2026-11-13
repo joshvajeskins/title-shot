@@ -1,0 +1,22 @@
+# deps / build
+node_modules/
+target/
+dist/
+build/
+.wrangler/
+*.wasm
+!web/public/**/*.wasm
+# secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+.secrets/
+secrets/
+.near-credentials/
+# local state
+STATUS.md
+.DS_Store
+scratch/
+*.log
