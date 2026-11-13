@@ -1,6 +1,6 @@
 {
- "version": "titleshot-rulebook-v1",
- "hash": "57963de68f723ffaa9be72286f164db7d2483c8b053ac4dbb265706f582b3f7f",
+ "version": "titleshot-rulebook-v2",
+ "hash": "61ec96b27661f09562445f749400ce92c546e01f22e95885d240422f464fae1c",
  "library": [
   {
    "index": 0,
@@ -40,7 +40,7 @@
    "name": "Smolder",
    "school": "BLAZE",
    "kind": "hex",
-   "desc": "Light singe, but the foe surely starts burning."
+   "desc": "Light singe. 75% to set the foe burning."
   },
   {
    "index": 5,
@@ -48,7 +48,7 @@
    "name": "Battle Roar",
    "school": "BLAZE",
    "kind": "boost",
-   "desc": "Weak hit. Your next attack hits double and cannot miss."
+   "desc": "Weak hit. Your next attack hits 1.5x and cannot miss."
   },
   {
    "index": 6,
@@ -80,7 +80,7 @@
    "name": "Riptide",
    "school": "TIDE",
    "kind": "strike",
-   "desc": "Heals you for half the damage dealt."
+   "desc": "Heals you for 40% of the damage dealt."
   },
   {
    "index": 10,
@@ -96,7 +96,7 @@
    "name": "Healing Rain",
    "school": "TIDE",
    "kind": "boost",
-   "desc": "Heal 25% of your max HP."
+   "desc": "Heal 20% of your max HP."
   },
   {
    "index": 12,
@@ -104,7 +104,7 @@
    "name": "Salt Spray",
    "school": "TIDE",
    "kind": "hex",
-   "desc": "Light spray: sure weaken on the foe, you shed ailments."
+   "desc": "Light spray: 80% to weaken the foe, you shed ailments."
   },
   {
    "index": 13,
@@ -176,7 +176,7 @@
    "name": "Riposte",
    "school": "IRON",
    "kind": "guard",
-   "desc": "Light jab. Next hit you take is half thrown back."
+   "desc": "Light jab. Part of the next hit you take is thrown back."
   },
   {
    "index": 22,
@@ -224,7 +224,7 @@
    "name": "Hex Gaze",
    "school": "MIND",
    "kind": "hex",
-   "desc": "Light psychic jab. Sure weaken on the foe."
+   "desc": "Light psychic jab. 80% to weaken the foe."
   },
   {
    "index": 28,
@@ -240,7 +240,7 @@
    "name": "Brain Freeze",
    "school": "MIND",
    "kind": "strike",
-   "desc": "Sudden headache. 40% to stun."
+   "desc": "Sudden headache. 35% to stun."
   },
   {
    "index": 30,
@@ -288,7 +288,7 @@
    "name": "Regrowth",
    "school": "WILD",
    "kind": "boost",
-   "desc": "Heal 25% max HP and shake off ailments."
+   "desc": "Heal 20% max HP and shake off ailments."
   },
   {
    "index": 36,

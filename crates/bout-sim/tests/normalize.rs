@@ -171,11 +171,11 @@ fn strings_are_trimmed_capped_and_cleaned() {
     assert_eq!(s.cry.chars().count(), CAP_CRY);
     assert!(s.moves[0].label.chars().count() <= CAP_LABEL && !s.moves[0].label.ends_with(' '));
     assert!(s.look.is_char_boundary(s.look.len()));
-    // emoji (including ZWJ sequences) are fine; zero-width space and bidi marks are not
+    // plain emoji and variation selectors are fine; zero-width joiners and bidi marks are not
     r = base_raw();
-    r.cry = "👩\u{200D}⚖️ objection!".into();
+    r.cry = "👩 ⚖️ objection!".into();
     assert!(normalize(&r).is_ok());
-    for bad in ["\u{200B}", "\u{200E}", "\u{2066}", "\u{FEFF}", "\u{0000}", "\u{007F}", "\u{0085}"] {
+    for bad in ["\u{200B}", "\u{200D}", "\u{200E}", "\u{2066}", "\u{FEFF}", "\u{0000}", "\u{007F}", "\u{0085}"] {
         r = base_raw();
         r.name = format!("a{bad}b");
         assert_eq!(normalize(&r).unwrap_err().code(), "E_BAD_CHAR", "{bad:?}");

@@ -130,7 +130,8 @@ fn draw_semantics() {
 #[test]
 fn a_better_built_fighter_wins_more_often_from_either_seat() {
     let strong = normalize(&raw_with("BLAZE", "BRAWLER", ["inferno", "ember_jab", "flame_lash"], [10, 5, 5, 8])).unwrap();
-    let weak = normalize(&raw_with("BLAZE", "SHOWBOAT", ["tidal_wall", "healing_rain", "hex_gaze"], [1, 1, 1, 1])).unwrap();
+    // all-support moves and every point in one stat (stats above 20 count half): a badly built fighter
+    let weak = normalize(&raw_with("BLAZE", "SHOWBOAT", ["tidal_wall", "healing_rain", "hex_gaze"], [10, 1, 1, 1])).unwrap();
     let o = odds(&strong, &weak, seed(3), 8, 2000);
     assert!(o.champion > o.challenger + 100, "{o:?}");
     // the reverse seating favours the same fighter (seat bias is small)

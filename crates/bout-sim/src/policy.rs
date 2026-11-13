@@ -39,7 +39,7 @@ fn expected_damage(me: &Fighter, foe: &Fighter, m: &Move, aware: bool) -> i32 {
         _ => v,
     };
     if me.charged {
-        v *= 2;
+        v = v * CHARGE_NUM / CHARGE_DEN;
     }
     if me.weaken_t > 0 {
         v = v * WEAKEN_NUM / WEAKEN_DEN;

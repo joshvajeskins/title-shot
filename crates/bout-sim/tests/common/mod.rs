@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 use bout_sim::rng::Rng;
 use bout_sim::spec::{Raw, Spec};
+use bout_sim::tune::{FORM_MIN, FORM_SPAN};
 use bout_sim::{normalize, Fight};
 use serde::Deserialize;
 
@@ -42,7 +43,7 @@ pub fn check_fight(f: &Fight) {
                 assert!(!in_round);
                 round += 1;
                 assert_eq!(*r, round);
-                assert!(form.iter().all(|&x| (30..=170).contains(&x)));
+                assert!(form.iter().all(|&x| (FORM_MIN as u8..=(FORM_MIN + FORM_SPAN - 1) as u8).contains(&x)));
                 in_round = true;
                 exch = 0;
             }

@@ -30,13 +30,14 @@ pub struct Fighter<'a> {
 
 impl<'a> Fighter<'a> {
     pub fn new(spec: &'a Spec) -> Fighter<'a> {
-        let max_hp = HP_BASE + HP_PER_GRIT * spec.stats.grit as i32;
+        let (p, g, s, grit) = (eff(spec.stats.power as i32), eff(spec.stats.guard as i32), eff(spec.stats.speed as i32), eff(spec.stats.grit as i32));
+        let max_hp = HP_BASE + HP_PER_GRIT * grit;
         Fighter {
             spec,
-            p: spec.stats.power as i32,
-            g: spec.stats.guard as i32,
-            s: spec.stats.speed as i32,
-            grit: spec.stats.grit as i32,
+            p,
+            g,
+            s,
+            grit,
             max_hp,
             hp: max_hp,
             shield: 0,

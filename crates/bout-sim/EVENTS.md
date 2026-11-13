@@ -1,4 +1,4 @@
-# bout-sim event schema (rulebook titleshot-rulebook-v1)
+# bout-sim event schema (rulebook titleshot-rulebook-v2)
 
 `simulate(champion, challenger, seed, rule)` returns a `Fight`:
 
@@ -37,7 +37,7 @@ HP is restored and every status cleared at each `round_start`; cooldowns reset t
 | `move_id` | library index (`rulebook_json().library[i].index`), `255` for the basic move |
 | `outcome` | `hit`, `crit`, `miss`, `blocked` (a shield soaked everything), `countered` (the foe's counter stance reflected part of it), `used` (non-damaging move / hex that landed) |
 | `hits` | landed hits for multihit moves, 0 for a miss or a move without damage |
-| `dmg` | HP removed from the target (after counter halving and shield) |
+| `dmg` | HP removed from the target (after the counter stance and shield) |
 | `absorbed` | damage soaked by the target's shield |
 | `heal` | HP the actor regained (lifesteal or a heal move) |
 | `recoil` | HP the actor lost to a counter |
@@ -49,7 +49,7 @@ Status flags (bit mask, used by `fx_self`, `fx_foe`, `upkeep.expired`):
 `1` burn, `2` stun, `4` shield, `8` weaken, `16` haste, `32` counter, `64` charge.
 `stun` appears only in `fx_foe` (the foe will lose its next action; a `skip` event follows).
 `cleanse` has no flag; it only removes the actor's own burn and weaken. A `charge` flag in `fx_self` means the
-next damaging move is doubled and cannot miss. Heal moves report their effect in `heal`.
+next damaging move deals x3/2 and cannot miss. Heal moves report their effect in `heal`.
 
 ## Canonical encoding (what `state_hash` covers)
 

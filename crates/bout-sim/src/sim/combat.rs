@@ -39,7 +39,7 @@ impl<S: Sink> Match<'_, '_, S> {
             v = v * WEAKEN_NUM / WEAKEN_DEN;
         }
         if charged {
-            v *= 2;
+            v = v * CHARGE_NUM / CHARGE_DEN;
         }
         if crit {
             v = v * m.crit_num / m.crit_den;

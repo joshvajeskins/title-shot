@@ -62,15 +62,17 @@ sequenceDiagram
 
 ## Balance
 
-`cargo run --release --bin sweep` in `crates/bout-sim` runs ~24M fights over 2,040 fighters × 8 arena rules.
-All gates pass (`crates/bout-sim/SWEEP.md`): best fighter in the field 61.3%, every top-50 build has a counter ≥55%,
-draw rate 5.2%, mean |p−0.5| between random builds 0.156 vs a pure-dice baseline of 0.028 (wording matters more than luck).
+`cargo run --release --bin sweep` in `crates/bout-sim` runs ~24M fights over 2,040 fighters × 8 arena rules, then an
+adversarial hill-climb (gate G9) that searches for the strongest possible build and re-measures it on fresh seeds and
+fresh opponents. All nine gates pass (`crates/bout-sim/SWEEP.md`): best fighter in the field 59.4%, best optimizer-found
+build 61.5% (62.2% in the deepest independent climb), every top build has a counter that beats it ≥55%, draw rate 5.0%,
+mean |p−0.5| between random builds 0.149 vs a pure-dice baseline of 0.028: wording matters more than luck.
 
 ## What we do not claim
 
-- The model and rulebook are public. Anyone can search for strong sentences offline, bots included. An adversarial
-  hill-climb against our own pool found builds around 69% against the field (see SWEEP.md). The sealed season rule,
-  the defence-weighted purse and the per-account cap blunt this; they do not prevent it.
+- The model and rulebook are public. Anyone can search for strong sentences offline, bots included. Our own
+  hill-climb shows how far that gets you (about 62% against the field, and every such build has a counter). The sealed
+  season rule, the defence-weighted purse and the per-account cap blunt the rest; they do not prevent it.
 - The AI signer allowlist is set by the contract owner from the model's attestation report; changes are timelocked.
 - OutLayer's DAO can reach the master secret per its own docs, so "nobody can read the key" is not claimed.
 - Testnet only. Testnet NEAR and Sepolia ETH have no value.

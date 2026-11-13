@@ -171,21 +171,27 @@ pub fn part_b(pool: &[Spec], cfg: &Cfg) -> BResult {
 
 /// First pool spec that beats `target` in >= 55% of fights (decisive wins), else the best found.
 pub fn best_counter(pool: &[Spec], target: usize, cfg: &Cfg) -> (usize, u32) {
+    best_counter_for(pool, &pool[target], target, cfg)
+}
+
+/// Same for a spec that may sit outside the pool (`tid` only seeds the fight rng; a pool member
+/// that equals the target is skipped by index when `tid < pool.len()`).
+pub fn best_counter_for(pool: &[Spec], target: &Spec, tid: usize, cfg: &Cfg) -> (usize, u32) {
     let total = (cfg.pair_seeds * 8) as u32;
-    let mut best = (target, 0u32);
+    let mut best = (usize::MAX, 0u32);
     for j in 0..pool.len() {
-        if j == target {
+        if j == tid {
             continue;
         }
         let mut wins = 0u32;
         for s in 0..cfg.pair_seeds {
             for rule in 0..8usize {
                 let j_champ = (s + rule) % 2 == 0;
-                let seed = seed_for(j, target, s * 8 + rule, 0xCCCC);
+                let seed = seed_for(j, tid, s * 8 + rule, 0xCCCC);
                 let (f, side) = if j_champ {
-                    (fight(&pool[j], &pool[target], &seed, rule as u8), 0)
+                    (fight(&pool[j], target, &seed, rule as u8), 0)
                 } else {
-                    (fight(&pool[target], &pool[j], &seed, rule as u8), 1)
+                    (fight(target, &pool[j], &seed, rule as u8), 1)
                 };
                 if f.winner == side {
                     wins += 1;

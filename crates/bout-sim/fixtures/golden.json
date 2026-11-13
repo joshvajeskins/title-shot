@@ -67,8 +67,8 @@
       2
     ],
     "rounds": 2,
-    "events": 60,
-    "state_hash": "0110375b699f7c4765e7ef319ce8ab2a4dbb530c19e42a4658a051bf004507ba"
+    "events": 47,
+    "state_hash": "f243c579e944b431630d226cd9f533b61cbce53e3e3d9d9ddc8b42415a664752"
   },
   {
     "id": "seq-01",
@@ -134,12 +134,12 @@
     "rule": 1,
     "winner": "champion",
     "rounds_won": [
-      1,
+      2,
       0
     ],
-    "rounds": 3,
-    "events": 107,
-    "state_hash": "b5561328a2b6bf8e42e0c73bae00f6c5dc3b0ed2403e5a6c249b46f25329de92"
+    "rounds": 2,
+    "events": 70,
+    "state_hash": "8660d6249b074d23f6bb0b090f5d133284f9e537a2c2173bf1201a242b32f761"
   },
   {
     "id": "seq-02",
@@ -205,12 +205,12 @@
     "rule": 2,
     "winner": "challenger",
     "rounds_won": [
-      1,
+      0,
       2
     ],
-    "rounds": 3,
-    "events": 70,
-    "state_hash": "1bdde2abafb87857fb253bc17fc5dada4c8e51af9a1761d307ef5d0837c09f96"
+    "rounds": 2,
+    "events": 35,
+    "state_hash": "aa9a97cff123b4dbab3b7bc89e368916a408498049facd8e393e057e51b855ee"
   },
   {
     "id": "seq-03",
@@ -280,8 +280,8 @@
       0
     ],
     "rounds": 2,
-    "events": 50,
-    "state_hash": "9b741d0976dbae4d3ca98e137f8670baa115c8113332379a3611d071cfa890b4"
+    "events": 41,
+    "state_hash": "6ee136bbc50617648e0f0aed0608f1631ea57f535b5ec0ea5fa1896b91cd9490"
   },
   {
     "id": "seq-04",
@@ -345,14 +345,14 @@
     },
     "seed": "029fd5d898db734165e6964c82eb95cf713680e82372027a3032ca6a416d1121",
     "rule": 4,
-    "winner": "champion",
+    "winner": "challenger",
     "rounds_won": [
-      2,
-      1
+      0,
+      2
     ],
-    "rounds": 3,
-    "events": 76,
-    "state_hash": "b98e93ca57bc6f13da16219cf0c289aaf789d1354b1b18ca60ec855154922174"
+    "rounds": 2,
+    "events": 39,
+    "state_hash": "d675365793fba33bd313070a599ea4e441fcd4dddd43cb96a9fcd505550c0ab8"
   },
   {
     "id": "seq-05",
@@ -422,8 +422,8 @@
       2
     ],
     "rounds": 2,
-    "events": 74,
-    "state_hash": "eea68055c6f80ff39c7193a43bbde51f9e40ca058ce45ef5324dbb18a5ef5edd"
+    "events": 62,
+    "state_hash": "f63f93425fe2435cd9265bde91b0bedfabf053c44f09c601c309e5866d97acb8"
   },
   {
     "id": "seq-06",
@@ -487,14 +487,14 @@
     },
     "seed": "c2b261700fd2bbe64d1b0d93338762222c9622643c98803a091e2236f76c2322",
     "rule": 6,
-    "winner": "challenger",
+    "winner": "champion",
     "rounds_won": [
-      0,
-      2
+      2,
+      1
     ],
-    "rounds": 2,
-    "events": 41,
-    "state_hash": "99feeadede85906754e26f1ab0dd7e9c5061bc9343c096d09b9d84dbebf5cae2"
+    "rounds": 3,
+    "events": 81,
+    "state_hash": "7e2d530c135733e2a0904d953bad58769c2444d2cc40fbfb451ef74f5fdb9097"
   },
   {
     "id": "seq-07",
@@ -561,11 +561,11 @@
     "winner": "champion",
     "rounds_won": [
       2,
-      0
+      1
     ],
-    "rounds": 2,
-    "events": 65,
-    "state_hash": "d92c7d1c04c648c71601599ab6e89efabb165a488a75aa4e202fc985a0abfb41"
+    "rounds": 3,
+    "events": 59,
+    "state_hash": "27b4cbab84e4d4f65a32a83290aaa31111ed18a0f1a5a344ef373ebf4e5fca19"
   },
   {
     "id": "seq-08",
@@ -635,8 +635,8 @@
       2
     ],
     "rounds": 2,
-    "events": 27,
-    "state_hash": "9c5449cb33263650e8d2ed9246c50ebf42dff309cee8c931085444ddae568908"
+    "events": 25,
+    "state_hash": "3410de79c1175d282117f5ad4611b6c555e1f805360512184c2ab972924ff04c"
   },
   {
     "id": "seq-09",
@@ -706,8 +706,8 @@
       0
     ],
     "rounds": 2,
-    "events": 46,
-    "state_hash": "996b5d6083317555444059674b4553100788a641988ec2ad015bd9f1b5e50788"
+    "events": 50,
+    "state_hash": "b7b1d313baba0eb5dfad0f5efb51df60c396a55ec6259a430deb5da0de391ba2"
   },
   {
     "id": "seq-10",
@@ -777,8 +777,8 @@
       2
     ],
     "rounds": 2,
-    "events": 32,
-    "state_hash": "e2e91b3c4dd39e0c1aa8840e2abd778bfa8a3484154a13843383c45c6b454a3e"
+    "events": 31,
+    "state_hash": "1c12c1d5d3bead73c302433c0cd86c7f491e7d1c315401e6b777c74d916e5bd6"
   },
   {
     "id": "seq-11",
@@ -849,7 +849,7 @@
     ],
     "rounds": 2,
     "events": 50,
-    "state_hash": "020da7fba6723d1fb11db9138370f0f51e12c293cbee597d421791d6902351f5"
+    "state_hash": "55dc374c0188e07d1a931cfe5174300840c000fd85584194d04d6ce14604a4ea"
   },
   {
     "id": "seq-12",
@@ -913,14 +913,14 @@
     },
     "seed": "4862295de1c34fe89576da4232a9147749087c0bf92b3a3ebc50e7fc71973618",
     "rule": 4,
-    "winner": "draw",
+    "winner": "challenger",
     "rounds_won": [
       1,
-      1
+      2
     ],
     "rounds": 3,
-    "events": 65,
-    "state_hash": "eee22262bbf534722d3656c9bf1435a6e65bd1a372cdcf3ec196755292d539eb"
+    "events": 76,
+    "state_hash": "b64c73fe5f272fbe0293adccdc81f44fc46f1b61693f259a9bc9ac97d7b35143"
   },
   {
     "id": "seq-13",
@@ -990,8 +990,8 @@
       0
     ],
     "rounds": 2,
-    "events": 40,
-    "state_hash": "d04ef2a437171118f7229d84d09eaecc5d4b7631ddba225d5db3fc5710f76f6f"
+    "events": 41,
+    "state_hash": "046cc08ba6ca3263dfe5cb501dc9e542e947c7c64c5491b51fde6c5846c8462c"
   },
   {
     "id": "seq-14",
@@ -1058,11 +1058,11 @@
     "winner": "champion",
     "rounds_won": [
       2,
-      1
+      0
     ],
-    "rounds": 3,
-    "events": 85,
-    "state_hash": "3a68bcf37c74a102eabe87d53459c37872d66eff735bfb0d2aab5f3138831d45"
+    "rounds": 2,
+    "events": 54,
+    "state_hash": "b9b6d9c7bf57de9330317ad11b44570b245f466dd8376e6f5994da935bc08fb9"
   },
   {
     "id": "seq-15",
@@ -1126,156 +1126,156 @@
     },
     "seed": "4bd016d6ece0291aa30c73a95b4bdd932e52de0e46815a8be873646f2097803f",
     "rule": 7,
-    "winner": "draw",
+    "winner": "challenger",
     "rounds_won": [
-      1,
-      1
+      0,
+      2
     ],
     "rounds": 3,
-    "events": 71,
-    "state_hash": "c9a0c40c317de99837131f8f32501e65f277d8ba70457bcef8b2f59b6ad86843"
+    "events": 91,
+    "state_hash": "47266a6c835a9a1967f93a7383639db60168b9e781c9c1acd25eb7e06bc48868"
   },
   {
     "id": "target-draw",
     "champion": {
       "verdict": "ok",
-      "name": "Madam Hush",
-      "title": "Keeper of the Quiet",
-      "look": "A stern librarian with a bun, cat-eye glasses and a heavy stamp raised overhead, one finger pressed to her lips, bookshelf shadows, cardigan green and cream.",
-      "cry": "SHHHH!",
-      "school": "MIND",
+      "name": "Last Slice",
+      "title": "Everyone's Favourite Bad Idea",
+      "look": "A single cartoon pizza slice with a smug face, stringy cheese cape, pepperoni armour discs and a plastic party hat, steam rising, red and gold palette.",
+      "cry": "Nobody takes me alive!",
+      "school": "BLAZE",
       "style": "COUNTERPUNCHER",
       "moves": [
         {
-          "id": "hex_gaze",
-          "label": "Silence Glare"
+          "id": "riposte",
+          "label": "Hands Off"
         },
         {
-          "id": "foresight",
-          "label": "Overdue Notice"
+          "id": "thorn_wall",
+          "label": "Cheese Shield"
         },
         {
-          "id": "mind_spike",
-          "label": "Book Slam"
+          "id": "flame_lash",
+          "label": "Hot Sauce Lash"
         }
       ],
       "weights": {
         "power": 3,
-        "guard": 6,
-        "speed": 5,
+        "guard": 8,
+        "speed": 4,
         "grit": 8
       }
     },
     "challenger": {
       "verdict": "ok",
-      "name": "Lumi Bloom",
-      "title": "The Shade of the Deep",
-      "look": "A translucent jellyfish with a lampshade cap, glowing blue tentacles disguised as a pull-cord, trying to look casual, soft turquoise and cream.",
-      "cry": "Nothing to see here. Lamp.",
-      "school": "TIDE",
-      "style": "COUNTERPUNCHER",
+      "name": "Hoardy McFluff",
+      "title": "Dragon of the Odd Socks",
+      "look": "A fat friendly dragon asleep on a mountain of mismatched socks, one sock hanging from a claw, small puffs of lint-smoke, warm crimson and sock rainbow.",
+      "cry": "The left one is MINE!",
+      "school": "BLAZE",
+      "style": "TACTICIAN",
       "moves": [
         {
-          "id": "static_field",
-          "label": "Sting of Light"
+          "id": "smolder",
+          "label": "Lint Smoulder"
         },
         {
-          "id": "salt_spray",
-          "label": "Shade Drift"
+          "id": "melt_through",
+          "label": "Sock Hoard Charge"
         },
         {
-          "id": "undertow",
-          "label": "Tentacle Lamp Cord"
+          "id": "battle_roar",
+          "label": "Possessive Roar"
         }
       ],
       "weights": {
-        "power": 3,
-        "guard": 7,
-        "speed": 5,
+        "power": 6,
+        "guard": 6,
+        "speed": 3,
         "grit": 7
       }
     },
-    "seed": "2f252a49c5d79948b3d298fee21ba69a451afd1916f1f530ce342b322bfd9e1a",
-    "rule": 5,
+    "seed": "7769094f97f132205a4b6ed92377d1f12a8d8bf37707e7c40ba1280090f08e4e",
+    "rule": 6,
     "winner": "draw",
     "rounds_won": [
       1,
       1
     ],
     "rounds": 3,
-    "events": 103,
-    "state_hash": "da31eea3a91556ea597c8df8edc60821ce649cf15c8056c25addf869d8709a63"
+    "events": 93,
+    "state_hash": "c978cfdf5e1c8e93d459d7bece6b005a4185669364f30cfa542097265a1ba0a9"
   },
   {
     "id": "target-three-rounds-decided",
     "champion": {
       "verdict": "ok",
-      "name": "Gale Grumble",
-      "title": "The Cold Shoulder",
-      "look": "A swirling grey wind spirit with a grumpy face in the cloud, icy beard streaming sideways, scattering leaves and a stolen hat, steel blue and white.",
-      "cry": "Not in the mood.",
-      "school": "TIDE",
-      "style": "BRAWLER",
+      "name": "Mic Drop Mona",
+      "title": "Queen of the Final Chorus",
+      "look": "A sparkly singer in a rhinestone jacket clutching a microphone in a power pose, spotlight glare, glitter in her hair, hot pink and gold.",
+      "cry": "One more song!",
+      "school": "VOLT",
+      "style": "SHOWBOAT",
       "moves": [
         {
-          "id": "wave_slap",
-          "label": "Chilly Backhand"
+          "id": "static_field",
+          "label": "Held Note Hypnosis"
         },
         {
-          "id": "undertow",
-          "label": "Sulk Gust"
+          "id": "chain_shock",
+          "label": "Key Change Combo"
         },
         {
-          "id": "riptide",
-          "label": "Windburn Wallop"
+          "id": "thunderclap",
+          "label": "Power Ballad Blast"
         }
       ],
       "weights": {
-        "power": 8,
+        "power": 6,
         "guard": 3,
         "speed": 7,
-        "grit": 3
+        "grit": 4
       }
     },
     "challenger": {
       "verdict": "ok",
-      "name": "Intern Admin",
-      "title": "Keeper of the Master Key",
-      "look": "A nervous intern in an oversized blazer clutching a sticky note password, lanyard askew, sweating next to a glowing server rack, corporate blue and white.",
-      "cry": "I was just checking my email!",
-      "school": "VOLT",
-      "style": "TACTICIAN",
+      "name": "Captain Chowder",
+      "title": "Terror of the Seven Bowls",
+      "look": "A bubbling pirate captain made of creamy clam chowder with a floating tricorn hat and cutlass, oyster-cracker buttons, steam clouds, cream and navy.",
+      "cry": "Yarr, pass the bread!",
+      "school": "TIDE",
+      "style": "BRAWLER",
       "moves": [
         {
-          "id": "static_field",
-          "label": "Password Reset"
+          "id": "riptide",
+          "label": "Broth Broadside"
         },
         {
-          "id": "spark",
-          "label": "Admin Access Zap"
+          "id": "wave_slap",
+          "label": "Ladle Slap"
         },
         {
-          "id": "overclock",
-          "label": "Access Escalation"
+          "id": "healing_rain",
+          "label": "Second Helping"
         }
       ],
       "weights": {
-        "power": 3,
-        "guard": 3,
-        "speed": 9,
-        "grit": 5
+        "power": 6,
+        "guard": 4,
+        "speed": 4,
+        "grit": 6
       }
     },
-    "seed": "8d79582e266badc0cb45e8ef196ca216ce6aa04a7ae4434d871e66c4c63e0d55",
-    "rule": 6,
+    "seed": "995998007ff0961ec0fb68728e1f2fa6634051278bcad1453a252d46d224a876",
+    "rule": 5,
     "winner": "challenger",
     "rounds_won": [
-      1,
+      0,
       2
     ],
     "rounds": 3,
-    "events": 87,
-    "state_hash": "d8b18ab1433047d45887bafddd16a06f960b6b79b846a02308cd94d58885593b"
+    "events": 65,
+    "state_hash": "d831fa0590fc7c500e07250c9c2e0291761fb16e28d7d8bf0c1bd60f81e4a870"
   },
   {
     "id": "target-limit-round",
@@ -1345,8 +1345,8 @@
       2
     ],
     "rounds": 2,
-    "events": 69,
-    "state_hash": "85b817121787b8394a718b15f92897a8628a4b201008c1034aebf8b0d0bc5b52"
+    "events": 71,
+    "state_hash": "946b30290abe472557b5cab7b01fd8e8aafcac5cef6551dd8c956e897f6266fb"
   },
   {
     "id": "target-sweep-2-0",
@@ -1416,7 +1416,7 @@
       2
     ],
     "rounds": 2,
-    "events": 41,
-    "state_hash": "95d95521181ece162a05752dd5b5d1184ada04b9cc659f3c48c67ec86e111285"
+    "events": 44,
+    "state_hash": "d7453b8da3c42b7f64c28658da83e3348f8105051dcef8f1dcda5239cb465bc7"
   }
 ]

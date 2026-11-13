@@ -1,6 +1,9 @@
-//! Balance sweep. `cargo run --release --bin sweep [-- --quick] [-- --write]`
-//! Gates G1..G8 are fixed; tune src/tune.rs and src/moves.rs until all pass. Exit code 1 on any failure.
+//! Balance sweep. `cargo run --release --bin sweep [-- --quick] [-- --write] [-- --climb | --climb-only | --no-climb] [-- --restarts N --steps N --salt N]`
+//! Gates G1..G9 are fixed; tune src/tune.rs and src/moves.rs until all pass. Exit code 1 on any failure.
+//! G9 (adversarial hill-climb) runs in a full sweep, with `--climb` in any mode, alone with `--climb-only`.
 
+#[path = "sweep/climb.rs"]
+mod climb;
 #[path = "sweep/parts.rs"]
 mod parts;
 #[path = "sweep/stats.rs"]
@@ -40,6 +43,13 @@ fn main() {
     let quick = args.iter().any(|a| a == "--quick");
     let write_md = args.iter().any(|a| a == "--write");
     let tune = args.iter().any(|a| a == "--tune");
+    let climb_only = args.iter().any(|a| a == "--climb-only");
+    let climb_on = climb_only || args.iter().any(|a| a == "--climb") || (!quick && !tune && !args.iter().any(|a| a == "--no-climb"));
+    let mut ccfg = if quick || tune { climb::SMALL } else { climb::FULL };
+    let opt = |name: &str| args.iter().position(|a| a == name).and_then(|p| args.get(p + 1)).and_then(|v| v.parse::<u64>().ok());
+    ccfg.restarts = opt("--restarts").map_or(ccfg.restarts, |v| v as usize);
+    ccfg.steps = opt("--steps").map_or(ccfg.steps, |v| v as usize);
+    ccfg.salt = opt("--salt").unwrap_or(ccfg.salt);
     let cfg = if tune {
         Cfg { n_random: 1500, opponents: 80, seeds: 5, pairs: 200, pair_seeds: 10 }
     } else if quick {
@@ -61,6 +71,13 @@ fn main() {
         labels.push(format!("rand{}", i));
     }
     let n = pool.len();
+    if climb_only {
+        let top: Vec<Spec> = pool[..n_arch].to_vec();
+        let r = climb::run(&pool, &top, &cfg, &ccfg);
+        print!("{}", r.report);
+        println!("elapsed {}s", r.secs);
+        std::process::exit(if r.gate_ok { 0 } else { 1 });
+    }
     let t0 = std::time::Instant::now();
     let a_res = par_map(n, |i| part_a(&pool, i, &cfg));
     let t_a = t0.elapsed().as_secs();
@@ -74,6 +91,12 @@ fn main() {
     let top50: Vec<usize> = order.iter().copied().take(50).collect();
     let counters = par_map(top50.len(), |k| best_counter(&pool, top50[k], &cfg));
     let t_c = t0.elapsed().as_secs() - t_a - t_b;
+    let climbed = if climb_on {
+        let top: Vec<Spec> = order.iter().take(30).map(|&i| pool[i].clone()).collect();
+        Some(climb::run(&pool, &top, &cfg, &ccfg))
+    } else {
+        None
+    };
 
     let mut out = String::new();
     let o = &mut out;
@@ -81,7 +104,7 @@ fn main() {
     let _ = writeln!(o, "pool = {} archetypes + {} random valid specs (half uniform, half school-themed) = {}", n_arch, cfg.n_random, n);
     let _ = writeln!(o, "part A: each spec vs {} opponents x {} seeds x 8 rules = {} fights/spec", cfg.opponents, cfg.seeds, cfg.opponents * cfg.seeds * 8);
     let _ = writeln!(o, "part B: {} random pairs x {} seeds x 8 rules = {} fights/pair; counters: top-50 vs whole pool at the same depth", cfg.pairs, cfg.pair_seeds, cfg.pair_seeds * 8);
-    let _ = writeln!(o, "mode: {}  elapsed: A {}s, B {}s, counters {}s\n", if quick { "QUICK (not valid for SWEEP.md)" } else { "FULL" }, t_a, t_b, t_c);
+    let _ = writeln!(o, "mode: {}  elapsed: A {}s, B {}s, counters {}s, G9 climb {}\n", if quick { "QUICK (not valid for SWEEP.md)" } else { "FULL" }, t_a, t_b, t_c, climbed.as_ref().map_or("not run".to_string(), |c| format!("{}s", c.secs)));
 
     let _ = writeln!(o, "definitions: win rate = decisive wins / fights (draws count as non-wins), seats alternate; G2 counter = a pool spec with >=55% decisive wins against the target at the part-B depth (first one found); G4 p = (wins + draws/2)/fights per pair, pairs drawn at random from the pool, noise floor shown as the pure-dice null; G6 stun loss = skipped turns / (skipped + acted turns) per fighter per matchup, max over matchups; G7 top 25% = best quarter of the pool by win rate.\n");
     // ---- gates
@@ -120,12 +143,22 @@ fn main() {
         ("G7", "top-25% has >=80% of moves, all schools, all styles", format!("{}/{} moves, {}/6 schools, {}/4 styles", mv_n, LIB_LEN, sc_n, st_n), mv_n * 100 >= LIB_LEN * 80 && sc_n == 6 && st_n == 4),
         ("G8", "events per fight <= 200", format!("max {}", maxev), maxev <= 200),
     ];
+    let mut gates = gates;
+    if let Some(c) = &climbed {
+        gates.push(("G9", "climbed specs re-measured <= 65%, each has a counter >= 55%", format!("top-5 max {} (all finals {}), {}/5 have a counter", pm(c.max_top5_pm, 1000), pm(c.max_all_pm, 1000), c.counters_ok), c.gate_ok));
+    }
     let _ = writeln!(o, "## Gates\n\n| gate | requirement | measured | result |\n|---|---|---|---|");
     for (g, req, got, ok) in &gates {
         let _ = writeln!(o, "| {} | {} | {} | {} |", g, req, got, if *ok { "PASS" } else { "FAIL" });
     }
     let all = gates.iter().all(|g| g.3);
-    let _ = writeln!(o, "\n**{}**\n", if all { "ALL GATES PASS" } else { "GATES FAILING" });
+    if climbed.is_none() {
+        let _ = writeln!(o, "| G9 | adversarial hill-climb | NOT RUN (pass --climb) | NOT RUN |");
+    }
+    let _ = writeln!(o, "\n**{}**\n", if !all { "GATES FAILING" } else if climbed.is_none() { "G1-G8 PASS, G9 NOT RUN" } else { "ALL GATES PASS" });
+    if let Some(c) = &climbed {
+        let _ = writeln!(o, "{}", c.report);
+    }
 
     // ---- diagnostics
     let _ = writeln!(o, "## Diagnostics\n");
@@ -193,7 +226,7 @@ fn main() {
         std::fs::write(&args[pos + 1], csv).expect("csv");
     }
     print!("{}", out);
-    if write_md && !quick {
+    if write_md && !quick && climbed.is_some() {
         std::fs::write("SWEEP.md", &out).expect("write SWEEP.md");
     }
     if !all {

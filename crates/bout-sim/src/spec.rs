@@ -123,31 +123,44 @@ impl TryFrom<SpecJson> for Spec {
     }
 }
 
-fn is_bad_char(c: char) -> bool {
-    c.is_control()
-        || matches!(c as u32,
-            0x200B | 0x200E | 0x200F | 0x202A..=0x202E | 0x2060..=0x2064 | 0x2066..=0x2069 | 0xFEFF)
+/// Characters that render as nothing (or reorder text). They never reach a stored string, and a field
+/// made only of them (plus whitespace) is empty.
+pub fn is_invisible(c: char) -> bool {
+    matches!(c as u32,
+        0x00AD | 0x034F | 0x061C | 0x115F | 0x1160 | 0x17B4 | 0x17B5 | 0x180E
+        | 0x200B..=0x200F | 0x202A..=0x202E | 0x2060..=0x2064 | 0x2066..=0x2069
+        | 0x2800 | 0x3164 | 0xFEFF | 0xFFA0 | 0xE0000..=0xE007F)
 }
 
-/// Whitespace controls become spaces; other control/invisible/bidi characters reject.
-/// Trim, cap at `cap` chars, reject empty.
+fn is_bad_char(c: char) -> bool {
+    c.is_control() || is_invisible(c)
+}
+
+/// Whitespace controls become spaces; other control, invisible and bidi characters reject
+/// (`E_BAD_CHAR`), except that a string with nothing visible in it is `E_EMPTY_FIELD`.
+/// Trim, cap at `cap` chars.
 fn clean(field: &'static str, s: &str, cap: usize) -> Result<String, Reject> {
     let mut out = String::new();
+    let mut invisible = false;
     for c in s.chars() {
         if matches!(c, '\n' | '\t' | '\r') {
             out.push(' ');
-        } else if is_bad_char(c) {
+        } else if is_invisible(c) {
+            invisible = true;
+        } else if c.is_control() {
             return Err(Reject::BadChar(field));
         } else {
             out.push(c);
         }
     }
-    let capped: String = out.trim().chars().take(cap).collect();
-    let t = capped.trim_end();
-    if t.is_empty() {
+    if out.trim().is_empty() {
         return Err(Reject::EmptyField(field));
     }
-    Ok(t.into())
+    if invisible {
+        return Err(Reject::BadChar(field));
+    }
+    let capped: String = out.trim().chars().take(cap).collect();
+    Ok(capped.trim_end().into())
 }
 
 fn ids_cost(ids: &[u8; 3]) -> u32 {
@@ -218,7 +231,7 @@ pub fn normalize_str(json: &str) -> Result<Spec, Reject> {
     normalize(&raw)
 }
 
-/// Check a player sentence the same way everywhere: 3..=120 chars, no control/bidi characters.
+/// Check a player sentence the same way everywhere: 3..=120 chars, no control, bidi or invisible characters.
 pub fn check_sentence(s: &str) -> Result<(), Reject> {
     let n = s.chars().count();
     if !(SENTENCE_MIN..=SENTENCE_MAX).contains(&n) || s.trim().is_empty() || s.chars().any(is_bad_char) {
