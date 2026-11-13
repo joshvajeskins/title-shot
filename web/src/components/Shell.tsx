@@ -51,7 +51,7 @@ export function Shell({ children, bare = false }: { children: ReactNode; bare?: 
       <main className="shell-main">
         {!account && !bare && (
           <div className="guest-nudge">
-            <span><b>You're spectating.</b> Get a free testnet fighter account to take a shot.</span>
+            <span><b>You're spectating.</b><span className="hide-sm"> Get a free testnet fighter account to take a shot.</span></span>
             <Link href={`/enter?next=${encodeURIComponent(path)}`} className="btn btn-red btn-sm">Get in the ring</Link>
           </div>
         )}
