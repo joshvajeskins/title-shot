@@ -38,9 +38,9 @@ export function Enter() {
           </button>
           {err && <p className="enter-err" role="alert"><Icon name="x" size={14} /> {err}</p>}
           <ul className="enter-facts">
-            <li><Icon name="check" size={14} /> A real NEAR account on testnet, yours to keep</li>
-            <li><Icon name="lock" size={14} /> The session key can only call <i>challenge</i>: it cannot withdraw or move your belt</li>
-            <li><Icon name="coin" size={14} /> Testnet NEAR has no cash value. This is a demo economy on testnet.</li>
+            <li><Icon name="check" size={14} /><span>A real NEAR account on testnet, yours to keep</span></li>
+            <li><Icon name="lock" size={14} /><span>The session key can only call <i>challenge</i>: it cannot withdraw or move your belt</span></li>
+            <li><Icon name="coin" size={14} /><span>Testnet NEAR has no cash value. This is a demo economy on testnet.</span></li>
           </ul>
           <p className="enter-terms">By entering you agree to the <Link href="/terms">terms</Link> and the <Link href="/privacy">privacy note</Link>.</p>
         </div>

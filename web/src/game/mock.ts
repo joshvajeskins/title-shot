@@ -80,13 +80,17 @@ export class MockClient implements GameClient {
     }
   }
 
-  async account() { return this.acct }
+  async account() {
+    if (!this.acct) { try { const raw = localStorage.getItem('ts-mock-account'); if (raw) this.acct = JSON.parse(raw) as Account } catch { /* storage blocked */ } }
+    return this.acct
+  }
   async createGuest() {
     await sleep(900)
     this.acct = { id: `fighter-${(Date.now() % 1e6).toString(36)}.titleshot.testnet`, kind: 'guest', balanceYocto: (NEAR * 2n).toString(), claimableYocto: '0' }
+    try { localStorage.setItem('ts-mock-account', JSON.stringify(this.acct)) } catch { /* storage blocked */ }
     return this.acct
   }
-  async signOut() { this.acct = null }
+  async signOut() { this.acct = null; try { localStorage.removeItem('ts-mock-account') } catch { /* storage blocked */ } }
   async belts() { return this.beltsState }
   async belt(id: string) {
     const b = this.beltsState.find((x) => x.id === id)
