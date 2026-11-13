@@ -1,0 +1,38 @@
+[package]
+name = "bout-sim"
+version = "0.1.0"
+edition = "2021"
+description = "TITLE SHOT+ shared referee: fighter normalizer, rulebook, deterministic best-of-3 simulator"
+license = "MIT"
+publish = false
+
+[features]
+default = []
+# wasm-bindgen JSON exports for the browser build (never enabled in the contract).
+wasm = ["dep:wasm-bindgen"]
+
+[dependencies]
+serde = { version = "1", default-features = false, features = ["derive", "std"] }
+serde_json = { version = "1", default-features = false, features = ["std"] }
+sha2 = { version = "0.10", default-features = false }
+wasm-bindgen = { version = "=0.2.130", optional = true }
+
+[[bin]]
+name = "sweep"
+path = "src/bin/sweep.rs"
+
+[[bin]]
+name = "golden"
+path = "src/bin/golden.rs"
+
+# Shipped inside the NEAR contract: small and fast wasm. Only applies when this
+# crate is the build root (sweep, tests, wasm-bindgen build); the contract has its own.
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[profile.wasm]
+inherits = "release"
+opt-level = 3

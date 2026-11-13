@@ -1,0 +1,1422 @@
+[
+  {
+    "id": "seq-00",
+    "champion": {
+      "verdict": "ok",
+      "name": "Granny Purl",
+      "title": "The Eternal Stitch",
+      "look": "A tiny fierce grandmother in a patchwork cardigan and half-moon glasses, a giant scarf trailing behind, knitting needles held like swords, warm yarn colours.",
+      "cry": "One more row, dearie.",
+      "school": "IRON",
+      "style": "COUNTERPUNCHER",
+      "moves": [
+        {
+          "id": "bulwark",
+          "label": "Woolly Wall"
+        },
+        {
+          "id": "dent",
+          "label": "Needle Prick"
+        },
+        {
+          "id": "rivet_barrage",
+          "label": "Stitch Barrage"
+        }
+      ],
+      "weights": {
+        "power": 3,
+        "guard": 8,
+        "speed": 3,
+        "grit": 8
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Last Slice",
+      "title": "Everyone's Favourite Bad Idea",
+      "look": "A single cartoon pizza slice with a smug face, stringy cheese cape, pepperoni armour discs and a plastic party hat, steam rising, red and gold palette.",
+      "cry": "Nobody takes me alive!",
+      "school": "BLAZE",
+      "style": "COUNTERPUNCHER",
+      "moves": [
+        {
+          "id": "riposte",
+          "label": "Hands Off"
+        },
+        {
+          "id": "thorn_wall",
+          "label": "Cheese Shield"
+        },
+        {
+          "id": "flame_lash",
+          "label": "Hot Sauce Lash"
+        }
+      ],
+      "weights": {
+        "power": 3,
+        "guard": 8,
+        "speed": 4,
+        "grit": 8
+      }
+    },
+    "seed": "fbb6265a2ddae56c1dd15006a6291102eba5f4e8601e74ea78f354298257f0aa",
+    "rule": 0,
+    "winner": "challenger",
+    "rounds_won": [
+      0,
+      2
+    ],
+    "rounds": 2,
+    "events": 60,
+    "state_hash": "0110375b699f7c4765e7ef319ce8ab2a4dbb530c19e42a4658a051bf004507ba"
+  },
+  {
+    "id": "seq-01",
+    "champion": {
+      "verdict": "ok",
+      "name": "Sir Trembles-a-Lot",
+      "title": "Knight of the Long Walk",
+      "look": "A clanking knight in dented armour with a sad plume, shield painted with a worried face, running on foot and glancing over his shoulder, steel and mud brown.",
+      "cry": "Is it gone? Is it gone?",
+      "school": "IRON",
+      "style": "COUNTERPUNCHER",
+      "moves": [
+        {
+          "id": "bulwark",
+          "label": "Hide Behind Shield"
+        },
+        {
+          "id": "riposte",
+          "label": "Panicked Riposte"
+        },
+        {
+          "id": "iron_fist",
+          "label": "Frightened Flail"
+        }
+      ],
+      "weights": {
+        "power": 4,
+        "guard": 9,
+        "speed": 5,
+        "grit": 6
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Cell Block Charlie",
+      "title": "Master of the Pivot Table",
+      "look": "A glowing floating grid of cells with angry red formula errors for eyes and tentacles of cable, spreadsheet green, tiny macros orbiting like satellites.",
+      "cry": "#REF! Your move!",
+      "school": "MIND",
+      "style": "TACTICIAN",
+      "moves": [
+        {
+          "id": "hex_gaze",
+          "label": "Circular Reference"
+        },
+        {
+          "id": "mind_spike",
+          "label": "Formula Strike"
+        },
+        {
+          "id": "focus",
+          "label": "Recalculate"
+        }
+      ],
+      "weights": {
+        "power": 4,
+        "guard": 5,
+        "speed": 6,
+        "grit": 5
+      }
+    },
+    "seed": "3634f8d2dc237420dfd3400661a12f8dbc9e9adf5736568140c29d2d3e71c611",
+    "rule": 1,
+    "winner": "champion",
+    "rounds_won": [
+      1,
+      0
+    ],
+    "rounds": 3,
+    "events": 107,
+    "state_hash": "b5561328a2b6bf8e42e0c73bae00f6c5dc3b0ed2403e5a6c249b46f25329de92"
+  },
+  {
+    "id": "seq-02",
+    "champion": {
+      "verdict": "ok",
+      "name": "Mic Drop Mona",
+      "title": "Queen of the Final Chorus",
+      "look": "A sparkly singer in a rhinestone jacket clutching a microphone in a power pose, spotlight glare, glitter in her hair, hot pink and gold.",
+      "cry": "One more song!",
+      "school": "VOLT",
+      "style": "SHOWBOAT",
+      "moves": [
+        {
+          "id": "static_field",
+          "label": "Held Note Hypnosis"
+        },
+        {
+          "id": "chain_shock",
+          "label": "Key Change Combo"
+        },
+        {
+          "id": "thunderclap",
+          "label": "Power Ballad Blast"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 3,
+        "speed": 7,
+        "grit": 4
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Captain Chowder",
+      "title": "Terror of the Seven Bowls",
+      "look": "A bubbling pirate captain made of creamy clam chowder with a floating tricorn hat and cutlass, oyster-cracker buttons, steam clouds, cream and navy.",
+      "cry": "Yarr, pass the bread!",
+      "school": "TIDE",
+      "style": "BRAWLER",
+      "moves": [
+        {
+          "id": "riptide",
+          "label": "Broth Broadside"
+        },
+        {
+          "id": "wave_slap",
+          "label": "Ladle Slap"
+        },
+        {
+          "id": "healing_rain",
+          "label": "Second Helping"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 4,
+        "speed": 4,
+        "grit": 6
+      }
+    },
+    "seed": "b08cd84eb3984a464a9c84580762ac68ad741456a41425cea803c85f78f08dbb",
+    "rule": 2,
+    "winner": "challenger",
+    "rounds_won": [
+      1,
+      2
+    ],
+    "rounds": 3,
+    "events": 70,
+    "state_hash": "1bdde2abafb87857fb253bc17fc5dada4c8e51af9a1761d307ef5d0837c09f96"
+  },
+  {
+    "id": "seq-03",
+    "champion": {
+      "verdict": "ok",
+      "name": "Gale Grumble",
+      "title": "The Cold Shoulder",
+      "look": "A swirling grey wind spirit with a grumpy face in the cloud, icy beard streaming sideways, scattering leaves and a stolen hat, steel blue and white.",
+      "cry": "Not in the mood.",
+      "school": "TIDE",
+      "style": "BRAWLER",
+      "moves": [
+        {
+          "id": "wave_slap",
+          "label": "Chilly Backhand"
+        },
+        {
+          "id": "undertow",
+          "label": "Sulk Gust"
+        },
+        {
+          "id": "riptide",
+          "label": "Windburn Wallop"
+        }
+      ],
+      "weights": {
+        "power": 8,
+        "guard": 3,
+        "speed": 7,
+        "grit": 3
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Intern Admin",
+      "title": "Keeper of the Master Key",
+      "look": "A nervous intern in an oversized blazer clutching a sticky note password, lanyard askew, sweating next to a glowing server rack, corporate blue and white.",
+      "cry": "I was just checking my email!",
+      "school": "VOLT",
+      "style": "TACTICIAN",
+      "moves": [
+        {
+          "id": "static_field",
+          "label": "Password Reset"
+        },
+        {
+          "id": "spark",
+          "label": "Admin Access Zap"
+        },
+        {
+          "id": "overclock",
+          "label": "Access Escalation"
+        }
+      ],
+      "weights": {
+        "power": 3,
+        "guard": 3,
+        "speed": 9,
+        "grit": 5
+      }
+    },
+    "seed": "9b117dab6983142697d170901d2c67e3d73d58bd8123adf8efd08230fad2d4ec",
+    "rule": 3,
+    "winner": "champion",
+    "rounds_won": [
+      2,
+      0
+    ],
+    "rounds": 2,
+    "events": 50,
+    "state_hash": "9b741d0976dbae4d3ca98e137f8670baa115c8113332379a3611d071cfa890b4"
+  },
+  {
+    "id": "seq-04",
+    "champion": {
+      "verdict": "ok",
+      "name": "Hoardy McFluff",
+      "title": "Dragon of the Odd Socks",
+      "look": "A fat friendly dragon asleep on a mountain of mismatched socks, one sock hanging from a claw, small puffs of lint-smoke, warm crimson and sock rainbow.",
+      "cry": "The left one is MINE!",
+      "school": "BLAZE",
+      "style": "TACTICIAN",
+      "moves": [
+        {
+          "id": "smolder",
+          "label": "Lint Smoulder"
+        },
+        {
+          "id": "melt_through",
+          "label": "Sock Hoard Charge"
+        },
+        {
+          "id": "battle_roar",
+          "label": "Possessive Roar"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 6,
+        "speed": 3,
+        "grit": 7
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Vendetta 3000",
+      "title": "Machine of Small Grievances",
+      "look": "A hulking glass-front vending machine with angry glowing buttons and a coin-slot frown, a robotic arm spring-loaded in the dispenser, neon red and steel grey.",
+      "cry": "Please insert correct change!",
+      "school": "IRON",
+      "style": "TACTICIAN",
+      "moves": [
+        {
+          "id": "dent",
+          "label": "Coin Return Slap"
+        },
+        {
+          "id": "hex_gaze",
+          "label": "Out of Stock Stare"
+        },
+        {
+          "id": "wrecking_swing",
+          "label": "Jammed Can Drop"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 9,
+        "speed": 2,
+        "grit": 6
+      }
+    },
+    "seed": "029fd5d898db734165e6964c82eb95cf713680e82372027a3032ca6a416d1121",
+    "rule": 4,
+    "winner": "champion",
+    "rounds_won": [
+      2,
+      1
+    ],
+    "rounds": 3,
+    "events": 76,
+    "state_hash": "b98e93ca57bc6f13da16219cf0c289aaf789d1354b1b18ca60ec855154922174"
+  },
+  {
+    "id": "seq-05",
+    "champion": {
+      "verdict": "ok",
+      "name": "Intern Admin",
+      "title": "Keeper of the Master Key",
+      "look": "A nervous intern in an oversized blazer clutching a sticky note password, lanyard askew, sweating next to a glowing server rack, corporate blue and white.",
+      "cry": "I was just checking my email!",
+      "school": "VOLT",
+      "style": "TACTICIAN",
+      "moves": [
+        {
+          "id": "static_field",
+          "label": "Password Reset"
+        },
+        {
+          "id": "spark",
+          "label": "Admin Access Zap"
+        },
+        {
+          "id": "overclock",
+          "label": "Access Escalation"
+        }
+      ],
+      "weights": {
+        "power": 3,
+        "guard": 3,
+        "speed": 9,
+        "grit": 5
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Ticket 404",
+      "title": "Eternal Waiter",
+      "look": "A pale ghost in a faded cardigan clutching a wilted paper ticket number, chain of forms trailing behind, dead-eyed stare, fluorescent beige and ghost white.",
+      "cry": "Your number is never called.",
+      "school": "MIND",
+      "style": "TACTICIAN",
+      "moves": [
+        {
+          "id": "hex_gaze",
+          "label": "Take a Number"
+        },
+        {
+          "id": "brain_freeze",
+          "label": "Form 27-B Stare"
+        },
+        {
+          "id": "foresight",
+          "label": "Come Back Tomorrow"
+        }
+      ],
+      "weights": {
+        "power": 3,
+        "guard": 6,
+        "speed": 4,
+        "grit": 8
+      }
+    },
+    "seed": "4c0da19754306b522b9b84e025b939d35e6b4513d7b75a5b09aca8b1e379b58f",
+    "rule": 5,
+    "winner": "challenger",
+    "rounds_won": [
+      0,
+      2
+    ],
+    "rounds": 2,
+    "events": 74,
+    "state_hash": "eea68055c6f80ff39c7193a43bbde51f9e40ca058ce45ef5324dbb18a5ef5edd"
+  },
+  {
+    "id": "seq-06",
+    "champion": {
+      "verdict": "ok",
+      "name": "Last Slice",
+      "title": "Everyone's Favourite Bad Idea",
+      "look": "A single cartoon pizza slice with a smug face, stringy cheese cape, pepperoni armour discs and a plastic party hat, steam rising, red and gold palette.",
+      "cry": "Nobody takes me alive!",
+      "school": "BLAZE",
+      "style": "COUNTERPUNCHER",
+      "moves": [
+        {
+          "id": "riposte",
+          "label": "Hands Off"
+        },
+        {
+          "id": "thorn_wall",
+          "label": "Cheese Shield"
+        },
+        {
+          "id": "flame_lash",
+          "label": "Hot Sauce Lash"
+        }
+      ],
+      "weights": {
+        "power": 3,
+        "guard": 8,
+        "speed": 4,
+        "grit": 8
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Hoardy McFluff",
+      "title": "Dragon of the Odd Socks",
+      "look": "A fat friendly dragon asleep on a mountain of mismatched socks, one sock hanging from a claw, small puffs of lint-smoke, warm crimson and sock rainbow.",
+      "cry": "The left one is MINE!",
+      "school": "BLAZE",
+      "style": "TACTICIAN",
+      "moves": [
+        {
+          "id": "smolder",
+          "label": "Lint Smoulder"
+        },
+        {
+          "id": "melt_through",
+          "label": "Sock Hoard Charge"
+        },
+        {
+          "id": "battle_roar",
+          "label": "Possessive Roar"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 6,
+        "speed": 3,
+        "grit": 7
+      }
+    },
+    "seed": "c2b261700fd2bbe64d1b0d93338762222c9622643c98803a091e2236f76c2322",
+    "rule": 6,
+    "winner": "challenger",
+    "rounds_won": [
+      0,
+      2
+    ],
+    "rounds": 2,
+    "events": 41,
+    "state_hash": "99feeadede85906754e26f1ab0dd7e9c5061bc9343c096d09b9d84dbebf5cae2"
+  },
+  {
+    "id": "seq-07",
+    "champion": {
+      "verdict": "ok",
+      "name": "Beacon Bruno",
+      "title": "The Last Light",
+      "look": "A weathered old sailor-boxer in a knitted cap and boxing gloves, a lantern hanging from his belt, striped lighthouse tank top, navy and white.",
+      "cry": "Keep your eyes on the light!",
+      "school": "TIDE",
+      "style": "COUNTERPUNCHER",
+      "moves": [
+        {
+          "id": "riptide",
+          "label": "Tidal Uppercut"
+        },
+        {
+          "id": "tidal_wall",
+          "label": "Fog Bank Guard"
+        },
+        {
+          "id": "salt_spray",
+          "label": "Sea-Spray Jab"
+        }
+      ],
+      "weights": {
+        "power": 5,
+        "guard": 6,
+        "speed": 3,
+        "grit": 8
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Counselor Coo",
+      "title": "Pigeon at Law, Esq.",
+      "look": "A plump grey pigeon in a tiny oversized black barrister robe and curled white wig, gripping a rolled subpoena in one claw, courtroom-gold palette.",
+      "cry": "I object! Also, crumbs.",
+      "school": "MIND",
+      "style": "TACTICIAN",
+      "moves": [
+        {
+          "id": "brain_freeze",
+          "label": "Serve Subpoena"
+        },
+        {
+          "id": "hex_gaze",
+          "label": "Cross-Examine"
+        },
+        {
+          "id": "claw_swipe",
+          "label": "Peck of Justice"
+        }
+      ],
+      "weights": {
+        "power": 4,
+        "guard": 5,
+        "speed": 7,
+        "grit": 4
+      }
+    },
+    "seed": "151d3d383f50227503e1990d3d179124c1139c34d940ef95334e178b5ba0dd25",
+    "rule": 7,
+    "winner": "champion",
+    "rounds_won": [
+      2,
+      0
+    ],
+    "rounds": 2,
+    "events": 65,
+    "state_hash": "d92c7d1c04c648c71601599ab6e89efabb165a488a75aa4e202fc985a0abfb41"
+  },
+  {
+    "id": "seq-08",
+    "champion": {
+      "verdict": "ok",
+      "name": "Trash Panda Tony",
+      "title": "High Roller of the Bins",
+      "look": "A raccoon in a velvet vest and bow tie, holding fanned playing cards and a stack of bottle-cap chips, shifty eyes, casino green and gold.",
+      "cry": "The house always eats!",
+      "school": "WILD",
+      "style": "SHOWBOAT",
+      "moves": [
+        {
+          "id": "venom_bite",
+          "label": "Marked Cards"
+        },
+        {
+          "id": "pounce",
+          "label": "Pickpocket Dive"
+        },
+        {
+          "id": "regrowth",
+          "label": "Cash-Out Cuddle"
+        }
+      ],
+      "weights": {
+        "power": 5,
+        "guard": 4,
+        "speed": 8,
+        "grit": 3
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Honk Vengeance",
+      "title": "Terror of the Pond",
+      "look": "A huge white goose with a furious orange beak and wild eyes, wings flared like a cloak, a single feather drifting down, pond-green and white.",
+      "cry": "HONK!!",
+      "school": "WILD",
+      "style": "BRAWLER",
+      "moves": [
+        {
+          "id": "claw_swipe",
+          "label": "Beak Barrage"
+        },
+        {
+          "id": "stampede",
+          "label": "Flock Charge"
+        },
+        {
+          "id": "pounce",
+          "label": "Pond Ambush"
+        }
+      ],
+      "weights": {
+        "power": 9,
+        "guard": 2,
+        "speed": 7,
+        "grit": 3
+      }
+    },
+    "seed": "057588bb16fbb0c45a67975f4d9fee196d5bae94ca09cd46e279d1dfe64dbe03",
+    "rule": 0,
+    "winner": "challenger",
+    "rounds_won": [
+      0,
+      2
+    ],
+    "rounds": 2,
+    "events": 27,
+    "state_hash": "9c5449cb33263650e8d2ed9246c50ebf42dff309cee8c931085444ddae568908"
+  },
+  {
+    "id": "seq-09",
+    "champion": {
+      "verdict": "ok",
+      "name": "Marcel Boxwell",
+      "title": "The Wall That Is Not",
+      "look": "A white-faced mime in a striped shirt pressing both palms against an invisible wall, dramatic worried face, faint glass-like glimmers, black white and red.",
+      "cry": "...",
+      "school": "IRON",
+      "style": "COUNTERPUNCHER",
+      "moves": [
+        {
+          "id": "bulwark",
+          "label": "Invisible Wall"
+        },
+        {
+          "id": "riposte",
+          "label": "Mimed Reflection"
+        },
+        {
+          "id": "dent",
+          "label": "Mimed Shove"
+        }
+      ],
+      "weights": {
+        "power": 3,
+        "guard": 9,
+        "speed": 3,
+        "grit": 7
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Gale Grumble",
+      "title": "The Cold Shoulder",
+      "look": "A swirling grey wind spirit with a grumpy face in the cloud, icy beard streaming sideways, scattering leaves and a stolen hat, steel blue and white.",
+      "cry": "Not in the mood.",
+      "school": "TIDE",
+      "style": "BRAWLER",
+      "moves": [
+        {
+          "id": "wave_slap",
+          "label": "Chilly Backhand"
+        },
+        {
+          "id": "undertow",
+          "label": "Sulk Gust"
+        },
+        {
+          "id": "riptide",
+          "label": "Windburn Wallop"
+        }
+      ],
+      "weights": {
+        "power": 8,
+        "guard": 3,
+        "speed": 7,
+        "grit": 3
+      }
+    },
+    "seed": "6cacf798fde8e1bea3b8a3f2244e98afef28f7bb6d9923c6b394296c71726240",
+    "rule": 1,
+    "winner": "champion",
+    "rounds_won": [
+      2,
+      0
+    ],
+    "rounds": 2,
+    "events": 46,
+    "state_hash": "996b5d6083317555444059674b4553100788a641988ec2ad015bd9f1b5e50788"
+  },
+  {
+    "id": "seq-10",
+    "champion": {
+      "verdict": "ok",
+      "name": "Pawsitive Chaos",
+      "title": "Gravity's Worst Friend",
+      "look": "A smug tabby sitting on a bare shelf, one paw still extended over the edge, a trail of fallen mugs below, golden eyes, orange stripes and soft grey.",
+      "cry": "Gravity is a suggestion.",
+      "school": "WILD",
+      "style": "SHOWBOAT",
+      "moves": [
+        {
+          "id": "claw_swipe",
+          "label": "Shelf Sweep"
+        },
+        {
+          "id": "venom_bite",
+          "label": "Midnight Zoomies"
+        },
+        {
+          "id": "pounce",
+          "label": "Sudden Ankle Ambush"
+        }
+      ],
+      "weights": {
+        "power": 7,
+        "guard": 3,
+        "speed": 9,
+        "grit": 3
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Auditor Abaddon",
+      "title": "Collector of Souls and Receipts",
+      "look": "A pale demon in a grey suit with small horns and a flaming ledger, stamp in one clawed hand, thin glasses glowing red, charcoal and ember orange.",
+      "cry": "Everything is deductible but you.",
+      "school": "BLAZE",
+      "style": "TACTICIAN",
+      "moves": [
+        {
+          "id": "flame_lash",
+          "label": "Penalty Interest"
+        },
+        {
+          "id": "hex_gaze",
+          "label": "Audit Notice"
+        },
+        {
+          "id": "melt_through",
+          "label": "Seized Assets"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 5,
+        "speed": 4,
+        "grit": 5
+      }
+    },
+    "seed": "08d506ffd2175e9b455feaeb8f27529a92b9d3fb36f4f96da84f7736a9db6dba",
+    "rule": 2,
+    "winner": "challenger",
+    "rounds_won": [
+      0,
+      2
+    ],
+    "rounds": 2,
+    "events": 32,
+    "state_hash": "e2e91b3c4dd39e0c1aa8840e2abd778bfa8a3484154a13843383c45c6b454a3e"
+  },
+  {
+    "id": "seq-11",
+    "champion": {
+      "verdict": "ok",
+      "name": "Lumen Lurch",
+      "title": "Pilgrim of the Orange Glow",
+      "look": "A fuzzy brown moth with wide dusty wings and dreamy eyes, drawn to a flickering streetlamp halo, scorch marks on its wingtips, amber and midnight blue.",
+      "cry": "The light! The light!",
+      "school": "VOLT",
+      "style": "BRAWLER",
+      "moves": [
+        {
+          "id": "spark",
+          "label": "Dazzle Dive"
+        },
+        {
+          "id": "arc_bolt",
+          "label": "Streetlamp Collision"
+        },
+        {
+          "id": "pounce",
+          "label": "Wingbeat Flutter"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 2,
+        "speed": 8,
+        "grit": 5
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Cumulus Grudge",
+      "title": "Forecast: Passive Aggressive",
+      "look": "A scowling storm cloud with tiny crossed arms and a lightning-bolt eyebrow, dripping a thin sarcastic drizzle, slate grey and electric yellow.",
+      "cry": "I remember what you said.",
+      "school": "VOLT",
+      "style": "BRAWLER",
+      "moves": [
+        {
+          "id": "thunderclap",
+          "label": "Passive-Aggressive Boom"
+        },
+        {
+          "id": "arc_bolt",
+          "label": "Drizzle of Spite"
+        },
+        {
+          "id": "overclock",
+          "label": "Brewing Fury"
+        }
+      ],
+      "weights": {
+        "power": 7,
+        "guard": 3,
+        "speed": 6,
+        "grit": 4
+      }
+    },
+    "seed": "9617bafa472745db00799b347661da8b67644c6966b8362dcfd95c55d35df862",
+    "rule": 3,
+    "winner": "challenger",
+    "rounds_won": [
+      0,
+      2
+    ],
+    "rounds": 2,
+    "events": 50,
+    "state_hash": "020da7fba6723d1fb11db9138370f0f51e12c293cbee597d421791d6902351f5"
+  },
+  {
+    "id": "seq-12",
+    "champion": {
+      "verdict": "ok",
+      "name": "Bonesy Overdue",
+      "title": "Clocked Out Since 1823",
+      "look": "A hurried skeleton in a wrinkled necktie and lanyard, coffee cup in one hand, pocket watch swinging from the ribs, pale bone and office beige.",
+      "cry": "Sorry, traffic was dead!",
+      "school": "IRON",
+      "style": "SHOWBOAT",
+      "moves": [
+        {
+          "id": "wrecking_swing",
+          "label": "Late Fee Wallop"
+        },
+        {
+          "id": "armor_up",
+          "label": "Rib-Cage Briefcase"
+        },
+        {
+          "id": "riposte",
+          "label": "Excuse Me, Boss"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 5,
+        "speed": 7,
+        "grit": 2
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Mic Drop Mona",
+      "title": "Queen of the Final Chorus",
+      "look": "A sparkly singer in a rhinestone jacket clutching a microphone in a power pose, spotlight glare, glitter in her hair, hot pink and gold.",
+      "cry": "One more song!",
+      "school": "VOLT",
+      "style": "SHOWBOAT",
+      "moves": [
+        {
+          "id": "static_field",
+          "label": "Held Note Hypnosis"
+        },
+        {
+          "id": "chain_shock",
+          "label": "Key Change Combo"
+        },
+        {
+          "id": "thunderclap",
+          "label": "Power Ballad Blast"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 3,
+        "speed": 7,
+        "grit": 4
+      }
+    },
+    "seed": "4862295de1c34fe89576da4232a9147749087c0bf92b3a3ebc50e7fc71973618",
+    "rule": 4,
+    "winner": "draw",
+    "rounds_won": [
+      1,
+      1
+    ],
+    "rounds": 3,
+    "events": 65,
+    "state_hash": "eee22262bbf534722d3656c9bf1435a6e65bd1a372cdcf3ec196755292d539eb"
+  },
+  {
+    "id": "seq-13",
+    "champion": {
+      "verdict": "ok",
+      "name": "Decaf Dave",
+      "title": "Espresso Shot of Doom",
+      "look": "A jittery barista with huge dark circles, apron splashed with coffee, steaming milk pitcher in each hand, hair standing on end, roasted brown and neon green.",
+      "cry": "I can hear colours!",
+      "school": "BLAZE",
+      "style": "SHOWBOAT",
+      "moves": [
+        {
+          "id": "flame_lash",
+          "label": "Scalding Steam"
+        },
+        {
+          "id": "fire_whirl",
+          "label": "Triple Shot Spin"
+        },
+        {
+          "id": "battle_roar",
+          "label": "Fifth Espresso"
+        }
+      ],
+      "weights": {
+        "power": 5,
+        "guard": 2,
+        "speed": 9,
+        "grit": 4
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Old Grumblerock",
+      "title": "Mountain Who Sat Down",
+      "look": "A colossal mountain with a craggy frowning face and snowy eyebrows, tiny trees along the shoulders like hair, avalanche rumble, granite grey and white.",
+      "cry": "Get off my lawn.",
+      "school": "IRON",
+      "style": "BRAWLER",
+      "moves": [
+        {
+          "id": "wrecking_swing",
+          "label": "Avalanche Sulk"
+        },
+        {
+          "id": "iron_fist",
+          "label": "Boulder Fist"
+        },
+        {
+          "id": "bulwark",
+          "label": "Immovable Mood"
+        }
+      ],
+      "weights": {
+        "power": 9,
+        "guard": 7,
+        "speed": 1,
+        "grit": 6
+      }
+    },
+    "seed": "942b60fe865fe770e1f39c83f5a5ec80ca8d857b99bf5aa28f00a92d677c862a",
+    "rule": 5,
+    "winner": "champion",
+    "rounds_won": [
+      2,
+      0
+    ],
+    "rounds": 2,
+    "events": 40,
+    "state_hash": "d04ef2a437171118f7229d84d09eaecc5d4b7631ddba225d5db3fc5710f76f6f"
+  },
+  {
+    "id": "seq-14",
+    "champion": {
+      "verdict": "ok",
+      "name": "Sir Squidley",
+      "title": "Gentleman of the Deep",
+      "look": "A towering kraken in a tiny top hat and monocle, one tentacle offering a cup of tea, the others politely poised, deep teal and brass.",
+      "cry": "Terribly sorry about the ship.",
+      "school": "TIDE",
+      "style": "TACTICIAN",
+      "moves": [
+        {
+          "id": "undertow",
+          "label": "Gentle Tentacle"
+        },
+        {
+          "id": "healing_rain",
+          "label": "Spot of Tea"
+        },
+        {
+          "id": "riptide",
+          "label": "Apologetic Squeeze"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 5,
+        "speed": 3,
+        "grit": 8
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Ducky Poseidon",
+      "title": "Squeak of the Seven Bathtubs",
+      "look": "A glossy yellow rubber duck wielding a tiny golden trident, stormy bathwater waves swirling, a squeak-ready beak and fierce painted brows, yellow and aqua.",
+      "cry": "SQUEAK OF DOOM!",
+      "school": "TIDE",
+      "style": "SHOWBOAT",
+      "moves": [
+        {
+          "id": "riptide",
+          "label": "Bathtub Tsunami"
+        },
+        {
+          "id": "wave_slap",
+          "label": "Squeaky Smack"
+        },
+        {
+          "id": "overclock",
+          "label": "Rubber Ducky Rush"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 4,
+        "speed": 7,
+        "grit": 3
+      }
+    },
+    "seed": "3d577f33deb090364a990b3ce367aeab83d7e549f0236886bd57a4654b99d577",
+    "rule": 6,
+    "winner": "champion",
+    "rounds_won": [
+      2,
+      1
+    ],
+    "rounds": 3,
+    "events": 85,
+    "state_hash": "3a68bcf37c74a102eabe87d53459c37872d66eff735bfb0d2aab5f3138831d45"
+  },
+  {
+    "id": "seq-15",
+    "champion": {
+      "verdict": "ok",
+      "name": "Old Grumblerock",
+      "title": "Mountain Who Sat Down",
+      "look": "A colossal mountain with a craggy frowning face and snowy eyebrows, tiny trees along the shoulders like hair, avalanche rumble, granite grey and white.",
+      "cry": "Get off my lawn.",
+      "school": "IRON",
+      "style": "BRAWLER",
+      "moves": [
+        {
+          "id": "wrecking_swing",
+          "label": "Avalanche Sulk"
+        },
+        {
+          "id": "iron_fist",
+          "label": "Boulder Fist"
+        },
+        {
+          "id": "bulwark",
+          "label": "Immovable Mood"
+        }
+      ],
+      "weights": {
+        "power": 9,
+        "guard": 7,
+        "speed": 1,
+        "grit": 6
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Sir Trembles-a-Lot",
+      "title": "Knight of the Long Walk",
+      "look": "A clanking knight in dented armour with a sad plume, shield painted with a worried face, running on foot and glancing over his shoulder, steel and mud brown.",
+      "cry": "Is it gone? Is it gone?",
+      "school": "IRON",
+      "style": "COUNTERPUNCHER",
+      "moves": [
+        {
+          "id": "bulwark",
+          "label": "Hide Behind Shield"
+        },
+        {
+          "id": "riposte",
+          "label": "Panicked Riposte"
+        },
+        {
+          "id": "iron_fist",
+          "label": "Frightened Flail"
+        }
+      ],
+      "weights": {
+        "power": 4,
+        "guard": 9,
+        "speed": 5,
+        "grit": 6
+      }
+    },
+    "seed": "4bd016d6ece0291aa30c73a95b4bdd932e52de0e46815a8be873646f2097803f",
+    "rule": 7,
+    "winner": "draw",
+    "rounds_won": [
+      1,
+      1
+    ],
+    "rounds": 3,
+    "events": 71,
+    "state_hash": "c9a0c40c317de99837131f8f32501e65f277d8ba70457bcef8b2f59b6ad86843"
+  },
+  {
+    "id": "target-draw",
+    "champion": {
+      "verdict": "ok",
+      "name": "Madam Hush",
+      "title": "Keeper of the Quiet",
+      "look": "A stern librarian with a bun, cat-eye glasses and a heavy stamp raised overhead, one finger pressed to her lips, bookshelf shadows, cardigan green and cream.",
+      "cry": "SHHHH!",
+      "school": "MIND",
+      "style": "COUNTERPUNCHER",
+      "moves": [
+        {
+          "id": "hex_gaze",
+          "label": "Silence Glare"
+        },
+        {
+          "id": "foresight",
+          "label": "Overdue Notice"
+        },
+        {
+          "id": "mind_spike",
+          "label": "Book Slam"
+        }
+      ],
+      "weights": {
+        "power": 3,
+        "guard": 6,
+        "speed": 5,
+        "grit": 8
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Lumi Bloom",
+      "title": "The Shade of the Deep",
+      "look": "A translucent jellyfish with a lampshade cap, glowing blue tentacles disguised as a pull-cord, trying to look casual, soft turquoise and cream.",
+      "cry": "Nothing to see here. Lamp.",
+      "school": "TIDE",
+      "style": "COUNTERPUNCHER",
+      "moves": [
+        {
+          "id": "static_field",
+          "label": "Sting of Light"
+        },
+        {
+          "id": "salt_spray",
+          "label": "Shade Drift"
+        },
+        {
+          "id": "undertow",
+          "label": "Tentacle Lamp Cord"
+        }
+      ],
+      "weights": {
+        "power": 3,
+        "guard": 7,
+        "speed": 5,
+        "grit": 7
+      }
+    },
+    "seed": "2f252a49c5d79948b3d298fee21ba69a451afd1916f1f530ce342b322bfd9e1a",
+    "rule": 5,
+    "winner": "draw",
+    "rounds_won": [
+      1,
+      1
+    ],
+    "rounds": 3,
+    "events": 103,
+    "state_hash": "da31eea3a91556ea597c8df8edc60821ce649cf15c8056c25addf869d8709a63"
+  },
+  {
+    "id": "target-three-rounds-decided",
+    "champion": {
+      "verdict": "ok",
+      "name": "Gale Grumble",
+      "title": "The Cold Shoulder",
+      "look": "A swirling grey wind spirit with a grumpy face in the cloud, icy beard streaming sideways, scattering leaves and a stolen hat, steel blue and white.",
+      "cry": "Not in the mood.",
+      "school": "TIDE",
+      "style": "BRAWLER",
+      "moves": [
+        {
+          "id": "wave_slap",
+          "label": "Chilly Backhand"
+        },
+        {
+          "id": "undertow",
+          "label": "Sulk Gust"
+        },
+        {
+          "id": "riptide",
+          "label": "Windburn Wallop"
+        }
+      ],
+      "weights": {
+        "power": 8,
+        "guard": 3,
+        "speed": 7,
+        "grit": 3
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Intern Admin",
+      "title": "Keeper of the Master Key",
+      "look": "A nervous intern in an oversized blazer clutching a sticky note password, lanyard askew, sweating next to a glowing server rack, corporate blue and white.",
+      "cry": "I was just checking my email!",
+      "school": "VOLT",
+      "style": "TACTICIAN",
+      "moves": [
+        {
+          "id": "static_field",
+          "label": "Password Reset"
+        },
+        {
+          "id": "spark",
+          "label": "Admin Access Zap"
+        },
+        {
+          "id": "overclock",
+          "label": "Access Escalation"
+        }
+      ],
+      "weights": {
+        "power": 3,
+        "guard": 3,
+        "speed": 9,
+        "grit": 5
+      }
+    },
+    "seed": "8d79582e266badc0cb45e8ef196ca216ce6aa04a7ae4434d871e66c4c63e0d55",
+    "rule": 6,
+    "winner": "challenger",
+    "rounds_won": [
+      1,
+      2
+    ],
+    "rounds": 3,
+    "events": 87,
+    "state_hash": "d8b18ab1433047d45887bafddd16a06f960b6b79b846a02308cd94d58885593b"
+  },
+  {
+    "id": "target-limit-round",
+    "champion": {
+      "verdict": "ok",
+      "name": "Granny Purl",
+      "title": "The Eternal Stitch",
+      "look": "A tiny fierce grandmother in a patchwork cardigan and half-moon glasses, a giant scarf trailing behind, knitting needles held like swords, warm yarn colours.",
+      "cry": "One more row, dearie.",
+      "school": "IRON",
+      "style": "COUNTERPUNCHER",
+      "moves": [
+        {
+          "id": "bulwark",
+          "label": "Woolly Wall"
+        },
+        {
+          "id": "dent",
+          "label": "Needle Prick"
+        },
+        {
+          "id": "rivet_barrage",
+          "label": "Stitch Barrage"
+        }
+      ],
+      "weights": {
+        "power": 3,
+        "guard": 8,
+        "speed": 3,
+        "grit": 8
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Last Slice",
+      "title": "Everyone's Favourite Bad Idea",
+      "look": "A single cartoon pizza slice with a smug face, stringy cheese cape, pepperoni armour discs and a plastic party hat, steam rising, red and gold palette.",
+      "cry": "Nobody takes me alive!",
+      "school": "BLAZE",
+      "style": "COUNTERPUNCHER",
+      "moves": [
+        {
+          "id": "riposte",
+          "label": "Hands Off"
+        },
+        {
+          "id": "thorn_wall",
+          "label": "Cheese Shield"
+        },
+        {
+          "id": "flame_lash",
+          "label": "Hot Sauce Lash"
+        }
+      ],
+      "weights": {
+        "power": 3,
+        "guard": 8,
+        "speed": 4,
+        "grit": 8
+      }
+    },
+    "seed": "1aaf2d45287ea0b2b68f56fd64fcb068a285f4bb4024f7743bf9497b4086a710",
+    "rule": 6,
+    "winner": "challenger",
+    "rounds_won": [
+      0,
+      2
+    ],
+    "rounds": 2,
+    "events": 69,
+    "state_hash": "85b817121787b8394a718b15f92897a8628a4b201008c1034aebf8b0d0bc5b52"
+  },
+  {
+    "id": "target-sweep-2-0",
+    "champion": {
+      "verdict": "ok",
+      "name": "Mic Drop Mona",
+      "title": "Queen of the Final Chorus",
+      "look": "A sparkly singer in a rhinestone jacket clutching a microphone in a power pose, spotlight glare, glitter in her hair, hot pink and gold.",
+      "cry": "One more song!",
+      "school": "VOLT",
+      "style": "SHOWBOAT",
+      "moves": [
+        {
+          "id": "static_field",
+          "label": "Held Note Hypnosis"
+        },
+        {
+          "id": "chain_shock",
+          "label": "Key Change Combo"
+        },
+        {
+          "id": "thunderclap",
+          "label": "Power Ballad Blast"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 3,
+        "speed": 7,
+        "grit": 4
+      }
+    },
+    "challenger": {
+      "verdict": "ok",
+      "name": "Captain Chowder",
+      "title": "Terror of the Seven Bowls",
+      "look": "A bubbling pirate captain made of creamy clam chowder with a floating tricorn hat and cutlass, oyster-cracker buttons, steam clouds, cream and navy.",
+      "cry": "Yarr, pass the bread!",
+      "school": "TIDE",
+      "style": "BRAWLER",
+      "moves": [
+        {
+          "id": "riptide",
+          "label": "Broth Broadside"
+        },
+        {
+          "id": "wave_slap",
+          "label": "Ladle Slap"
+        },
+        {
+          "id": "healing_rain",
+          "label": "Second Helping"
+        }
+      ],
+      "weights": {
+        "power": 6,
+        "guard": 4,
+        "speed": 4,
+        "grit": 6
+      }
+    },
+    "seed": "9957688471f9fa17f80730f1e8afeaff9c0f52dc38e24868d13c836cbe89e430",
+    "rule": 3,
+    "winner": "challenger",
+    "rounds_won": [
+      0,
+      2
+    ],
+    "rounds": 2,
+    "events": 41,
+    "state_hash": "95d95521181ece162a05752dd5b5d1184ada04b9cc659f3c48c67ec86e111285"
+  }
+]

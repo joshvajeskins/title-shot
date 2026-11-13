@@ -31,3 +31,11 @@ assets/audio/raw/sfx_rejected/
 assets/art/raw/*.png
 assets/art/raw/*.log
 assets/art/raw/*.out
+
+# worker lane: the browser/worker wasm package is committed (the *.wasm rule above would drop it); local wrangler secrets are not
+!web/src/sim/pkg/*.wasm
+web/.dev.vars
+.dev.vars
+web/.wrangler/
+crates/bout-sim/pkg/
+!web/src/sim/pkg/*.wasm
