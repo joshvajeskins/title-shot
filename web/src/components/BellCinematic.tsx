@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { sound } from '../audio/sound'
 import type { Bell } from '../game/types'
 import { eth, near, shortAccount, shortHex } from '../lib/format'
@@ -21,7 +22,7 @@ export function BellCinematic({ bell, beltName, onClose }: { bell: Bell; beltNam
     return () => { t.forEach(clearTimeout); window.removeEventListener('keydown', k); void sound.music('lobby_loop') }
   }, [onClose])
   const total = BigInt(bell.purseWei || '0') || 1n
-  return (
+  return createPortal(
     <div className="bellc" role="dialog" aria-modal="true" aria-label={`${beltName} season ${bell.seasonId} bell`}>
       <button className="bellc-close" onClick={onClose} aria-label="Close"><Icon name="x" size={18} /></button>
       <div className="bellc-stage">
@@ -57,6 +58,7 @@ export function BellCinematic({ bell, beltName, onClose }: { bell: Bell; beltNam
           <p className="bellc-note">Half the purse goes to whoever holds the belt at the bell, half by successful defences, at most 25% per account. The season side-pot of {near(bell.sidePotYocto, 3)} NEAR went to the final holder's balance.</p>
         </section>
       )}
-    </div>
+    </div>,
+    document.body,
   )
 }
