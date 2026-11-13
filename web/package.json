@@ -6,21 +6,36 @@
     "dev": "vite",
     "build": "tsc -b --noEmit && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc -b --noEmit"
+    "typecheck": "tsc -b --noEmit",
+    "test": "vitest run",
+    "typecheck:functions": "tsc -p functions/tsconfig.json",
+    "pages:dev": "bash ../scripts/dev-pages.sh",
+    "typecheck:tests": "tsc -p test/tsconfig.json"
   },
   "dependencies": {
+    "@noble/curves": "^2.4.0",
+    "@noble/hashes": "^2.4.0",
     "howler": "^2.2.4",
     "motion": "^14.13.0",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "viem": "^2.57.19",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261112.1",
+    "@near-js/crypto": "^2.5.1",
+    "@near-js/transactions": "^2.5.1",
     "@types/howler": "^2.2.13",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.3.0",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2",
-    "vite": "^8.3.8"
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0",
+    "wrangler": "^4.161.0"
   },
   "private": true,
   "type": "module"

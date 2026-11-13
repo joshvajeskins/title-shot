@@ -39,3 +39,9 @@ web/.dev.vars
 web/.wrangler/
 crates/bout-sim/pkg/
 !web/src/sim/pkg/*.wasm
+
+# wrangler local secrets
+.dev.vars
+**/.dev.vars
+.wrangler/
+*.tsbuildinfo

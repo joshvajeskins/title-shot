@@ -7,9 +7,9 @@ export const baseTxUrl = (hash: string) => `${BASESCAN}/tx/${hash}`
 export const baseAddrUrl = (addr: string) => `${BASESCAN}/address/${addr}`
 
 export const GAS_CHALLENGE = 300_000_000_000_000n // 300 Tgas, the per-tx maximum
-export const GUEST_FUND_GAS = 150_000_000_000_000_000_000_000n // 0.15 NEAR for gas
-export const GUEST_DEPOSIT = 500_000_000_000_000_000_000_000n // 0.5 NEAR into the contract balance
-export const GUEST_ALLOWANCE = 500_000_000_000_000_000_000_000n // 0.5 NEAR function-call key allowance
+/** Guest economics defaults; the Pages vars GUEST_GAS_NEAR / GUEST_DEPOSIT_NEAR override them (functions/_lib/guest.ts). */
+export const GUEST_FUND_GAS = 100_000_000_000_000_000_000_000n // 0.1 NEAR for gas
+export const GUEST_DEPOSIT = 300_000_000_000_000_000_000_000n // 0.3 NEAR into the contract balance
 
 /** Fee and gas bounds enforced by the contract (`economy::gas_params_ok`). */
 export const GAS_LIMIT_MIN = 21_000n

@@ -13,6 +13,9 @@ export interface ChainSpec {
 export type SimError = { code: string; field?: string | null }
 export interface SimFight { rounds: number; events: any[]; winner: 0 | 1 | 2; rounds_won: [number, number]; state_hash: string }
 
+/** Counts from the wasm: `champion`/`challenger` are bout wins, `n` bouts were simulated. */
+export interface SimOdds { n: number; champion: number; draw: number; challenger: number; champion_pct: number; draw_pct: number; challenger_pct: number }
+
 export interface Sim {
   rulebook(): Rulebook
   requestParts(model: string): { prefix: string; suffix: string; rulebook_hash: string }
@@ -20,7 +23,7 @@ export interface Sim {
   checkSentence(sentence: string): SimError | null
   normalize(rawJson: string): { ok: true; spec: ChainSpec } | { ok: false; error: SimError }
   simulate(champ: ChainSpec, chall: ChainSpec, seedHex: string, rule: number): { ok: true; fight: SimFight } | { ok: false; error: SimError }
-  odds(champ: ChainSpec, chall: ChainSpec, seedHex: string, rule: number, n: number): { win: number; draw: number; loss: number; n: number } | null
+  odds(champ: ChainSpec, chall: ChainSpec, seedHex: string, rule: number, n: number): SimOdds | null
 }
 
 function make(): Sim {
@@ -42,6 +45,7 @@ let sync: Sim | null = null
 
 /** Browser loader: fetches the wasm next to this module (Vite hashes and serves it). */
 export function loadSim(): Promise<Sim> {
+  if (sync) return Promise.resolve(sync)
   ready ??= init({ module_or_path: new URL('./pkg/bout_sim_bg.wasm', import.meta.url) }).then(() => (sync = make()))
   return ready
 }

@@ -1,0 +1,58 @@
+{
+  "cases": [
+    {
+      "escaped": "a pigeon with a law degree",
+      "request_len": 11747,
+      "request_sha256": "055de10221f8a4f9a385b0ebfb1ec08f7233e0c68940f827427544fe86a87fbf",
+      "sentence": "a pigeon with a law degree"
+    },
+    {
+      "escaped": "she said \\\"no\\\" and left",
+      "request_len": 11745,
+      "request_sha256": "0924131cabcfef9dbb139ed9fc223eecedd409428da2829073e319a515674100",
+      "sentence": "she said \"no\" and left"
+    },
+    {
+      "escaped": "back\\\\slash and /slash",
+      "request_len": 11743,
+      "request_sha256": "7cd49ced482d2e82e479ea2b46f6a64c8e26e6094d7aa464a75d3ded76fc4a6b",
+      "sentence": "back\\slash and /slash"
+    },
+    {
+      "escaped": "ctrl \\u0001 \\u001f chars",
+      "request_len": 11745,
+      "request_sha256": "8b371bf2ca438e4bd034ff6b0b738917e7d1aea71bf75cca74a1ebe0e347b268",
+      "sentence": "ctrl \u0001 \u001f chars"
+    },
+    {
+      "escaped": "emoji 🥊 and 🏆 日本語 éè",
+      "request_len": 11755,
+      "request_sha256": "aa8532247f0037e439816033f0772dfbc3be19bc2b458f54435bd7bc7d87f831",
+      "sentence": "emoji 🥊 and 🏆 日本語 éè"
+    },
+    {
+      "escaped": "tab\\there\\nnewline",
+      "request_len": 11739,
+      "request_sha256": "f816d323716b779ba39a33c50c94e43a30305f064f32305c20ff26dfed02d8c7",
+      "sentence": "tab\there\nnewline"
+    },
+    {
+      "escaped": "<script>alert(1)</script> & 'quotes'",
+      "request_len": 11757,
+      "request_sha256": "0058a0930bb3b7954766df3d1ea41bd6c871b5f58bb367f65dce10c2b8647e87",
+      "sentence": "<script>alert(1)</script> & 'quotes'"
+    },
+    {
+      "escaped": "line sep   para   del ",
+      "request_len": 11748,
+      "request_sha256": "1bbcaa2d731948c1b061da87ab5f45bbd7c708c9cb04ee28abe28ad4c3f425eb",
+      "sentence": "line sep   para   del "
+    }
+  ],
+  "model": "Qwen/Qwen3.8-27B",
+  "prefix_len": 10044,
+  "prefix_sha256": "8f51336cd4e00e35d96a8d842df393f8ed24634ed00d1d5b9fe4211accff4c2c",
+  "rulebook_hash": "61ec96b27661f09562445f749400ce92c546e01f22e95885d240422f464fae1c",
+  "suffix_len": 1677,
+  "suffix_sha256": "6d5bcb2ec1e200110e1e5d69d297ef602edaf7101bdec3d43646a9070bb79f01"
+}

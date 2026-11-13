@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { GameClient } from './client'
-import { MockClient } from './mock'
+import { makeClient as pickClient } from './factory'
 import type { Account } from './types'
 
 interface Ctx {
@@ -18,7 +18,7 @@ const GameCtx = createContext<Ctx | null>(null)
 
 let singleton: GameClient | null = null
 function makeClient(): GameClient {
-  if (!singleton) singleton = new MockClient()
+  if (!singleton) singleton = pickClient()
   return singleton
 }
 

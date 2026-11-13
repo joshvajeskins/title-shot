@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { sound } from '../audio/sound'
 import { useGame } from '../game/context'
 import { near, shortAccount } from '../lib/format'
+import { browserStore, exportKey } from '../game/nearKeys'
 import { navigate, usePath } from '../lib/router'
 import { Icon } from './Icon'
 import { Link, Wordmark } from './Link'
@@ -75,6 +76,8 @@ export function Shell({ children, bare = false }: { children: ReactNode; bare?: 
 
 function IdentityBlock({ open, setOpen, onSignOut }: { open: boolean; setOpen: (o: boolean) => void; onSignOut: () => void }) {
   const { account, client } = useGame()
+  const [note, setNote] = useState<string | null>(null)
+  useEffect(() => { if (!open) setNote(null) }, [open])
   if (!account) {
     return (
       <Link href="/enter" className="identity identity-empty">
@@ -84,6 +87,12 @@ function IdentityBlock({ open, setOpen, onSignOut }: { open: boolean; setOpen: (
     )
   }
   const initials = account.id.replace(/[^a-z]/gi, '').slice(0, 2).toUpperCase()
+  const backup = async () => {
+    const k = client.mode === 'testnet' ? exportKey(browserStore()) : null
+    if (!k) return
+    try { await navigator.clipboard.writeText(`${k.accountId}\n${k.privateKey}`); setNote('Key copied. Store it like a password: it controls this account.') }
+    catch { setNote('Your browser blocked the clipboard.') }
+  }
   return (
     <div className="identity-wrap">
       <button className="identity" onClick={() => setOpen(!open)} aria-expanded={open}>
@@ -98,6 +107,8 @@ function IdentityBlock({ open, setOpen, onSignOut }: { open: boolean; setOpen: (
         <div className="identity-menu panel" role="menu">
           <Link href="/play/book" className="identity-menu-item" role="menuitem"><Icon name="book" size={16} /> My bouts</Link>
           <Link href="/play/how" className="identity-menu-item" role="menuitem"><Icon name="info" size={16} /> How the money moves</Link>
+          {client.mode === 'testnet' && <button className="identity-menu-item" role="menuitem" onClick={backup}><Icon name="lock" size={16} /> Back up my key</button>}
+          {note && <p className="identity-note">{note}</p>}
           <Link href="/" className="identity-menu-item" role="menuitem"><Icon name="ring" size={16} /> Website</Link>
           <button className="identity-menu-item" role="menuitem" onClick={onSignOut}><Icon name="x" size={16} /> Sign out</button>
         </div>

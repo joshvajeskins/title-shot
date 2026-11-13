@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { useState, type CSSProperties } from 'react'
 import type { Fighter, School, Spec } from '../game/types'
 import './poster.css'
 
@@ -26,6 +26,7 @@ export function FighterPoster({ fighter, spec: specIn, sentence: sentenceIn, por
   const sentence = sentenceIn ?? fighter?.sentence ?? ''
   const portrait = portraitIn !== undefined ? portraitIn : fighter?.portrait ?? null
   const school = spec?.school ?? 'WILD'
+  const [broken, setBroken] = useState<string | null>(null)
   return (
     <figure className={`poster poster-${size} ${corner ? `poster-${corner}` : ''} ${pending ? 'is-pending' : ''} ${className}`} style={{ ...style, ['--tilt' as string]: `${tilt}deg` }}>
       <div className="poster-sheet paper">
@@ -35,8 +36,8 @@ export function FighterPoster({ fighter, spec: specIn, sentence: sentenceIn, por
           </div>
         )}
         <div className="poster-art">
-          {portrait ? (
-            <img src={portrait} alt={spec?.look ?? sentence} loading="lazy" draggable={false} />
+          {portrait && broken !== portrait ? (
+            <img src={portrait} alt={spec?.look ?? sentence} loading="lazy" draggable={false} onError={() => setBroken(portrait)} />
           ) : (
             <div className={`poster-fallback school-${school.toLowerCase()}`}>
               <img src={`/art/emblem-${school.toLowerCase()}.webp`} alt="" draggable={false} />

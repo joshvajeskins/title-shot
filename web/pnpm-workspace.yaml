@@ -1,0 +1,4 @@
+allowBuilds:
+  esbuild: true
+  workerd: true
+  secp256k1: false

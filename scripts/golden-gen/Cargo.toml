@@ -1,0 +1,8 @@
+[package]
+name = "golden-gen"
+version = "0.1.0"
+edition = "2021"
+[dependencies]
+bout-sim = { path = "../../crates/bout-sim" }
+sha2 = "0.10"
+serde_json = "1"

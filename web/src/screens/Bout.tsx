@@ -78,7 +78,7 @@ export function Bout({ beltId: id }: { beltId: string }) {
       {phase === 'intro' && fight && belt && <Intro fight={fight} beltArt={belt.art} beltName={belt.name} onDone={() => setPhase('fight')} />}
       {phase === 'fight' && fight && <Arena fight={fight} onDone={() => setPhase('result')} />}
       {phase === 'result' && fight && belt && (
-        <Result fight={fight} beltArt={belt.art} beltName={belt.name} verified={null}
+        <Result fight={fight} beltArt={belt.art} beltName={belt.name} verified={(fight as Fight & { verified?: boolean }).verified ?? null}
           onRematch={() => { setPending({ beltId: belt.id, sentence: fight.challenger.sentence }); started.current = false; void run(belt.id, fight.challenger.sentence) }}
           onRewrite={() => navigate(`/play/belt/${belt.id}`)} />
       )}

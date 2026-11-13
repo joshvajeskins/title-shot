@@ -1,0 +1,12 @@
+# The promoter's alarm clock. Deploy with `wrangler deploy` from this folder; the tick token is a secret:
+#   wrangler secret put TICK_SECRET   (same value as the Pages project's TICK_SECRET)
+name = "title-shot-bell"
+main = "src/index.ts"
+compatibility_date = "2026-11-01"
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+[vars]
+# The Pages preview URL of the `title-shot` project (set after the first Pages deploy).
+PAGES_URL = "https://title-shot.pages.dev"

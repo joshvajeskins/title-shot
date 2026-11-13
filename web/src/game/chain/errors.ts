@@ -40,6 +40,21 @@ const MESSAGES: Record<string, (c: ErrorCtx) => string> = {
   E_STATE: () => 'The belt changed while your fight was forging. Your toll was refunded minus the forge fee.',
 }
 
+/**
+ * Codes that mean one thing when the challenge transaction itself is refused (nothing was charged) and another once the
+ * forge has run: then the rejection is a refund, so the player is told their toll came back.
+ */
+const REFUND_MESSAGES: Record<string, () => string> = {
+  E_SELF: () => 'The belt changed hands while your fighter was forging; your toll came back minus the forge fee.',
+  E_CLOSED: () => 'The season closed while your fighter was forging; your toll came back minus the forge fee.',
+}
+
+/** The message for a challenge that failed after forging (status Rejected or Refunded). */
+export function refundMessageFor(code: string | null | undefined, ctx: ErrorCtx = {}): string {
+  const m = code ? REFUND_MESSAGES[code] : undefined
+  return m ? m() : messageFor(code, ctx)
+}
+
 export function messageFor(code: string | null | undefined, ctx: ErrorCtx = {}): string {
   if (!code) return 'Something went wrong. Try again.'
   const m = MESSAGES[code]
@@ -73,7 +88,7 @@ export function describeChallenge(c: RawChallenge | null, ctx: ErrorCtx = {}): C
     case 'Rejected':
     case 'Refunded': {
       const code = c.code ?? 'E_FORGE_FAILED'
-      return { phase: 'failed', code, message: messageFor(code, ctx), refunded: true }
+      return { phase: 'failed', code, message: refundMessageFor(code, ctx), refunded: true }
     }
     default:
       return { phase: 'forging' }

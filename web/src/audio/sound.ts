@@ -83,7 +83,10 @@ export const sound = {
   /** a fighter's battle cry from the worker's TTS cache; silent if unavailable */
   cry(hash: string) {
     if (!hash || muted) return
-    fetch(`/api/cry/${hash}`, { method: 'HEAD' }).then((r) => { if (r.ok && (r.headers.get('content-type') ?? '').includes('audio')) sound.url(`/api/cry/${hash}`, 1) }).catch(() => { /* no TTS endpoint */ })
+    const h = new Howl({ src: [`/api/cry/${hash}`], format: ['mp3'], volume: 1 })
+    h.once('load', () => { const pid = h.play(); duck(h, pid) })
+    h.once('loaderror', () => h.unload())
+    h.once('end', () => h.unload())
   },
   /** play an arbitrary URL (runtime TTS battle cries) */
   url(src: string, volume = 1) {

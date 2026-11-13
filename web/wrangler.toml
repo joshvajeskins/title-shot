@@ -1,0 +1,28 @@
+# Cloudflare Pages project `title-shot` (preview URL only). Static site = dist/, API = functions/.
+# Secrets are never in this file: `wrangler pages secret put <NAME> --project-name title-shot` (see scripts/cf-setup.sh),
+# or web/.dev.vars for local `wrangler pages dev` (gitignored, written by scripts/gen-dev-vars.ts).
+name = "title-shot"
+compatibility_date = "2026-11-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
+
+[[kv_namespaces]]
+binding = "TS_KV"
+# Local dev uses an on-disk simulation. scripts/cf-setup.sh replaces this id with the real namespace before the first deploy.
+id = "00000000000000000000000000000000"
+
+[vars]
+# Set after the contract is deployed (a blank value keeps the API in "not deployed" mode: preview and static routes still work).
+CONTRACT_ID = ""
+SPONSOR_ID = "play.titleshot.testnet"
+VANCE_ID = "vance.titleshot.testnet"
+RELAYER_ID = "relay.titleshot.testnet"
+MPC_SIGNER = "v1.signer-prod.testnet"
+NEAR_RPC_URLS = "https://near-testnet.drpc.org,https://test.rpc.fastnear.com,https://rpc.testnet.fastnear.com"
+BASE_RPC_URLS = "https://sepolia.base.org,https://base-sepolia-rpc.publicnode.com"
+NEARAI_MODEL = "Qwen/Qwen3.8-27B"
+PURSE_WEI = "2000000000000000"
+SEASON_SEC = "21600"
+SPONSOR_FLOOR_NEAR = "0.8"
+GUEST_DEPOSIT_NEAR = "0.3"
+GUEST_GAS_NEAR = "0.1"

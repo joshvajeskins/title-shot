@@ -1,4 +1,5 @@
 import type { Account, Belt, Fight, ForgeProgress, Odds, Spec } from './types'
+import { cleanSentence as cleanSentenceImpl, sentenceProblem as sentenceProblemImpl } from './sentence'
 
 export interface PreviewResult {
   spec: Spec
@@ -43,15 +44,10 @@ export class GameError extends Error {
   }
 }
 
-/** Sentence rules shared with the contract: 3–120 chars after trimming and collapsing whitespace. */
+/** Sentence rules shared with the contract and the Rust crate: see ./sentence.ts (code-point length, no control/invisible/bidi characters). */
 export function cleanSentence(s: string): string {
-  return s.replace(/\s+/g, ' ').trim()
+  return cleanSentenceImpl(s)
 }
 export function sentenceProblem(s: string): string | null {
-  const c = cleanSentence(s)
-  if (c.length < 3) return 'Give it at least a few words.'
-  if (c.length > 120) return 'Keep it under 120 characters.'
-  // eslint-disable-next-line no-control-regex
-  if (/[\u0000-\u001f\u007f]/.test(c)) return 'No control characters.'
-  return null
+  return sentenceProblemImpl(s)
 }
