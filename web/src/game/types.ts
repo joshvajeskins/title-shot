@@ -5,7 +5,7 @@ export type Style = 'BRAWLER' | 'TACTICIAN' | 'COUNTERPUNCHER' | 'SHOWBOAT'
 export type Side = 0 | 1 // 0 champion, 1 challenger
 
 export interface Stats { power: number; guard: number; speed: number; grit: number }
-export interface SpecMove { id: number; label: string }
+export interface SpecMove { id: string; label: string }
 export interface Spec {
   name: string
   title: string
@@ -86,7 +86,7 @@ export type Outcome = 'hit' | 'crit' | 'miss' | 'blocked' | 'countered' | 'used'
 
 export type FightEvent =
   | { t: 'match_start'; rule: number; max_hp: [number, number] }
-  | { t: 'round_start'; round: number }
+  | { t: 'round_start'; round: number; form?: [number, number] }
   | { t: 'exchange'; round: number; n: number; first: Side }
   | {
       t: 'act'

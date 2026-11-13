@@ -110,3 +110,8 @@
   .arena-round .display { font-size: 30px; }
 }
 .arena-flash { position: absolute; inset: 0; z-index: 7; pointer-events: none; background: radial-gradient(circle at 50% 45%, #fff, rgba(242, 232, 213, 0.6) 60%); opacity: 0; mix-blend-mode: screen; }
+.form-banner { position: absolute; z-index: 8; left: 50%; top: 60%; transform: translateX(-50%); display: grid; gap: 4px; justify-items: center; text-align: center; font-size: 13px; color: var(--paper-dim); animation: fx-in 300ms var(--ease-out) both 300ms; pointer-events: none; }
+.form-banner span { padding: 4px 12px; border-radius: 99px; background: rgba(14, 13, 18, 0.78); box-shadow: 0 0 0 1px var(--line); white-space: nowrap; }
+.form-banner b { color: var(--paper); margin-left: 4px; }
+.form-banner .is-hot { color: #ffb38a; } .form-banner .is-hot b { color: var(--gold); }
+.form-banner .is-cold { color: #9db8ff; }

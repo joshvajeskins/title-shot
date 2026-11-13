@@ -9,6 +9,7 @@ import { cleanSentence, sentenceProblem, type PreviewResult } from '../game/clie
 import { useAsync, useGame } from '../game/context'
 import { near } from '../lib/format'
 import { navigate } from '../lib/router'
+import { moveInfo } from '../game/library'
 import './corner.css'
 
 const IDEAS = ['a pigeon with a law degree', 'a toaster that believes it is a dragon', 'a librarian who bans noise', 'a snail with a rocket backpack', 'a ghost who haunts the DMV', 'the north wind in a bad mood']
@@ -73,7 +74,7 @@ export function Corner({ beltId }: { beltId: string }) {
               <div className="corner-school"><span className="chip chip-gold">{SCHOOL_LABEL[champ.spec.school]}</span><span className="chip">{champ.spec.style.toLowerCase()}</span></div>
               <p className="corner-hint">{SCHOOL_LABEL[champ.spec.school]} fighters lean on {SCHOOL_HINT[champ.spec.school]}.</p>
               <StatBars spec={champ.spec} compact />
-              <MoveList spec={champ.spec} />
+              <MoveList spec={champ.spec} names={moveInfo} />
               <p className="corner-cry serif-i">“{champ.spec.cry}”</p>
             </div>
           </div>
@@ -114,7 +115,7 @@ export function Corner({ beltId }: { beltId: string }) {
               <div className="corner-preview-detail">
                 {odds && <OddsMeter odds={odds} champName={champ.spec.name} />}
                 <StatBars spec={preview.spec} compact />
-                <MoveList spec={preview.spec} />
+                <MoveList spec={preview.spec} names={moveInfo} />
                 <p className="corner-note">
                   {preview.canonical
                     ? 'This sentence was already forged on chain, so this is exactly the fighter you will get.'

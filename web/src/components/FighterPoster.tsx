@@ -72,7 +72,7 @@ export function StatBars({ spec, compact = false }: { spec: Spec; compact?: bool
   )
 }
 
-export function MoveList({ spec, names }: { spec: Spec; names?: (id: number) => { name: string; desc: string } | null }) {
+export function MoveList({ spec, names }: { spec: Spec; names?: (id: string) => { name: string; desc: string } | null }) {
   return (
     <ol className="movelist">
       {spec.moves.map((m, i) => {

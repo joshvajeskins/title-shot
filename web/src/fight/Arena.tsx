@@ -6,6 +6,7 @@ import type { Fight, Side } from '../game/types'
 import { FX } from '../game/types'
 import { actSound, applyFx, Clock, fighterName, fxNames, moveLabel, NO_STATUS, roundVo, schoolOf, type Callout, type Pop, type Status } from './director'
 import { Vfx } from './vfx'
+import { moveByIndex } from '../game/library'
 import './arena.css'
 
 const EASE: [number, number, number, number] = [0.23, 1, 0.32, 1]
@@ -28,6 +29,7 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
   const [log, setLog] = useState<string[]>([])
   const [speed, setSpeed] = useState(1)
   const [koSide, setKoSide] = useState<Side | null>(null)
+  const [form, setForm] = useState<[number, number] | null>(null)
 
   const speedRef = useRef(1)
   useEffect(() => { clock.current.speed = speed; speedRef.current = speed }, [speed])
@@ -76,6 +78,7 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
             setRound(ev.round); setStatus([NO_STATUS, NO_STATUS]); setShield([0, 0]); setKoSide(null)
             const mh = fight.events.find((e) => e.t === 'match_start')
             if (mh && mh.t === 'match_start') { setHp(mh.max_hp); setGhost(mh.max_hp) }
+            if (ev.form) setForm(ev.form)
             setCallout({ text: ev.round === lastRound && ev.round === 3 ? 'Final round' : `Round ${ev.round}`, kind: 'round' })
             roundVo(ev.round, ev.round === 3)
             await c.wait(ev.round === 1 ? 1150 : 900)
@@ -93,11 +96,13 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
             await c.wait(170)
             const hitting = ev.outcome === 'hit' || ev.outcome === 'crit' || ev.outcome === 'countered'
             if (ev.outcome === 'crit' || finisher) { await c.wait(150); flash(finisher); if (stage.current) animate(stage.current, { x: [0, -12, 9, -5, 2, 0], y: [0, 7, -4, 2, 0] }, { duration: 0.38 }) }
-            actSound(ev, schoolOf(fight, a))
+            const lm = moveByIndex(ev.move_id)
+            const mvSchool = lm?.school ?? schoolOf(fight, a)
+            actSound(ev, mvSchool)
             const p = center(f)
             if (hitting && ev.dmg > 0) {
               if (fe) { animate(fe, { x: [0, dir * 18, -dir * 8, dir * 3, 0], rotate: [0, dir * 4, 0] }, { duration: 0.34, ease: EASE }); fe.classList.add('is-hit'); setTimeout(() => fe.classList.remove('is-hit'), 130) }
-              vfx.burst(p.x, p.y, schoolOf(fight, a), ev.outcome === 'crit' ? 1.6 : ev.dmg > 18 ? 1.2 : 0.85, dir)
+              vfx.burst(p.x, p.y, mvSchool, ev.outcome === 'crit' ? 1.6 : ev.dmg > 40 ? 1.25 : 0.85, dir)
               vfx.burst(p.x, p.y, 'INK', 0.8, dir)
               pop(f, `-${ev.dmg}`, ev.outcome === 'crit' ? 'crit' : 'dmg')
               if (ev.outcome === 'crit') { pop(f, 'Critical!', 'status'); if (Math.random() < 0.45) sound.play(`crit_${1 + Math.floor(Math.random() * 3)}`) }
@@ -107,7 +112,8 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
             } else if (ev.outcome === 'blocked') {
               pop(f, 'Blocked', 'block'); vfx.burst(p.x, p.y, 'IRON', 0.7, dir)
             } else if (ev.outcome === 'used') {
-              const me = center(a); vfx.burst(me.x, me.y, schoolOf(fight, a), 0.7, -dir)
+              if (lm?.kind === 'hex') vfx.burst(p.x, p.y, mvSchool, 0.8, dir)
+              else { const me = center(a); vfx.burst(me.x, me.y, mvSchool, 0.7, -dir) }
               if (ev.heal > 0) pop(a, `+${ev.heal}`, 'heal')
             }
             if (ev.recoil > 0) pop(a, `-${ev.recoil}`, 'dmg')
@@ -204,6 +210,9 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
       <canvas ref={canvas} className="arena-vfx" aria-hidden="true" />
       <div className="arena-flash" aria-hidden="true" />
       <div className="arena-crowd" aria-hidden="true" />
+      {form && callout?.kind === 'round' && (
+        <div className="form-banner">{([0, 1] as Side[]).map((sd) => <span key={sd} className={form[sd] >= 120 ? 'is-hot' : form[sd] <= 70 ? 'is-cold' : ''}>{fighterName(fight, sd)} {form[sd] >= 120 ? 'is in form' : form[sd] <= 70 ? 'is having an off day' : 'looks steady'} <b className="num">{form[sd]}%</b></span>)}</div>
+      )}
       {callout && <div key={callout.text} className={`callout callout-${callout.kind} display print`}>{callout.text}</div>}
       <footer className="arena-foot">
         <div className="arena-log" aria-live="polite">{log.map((l, i) => <span key={i + l}>{l}</span>)}</div>

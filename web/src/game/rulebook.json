@@ -1,0 +1,438 @@
+{
+ "version": "titleshot-rulebook-v1",
+ "hash": "57963de68f723ffaa9be72286f164db7d2483c8b053ac4dbb265706f582b3f7f",
+ "library": [
+  {
+   "index": 0,
+   "id": "ember_jab",
+   "name": "Ember Jab",
+   "school": "BLAZE",
+   "kind": "strike",
+   "desc": "Quick hot jab. Reliable."
+  },
+  {
+   "index": 1,
+   "id": "flame_lash",
+   "name": "Flame Lash",
+   "school": "BLAZE",
+   "kind": "strike",
+   "desc": "Whip of flame. 35% to set the foe burning."
+  },
+  {
+   "index": 2,
+   "id": "fire_whirl",
+   "name": "Fire Whirl",
+   "school": "BLAZE",
+   "kind": "strike",
+   "desc": "Three spinning licks of fire."
+  },
+  {
+   "index": 3,
+   "id": "inferno",
+   "name": "Inferno",
+   "school": "BLAZE",
+   "kind": "strike",
+   "desc": "Huge, risky blast. 60% to burn."
+  },
+  {
+   "index": 4,
+   "id": "smolder",
+   "name": "Smolder",
+   "school": "BLAZE",
+   "kind": "hex",
+   "desc": "Light singe, but the foe surely starts burning."
+  },
+  {
+   "index": 5,
+   "id": "battle_roar",
+   "name": "Battle Roar",
+   "school": "BLAZE",
+   "kind": "boost",
+   "desc": "Weak hit. Your next attack hits double and cannot miss."
+  },
+  {
+   "index": 6,
+   "id": "melt_through",
+   "name": "Melt Through",
+   "school": "BLAZE",
+   "kind": "strike",
+   "desc": "Ignores shields and half the foe's guard."
+  },
+  {
+   "index": 7,
+   "id": "wave_slap",
+   "name": "Wave Slap",
+   "school": "TIDE",
+   "kind": "strike",
+   "desc": "Wet, quick slap. Reliable."
+  },
+  {
+   "index": 8,
+   "id": "undertow",
+   "name": "Undertow",
+   "school": "TIDE",
+   "kind": "strike",
+   "desc": "Drags the foe down. 45% to weaken."
+  },
+  {
+   "index": 9,
+   "id": "riptide",
+   "name": "Riptide",
+   "school": "TIDE",
+   "kind": "strike",
+   "desc": "Heals you for half the damage dealt."
+  },
+  {
+   "index": 10,
+   "id": "tidal_wall",
+   "name": "Tidal Wall",
+   "school": "TIDE",
+   "kind": "guard",
+   "desc": "Light splash and a water shield that soaks damage."
+  },
+  {
+   "index": 11,
+   "id": "healing_rain",
+   "name": "Healing Rain",
+   "school": "TIDE",
+   "kind": "boost",
+   "desc": "Heal 25% of your max HP."
+  },
+  {
+   "index": 12,
+   "id": "salt_spray",
+   "name": "Salt Spray",
+   "school": "TIDE",
+   "kind": "hex",
+   "desc": "Light spray: sure weaken on the foe, you shed ailments."
+  },
+  {
+   "index": 13,
+   "id": "spark",
+   "name": "Spark",
+   "school": "VOLT",
+   "kind": "strike",
+   "desc": "Quick zap. 15% to stun."
+  },
+  {
+   "index": 14,
+   "id": "arc_bolt",
+   "name": "Arc Bolt",
+   "school": "VOLT",
+   "kind": "strike",
+   "desc": "Crackling bolt. 25% to stun."
+  },
+  {
+   "index": 15,
+   "id": "chain_shock",
+   "name": "Chain Shock",
+   "school": "VOLT",
+   "kind": "strike",
+   "desc": "Lightning jumps four times."
+  },
+  {
+   "index": 16,
+   "id": "overclock",
+   "name": "Overclock",
+   "school": "VOLT",
+   "kind": "boost",
+   "desc": "Weak jolt. Act first for 3 exchanges, charge next hit."
+  },
+  {
+   "index": 17,
+   "id": "thunderclap",
+   "name": "Thunderclap",
+   "school": "VOLT",
+   "kind": "strike",
+   "desc": "Booming slam. 40% to stun."
+  },
+  {
+   "index": 18,
+   "id": "static_field",
+   "name": "Static Field",
+   "school": "VOLT",
+   "kind": "hex",
+   "desc": "Light shock. 77% to pin the foe in place."
+  },
+  {
+   "index": 19,
+   "id": "iron_fist",
+   "name": "Iron Fist",
+   "school": "IRON",
+   "kind": "strike",
+   "desc": "Heavy, honest punch."
+  },
+  {
+   "index": 20,
+   "id": "bulwark",
+   "name": "Bulwark",
+   "school": "IRON",
+   "kind": "guard",
+   "desc": "Light shove and a thick plate shield."
+  },
+  {
+   "index": 21,
+   "id": "riposte",
+   "name": "Riposte",
+   "school": "IRON",
+   "kind": "guard",
+   "desc": "Light jab. Next hit you take is half thrown back."
+  },
+  {
+   "index": 22,
+   "id": "wrecking_swing",
+   "name": "Wrecking Swing",
+   "school": "IRON",
+   "kind": "strike",
+   "desc": "Slow, brutal. Pierces shields and guard."
+  },
+  {
+   "index": 23,
+   "id": "armor_up",
+   "name": "Armor Up",
+   "school": "IRON",
+   "kind": "boost",
+   "desc": "Weak hit, small shield, first strike for 3 exchanges."
+  },
+  {
+   "index": 24,
+   "id": "rivet_barrage",
+   "name": "Rivet Barrage",
+   "school": "IRON",
+   "kind": "strike",
+   "desc": "Three piercing rivets."
+  },
+  {
+   "index": 25,
+   "id": "dent",
+   "name": "Dent",
+   "school": "IRON",
+   "kind": "strike",
+   "desc": "Crumples their offence. 40% to weaken."
+  },
+  {
+   "index": 26,
+   "id": "mind_spike",
+   "name": "Mind Spike",
+   "school": "MIND",
+   "kind": "strike",
+   "desc": "A thought that cannot be dodged."
+  },
+  {
+   "index": 27,
+   "id": "hex_gaze",
+   "name": "Hex Gaze",
+   "school": "MIND",
+   "kind": "hex",
+   "desc": "Light psychic jab. Sure weaken on the foe."
+  },
+  {
+   "index": 28,
+   "id": "foresight",
+   "name": "Foresight",
+   "school": "MIND",
+   "kind": "guard",
+   "desc": "Predict the next hit: counter and act first."
+  },
+  {
+   "index": 29,
+   "id": "brain_freeze",
+   "name": "Brain Freeze",
+   "school": "MIND",
+   "kind": "strike",
+   "desc": "Sudden headache. 40% to stun."
+  },
+  {
+   "index": 30,
+   "id": "focus",
+   "name": "Focus",
+   "school": "MIND",
+   "kind": "boost",
+   "desc": "Charge your next attack and clear your head."
+  },
+  {
+   "index": 31,
+   "id": "psy_siphon",
+   "name": "Psy Siphon",
+   "school": "MIND",
+   "kind": "strike",
+   "desc": "Drains vigor: heals you, 25% to weaken."
+  },
+  {
+   "index": 32,
+   "id": "claw_swipe",
+   "name": "Claw Swipe",
+   "school": "WILD",
+   "kind": "strike",
+   "desc": "Fast, nasty swipe."
+  },
+  {
+   "index": 33,
+   "id": "venom_bite",
+   "name": "Venom Bite",
+   "school": "WILD",
+   "kind": "strike",
+   "desc": "Toxic bite. 45% to poison (damage over time)."
+  },
+  {
+   "index": 34,
+   "id": "pounce",
+   "name": "Pounce",
+   "school": "WILD",
+   "kind": "strike",
+   "desc": "Leap in hard; you act first for three exchanges."
+  },
+  {
+   "index": 35,
+   "id": "regrowth",
+   "name": "Regrowth",
+   "school": "WILD",
+   "kind": "boost",
+   "desc": "Heal 25% max HP and shake off ailments."
+  },
+  {
+   "index": 36,
+   "id": "thorn_wall",
+   "name": "Thorn Wall",
+   "school": "WILD",
+   "kind": "guard",
+   "desc": "Small shield plus a counter stance."
+  },
+  {
+   "index": 37,
+   "id": "stampede",
+   "name": "Stampede",
+   "school": "WILD",
+   "kind": "strike",
+   "desc": "Three trampling hits, each can stun."
+  }
+ ],
+ "rules": [
+  {
+   "desc": "BLAZE moves deal x3/2 damage.",
+   "id": 0,
+   "name": "Furnace Night"
+  },
+  {
+   "desc": "VOLT moves deal x3/2 damage.",
+   "id": 1,
+   "name": "Storm Front"
+  },
+  {
+   "desc": "Stun chances are halved.",
+   "id": 2,
+   "name": "Padded Ring"
+  },
+  {
+   "desc": "Heals and lifesteal are switched off.",
+   "id": 3,
+   "name": "No Medics"
+  },
+  {
+   "desc": "Critical hits deal x2 instead of x3/2.",
+   "id": 4,
+   "name": "Glass Jaws"
+  },
+  {
+   "desc": "Shields absorb twice as much.",
+   "id": 5,
+   "name": "Iron Curtain"
+  },
+  {
+   "desc": "Burn ticks deal double damage.",
+   "id": 6,
+   "name": "Slow Burn"
+  },
+  {
+   "desc": "School edges hit x3/2, disadvantages x2/3.",
+   "id": 7,
+   "name": "Grudge Match"
+  }
+ ],
+ "schools": [
+  {
+   "beats": [
+    "IRON",
+    "WILD"
+   ],
+   "loses_to": [
+    "VOLT",
+    "MIND"
+   ],
+   "name": "BLAZE",
+   "neutral": [
+    "TIDE"
+   ]
+  },
+  {
+   "beats": [
+    "VOLT",
+    "MIND"
+   ],
+   "loses_to": [
+    "IRON",
+    "WILD"
+   ],
+   "name": "TIDE",
+   "neutral": [
+    "BLAZE"
+   ]
+  },
+  {
+   "beats": [
+    "BLAZE",
+    "WILD"
+   ],
+   "loses_to": [
+    "TIDE",
+    "MIND"
+   ],
+   "name": "VOLT",
+   "neutral": [
+    "IRON"
+   ]
+  },
+  {
+   "beats": [
+    "TIDE",
+    "MIND"
+   ],
+   "loses_to": [
+    "BLAZE",
+    "WILD"
+   ],
+   "name": "IRON",
+   "neutral": [
+    "VOLT"
+   ]
+  },
+  {
+   "beats": [
+    "BLAZE",
+    "VOLT"
+   ],
+   "loses_to": [
+    "TIDE",
+    "IRON"
+   ],
+   "name": "MIND",
+   "neutral": [
+    "WILD"
+   ]
+  },
+  {
+   "beats": [
+    "TIDE",
+    "IRON"
+   ],
+   "loses_to": [
+    "BLAZE",
+    "VOLT"
+   ],
+   "name": "WILD",
+   "neutral": [
+    "MIND"
+   ]
+  }
+ ]
+}

@@ -22,7 +22,7 @@ function toSpec(raw: RosterRow['raw']): Spec {
   const pts = 70
   const st = { power: Math.round((w.power / tot) * pts), guard: Math.round((w.guard / tot) * pts), speed: Math.round((w.speed / tot) * pts), grit: 0 }
   st.grit = pts - st.power - st.guard - st.speed
-  return { name: raw.name, title: raw.title, look: raw.look, cry: raw.cry, school: raw.school as School, style: raw.style as Style, moves: raw.moves.map((m, i) => ({ id: i, label: m.label })), stats: st }
+  return { name: raw.name, title: raw.title, look: raw.look, cry: raw.cry, school: raw.school as School, style: raw.style as Style, moves: raw.moves.map((m) => ({ id: m.id, label: m.label })), stats: st }
 }
 
 function fighterFrom(row: RosterRow, writer: string): Fighter {
@@ -46,7 +46,7 @@ function synth(sentence: string): Spec {
   const a = 10 + (h % 20), b = 10 + ((h >> 5) % 20), c = 10 + ((h >> 10) % 20)
   return {
     name, title: `The ${cap(words[0] ?? 'Unknown')} Threat`, look: sentence, cry: `${name} came to win!`, school, style: styles[h % 4],
-    moves: [{ id: 0, label: `${cap(words[0] ?? 'Wild')} Jab` }, { id: 1, label: `${cap(words[1] ?? 'Big')} Slam` }, { id: 2, label: 'Second Wind' }],
+    moves: [{ id: 'ember_jab', label: `${cap(words[0] ?? 'Wild')} Jab` }, { id: 'iron_fist', label: `${cap(words[1] ?? 'Big')} Slam` }, { id: 'second_wind', label: 'Second Wind' }],
     stats: { power: a, guard: b, speed: c, grit: 70 - a - b - c },
   }
 }
