@@ -1,0 +1,95 @@
+.poster {
+  --w: 300px;
+  margin: 0;
+  width: var(--w);
+  max-width: 100%;
+  transform: rotate(var(--tilt, 0deg));
+  filter: drop-shadow(0 22px 34px rgba(0, 0, 0, 0.6));
+}
+.poster-sm { --w: 200px; }
+.poster-lg { --w: 340px; }
+.poster-sheet {
+  position: relative;
+  padding: 10px 10px 14px;
+  border-radius: 3px;
+  /* torn-edge bottom */
+  clip-path: polygon(0 0, 100% 0, 100% 97.6%, 96% 99.4%, 91% 98.2%, 85% 99.8%, 78% 98.4%, 70% 99.6%, 63% 98.1%, 55% 99.7%, 47% 98.3%, 40% 99.5%, 32% 98.2%, 25% 99.8%, 17% 98.4%, 9% 99.6%, 4% 98.3%, 0 99.4%);
+}
+.poster-corner {
+  position: absolute; z-index: 2; top: 18px; left: -2px;
+  padding: 3px 12px 2px 12px;
+  font-size: 15px; letter-spacing: 0.06em;
+  color: var(--on-paper);
+  background: var(--gold);
+  box-shadow: 2px 2px 0 var(--red-deep);
+}
+.poster-chall .poster-corner { background: var(--blue); color: var(--paper); box-shadow: 2px 2px 0 var(--blue-deep); left: auto; right: -2px; }
+.poster-art {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--red);
+  box-shadow: 0 0 0 2px var(--on-paper) inset;
+}
+.poster-art > img { width: 100%; height: 100%; object-fit: cover; }
+.poster-school {
+  position: absolute; right: 8px; bottom: 8px;
+  font-family: var(--font-display); font-weight: 800; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 2px;
+  background: var(--ink); color: var(--paper);
+}
+.poster-fallback {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(242, 232, 213, 0.22), transparent 60%),
+    radial-gradient(rgba(14, 13, 18, 0.28) 1.2px, transparent 1.4px) 0 0 / 7px 7px,
+    var(--red);
+}
+.poster-fallback > img { width: 62%; filter: drop-shadow(0 6px 0 rgba(14, 13, 18, 0.35)); }
+.poster-fallback.school-tide, .poster-fallback.school-volt { background-color: var(--blue); }
+.poster-fallback.school-iron, .poster-fallback.school-mind { background-color: #2b2733; }
+.poster-ink {
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(242, 232, 213, 0.28) 50%, transparent 70%);
+  background-size: 220% 100%;
+  animation: poster-shimmer 1.4s linear infinite;
+}
+@keyframes poster-shimmer { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+.poster-caption { display: grid; gap: 2px; padding: 10px 4px 2px; }
+.poster-name {
+  font-size: calc(var(--w) * 0.115);
+  color: var(--on-paper);
+  text-shadow: 0.05em 0.045em 0 var(--red);
+  line-height: 0.92;
+  overflow-wrap: anywhere;
+}
+.poster-title { font-size: calc(var(--w) * 0.058); color: var(--on-paper-dim); line-height: 1.15; }
+.poster-sentence {
+  margin-top: 6px; padding-top: 7px;
+  border-top: 1.5px dashed rgba(26, 22, 18, 0.28);
+  font-size: calc(var(--w) * 0.062);
+  line-height: 1.2;
+  color: var(--on-paper);
+}
+.poster-sm .poster-sheet { padding: 7px 7px 10px; }
+.poster-sm .poster-corner { font-size: 12px; top: 12px; }
+
+/* stat bars */
+.statbars { margin: 0; display: grid; gap: 9px; }
+.statbar { display: grid; grid-template-columns: 62px 1fr; align-items: center; gap: 10px; }
+.statbar dt { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-faint); }
+.statbar dd { margin: 0; display: grid; grid-template-columns: 1fr 26px; align-items: center; gap: 10px; }
+.statbar dd .num { text-align: right; font-weight: 600; }
+.statbar-track { position: relative; height: 8px; border-radius: 99px; background: rgba(242, 232, 213, 0.08); overflow: hidden; }
+.statbar-fill { position: absolute; inset: 0; transform-origin: left; background: linear-gradient(90deg, var(--red), var(--gold)); border-radius: 99px; transition: transform 600ms var(--ease-out); }
+.statbars.is-compact { gap: 6px; }
+.statbars.is-compact .statbar { grid-template-columns: 50px 1fr; }
+
+/* moves */
+.movelist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.movelist li { display: grid; grid-template-columns: 26px 1fr; column-gap: 10px; align-items: baseline; }
+.movelist-n { font-size: 20px; color: var(--red); line-height: 1; }
+.movelist-label { font-family: var(--font-serif); font-style: italic; font-size: 19px; line-height: 1.2; }
+.movelist-lib { grid-column: 2; font-size: 11px; color: var(--paper-faint); letter-spacing: 0.02em; }

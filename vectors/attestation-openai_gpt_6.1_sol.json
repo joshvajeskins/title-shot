@@ -1,0 +1,18 @@
+{
+  "model": "openai/gpt-6.1-sol",
+  "http": 503,
+  "ms": 241,
+  "tee_attested": false,
+  "signers": {
+    "gateway": null,
+    "model": []
+  },
+  "summary": {
+    "error": {
+      "message": "Provider error: Failed to fetch attestat...(213 chars)",
+      "type": "provider_error",
+      "param": null,
+      "code": null
+    }
+  }
+}

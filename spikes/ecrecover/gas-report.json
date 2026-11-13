@@ -1,0 +1,164 @@
+[
+  {
+    "case": "valid_provider_tee_v27_28",
+    "code": "OK",
+    "tgas": 2.38,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "valid_v_0_1",
+    "code": "OK",
+    "tgas": 2.38,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "valid_0x_prefix_uppercase",
+    "code": "OK",
+    "tgas": 2.38,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "valid_gateway_kind",
+    "code": "OK",
+    "tgas": 2.38,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "valid_unicode_escaped_sentence",
+    "code": "OK",
+    "tgas": 2.38,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "tampered_response_byte",
+    "code": "E_SIGNER",
+    "tgas": 2.31,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "tampered_response_trailing_newline",
+    "code": "E_SIGNER",
+    "tgas": 2.31,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "tampered_sentence",
+    "code": "E_SIGNER",
+    "tgas": 2.31,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "signed_with_different_model_id",
+    "code": "E_SIGNER",
+    "tgas": 2.31,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "signer_not_in_allowlist",
+    "code": "E_SIGNER",
+    "tgas": 2.31,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "gateway_sig_submitted_as_provider_tee",
+    "code": "E_SIGNER",
+    "tgas": 2.31,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "provider_tee_sig_submitted_as_gateway",
+    "code": "E_SIGNER",
+    "tgas": 2.31,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "high_s_malleable_twin",
+    "code": "E_RECOVER",
+    "tgas": 2.28,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "zero_r_s_signature",
+    "code": "E_RECOVER",
+    "tgas": 2.28,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "truncated_sig_64_bytes",
+    "code": "E_SIG_LEN",
+    "tgas": 1.66,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "overlong_sig_66_bytes",
+    "code": "E_SIG_LEN",
+    "tgas": 1.66,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "bad_recovery_byte_2",
+    "code": "E_SIG_V",
+    "tgas": 1.66,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "bad_recovery_byte_29",
+    "code": "E_SIG_V",
+    "tgas": 1.66,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "non_hex_signature",
+    "code": "E_SIG_HEX",
+    "tgas": 1.64,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "algo_ed25519_unsupported",
+    "code": "E_ALGO",
+    "tgas": 1.64,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "kind_unknown",
+    "code": "E_KIND",
+    "tgas": 1.64,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "sentence_over_1024_bytes",
+    "code": "E_SENTENCE_SIZE",
+    "tgas": 1.66,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "oversized_response_9k_validly_signed",
+    "code": "E_RESPONSE_SIZE",
+    "tgas": 1.83,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "signed_not_json",
+    "code": "E_ENVELOPE",
+    "tgas": 2.23,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "signed_empty_choices",
+    "code": "E_ENVELOPE",
+    "tgas": 2.24,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "signed_null_content",
+    "code": "E_NO_CONTENT",
+    "tgas": 2.28,
+    "vector": "synthetic-eip191-1.json"
+  },
+  {
+    "case": "signed_empty_content",
+    "code": "E_NO_CONTENT",
+    "tgas": 2.28,
+    "vector": "synthetic-eip191-1.json"
+  }
+]

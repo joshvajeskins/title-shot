@@ -1,0 +1,87 @@
+{
+ "announcer": "RwCBSTvCZrbz0Ee9NhVE",
+ "vance": "WyLpysMGEztFyF2CmOk7",
+ "fighters": [
+  {
+   "key": "gruff_veteran",
+   "voice_id": "L4m6gNixHa9n4BqMT9nG",
+   "descriptor": "Gruff veteran",
+   "design_prompt": "Male, 60s, grizzled retired boxing veteran: gravelly rough rasp, low, tired but tough, American, blunt and growly.",
+   "model_id": "eleven_v3",
+   "stability": 0.5,
+   "similarity_boost": 0.8,
+   "sample": "audio/vo/fighter_gruff_veteran.mp3"
+  },
+  {
+   "key": "squeaky_tiny",
+   "voice_id": "OR7Av84vx5QZuvwnK12h",
+   "descriptor": "Squeaky tiny",
+   "design_prompt": "Adult comedic cartoon critter voice: extremely high-pitched squeaky helium-like voice of a tiny woodland creature, fast, excitable and bubbly.",
+   "model_id": "eleven_v3",
+   "stability": 0.0,
+   "similarity_boost": 0.8,
+   "sample": "audio/vo/fighter_squeaky_tiny.mp3"
+  },
+  {
+   "key": "regal_grand",
+   "voice_id": "wBBdSSFWcmRfgcMxBiFq",
+   "descriptor": "Regal grand",
+   "design_prompt": "Female, 40s, regal grand queen: rich resonant mezzo, noble, slow and majestic, British accent, commanding and elegant.",
+   "model_id": "eleven_v3",
+   "stability": 0.5,
+   "similarity_boost": 0.8,
+   "sample": "audio/vo/fighter_regal_grand.mp3"
+  },
+  {
+   "key": "deadpan_robot",
+   "voice_id": "cde3ffzQItSIc1pxTH48",
+   "descriptor": "Deadpan robotic",
+   "design_prompt": "Deadpan robotic machine voice: flat monotone, slightly synthetic and metallic, emotionless, precise, android.",
+   "model_id": "eleven_v3",
+   "stability": 1.0,
+   "similarity_boost": 0.8,
+   "sample": "audio/vo/fighter_deadpan_robot.mp3"
+  },
+  {
+   "key": "sweet_elderly",
+   "voice_id": "nMTkZP9LsSPWTlJDAu4D",
+   "descriptor": "Sweet elderly",
+   "design_prompt": "Female, 80s, sweet elderly grandmother: gentle warm quavering voice, kindly, soft and cheerful, American.",
+   "model_id": "eleven_v3",
+   "stability": 0.5,
+   "similarity_boost": 0.8,
+   "sample": "audio/vo/fighter_sweet_elderly.mp3"
+  },
+  {
+   "key": "hyper_teen",
+   "voice_id": "8slLmIwlBPhKUaHmc1mo",
+   "descriptor": "Hyper teen",
+   "design_prompt": "Male, early 20s, hyper energetic cocky streamer-type young adult: very fast, loud, bright, voice cracking with excitement, American, trash-talking.",
+   "model_id": "eleven_v3",
+   "stability": 0.0,
+   "similarity_boost": 0.8,
+   "sample": "audio/vo/fighter_hyper_teen.mp3"
+  },
+  {
+   "key": "theatrical_villain",
+   "voice_id": "krjCQw16DBOTbhTFeskH",
+   "descriptor": "Theatrical villain",
+   "design_prompt": "Male, 50s, theatrical cartoon villain: silky menacing baritone, over-the-top dramatic, sneering, British stage actor style, evil laugh energy.",
+   "model_id": "eleven_v3",
+   "stability": 0.0,
+   "similarity_boost": 0.8,
+   "sample": "audio/vo/fighter_theatrical_villain.mp3"
+  },
+  {
+   "key": "calm_monk",
+   "voice_id": "Of5nghHd07BaXFRHknUc",
+   "descriptor": "Calm monk",
+   "design_prompt": "Male, 60s, calm serene monk: soft slow deep voice, hushed, peaceful, meditative, unhurried, breathy.",
+   "model_id": "eleven_v3",
+   "stability": 1.0,
+   "similarity_boost": 0.8,
+   "sample": "audio/vo/fighter_calm_monk.mp3"
+  }
+ ],
+ "note": "Runtime battle cries: POST /v1/text-to-speech/{voice_id} with model eleven_v3 and these voice_settings; keep cries <= 60 chars."
+}

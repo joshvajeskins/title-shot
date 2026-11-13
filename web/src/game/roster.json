@@ -1,0 +1,662 @@
+[
+ {
+  "sentence": "a pigeon with a law degree",
+  "raw": {
+   "verdict": "ok",
+   "name": "Counselor Coo",
+   "title": "Pigeon at Law, Esq.",
+   "look": "A plump grey pigeon in a tiny oversized black barrister robe and curled white wig, gripping a rolled subpoena in one claw, courtroom-gold palette.",
+   "cry": "I object! Also, crumbs.",
+   "school": "MIND",
+   "style": "TACTICIAN",
+   "moves": [
+    {
+     "id": "brain_freeze",
+     "label": "Serve Subpoena"
+    },
+    {
+     "id": "hex_gaze",
+     "label": "Cross-Examine"
+    },
+    {
+     "id": "claw_swipe",
+     "label": "Peck of Justice"
+    }
+   ],
+   "weights": {
+    "power": 4,
+    "guard": 5,
+    "speed": 7,
+    "grit": 4
+   }
+  },
+  "portrait": "/art/fighter-pigeon.webp"
+ },
+ {
+  "sentence": "a grandma who never stops knitting",
+  "raw": {
+   "verdict": "ok",
+   "name": "Granny Purl",
+   "title": "The Eternal Stitch",
+   "look": "A tiny fierce grandmother in a patchwork cardigan and half-moon glasses, a giant scarf trailing behind her, two knitting needles held like swords, warm yarn colours.",
+   "cry": "One more row, dearie.",
+   "school": "IRON",
+   "style": "COUNTERPUNCHER",
+   "moves": [
+    {
+     "id": "bulwark",
+     "label": "Woolly Wall"
+    },
+    {
+     "id": "dent",
+     "label": "Needle Prick"
+    },
+    {
+     "id": "rivet_barrage",
+     "label": "Stitch Barrage"
+    }
+   ],
+   "weights": {
+    "power": 3,
+    "guard": 8,
+    "speed": 3,
+    "grit": 8
+   }
+  },
+  "portrait": "/art/fighter-grandma.webp"
+ },
+ {
+  "sentence": "a toaster that believes it is a dragon",
+  "raw": {
+   "verdict": "ok",
+   "name": "Toastzilla",
+   "title": "Dragon of the Kitchen Counter",
+   "look": "A chrome two-slot toaster with paper dragon wings and a painted-on snout, glowing orange coils inside, tiny plastic horns, smoke curling from the slots.",
+   "cry": "Fear my crumb-fire!",
+   "school": "BLAZE",
+   "style": "SHOWBOAT",
+   "moves": [
+    {
+     "id": "inferno",
+     "label": "Crumb Inferno"
+    },
+    {
+     "id": "battle_roar",
+     "label": "Delusions of Grandeur"
+    },
+    {
+     "id": "iron_fist",
+     "label": "Pop-Up Slam"
+    }
+   ],
+   "weights": {
+    "power": 8,
+    "guard": 5,
+    "speed": 3,
+    "grit": 7
+   }
+  },
+  "portrait": "/art/fighter-toaster.webp"
+ },
+ {
+  "sentence": "the last slice of pizza at a party",
+  "raw": {
+   "verdict": "ok",
+   "name": "Last Slice",
+   "title": "Everyone's Favourite Bad Idea",
+   "look": "A single cartoon pizza slice with a smug face, stringy cheese cape, pepperoni armour discs and a plastic party hat, steam rising, red and gold palette.",
+   "cry": "Nobody takes me alive!",
+   "school": "BLAZE",
+   "style": "COUNTERPUNCHER",
+   "moves": [
+    {
+     "id": "riposte",
+     "label": "Hands Off"
+    },
+    {
+     "id": "thorn_wall",
+     "label": "Cheese Shield"
+    },
+    {
+     "id": "flame_lash",
+     "label": "Hot Sauce Lash"
+    }
+   ],
+   "weights": {
+    "power": 3,
+    "guard": 8,
+    "speed": 4,
+    "grit": 8
+   }
+  },
+  "portrait": "/art/fighter-pizza.webp"
+ },
+ {
+  "sentence": "a cloud with a grudge",
+  "raw": {
+   "verdict": "ok",
+   "name": "Cumulus Grudge",
+   "title": "Forecast: Passive Aggressive",
+   "look": "A scowling storm cloud with tiny crossed arms and a lightning-bolt eyebrow, dripping a thin sarcastic drizzle, slate grey and electric yellow.",
+   "cry": "I remember what you said.",
+   "school": "VOLT",
+   "style": "BRAWLER",
+   "moves": [
+    {
+     "id": "thunderclap",
+     "label": "Passive-Aggressive Boom"
+    },
+    {
+     "id": "arc_bolt",
+     "label": "Drizzle of Spite"
+    },
+    {
+     "id": "overclock",
+     "label": "Brewing Fury"
+    }
+   ],
+   "weights": {
+    "power": 7,
+    "guard": 3,
+    "speed": 6,
+    "grit": 4
+   }
+  },
+  "portrait": "/art/fighter-cloud.webp"
+ },
+ {
+  "sentence": "a skeleton who is late for work",
+  "raw": {
+   "verdict": "ok",
+   "name": "Bonesy Overdue",
+   "title": "Clocked Out Since 1823",
+   "look": "A hurried skeleton in a wrinkled necktie and lanyard, coffee cup in one hand, pocket watch swinging from the ribs, pale bone and office beige.",
+   "cry": "Sorry, traffic was dead!",
+   "school": "IRON",
+   "style": "SHOWBOAT",
+   "moves": [
+    {
+     "id": "wrecking_swing",
+     "label": "Late Fee Wallop"
+    },
+    {
+     "id": "armor_up",
+     "label": "Rib-Cage Briefcase"
+    },
+    {
+     "id": "riposte",
+     "label": "Excuse Me, Boss"
+    }
+   ],
+   "weights": {
+    "power": 6,
+    "guard": 5,
+    "speed": 7,
+    "grit": 2
+   }
+  },
+  "portrait": "/art/fighter-skeleton.webp"
+ },
+ {
+  "sentence": "a wizard who only knows one spell",
+  "raw": {
+   "verdict": "ok",
+   "name": "One-Spell Wendell",
+   "title": "Master of Exactly Fireball",
+   "look": "A rumpled wizard in a stained blue robe and crooked hat, one finger raised, a hand-written sticky note labelled spell stuck to his sleeve, ember sparks in his beard.",
+   "cry": "It worked last time!",
+   "school": "BLAZE",
+   "style": "BRAWLER",
+   "moves": [
+    {
+     "id": "inferno",
+     "label": "The Only Fireball"
+    },
+    {
+     "id": "ember_jab",
+     "label": "Fireball (Smaller)"
+    },
+    {
+     "id": "smolder",
+     "label": "Fireball (Slow)"
+    }
+   ],
+   "weights": {
+    "power": 9,
+    "guard": 2,
+    "speed": 3,
+    "grit": 6
+   }
+  },
+  "portrait": "/art/fighter-wizard.webp"
+ },
+ {
+  "sentence": "a vending machine that hates exact change",
+  "raw": {
+   "verdict": "ok",
+   "name": "Vendetta 3000",
+   "title": "Machine of Small Grievances",
+   "look": "A hulking glass-front vending machine with angry glowing buttons and a coin-slot frown, a robotic arm spring-loaded in the dispenser, neon red and steel grey.",
+   "cry": "Please insert correct change!",
+   "school": "IRON",
+   "style": "TACTICIAN",
+   "moves": [
+    {
+     "id": "dent",
+     "label": "Coin Return Slap"
+    },
+    {
+     "id": "hex_gaze",
+     "label": "Out of Stock Stare"
+    },
+    {
+     "id": "wrecking_swing",
+     "label": "Jammed Can Drop"
+    }
+   ],
+   "weights": {
+    "power": 6,
+    "guard": 9,
+    "speed": 2,
+    "grit": 6
+   }
+  },
+  "portrait": "/art/fighter-vending.webp"
+ },
+ {
+  "sentence": "a houseplant with a black belt",
+  "raw": {
+   "verdict": "ok",
+   "name": "Fern Master Frond",
+   "title": "Sensei of the Windowsill",
+   "look": "A potted fern with a tiny black karate belt tied around the pot, leaf-arms in a crane stance, a drip of morning dew, deep greens and terracotta.",
+   "cry": "Photosynthesis is a martial art.",
+   "school": "WILD",
+   "style": "TACTICIAN",
+   "moves": [
+    {
+     "id": "regrowth",
+     "label": "Photosynthesis Breath"
+    },
+    {
+     "id": "pounce",
+     "label": "Leaf-Blade Strike"
+    },
+    {
+     "id": "thorn_wall",
+     "label": "Bonsai Guard"
+    }
+   ],
+   "weights": {
+    "power": 5,
+    "guard": 6,
+    "speed": 7,
+    "grit": 4
+   }
+  },
+  "portrait": "/art/fighter-fern.webp"
+ },
+ {
+  "sentence": "the world's angriest goose",
+  "raw": {
+   "verdict": "ok",
+   "name": "Honk Vengeance",
+   "title": "Terror of the Pond",
+   "look": "A huge white goose with a furious orange beak and wild eyes, wings flared like a cloak, a single feather drifting down, pond-green and white.",
+   "cry": "HONK!!",
+   "school": "WILD",
+   "style": "BRAWLER",
+   "moves": [
+    {
+     "id": "claw_swipe",
+     "label": "Beak Barrage"
+    },
+    {
+     "id": "stampede",
+     "label": "Flock Charge"
+    },
+    {
+     "id": "pounce",
+     "label": "Pond Ambush"
+    }
+   ],
+   "weights": {
+    "power": 9,
+    "guard": 2,
+    "speed": 7,
+    "grit": 3
+   }
+  },
+  "portrait": "/art/fighter-goose.webp"
+ },
+ {
+  "sentence": "a hedgehog in samurai armor",
+  "raw": {
+   "verdict": "ok",
+   "name": "Ronin Prickles",
+   "title": "Wanderer of the Hedgerow",
+   "look": "A small hedgehog in lacquered red samurai armour, tiny kabuto helmet on his spikes, sword the size of a toothpick, cherry blossom petals swirling.",
+   "cry": "My honour has quills.",
+   "school": "WILD",
+   "style": "COUNTERPUNCHER",
+   "moves": [
+    {
+     "id": "thorn_wall",
+     "label": "Quill Stance"
+    },
+    {
+     "id": "riposte",
+     "label": "Honourable Reply"
+    },
+    {
+     "id": "claw_swipe",
+     "label": "Toothpick Cut"
+    }
+   ],
+   "weights": {
+    "power": 4,
+    "guard": 8,
+    "speed": 5,
+    "grit": 6
+   }
+  },
+  "portrait": "/art/fighter-hedgehog.webp"
+ },
+ {
+  "sentence": "a raccoon running a casino",
+  "raw": {
+   "verdict": "ok",
+   "name": "Trash Panda Tony",
+   "title": "High Roller of the Bins",
+   "look": "A raccoon in a velvet vest and bow tie, holding fanned playing cards and a stack of bottle-cap chips, shifty eyes, casino green and gold.",
+   "cry": "The house always eats!",
+   "school": "WILD",
+   "style": "SHOWBOAT",
+   "moves": [
+    {
+     "id": "venom_bite",
+     "label": "Marked Cards"
+    },
+    {
+     "id": "pounce",
+     "label": "Pickpocket Dive"
+    },
+    {
+     "id": "regrowth",
+     "label": "Cash-Out Cuddle"
+    }
+   ],
+   "weights": {
+    "power": 5,
+    "guard": 4,
+    "speed": 8,
+    "grit": 3
+   }
+  },
+  "portrait": "/art/fighter-raccoon.webp"
+ },
+ {
+  "sentence": "a very polite kraken",
+  "raw": {
+   "verdict": "ok",
+   "name": "Sir Squidley",
+   "title": "Gentleman of the Deep",
+   "look": "A towering kraken in a tiny top hat and monocle, one tentacle offering a cup of tea, the others politely poised, deep teal and brass.",
+   "cry": "Terribly sorry about the ship.",
+   "school": "TIDE",
+   "style": "TACTICIAN",
+   "moves": [
+    {
+     "id": "undertow",
+     "label": "Gentle Tentacle"
+    },
+    {
+     "id": "healing_rain",
+     "label": "Spot of Tea"
+    },
+    {
+     "id": "riptide",
+     "label": "Apologetic Squeeze"
+    }
+   ],
+   "weights": {
+    "power": 6,
+    "guard": 5,
+    "speed": 3,
+    "grit": 8
+   }
+  },
+  "portrait": "/art/fighter-kraken.webp"
+ },
+ {
+  "sentence": "a golden retriever who thinks it is a bodyguard",
+  "raw": {
+   "verdict": "ok",
+   "name": "Sergeant Fetch",
+   "title": "Protector of the Park",
+   "look": "A beaming golden retriever in a tiny black suit and earpiece, standing between a tennis ball and the viewer, wagging tail, golden brown and charcoal.",
+   "cry": "Nobody touches the ball!",
+   "school": "WILD",
+   "style": "BRAWLER",
+   "moves": [
+    {
+     "id": "pounce",
+     "label": "Bodyguard Tackle"
+    },
+    {
+     "id": "thorn_wall",
+     "label": "Human Shield"
+    },
+    {
+     "id": "stampede",
+     "label": "Zoomies of Justice"
+    }
+   ],
+   "weights": {
+    "power": 7,
+    "guard": 6,
+    "speed": 6,
+    "grit": 3
+   }
+  },
+  "portrait": "/art/fighter-retriever.webp"
+ },
+ {
+  "sentence": "a snail with a rocket backpack",
+  "raw": {
+   "verdict": "ok",
+   "name": "Turbo Escargot",
+   "title": "Slowest Thing in the Sky",
+   "look": "A determined garden snail with a chrome rocket pack strapped to its shell, goggles on, a slime trail of sparks, orange flames and shell brown.",
+   "cry": "Goes faster than it looks!",
+   "school": "VOLT",
+   "style": "SHOWBOAT",
+   "moves": [
+    {
+     "id": "overclock",
+     "label": "Ignition Sequence"
+    },
+    {
+     "id": "arc_bolt",
+     "label": "Slime Spark"
+    },
+    {
+     "id": "spark",
+     "label": "Garden Zap"
+    }
+   ],
+   "weights": {
+    "power": 4,
+    "guard": 4,
+    "speed": 9,
+    "grit": 3
+   }
+  },
+  "portrait": "/art/fighter-snail.webp"
+ },
+ {
+  "sentence": "a mime trapped in an invisible box",
+  "raw": {
+   "verdict": "ok",
+   "name": "Marcel Boxwell",
+   "title": "The Wall That Is Not",
+   "look": "A white-faced mime in a striped shirt pressing both palms against an invisible wall, dramatic worried face, faint glass-like glimmers around, black white and red.",
+   "cry": "...",
+   "school": "IRON",
+   "style": "COUNTERPUNCHER",
+   "moves": [
+    {
+     "id": "bulwark",
+     "label": "Invisible Wall"
+    },
+    {
+     "id": "riposte",
+     "label": "Mimed Reflection"
+    },
+    {
+     "id": "armor_up",
+     "label": "Imaginary Rope"
+    }
+   ],
+   "weights": {
+    "power": 3,
+    "guard": 9,
+    "speed": 3,
+    "grit": 7
+   }
+  },
+  "portrait": "/art/fighter-mime.webp"
+ },
+ {
+  "sentence": "a disco ball with abandonment issues",
+  "raw": {
+   "verdict": "ok",
+   "name": "Mirror Ball Maurice",
+   "title": "Clingy Star of the Floor",
+   "look": "A spinning silver disco ball with big sad eyes, a tiny leash and a desperate grabby chain, rainbow light spots on the floor, silver and magenta.",
+   "cry": "Don't turn off the lights!",
+   "school": "VOLT",
+   "style": "SHOWBOAT",
+   "moves": [
+    {
+     "id": "chain_shock",
+     "label": "Rainbow Rebound"
+    },
+    {
+     "id": "static_field",
+     "label": "Clingy Pin"
+    },
+    {
+     "id": "overclock",
+     "label": "Panic Spin"
+    }
+   ],
+   "weights": {
+    "power": 4,
+    "guard": 4,
+    "speed": 8,
+    "grit": 4
+   }
+  },
+  "portrait": "/art/fighter-discoball.webp"
+ },
+ {
+  "sentence": "a librarian who bans noise",
+  "raw": {
+   "verdict": "ok",
+   "name": "Madam Hush",
+   "title": "Keeper of the Quiet",
+   "look": "A stern librarian with a bun, cat-eye glasses and a heavy stamp raised overhead, one finger pressed to her lips, bookshelf shadows, cardigan green and cream.",
+   "cry": "SHHHH!",
+   "school": "MIND",
+   "style": "COUNTERPUNCHER",
+   "moves": [
+    {
+     "id": "hex_gaze",
+     "label": "Silence Glare"
+    },
+    {
+     "id": "foresight",
+     "label": "Overdue Notice"
+    },
+    {
+     "id": "mind_spike",
+     "label": "Book Slam"
+    }
+   ],
+   "weights": {
+    "power": 3,
+    "guard": 6,
+    "speed": 5,
+    "grit": 8
+   }
+  },
+  "portrait": "/art/fighter-librarian.webp"
+ },
+ {
+  "sentence": "a tax inspector from the underworld",
+  "raw": {
+   "verdict": "ok",
+   "name": "Auditor Abaddon",
+   "title": "Collector of Souls and Receipts",
+   "look": "A pale demon in a grey suit with small horns and a flaming ledger, stamp in one clawed hand, thin glasses glowing red, charcoal and ember orange.",
+   "cry": "Everything is deductible but you.",
+   "school": "BLAZE",
+   "style": "TACTICIAN",
+   "moves": [
+    {
+     "id": "flame_lash",
+     "label": "Penalty Interest"
+    },
+    {
+     "id": "hex_gaze",
+     "label": "Audit Notice"
+    },
+    {
+     "id": "melt_through",
+     "label": "Seized Assets"
+    }
+   ],
+   "weights": {
+    "power": 6,
+    "guard": 5,
+    "speed": 4,
+    "grit": 5
+   }
+  },
+  "portrait": "/art/fighter-auditor.webp"
+ },
+ {
+  "sentence": "a rubber duck with a trident",
+  "raw": {
+   "verdict": "ok",
+   "name": "Ducky Poseidon",
+   "title": "Squeak of the Seven Bathtubs",
+   "look": "A glossy yellow rubber duck wielding a tiny golden trident, stormy bathwater waves swirling, a squeak-ready beak and fierce painted brows, yellow and aqua.",
+   "cry": "SQUEAK OF DOOM!",
+   "school": "TIDE",
+   "style": "SHOWBOAT",
+   "moves": [
+    {
+     "id": "riptide",
+     "label": "Bathtub Tsunami"
+    },
+    {
+     "id": "wave_slap",
+     "label": "Squeaky Smack"
+    },
+    {
+     "id": "overclock",
+     "label": "Rubber Ducky Rush"
+    }
+   ],
+   "weights": {
+    "power": 6,
+    "guard": 4,
+    "speed": 7,
+    "grit": 3
+   }
+  },
+  "portrait": "/art/fighter-duck.webp"
+ }
+]

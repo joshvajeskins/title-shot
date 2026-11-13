@@ -1,0 +1,28 @@
+[package]
+name = "ecrecover-spike"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.86"
+publish = false
+description = "Spike: NEAR contract verifies a NEAR AI Cloud per-response signature (EIP-191 ecrecover) bound to request bytes it rebuilds itself"
+
+# Standalone crate on purpose (no root workspace yet).
+[workspace]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = { version = "~5.27", features = ["unstable"] }
+hex = { version = "0.4", default-features = false, features = ["alloc"] }
+
+[dev-dependencies]
+near-sdk = { version = "~5.27", features = ["unstable", "unit-testing"] }
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true

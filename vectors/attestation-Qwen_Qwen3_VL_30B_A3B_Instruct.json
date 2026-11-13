@@ -1,0 +1,3025 @@
+{
+  "model": "Qwen/Qwen3-VL-30B-A3B-Instruct",
+  "http": 200,
+  "ms": 364,
+  "tee_attested": true,
+  "signers": {
+    "gateway": "0xb98a789cdc4817275f5155593ba73ef2a957e779",
+    "model": [
+      {
+        "model_name": "Qwen/Qwen3-VL-30B-A3B-Instruct",
+        "signing_address": "0x2665cce942fa427ef30d87f4b0bff67fb7645462",
+        "has_intel_quote": true,
+        "has_nvidia_payload": true
+      }
+    ]
+  },
+  "summary": {
+    "gateway_attestation": {
+      "signing_address": "0xb98a789cdc4817275f5155593ba73ef2a957e779",
+      "signing_algo": "ecdsa",
+      "intel_quote": "040002008100000000000000939a7233f79c4ca9...(10012 chars)",
+      "event_log": "[{\"imr\":0,\"event_type\":2147483659,\"diges...(4927 chars)",
+      "report_data": "b98a789cdc4817275f5155593ba73ef2a957e779...(128 chars)",
+      "request_nonce": "834c6160100db0fe0ed2fe1982c00e429c846a8535da4a19c8c52e7e92927736",
+      "info": {
+        "app_id": "f550fdfb4eb8ad787c1bcd423f091cbb4a4431ae",
+        "instance_id": "f93a165cf985a259b46793e5427163999fb628ad",
+        "app_cert": "-----BEGIN CERTIFICATE-----\nMIIa/jCCGqSg...(10740 chars)",
+        "tcb_info": {
+          "mrtd": "7fe60787222bd394cb516abca2435f22f035ab2c...(96 chars)",
+          "rtmr0": "d090162bff4b1d1dc74dc59dc548838efc4b811b...(96 chars)",
+          "rtmr1": "4ae609807c765916a31d724786ed74bcb97e168a...(96 chars)",
+          "rtmr2": "764489f277a8540189761e72b4238ba36d4d647e...(96 chars)",
+          "rtmr3": "74a9c9e45acbe8cfe5c8c18b5598abb4c775bb8d...(96 chars)",
+          "os_image_hash": "8db40cb23008d6213668b5816702d100b37b859a8a5bfd18d938ae3a1b3715bd",
+          "compose_hash": "7c15cbaa24e4e9aa70f4b1aae215e55268d08f64dbadbbcdd791287de191a255",
+          "device_id": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "app_compose": "{\"manifest_version\":2,\"name\":\"dstack-0.5...(31725 chars)",
+          "event_log": [
+            {
+              "imr": 0,
+              "event_type": 2147483659,
+              "digest": "2e070cda358b5aa00f27cca25c47381bb564f4be...(96 chars)",
+              "event": "",
+              "event_payload": "095464785461626c65000100000000000000af96...(84 chars)"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483658,
+              "digest": "344bc51c980ba621aaa00da3ed7436f7d6e54919...(96 chars)",
+              "event": "",
+              "event_payload": "2946762858585858585858582d585858582d5858...(116 chars)"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483649,
+              "digest": "9dc3a1f80bcec915391dcda5ffbb15e7419f77ea...(96 chars)",
+              "event": "",
+              "event_payload": "61dfe48bca93d211aa0d00e098032b8c0a000000...(104 chars)"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483649,
+              "digest": "6f2e3cbc14f9def86980f5f66fd85e99d63e69a7...(96 chars)",
+              "event": "",
+              "event_payload": "61dfe48bca93d211aa0d00e098032b8c0200000000000000000000000000000050004b00"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483649,
+              "digest": "d607c0efb41c0d757d69bca0615c3a9ac0b1db06...(96 chars)",
+              "event": "",
+              "event_payload": "61dfe48bca93d211aa0d00e098032b8c030000000000000000000000000000004b0045004b00"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483649,
+              "digest": "08a74f8963b337acb6c93682f934496373679dd2...(96 chars)",
+              "event": "",
+              "event_payload": "cbb219d73a3d9645a3bcdad00e67656f0200000000000000000000000000000064006200"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483649,
+              "digest": "18cc6e01f0c6ea99aa23f8a280423e94ad81d96d...(96 chars)",
+              "event": "",
+              "event_payload": "cbb219d73a3d9645a3bcdad00e67656f03000000000000000000000000000000640062007800"
+            },
+            {
+              "imr": 0,
+              "event_type": 4,
+              "digest": "394341b7182cd227c5c6b07ef8000cdfd86136c4...(96 chars)",
+              "event": "",
+              "event_payload": "00000000"
+            },
+            {
+              "imr": 0,
+              "event_type": 10,
+              "digest": "05c95712d2254a1d418dfc9abd53fa60e63b8743...(96 chars)",
+              "event": "",
+              "event_payload": "414350492044415441"
+            },
+            {
+              "imr": 0,
+              "event_type": 10,
+              "digest": "bcf576f33bfaca1ede8d8f964ff7d219cde03043...(96 chars)",
+              "event": "",
+              "event_payload": "414350492044415441"
+            },
+            {
+              "imr": 0,
+              "event_type": 10,
+              "digest": "1ff25d173a9b9a877a2f354410e62300d5c42514...(96 chars)",
+              "event": "",
+              "event_payload": "414350492044415441"
+            },
+            {
+              "imr": 1,
+              "event_type": 2147483651,
+              "digest": "48368ab87e5b8fecfb216bc26bbccfe13081bf8b...(96 chars)",
+              "event": "",
+              "event_payload": "18e0fd7a00000000008485000000000000000000...(148 chars)"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483650,
+              "digest": "1dd6f7b457ad880d840d41c961283bab688e94e4...(96 chars)",
+              "event": "",
+              "event_payload": "61dfe48bca93d211aa0d00e098032b8c09000000...(104 chars)"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483650,
+              "digest": "23ada07f5261f12f34a0bd8e46760962d6b4d576...(96 chars)",
+              "event": "",
+              "event_payload": "61dfe48bca93d211aa0d00e098032b8c08000000...(220 chars)"
+            },
+            {
+              "imr": 1,
+              "event_type": 2147483655,
+              "digest": "77a0dab2312b4e1e57a84d865a21e5b2ee8d677a...(96 chars)",
+              "event": "",
+              "event_payload": "43616c6c696e6720454649204170706c69636174696f6e2066726f6d20426f6f74204f7074696f6e"
+            },
+            {
+              "imr": 1,
+              "event_type": 4,
+              "digest": "394341b7182cd227c5c6b07ef8000cdfd86136c4...(96 chars)",
+              "event": "",
+              "event_payload": "00000000"
+            },
+            {
+              "imr": 2,
+              "event_type": 6,
+              "digest": "549e21b8d8898430a0be6e53191717f1d30d6658...(96 chars)",
+              "event": "",
+              "event_payload": "ed223b8f1a0000004c4f414445445f494d4147453a3a4c6f61644f7074696f6e7300"
+            },
+            {
+              "imr": 2,
+              "event_type": 6,
+              "digest": "fd01285d396a483667123c1a1a64d83b2dd5c6ce...(96 chars)",
+              "event": "",
+              "event_payload": "ec223b8f0d0000004c696e757820696e6974726400"
+            },
+            {
+              "imr": 1,
+              "event_type": 2147483655,
+              "digest": "214b0bef1379756011344877743fdc2a5382bac6...(96 chars)",
+              "event": "",
+              "event_payload": "4578697420426f6f7420536572766963657320496e766f636174696f6e"
+            },
+            {
+              "imr": 1,
+              "event_type": 2147483655,
+              "digest": "0a2e01c85deae718a530ad8c6d20a84009babe6c...(96 chars)",
+              "event": "",
+              "event_payload": "4578697420426f6f742053657276696365732052657475726e656420776974682053756363657373"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "f9974020ef507068183313d0ca808e0d1ca9b2d1...(96 chars)",
+              "event": "system-preparing",
+              "event_payload": ""
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "6fe75c63216de0f223bd4bb71a46a508f6cd5a51...(96 chars)",
+              "event": "app-id",
+              "event_payload": "f550fdfb4eb8ad787c1bcd423f091cbb4a4431ae"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "9f5574625d7e0d28384c83e2313e03a24d4c4f4d...(96 chars)",
+              "event": "compose-hash",
+              "event_payload": "7c15cbaa24e4e9aa70f4b1aae215e55268d08f64dbadbbcdd791287de191a255"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "3032c076122d682462c8c0c0119155f0cb3c3b48...(96 chars)",
+              "event": "instance-id",
+              "event_payload": "f93a165cf985a259b46793e5427163999fb628ad"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "98bd7e6bd3952720b65027fd494834045d06b4a7...(96 chars)",
+              "event": "boot-mr-done",
+              "event_payload": ""
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "4eab9203bdacdb5ecd598d9e39cb9e3e26b49e0f...(96 chars)",
+              "event": "mr-kms",
+              "event_payload": "22a6652c0ce74e50b549c0f9c21d53c5861598ec4d58cf3286d158104923bc56"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "9381eb17a317a6ebabc892bd4601743106b3f741...(96 chars)",
+              "event": "os-image-hash",
+              "event_payload": "8db40cb23008d6213668b5816702d100b37b859a8a5bfd18d938ae3a1b3715bd"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "9de6782ab6dfadb59a95bab8378e28a748331441...(96 chars)",
+              "event": "key-provider",
+              "event_payload": "7b226e616d65223a226b6d73222c226964223a22...(408 chars)"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "ba51104636900268b0e059fa3d266419d079d1e9...(96 chars)",
+              "event": "storage-fs",
+              "event_payload": "7a6673"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "1a76b2a80a0be71eae59f80945d876351a7a3fb8...(96 chars)",
+              "event": "system-ready",
+              "event_payload": ""
+            }
+          ]
+        },
+        "app_name": "dstack-0.5.12",
+        "device_id": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mr_aggregated": "58dbe23ecb61d6a06b5489a22a186598cbc177e29affd2c2c0e1024649ddf36f",
+        "os_image_hash": "8db40cb23008d6213668b5816702d100b37b859a8a5bfd18d938ae3a1b3715bd",
+        "key_provider_info": "{\"name\":\"kms\",\"id\":\"3059301306072a8648ce...(204 chars)",
+        "compose_hash": "7c15cbaa24e4e9aa70f4b1aae215e55268d08f64dbadbbcdd791287de191a255",
+        "vm_config": "{\"os_image_hash\":\"8db40cb23008d6213668b5...(341 chars)"
+      }
+    },
+    "model_attestations": [
+      {
+        "model_name": "Qwen/Qwen3-VL-30B-A3B-Instruct",
+        "signing_address": "0x2665cce942fa427ef30d87f4b0bff67fb7645462",
+        "signing_algo": "ecdsa",
+        "signing_public_key": "c1f246a31892b6c642f6dec8d42243c552a907b2...(128 chars)",
+        "request_nonce": "85216fdd80def63c75f587d3e1a1cf25558e3996b3c20affe2b26ba6d429a440",
+        "intel_quote": "040002008100000000000000939a7233f79c4ca9...(10012 chars)",
+        "nvidia_payload": "{\"nonce\":\"85216fdd80def63c75f587d3e1a1cf...(98222 chars)",
+        "event_log": [
+          {
+            "imr": 0,
+            "event_type": 2147483659,
+            "digest": "60a36090e82db2aa82a7abb76029b9ace69e9f08...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 0,
+            "event_type": 2147483658,
+            "digest": "344bc51c980ba621aaa00da3ed7436f7d6e54919...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 0,
+            "event_type": 2147483649,
+            "digest": "9dc3a1f80bcec915391dcda5ffbb15e7419f77ea...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 0,
+            "event_type": 2147483649,
+            "digest": "6f2e3cbc14f9def86980f5f66fd85e99d63e69a7...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 0,
+            "event_type": 2147483649,
+            "digest": "d607c0efb41c0d757d69bca0615c3a9ac0b1db06...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 0,
+            "event_type": 2147483649,
+            "digest": "08a74f8963b337acb6c93682f934496373679dd2...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 0,
+            "event_type": 2147483649,
+            "digest": "18cc6e01f0c6ea99aa23f8a280423e94ad81d96d...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 0,
+            "event_type": 4,
+            "digest": "394341b7182cd227c5c6b07ef8000cdfd86136c4...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 0,
+            "event_type": 10,
+            "digest": "067dbea869d662401cfc128612472b688899b95f...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 0,
+            "event_type": 10,
+            "digest": "e618ef92fa90877695c4be4ce94e99f8cac644f9...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 0,
+            "event_type": 10,
+            "digest": "36ab67305a05ca84327abeb3ac4c3fff28dd40e2...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 1,
+            "event_type": 2147483651,
+            "digest": "48368ab87e5b8fecfb216bc26bbccfe13081bf8b...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 0,
+            "event_type": 2147483650,
+            "digest": "1dd6f7b457ad880d840d41c961283bab688e94e4...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 0,
+            "event_type": 2147483650,
+            "digest": "23ada07f5261f12f34a0bd8e46760962d6b4d576...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 1,
+            "event_type": 2147483655,
+            "digest": "77a0dab2312b4e1e57a84d865a21e5b2ee8d677a...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 1,
+            "event_type": 4,
+            "digest": "394341b7182cd227c5c6b07ef8000cdfd86136c4...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 2,
+            "event_type": 6,
+            "digest": "0257b87a411a42f9cfdf0ee956d00036466b4564...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 2,
+            "event_type": 6,
+            "digest": "fd01285d396a483667123c1a1a64d83b2dd5c6ce...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 1,
+            "event_type": 2147483655,
+            "digest": "214b0bef1379756011344877743fdc2a5382bac6...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 1,
+            "event_type": 2147483655,
+            "digest": "0a2e01c85deae718a530ad8c6d20a84009babe6c...(96 chars)",
+            "event": "",
+            "event_payload": ""
+          },
+          {
+            "imr": 3,
+            "event_type": 134217729,
+            "digest": "",
+            "event": "system-preparing",
+            "event_payload": ""
+          },
+          {
+            "imr": 3,
+            "event_type": 134217729,
+            "digest": "",
+            "event": "app-id",
+            "event_payload": "2c0a0c96cb6dbd659bf1446e2f3fce58172ff91b"
+          },
+          {
+            "imr": 3,
+            "event_type": 134217729,
+            "digest": "",
+            "event": "compose-hash",
+            "event_payload": "e8416a02d6f7ce47baaa52e3925b934fd30834b04fc9086b363db9b1d12c729d"
+          },
+          {
+            "imr": 3,
+            "event_type": 134217729,
+            "digest": "",
+            "event": "instance-id",
+            "event_payload": "a8a25faab3ef437d2da809382e05e59e3c55a0f5"
+          },
+          {
+            "imr": 3,
+            "event_type": 134217729,
+            "digest": "",
+            "event": "boot-mr-done",
+            "event_payload": ""
+          },
+          {
+            "imr": 3,
+            "event_type": 134217729,
+            "digest": "",
+            "event": "mr-kms",
+            "event_payload": "22a6652c0ce74e50b549c0f9c21d53c5861598ec4d58cf3286d158104923bc56"
+          },
+          {
+            "imr": 3,
+            "event_type": 134217729,
+            "digest": "",
+            "event": "os-image-hash",
+            "event_payload": "91fd5d69ccee3e5ea4f2aeb8c9b632c4358c4ecfc29ba1aa6fb1e402af209829"
+          },
+          {
+            "imr": 3,
+            "event_type": 134217729,
+            "digest": "",
+            "event": "key-provider",
+            "event_payload": "7b226e616d65223a226b6d73222c226964223a22...(408 chars)"
+          },
+          {
+            "imr": 3,
+            "event_type": 134217729,
+            "digest": "",
+            "event": "storage-fs",
+            "event_payload": "7a6673"
+          },
+          {
+            "imr": 3,
+            "event_type": 134217729,
+            "digest": "",
+            "event": "system-ready",
+            "event_payload": ""
+          }
+        ],
+        "info": {
+          "app_id": "2c0a0c96cb6dbd659bf1446e2f3fce58172ff91b",
+          "instance_id": "a8a25faab3ef437d2da809382e05e59e3c55a0f5",
+          "app_cert": "-----BEGIN CERTIFICATE-----\nMIIbCTCCGq+g...(10760 chars)",
+          "tcb_info": {
+            "mrtd": "df4d77c857de652bd0fafa343a2026b51071ee03...(96 chars)",
+            "rtmr0": "bc122d143ab768565ba5c3774ff5f03a63c89a4d...(96 chars)",
+            "rtmr1": "4ae609807c765916a31d724786ed74bcb97e168a...(96 chars)",
+            "rtmr2": "bd67ab7554dc27ab03a077bc1447a1a67d0624ff...(96 chars)",
+            "rtmr3": "bbada8ce4eb49dcf9d67f987f8ce6a3a3a59e8e8...(96 chars)",
+            "os_image_hash": "91fd5d69ccee3e5ea4f2aeb8c9b632c4358c4ecfc29ba1aa6fb1e402af209829",
+            "compose_hash": "e8416a02d6f7ce47baaa52e3925b934fd30834b04fc9086b363db9b1d12c729d",
+            "device_id": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "app_compose": "{\n    \"manifest_version\": 2,\n    \"name\":...(18093 chars)",
+            "event_log": [
+              {
+                "imr": 0,
+                "event_type": 2147483659,
+                "digest": "60a36090e82db2aa82a7abb76029b9ace69e9f08...(96 chars)",
+                "event": "",
+                "event_payload": "095464785461626c65000100000000000000af96...(84 chars)"
+              },
+              {
+                "imr": 0,
+                "event_type": 2147483658,
+                "digest": "344bc51c980ba621aaa00da3ed7436f7d6e54919...(96 chars)",
+                "event": "",
+                "event_payload": "2946762858585858585858582d585858582d5858...(116 chars)"
+              },
+              {
+                "imr": 0,
+                "event_type": 2147483649,
+                "digest": "9dc3a1f80bcec915391dcda5ffbb15e7419f77ea...(96 chars)",
+                "event": "",
+                "event_payload": "61dfe48bca93d211aa0d00e098032b8c0a000000...(104 chars)"
+              },
+              {
+                "imr": 0,
+                "event_type": 2147483649,
+                "digest": "6f2e3cbc14f9def86980f5f66fd85e99d63e69a7...(96 chars)",
+                "event": "",
+                "event_payload": "61dfe48bca93d211aa0d00e098032b8c0200000000000000000000000000000050004b00"
+              },
+              {
+                "imr": 0,
+                "event_type": 2147483649,
+                "digest": "d607c0efb41c0d757d69bca0615c3a9ac0b1db06...(96 chars)",
+                "event": "",
+                "event_payload": "61dfe48bca93d211aa0d00e098032b8c030000000000000000000000000000004b0045004b00"
+              },
+              {
+                "imr": 0,
+                "event_type": 2147483649,
+                "digest": "08a74f8963b337acb6c93682f934496373679dd2...(96 chars)",
+                "event": "",
+                "event_payload": "cbb219d73a3d9645a3bcdad00e67656f0200000000000000000000000000000064006200"
+              },
+              {
+                "imr": 0,
+                "event_type": 2147483649,
+                "digest": "18cc6e01f0c6ea99aa23f8a280423e94ad81d96d...(96 chars)",
+                "event": "",
+                "event_payload": "cbb219d73a3d9645a3bcdad00e67656f03000000000000000000000000000000640062007800"
+              },
+              {
+                "imr": 0,
+                "event_type": 4,
+                "digest": "394341b7182cd227c5c6b07ef8000cdfd86136c4...(96 chars)",
+                "event": "",
+                "event_payload": "00000000"
+              },
+              {
+                "imr": 0,
+                "event_type": 10,
+                "digest": "067dbea869d662401cfc128612472b688899b95f...(96 chars)",
+                "event": "",
+                "event_payload": "414350492044415441"
+              },
+              {
+                "imr": 0,
+                "event_type": 10,
+                "digest": "e618ef92fa90877695c4be4ce94e99f8cac644f9...(96 chars)",
+                "event": "",
+                "event_payload": "414350492044415441"
+              },
+              {
+                "imr": 0,
+                "event_type": 10,
+                "digest": "36ab67305a05ca84327abeb3ac4c3fff28dd40e2...(96 chars)",
+                "event": "",
+                "event_payload": "414350492044415441"
+              },
+              {
+                "imr": 1,
+                "event_type": 2147483651,
+                "digest": "48368ab87e5b8fecfb216bc26bbccfe13081bf8b...(96 chars)",
+                "event": "",
+                "event_payload": "18e0fd7a00000000008485000000000000000000...(148 chars)"
+              },
+              {
+                "imr": 0,
+                "event_type": 2147483650,
+                "digest": "1dd6f7b457ad880d840d41c961283bab688e94e4...(96 chars)",
+                "event": "",
+                "event_payload": "61dfe48bca93d211aa0d00e098032b8c09000000...(104 chars)"
+              },
+              {
+                "imr": 0,
+                "event_type": 2147483650,
+                "digest": "23ada07f5261f12f34a0bd8e46760962d6b4d576...(96 chars)",
+                "event": "",
+                "event_payload": "61dfe48bca93d211aa0d00e098032b8c08000000...(220 chars)"
+              },
+              {
+                "imr": 1,
+                "event_type": 2147483655,
+                "digest": "77a0dab2312b4e1e57a84d865a21e5b2ee8d677a...(96 chars)",
+                "event": "",
+                "event_payload": "43616c6c696e6720454649204170706c69636174696f6e2066726f6d20426f6f74204f7074696f6e"
+              },
+              {
+                "imr": 1,
+                "event_type": 4,
+                "digest": "394341b7182cd227c5c6b07ef8000cdfd86136c4...(96 chars)",
+                "event": "",
+                "event_payload": "00000000"
+              },
+              {
+                "imr": 2,
+                "event_type": 6,
+                "digest": "0257b87a411a42f9cfdf0ee956d00036466b4564...(96 chars)",
+                "event": "",
+                "event_payload": "ed223b8f1a0000004c4f414445445f494d4147453a3a4c6f61644f7074696f6e7300"
+              },
+              {
+                "imr": 2,
+                "event_type": 6,
+                "digest": "fd01285d396a483667123c1a1a64d83b2dd5c6ce...(96 chars)",
+                "event": "",
+                "event_payload": "ec223b8f0d0000004c696e757820696e6974726400"
+              },
+              {
+                "imr": 1,
+                "event_type": 2147483655,
+                "digest": "214b0bef1379756011344877743fdc2a5382bac6...(96 chars)",
+                "event": "",
+                "event_payload": "4578697420426f6f7420536572766963657320496e766f636174696f6e"
+              },
+              {
+                "imr": 1,
+                "event_type": 2147483655,
+                "digest": "0a2e01c85deae718a530ad8c6d20a84009babe6c...(96 chars)",
+                "event": "",
+                "event_payload": "4578697420426f6f742053657276696365732052657475726e656420776974682053756363657373"
+              },
+              {
+                "imr": 3,
+                "event_type": 134217729,
+                "digest": "f9974020ef507068183313d0ca808e0d1ca9b2d1...(96 chars)",
+                "event": "system-preparing",
+                "event_payload": ""
+              },
+              {
+                "imr": 3,
+                "event_type": 134217729,
+                "digest": "5c149c8719975dc6285de58d94db7e6a75c46e79...(96 chars)",
+                "event": "app-id",
+                "event_payload": "2c0a0c96cb6dbd659bf1446e2f3fce58172ff91b"
+              },
+              {
+                "imr": 3,
+                "event_type": 134217729,
+                "digest": "700b7d36b359d16db860402579a814169ddc628d...(96 chars)",
+                "event": "compose-hash",
+                "event_payload": "e8416a02d6f7ce47baaa52e3925b934fd30834b04fc9086b363db9b1d12c729d"
+              },
+              {
+                "imr": 3,
+                "event_type": 134217729,
+                "digest": "7287931bae78462863a93f83c8e73c0ec684dfab...(96 chars)",
+                "event": "instance-id",
+                "event_payload": "a8a25faab3ef437d2da809382e05e59e3c55a0f5"
+              },
+              {
+                "imr": 3,
+                "event_type": 134217729,
+                "digest": "98bd7e6bd3952720b65027fd494834045d06b4a7...(96 chars)",
+                "event": "boot-mr-done",
+                "event_payload": ""
+              },
+              {
+                "imr": 3,
+                "event_type": 134217729,
+                "digest": "4eab9203bdacdb5ecd598d9e39cb9e3e26b49e0f...(96 chars)",
+                "event": "mr-kms",
+                "event_payload": "22a6652c0ce74e50b549c0f9c21d53c5861598ec4d58cf3286d158104923bc56"
+              },
+              {
+                "imr": 3,
+                "event_type": 134217729,
+                "digest": "47eb743b8bd069e71b6ab3cc6a7afbcd79fdd60b...(96 chars)",
+                "event": "os-image-hash",
+                "event_payload": "91fd5d69ccee3e5ea4f2aeb8c9b632c4358c4ecfc29ba1aa6fb1e402af209829"
+              },
+              {
+                "imr": 3,
+                "event_type": 134217729,
+                "digest": "9de6782ab6dfadb59a95bab8378e28a748331441...(96 chars)",
+                "event": "key-provider",
+                "event_payload": "7b226e616d65223a226b6d73222c226964223a22...(408 chars)"
+              },
+              {
+                "imr": 3,
+                "event_type": 134217729,
+                "digest": "ba51104636900268b0e059fa3d266419d079d1e9...(96 chars)",
+                "event": "storage-fs",
+                "event_payload": "7a6673"
+              },
+              {
+                "imr": 3,
+                "event_type": 134217729,
+                "digest": "1a76b2a80a0be71eae59f80945d876351a7a3fb8...(96 chars)",
+                "event": "system-ready",
+                "event_payload": ""
+              }
+            ]
+          },
+          "app_name": "dstack-nvidia-0.5.12",
+          "device_id": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mr_aggregated": "56dcff12a1f7669c4ad32c9328b0e867d9ab6dce32626bf83c4291051afad140",
+          "os_image_hash": "91fd5d69ccee3e5ea4f2aeb8c9b632c4358c4ecfc29ba1aa6fb1e402af209829",
+          "key_provider_info": "{\"name\":\"kms\",\"id\":\"3059301306072a8648ce...(204 chars)",
+          "compose_hash": "e8416a02d6f7ce47baaa52e3925b934fd30834b04fc9086b363db9b1d12c729d",
+          "vm_config": "{\"os_image_hash\":\"91fd5d69ccee3e5ea4f2ae...(352 chars)"
+        },
+        "ohttp_attestation": {
+          "signing_algo": "ed25519",
+          "signing_key": "c6eb7050db6f17486e179a0b393b73430e2db4e08d4dfb5d8fa1f8e2f8d98b6d",
+          "key_config": "01002087abaee9db9b6bdd394130be6daa773b00...(90 chars)",
+          "signature": "5666663da883708d99e954a0f28cf5aba0d669df...(128 chars)"
+        },
+        "compose_manager_attestation": {
+          "actions": [
+            {
+              "timestamp": "2026-10-21T02:44:29.846652109+00:00",
+              "action": "compose_manager_started",
+              "container": "compose-manager",
+              "image": "nearaidev/compose-manager@sha256:6e035c8...(97 chars)"
+            },
+            {
+              "timestamp": "2026-10-21T02:57:17.410621124+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.496",
+              "commit": "6000fd05967289ca9d3fcd4b1413875a05e958a1",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "addbc5fc3d3c43a455f44178c1525dd21f6c84dedf26ed9b4c725ac384ee980d",
+              "services": [
+                "model-downloader",
+                "nginx",
+                "model-proxy-registrar",
+                "proxy-qwen36-35b-a3b",
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1",
+                "model-downloader-qwen38",
+                "proxy-qwen38-27b",
+                "model-sg-qwen38-27b-fp8-tp1-r1",
+                "model-sg-qwen38-27b-fp8-tp1-r2",
+                "nginx-qwen38",
+                "proxy-glm53",
+                "model-sg-glm53-w4afp8-tp2-r1a",
+                "model-sg-glm53-w4afp8-tp2-r1b",
+                "glm53-ghost-aggregator",
+                "proxy-flux2-klein-4b",
+                "model-sg-flux2-klein-4b-tp1",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-qwen3-embedding-0.6b",
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "proxy-qwen3-reranker-0.6b",
+                "model-vllm-qwen3-reranker-0.6b-tp1",
+                "proxy-whisper-large-v3",
+                "model-vllm-whisper-large-v3-tp1",
+                "proxy-privacy-filter",
+                "model-privacy-filter",
+                "dcgm-privacy-filter",
+                "dcgm-qwen36-35b-a3b",
+                "dcgm-qwen38-27b",
+                "dcgm-glm53",
+                "dcgm-shared-gpu3",
+                "otelcol-contrib"
+              ]
+            },
+            {
+              "timestamp": "2026-10-21T04:02:41.293321191+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.496",
+              "commit": "6000fd05967289ca9d3fcd4b1413875a05e958a1",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "addbc5fc3d3c43a455f44178c1525dd21f6c84dedf26ed9b4c725ac384ee980d",
+              "services": [
+                "model-sg-qwen38-27b-fp8-tp1-r1",
+                "model-sg-qwen38-27b-fp8-tp1-r2"
+              ]
+            },
+            {
+              "timestamp": "2026-10-21T04:04:20.513249737+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.496",
+              "commit": "6000fd05967289ca9d3fcd4b1413875a05e958a1",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-sg-qwen38-27b-fp8-tp1-r1"
+              ]
+            },
+            {
+              "timestamp": "2026-10-21T04:17:26.995102947+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.496",
+              "commit": "6000fd05967289ca9d3fcd4b1413875a05e958a1",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "addbc5fc3d3c43a455f44178c1525dd21f6c84dedf26ed9b4c725ac384ee980d",
+              "services": [
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-10-21T04:20:30.140410740+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.496",
+              "commit": "6000fd05967289ca9d3fcd4b1413875a05e958a1",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "addbc5fc3d3c43a455f44178c1525dd21f6c84dedf26ed9b4c725ac384ee980d",
+              "services": [
+                "qwen38-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-10-21T04:26:34.373370951+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.496",
+              "commit": "6000fd05967289ca9d3fcd4b1413875a05e958a1",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "addbc5fc3d3c43a455f44178c1525dd21f6c84dedf26ed9b4c725ac384ee980d",
+              "services": [
+                "model-sg-glm53-w4afp8-tp2-r1a",
+                "model-sg-glm53-w4afp8-tp2-r1b"
+              ]
+            },
+            {
+              "timestamp": "2026-10-22T01:11:34.906803603+00:00",
+              "action": "compose_manager_started",
+              "container": "compose-manager",
+              "image": "nearaidev/compose-manager@sha256:6e035c8...(97 chars)"
+            },
+            {
+              "timestamp": "2026-10-23T21:58:28.551556781+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.496",
+              "commit": "6000fd05967289ca9d3fcd4b1413875a05e958a1",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-proxy-registrar",
+                "qwen38-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-10-23T22:07:20.168184435+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.496",
+              "commit": "6000fd05967289ca9d3fcd4b1413875a05e958a1",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-privacy-filter",
+                "dcgm-privacy-filter",
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1",
+                "dcgm-qwen36-35b-a3b",
+                "model-sg-qwen38-27b-fp8-tp1-r2",
+                "model-downloader-qwen38",
+                "proxy-qwen38-27b",
+                "nginx-qwen38",
+                "dcgm-qwen38-27b",
+                "model-sg-flux2-klein-4b-tp1",
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1",
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "model-vllm-qwen3-reranker-0.6b-tp1",
+                "model-vllm-whisper-large-v3-tp1",
+                "dcgm-shared-gpu3"
+              ]
+            },
+            {
+              "timestamp": "2026-10-23T23:05:23.854498312+00:00",
+              "action": "compose_manager_started",
+              "container": "compose-manager",
+              "image": "nearaidev/compose-manager@sha256:6e035c8...(97 chars)"
+            },
+            {
+              "timestamp": "2026-10-24T00:01:38.625973007+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.512",
+              "commit": "3651d981672542b92986af1d9ff4dcce761e58da",
+              "file": "prod/sage-pull.yaml",
+              "file_sha256": "37a6a029e6f09587d816d5c6f56ba094a4f0393fe40b782ec3215d7501aebb0b"
+            },
+            {
+              "timestamp": "2026-10-24T00:12:06.872447311+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.512",
+              "commit": "3651d981672542b92986af1d9ff4dcce761e58da",
+              "file": "prod/sage-pull.yaml"
+            },
+            {
+              "timestamp": "2026-10-24T00:13:47.863830590+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.512",
+              "commit": "3651d981672542b92986af1d9ff4dcce761e58da",
+              "file": "prod/sage-pull.yaml",
+              "file_sha256": "37a6a029e6f09587d816d5c6f56ba094a4f0393fe40b782ec3215d7501aebb0b"
+            },
+            {
+              "timestamp": "2026-10-24T01:17:05.784123240+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.512",
+              "commit": "3651d981672542b92986af1d9ff4dcce761e58da",
+              "file": "prod/sage-pull.yaml"
+            },
+            {
+              "timestamp": "2026-10-24T01:21:12.079808880+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.512",
+              "commit": "3651d981672542b92986af1d9ff4dcce761e58da",
+              "file": "prod/sage-pull.yaml",
+              "file_sha256": "37a6a029e6f09587d816d5c6f56ba094a4f0393fe40b782ec3215d7501aebb0b"
+            },
+            {
+              "timestamp": "2026-10-24T01:21:38.854520054+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.512",
+              "commit": "3651d981672542b92986af1d9ff4dcce761e58da",
+              "file": "prod/sage-pull.yaml"
+            },
+            {
+              "timestamp": "2026-10-24T01:23:39.348031081+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.513",
+              "commit": "e99f50fc2c08db4081e5436113e60fad68840cb4",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "dfac289866183c8fdd21606a0c431f7a5e8b240f2aeeb939461b823aec9541ac",
+              "services": [
+                "sage-dstack",
+                "sage"
+              ]
+            },
+            {
+              "timestamp": "2026-10-24T03:45:53.096421295+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.513",
+              "commit": "e99f50fc2c08db4081e5436113e60fad68840cb4",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "dfac289866183c8fdd21606a0c431f7a5e8b240f2aeeb939461b823aec9541ac",
+              "services": [
+                "model-privacy-filter",
+                "dcgm-privacy-filter",
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1",
+                "dcgm-qwen36-35b-a3b",
+                "model-sg-flux2-klein-4b-tp1",
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "model-vllm-qwen3-reranker-0.6b-tp1",
+                "model-vllm-whisper-large-v3-tp1",
+                "dcgm-shared-gpu3"
+              ]
+            },
+            {
+              "timestamp": "2026-10-24T03:49:33.182908923+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.513",
+              "commit": "e99f50fc2c08db4081e5436113e60fad68840cb4",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "dfac289866183c8fdd21606a0c431f7a5e8b240f2aeeb939461b823aec9541ac",
+              "services": [
+                "model-downloader-qwen38",
+                "model-sg-qwen38-27b-fp8-tp1-coloc",
+                "proxy-qwen38-27b",
+                "nginx-qwen38",
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1",
+                "model-proxy-registrar",
+                "qwen38-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-10-24T16:53:50.836002965+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.513",
+              "commit": "e99f50fc2c08db4081e5436113e60fad68840cb4",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "dfac289866183c8fdd21606a0c431f7a5e8b240f2aeeb939461b823aec9541ac",
+              "services": [
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-privacy-filter",
+                "proxy-whisper-large-v3",
+                "proxy-flux2-klein-4b",
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-glm53"
+              ]
+            },
+            {
+              "timestamp": "2026-10-24T16:54:53.803417941+00:00",
+              "action": "docker_restart",
+              "container": "nginx"
+            },
+            {
+              "timestamp": "2026-10-27T03:21:04.795361101+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.516",
+              "commit": "28a15af593b604d354691dcd77fb1f316cc9dbe1",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "88e8371122f7a4039ebb24e680658c2df5e77a4cea5464180f3bcf1ea8b72552",
+              "services": [
+                "qwen38-lora-adapter-downloader"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T03:23:41.342213149+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.516",
+              "commit": "28a15af593b604d354691dcd77fb1f316cc9dbe1",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "88e8371122f7a4039ebb24e680658c2df5e77a4cea5464180f3bcf1ea8b72552",
+              "services": [
+                "proxy-qwen38-27b-abliterated"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T03:24:56.944332734+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.516",
+              "commit": "28a15af593b604d354691dcd77fb1f316cc9dbe1",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "88e8371122f7a4039ebb24e680658c2df5e77a4cea5464180f3bcf1ea8b72552",
+              "services": [
+                "model-sg-qwen38-27b-fp8-tp1-coloc"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T03:39:09.145848652+00:00",
+              "action": "docker_restart",
+              "container": "model-sg-qwen38-27b-fp8-tp1-coloc"
+            },
+            {
+              "timestamp": "2026-10-27T03:43:38.753489246+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.516",
+              "commit": "28a15af593b604d354691dcd77fb1f316cc9dbe1",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "88e8371122f7a4039ebb24e680658c2df5e77a4cea5464180f3bcf1ea8b72552",
+              "services": [
+                "proxy-qwen38-27b"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T03:44:52.469095164+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.516",
+              "commit": "28a15af593b604d354691dcd77fb1f316cc9dbe1",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "88e8371122f7a4039ebb24e680658c2df5e77a4cea5464180f3bcf1ea8b72552",
+              "services": [
+                "nginx-qwen38"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T03:46:05.536232146+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.516",
+              "commit": "28a15af593b604d354691dcd77fb1f316cc9dbe1",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "otelcol-contrib"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T03:46:19.041014351+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.516",
+              "commit": "28a15af593b604d354691dcd77fb1f316cc9dbe1",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "88e8371122f7a4039ebb24e680658c2df5e77a4cea5464180f3bcf1ea8b72552",
+              "services": [
+                "otelcol-contrib"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T03:56:13.952994878+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.516",
+              "commit": "28a15af593b604d354691dcd77fb1f316cc9dbe1",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "88e8371122f7a4039ebb24e680658c2df5e77a4cea5464180f3bcf1ea8b72552",
+              "services": [
+                "nginx-qwen38-abliterated",
+                "qwen38-abliterated-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T04:01:24.272153393+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.516",
+              "commit": "28a15af593b604d354691dcd77fb1f316cc9dbe1",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "qwen38-abliterated-registrar",
+                "nginx-qwen38-abliterated"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T04:53:58.243397944+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.518",
+              "commit": "a42482d986e302a359da3cf3f114c7041687661f",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "570079d79bc69c9ca13116795350834653af94ced410c2c1855c0553317ed401",
+              "services": [
+                "nginx-qwen38"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T04:55:01.672438200+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.518",
+              "commit": "a42482d986e302a359da3cf3f114c7041687661f",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "570079d79bc69c9ca13116795350834653af94ced410c2c1855c0553317ed401",
+              "services": [
+                "qwen38-abliterated-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T18:24:31.299945187+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.520",
+              "commit": "dc718808ecae60f22be966f3d552ded2b8969542",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "c2c83d9c5ced7227a297f68743aaecfb5180ff5095ad9807d7094ccbaea3e84f",
+              "services": [
+                "nginx"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T20:32:59.212100338+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.520",
+              "commit": "dc718808ecae60f22be966f3d552ded2b8969542",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-sg-glm53-w4afp8-tp2-r1a"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T20:34:07.462859767+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.520",
+              "commit": "dc718808ecae60f22be966f3d552ded2b8969542",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "c2c83d9c5ced7227a297f68743aaecfb5180ff5095ad9807d7094ccbaea3e84f",
+              "services": [
+                "model-sg-glm53-w4afp8-tp2-r1a"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T20:41:21.387315981+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.520",
+              "commit": "dc718808ecae60f22be966f3d552ded2b8969542",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-sg-glm53-w4afp8-tp2-r1b"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T20:42:22.236637823+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.520",
+              "commit": "dc718808ecae60f22be966f3d552ded2b8969542",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "c2c83d9c5ced7227a297f68743aaecfb5180ff5095ad9807d7094ccbaea3e84f",
+              "services": [
+                "model-sg-glm53-w4afp8-tp2-r1b"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T20:51:25.048254557+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.520",
+              "commit": "dc718808ecae60f22be966f3d552ded2b8969542",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "c2c83d9c5ced7227a297f68743aaecfb5180ff5095ad9807d7094ccbaea3e84f",
+              "services": [
+                "glm53-ghost-aggregator"
+              ]
+            },
+            {
+              "timestamp": "2026-10-27T20:51:58.333025327+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.520",
+              "commit": "dc718808ecae60f22be966f3d552ded2b8969542",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "c2c83d9c5ced7227a297f68743aaecfb5180ff5095ad9807d7094ccbaea3e84f",
+              "services": [
+                "otelcol-contrib"
+              ]
+            },
+            {
+              "timestamp": "2026-10-29T06:06:50.257408261+00:00",
+              "action": "compose_manager_started",
+              "container": "compose-manager",
+              "image": "nearaidev/compose-manager@sha256:a320bb4...(97 chars)"
+            },
+            {
+              "timestamp": "2026-10-29T22:14:12.767722892+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.520",
+              "commit": "dc718808ecae60f22be966f3d552ded2b8969542",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-vllm-qwen3-reranker-0.6b-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-10-29T22:14:17.226560202+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.529",
+              "commit": "256e915c22033cad76f1a0aa06e3777b9221ca23",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "e2f4aac22eeaa63d21764d93a73fd067613f348a0487c4f4e0414a21507526dc",
+              "services": [
+                "model-vllm-qwen3-reranker-0.6b-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-10-30T13:22:32.811431877+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.530",
+              "commit": "cd1a323df6083b81126be6aa67b2b4d6a08b013e",
+              "file": "prod/sage-pull.yaml",
+              "file_sha256": "8dd9f6381e17ea66b3b5adc9875b0048ef6497e4097990b94576831ee9b8a811"
+            },
+            {
+              "timestamp": "2026-10-30T13:23:48.515368119+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.530",
+              "commit": "cd1a323df6083b81126be6aa67b2b4d6a08b013e",
+              "file": "prod/sage-pull.yaml"
+            },
+            {
+              "timestamp": "2026-10-30T13:23:53.398677711+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.530",
+              "commit": "cd1a323df6083b81126be6aa67b2b4d6a08b013e",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "254ac8b3c655126390b6038d96e9c9e378f8e2421585a5fd0f46f211d6822cd4",
+              "services": [
+                "sage-dstack",
+                "sage"
+              ]
+            },
+            {
+              "timestamp": "2026-10-30T20:22:28.325843994+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.530",
+              "commit": "cd1a323df6083b81126be6aa67b2b4d6a08b013e",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "qwen38-registrar",
+                "qwen38-abliterated-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-10-30T20:22:58.204172025+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.530",
+              "commit": "cd1a323df6083b81126be6aa67b2b4d6a08b013e",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "nginx-qwen38"
+              ]
+            },
+            {
+              "timestamp": "2026-10-30T20:24:00.641075175+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.530",
+              "commit": "cd1a323df6083b81126be6aa67b2b4d6a08b013e",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-sg-qwen38-27b-fp8-tp1-coloc"
+              ]
+            },
+            {
+              "timestamp": "2026-10-30T20:24:25.347812627+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.531",
+              "commit": "8ed47b2b2b155aa72ec78abf2ae837cd010c7f3d",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f972200851097365fc4f3f3473a5e5f4432d74d5485d0aa38182053000d7a7cf",
+              "services": [
+                "model-sg-qwen38-27b-fp8-tp1-coloc"
+              ]
+            },
+            {
+              "timestamp": "2026-10-30T20:26:12.993565745+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.531",
+              "commit": "8ed47b2b2b155aa72ec78abf2ae837cd010c7f3d",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f972200851097365fc4f3f3473a5e5f4432d74d5485d0aa38182053000d7a7cf",
+              "services": [
+                "nginx-qwen38"
+              ]
+            },
+            {
+              "timestamp": "2026-10-30T20:30:04.076556502+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.531",
+              "commit": "8ed47b2b2b155aa72ec78abf2ae837cd010c7f3d",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f972200851097365fc4f3f3473a5e5f4432d74d5485d0aa38182053000d7a7cf",
+              "services": [
+                "qwen38-registrar",
+                "qwen38-abliterated-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-10-30T21:07:16.617885139+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.531",
+              "commit": "8ed47b2b2b155aa72ec78abf2ae837cd010c7f3d",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f972200851097365fc4f3f3473a5e5f4432d74d5485d0aa38182053000d7a7cf",
+              "services": [
+                "otelcol-contrib"
+              ]
+            },
+            {
+              "timestamp": "2026-11-02T20:37:41.542081422+00:00",
+              "action": "docker_restart",
+              "container": "sage"
+            },
+            {
+              "timestamp": "2026-11-02T21:57:57.959418091+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.536",
+              "commit": "4b5d2d517ee4d6ac8f73e00f0d36ebb9fc801772",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "23e17f384a872c8fd7a378469ad18498ea804d3868e5509952523557b9e13868",
+              "services": [
+                "dcgm-sage",
+                "otelcol-contrib"
+              ]
+            },
+            {
+              "timestamp": "2026-11-02T23:34:31.042070783+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.536",
+              "commit": "4b5d2d517ee4d6ac8f73e00f0d36ebb9fc801772",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "23e17f384a872c8fd7a378469ad18498ea804d3868e5509952523557b9e13868",
+              "services": [
+                "model-sg-qwen38-27b-fp8-tp1-coloc"
+              ]
+            },
+            {
+              "timestamp": "2026-11-02T23:51:27.190838962+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.536",
+              "commit": "4b5d2d517ee4d6ac8f73e00f0d36ebb9fc801772",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "23e17f384a872c8fd7a378469ad18498ea804d3868e5509952523557b9e13868",
+              "services": [
+                "model-sg-qwen38-27b-fp8-tp1-coloc"
+              ]
+            },
+            {
+              "timestamp": "2026-11-03T00:04:30.973129357+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.536",
+              "commit": "4b5d2d517ee4d6ac8f73e00f0d36ebb9fc801772",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "proxy-glm53"
+              ]
+            },
+            {
+              "timestamp": "2026-11-03T00:36:31.994900792+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.537",
+              "commit": "368dc049942ae672968ffaa6b9182b9dd06a7525",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f146e3604ba9367781c41aea6d34199213ea2ac6537867b338817bd69dab1615",
+              "services": [
+                "model-downloader"
+              ]
+            },
+            {
+              "timestamp": "2026-11-03T00:57:01.655206088+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.537",
+              "commit": "368dc049942ae672968ffaa6b9182b9dd06a7525",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f146e3604ba9367781c41aea6d34199213ea2ac6537867b338817bd69dab1615",
+              "services": [
+                "model-vllm-dsv41-dp4",
+                "model-vllm-dsv41-dp5",
+                "model-vllm-dsv41-dp6",
+                "model-vllm-dsv41-dp7"
+              ]
+            },
+            {
+              "timestamp": "2026-11-03T01:23:58.499580768+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.537",
+              "commit": "368dc049942ae672968ffaa6b9182b9dd06a7525",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f146e3604ba9367781c41aea6d34199213ea2ac6537867b338817bd69dab1615",
+              "services": [
+                "proxy-dsv41",
+                "proxy-dsv41-abliterated",
+                "dcgm-dsv41"
+              ]
+            },
+            {
+              "timestamp": "2026-11-03T01:24:49.635950882+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.537",
+              "commit": "368dc049942ae672968ffaa6b9182b9dd06a7525",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f146e3604ba9367781c41aea6d34199213ea2ac6537867b338817bd69dab1615",
+              "services": [
+                "nginx",
+                "otelcol-contrib"
+              ]
+            },
+            {
+              "timestamp": "2026-11-03T01:26:59.504872328+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.537",
+              "commit": "368dc049942ae672968ffaa6b9182b9dd06a7525",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f146e3604ba9367781c41aea6d34199213ea2ac6537867b338817bd69dab1615",
+              "services": [
+                "model-proxy-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-03T01:57:04.793045040+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.539",
+              "commit": "cab4087076ad5321f3c2413627d30af455eb3cb6",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "68b80451c141f21eab9f80302e60f48857ddf2d6304b485327c23abe8c9423b2",
+              "services": [
+                "model-sg-qwen38-27b-fp8-tp1-coloc",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated"
+              ]
+            },
+            {
+              "timestamp": "2026-11-03T01:58:32.271638959+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.539",
+              "commit": "cab4087076ad5321f3c2413627d30af455eb3cb6",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "68b80451c141f21eab9f80302e60f48857ddf2d6304b485327c23abe8c9423b2",
+              "services": [
+                "nginx-qwen38"
+              ]
+            },
+            {
+              "timestamp": "2026-11-03T02:06:16.746156529+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.539",
+              "commit": "cab4087076ad5321f3c2413627d30af455eb3cb6",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "68b80451c141f21eab9f80302e60f48857ddf2d6304b485327c23abe8c9423b2",
+              "services": [
+                "qwen38-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-03T02:06:29.507640500+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.539",
+              "commit": "cab4087076ad5321f3c2413627d30af455eb3cb6",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "68b80451c141f21eab9f80302e60f48857ddf2d6304b485327c23abe8c9423b2",
+              "services": [
+                "qwen38-abliterated-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-03T02:06:55.087865502+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.539",
+              "commit": "cab4087076ad5321f3c2413627d30af455eb3cb6",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "68b80451c141f21eab9f80302e60f48857ddf2d6304b485327c23abe8c9423b2",
+              "services": [
+                "otelcol-contrib"
+              ]
+            },
+            {
+              "timestamp": "2026-11-03T22:45:39.381643995+00:00",
+              "action": "docker_restart",
+              "container": "model-vllm-qwen3vl-30b-a3b-fp8-tp1"
+            },
+            {
+              "timestamp": "2026-11-04T03:03:11.879878970+00:00",
+              "action": "compose_stage",
+              "tag": "v0.0.540",
+              "commit": "75d31e6461dc51465a81ff69203200a51a820d1c",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "320afade84f1606bda2c473ec0d09d3b6cd745038133bf353252f2683cc24eba",
+              "services": [
+                "proxy-dsv41",
+                "proxy-dsv41-abliterated",
+                "proxy-flux2-klein-4b",
+                "proxy-privacy-filter",
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-whisper-large-v3"
+              ]
+            },
+            {
+              "timestamp": "2026-11-04T03:03:35.401877625+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.540",
+              "commit": "75d31e6461dc51465a81ff69203200a51a820d1c",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "320afade84f1606bda2c473ec0d09d3b6cd745038133bf353252f2683cc24eba",
+              "services": [
+                "proxy-dsv41",
+                "proxy-dsv41-abliterated",
+                "proxy-flux2-klein-4b",
+                "proxy-privacy-filter",
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-whisper-large-v3",
+                "nginx",
+                "nginx-qwen38"
+              ]
+            },
+            {
+              "timestamp": "2026-11-04T04:13:45.207506024+00:00",
+              "action": "compose_manager_started",
+              "container": "compose-manager",
+              "image": "nearaidev/compose-manager@sha256:a0c0730...(97 chars)"
+            },
+            {
+              "timestamp": "2026-11-04T15:30:08.334757268+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.542",
+              "commit": "86d7ec5db459c02c3870f1e3e31226c661dc0c36",
+              "file": "prod/sage-pull.yaml",
+              "file_sha256": "2bfe8bc8efa1c8444e2f7db7633ea09a12acc5c07b9f71683dedf3ec9f183a0a"
+            },
+            {
+              "timestamp": "2026-11-04T15:30:18.171327471+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.542",
+              "commit": "86d7ec5db459c02c3870f1e3e31226c661dc0c36",
+              "file": "prod/sage-pull.yaml"
+            },
+            {
+              "timestamp": "2026-11-04T15:30:52.501527911+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.542",
+              "commit": "86d7ec5db459c02c3870f1e3e31226c661dc0c36",
+              "file": "prod/sage-pull.yaml",
+              "file_sha256": "2bfe8bc8efa1c8444e2f7db7633ea09a12acc5c07b9f71683dedf3ec9f183a0a"
+            },
+            {
+              "timestamp": "2026-11-04T15:31:40.088023675+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.542",
+              "commit": "86d7ec5db459c02c3870f1e3e31226c661dc0c36",
+              "file": "prod/sage-pull.yaml"
+            },
+            {
+              "timestamp": "2026-11-04T15:32:09.753473468+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.542",
+              "commit": "86d7ec5db459c02c3870f1e3e31226c661dc0c36",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "2afeafa24b31df9e56923659f106d17f04c1a182c52d576768456c005811720f",
+              "services": [
+                "sage-dstack",
+                "sage"
+              ]
+            },
+            {
+              "timestamp": "2026-11-04T19:23:06.557932141+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.545",
+              "commit": "81da1f6290a2bdb2f8f7712ab8ca76c891f5660d",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "proxy-dsv41",
+                "proxy-dsv41-abliterated"
+              ]
+            },
+            {
+              "timestamp": "2026-11-04T19:24:04.573023392+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.545",
+              "commit": "81da1f6290a2bdb2f8f7712ab8ca76c891f5660d",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "79f6fe9c746b5e1f7b4da882c49b434bdd1acbb603616266fc80d640361f6fd3",
+              "services": [
+                "model-vllm-dsv41-dp4",
+                "model-vllm-dsv41-dp5",
+                "model-vllm-dsv41-dp6",
+                "model-vllm-dsv41-dp7"
+              ]
+            },
+            {
+              "timestamp": "2026-11-04T19:33:20.328630491+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.545",
+              "commit": "81da1f6290a2bdb2f8f7712ab8ca76c891f5660d",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "79f6fe9c746b5e1f7b4da882c49b434bdd1acbb603616266fc80d640361f6fd3",
+              "services": [
+                "proxy-dsv41",
+                "proxy-dsv41-abliterated"
+              ]
+            },
+            {
+              "timestamp": "2026-11-04T19:33:54.497475325+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.545",
+              "commit": "81da1f6290a2bdb2f8f7712ab8ca76c891f5660d",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "79f6fe9c746b5e1f7b4da882c49b434bdd1acbb603616266fc80d640361f6fd3",
+              "services": [
+                "proxy-dsv41",
+                "proxy-dsv41-abliterated"
+              ]
+            },
+            {
+              "timestamp": "2026-11-06T21:33:33.153064476+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.548",
+              "commit": "38e766fab84ed1e00cbfa7e37adf92cb68654817",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "4d75088c7a9349c405f859ee84ba6a27d0c07a64ed30bcbcb444d20fc3777896",
+              "services": [
+                "model-downloader",
+                "model-sg-glm53-w4afp8-tp2-r1",
+                "model-sg-glm53-w4afp8-tp2-r2"
+              ]
+            },
+            {
+              "timestamp": "2026-11-06T21:38:45.850920030+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.548",
+              "commit": "38e766fab84ed1e00cbfa7e37adf92cb68654817",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "4d75088c7a9349c405f859ee84ba6a27d0c07a64ed30bcbcb444d20fc3777896",
+              "services": [
+                "proxy-glm53",
+                "glm53-ghost-aggregator",
+                "dcgm-glm53"
+              ]
+            },
+            {
+              "timestamp": "2026-11-06T21:39:41.439709458+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.548",
+              "commit": "38e766fab84ed1e00cbfa7e37adf92cb68654817",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "4d75088c7a9349c405f859ee84ba6a27d0c07a64ed30bcbcb444d20fc3777896",
+              "services": [
+                "nginx",
+                "otelcol-contrib"
+              ]
+            },
+            {
+              "timestamp": "2026-11-06T21:41:10.690021539+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.548",
+              "commit": "38e766fab84ed1e00cbfa7e37adf92cb68654817",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "4d75088c7a9349c405f859ee84ba6a27d0c07a64ed30bcbcb444d20fc3777896",
+              "services": [
+                "model-proxy-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-07T22:09:15.762874280+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.548",
+              "commit": "38e766fab84ed1e00cbfa7e37adf92cb68654817",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "4d75088c7a9349c405f859ee84ba6a27d0c07a64ed30bcbcb444d20fc3777896"
+            },
+            {
+              "timestamp": "2026-11-08T00:08:41.088522083+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.550",
+              "commit": "132912c5a119d6011e73c98ec2b23f806c2411cc",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "4d75088c7a9349c405f859ee84ba6a27d0c07a64ed30bcbcb444d20fc3777896",
+              "services": [
+                "model-downloader",
+                "hf-cleanup",
+                "model-proxy-registrar",
+                "proxy-qwen36-35b-a3b",
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1",
+                "model-downloader-qwen38",
+                "proxy-qwen38-27b",
+                "model-sg-qwen38-27b-fp8-tp1-coloc",
+                "qwen38-lora-adapter-downloader",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-glm53",
+                "model-sg-glm53-w4afp8-tp2-r1",
+                "model-sg-glm53-w4afp8-tp2-r2",
+                "proxy-flux2-klein-4b",
+                "model-sg-flux2-klein-4b-tp1",
+                "proxy-qwen3vl-30b-a3b",
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1",
+                "proxy-qwen3-embedding-0.6b",
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "proxy-qwen3-reranker-0.6b",
+                "model-vllm-qwen3-reranker-0.6b-tp1",
+                "proxy-whisper-large-v3",
+                "model-vllm-whisper-large-v3-tp1",
+                "proxy-privacy-filter",
+                "model-privacy-filter"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T00:09:16.040659635+00:00",
+              "action": "docker_restart",
+              "container": "sage"
+            },
+            {
+              "timestamp": "2026-11-08T00:27:10.757564146+00:00",
+              "action": "docker_restart",
+              "container": "nginx"
+            },
+            {
+              "timestamp": "2026-11-08T00:27:11.583982026+00:00",
+              "action": "docker_restart",
+              "container": "nginx-qwen38"
+            },
+            {
+              "timestamp": "2026-11-08T02:02:04.741898418+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.550",
+              "commit": "132912c5a119d6011e73c98ec2b23f806c2411cc",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "4d75088c7a9349c405f859ee84ba6a27d0c07a64ed30bcbcb444d20fc3777896",
+              "services": [
+                "qwen38-registrar",
+                "qwen38-abliterated-registrar",
+                "dry"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T02:05:26.858749849+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.550",
+              "commit": "132912c5a119d6011e73c98ec2b23f806c2411cc",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "4d75088c7a9349c405f859ee84ba6a27d0c07a64ed30bcbcb444d20fc3777896",
+              "services": [
+                "model-proxy-registrar",
+                "qwen38-registrar",
+                "qwen38-abliterated-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T02:39:01.642867929+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.550",
+              "commit": "132912c5a119d6011e73c98ec2b23f806c2411cc",
+              "file": "prod/rotate-compose-manager-token.yaml",
+              "file_sha256": "3154095bde664e261c18e034f2c74419014559583e260799f1528fd9bb016371",
+              "services": [
+                "rotate-token"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T02:39:42.560437800+00:00",
+              "action": "compose_manager_started",
+              "container": "compose-manager",
+              "image": "nearaidev/compose-manager@sha256:a0c0730...(97 chars)"
+            },
+            {
+              "timestamp": "2026-11-08T02:39:47.518006606+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.550",
+              "commit": "132912c5a119d6011e73c98ec2b23f806c2411cc",
+              "file": "prod/rotate-compose-manager-token.yaml",
+              "services": [
+                "rotate-token"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T02:39:48.024557230+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.550",
+              "commit": "132912c5a119d6011e73c98ec2b23f806c2411cc",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "4d75088c7a9349c405f859ee84ba6a27d0c07a64ed30bcbcb444d20fc3777896",
+              "services": [
+                "nginx"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T06:54:49.828881812+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.551",
+              "commit": "f2b0b35c9189a5a059ab3b6a795271d9d504f9af",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "27b1d5258031897cc5f13ee8bb4656176534764fc7cebeff3868e660ab39bd27",
+              "services": [
+                "proxy-flux2-klein-4b",
+                "proxy-glm53",
+                "proxy-privacy-filter",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-whisper-large-v3",
+                "nginx",
+                "nginx-qwen38",
+                "model-downloader",
+                "model-downloader-qwen38"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T09:03:54.214803765+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.551",
+              "commit": "f2b0b35c9189a5a059ab3b6a795271d9d504f9af",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-proxy-registrar",
+                "qwen38-registrar",
+                "qwen38-abliterated-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T09:09:53.429937492+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.551",
+              "commit": "f2b0b35c9189a5a059ab3b6a795271d9d504f9af",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-downloader",
+                "nginx",
+                "model-proxy-registrar",
+                "proxy-qwen36-35b-a3b",
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1",
+                "model-downloader-qwen38",
+                "proxy-qwen38-27b",
+                "model-sg-qwen38-27b-fp8-tp1-coloc",
+                "nginx-qwen38",
+                "qwen38-registrar",
+                "qwen38-lora-adapter-downloader",
+                "proxy-qwen38-27b-abliterated",
+                "qwen38-abliterated-registrar",
+                "proxy-glm53",
+                "model-sg-glm53-w4afp8-tp2-r1",
+                "model-sg-glm53-w4afp8-tp2-r2",
+                "glm53-ghost-aggregator",
+                "proxy-flux2-klein-4b",
+                "model-sg-flux2-klein-4b-tp1",
+                "proxy-qwen3vl-30b-a3b",
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1",
+                "proxy-qwen3-embedding-0.6b",
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "proxy-qwen3-reranker-0.6b",
+                "model-vllm-qwen3-reranker-0.6b-tp1",
+                "proxy-whisper-large-v3",
+                "model-vllm-whisper-large-v3-tp1",
+                "proxy-privacy-filter",
+                "model-privacy-filter",
+                "dcgm-privacy-filter",
+                "dcgm-qwen36-35b-a3b",
+                "dcgm-glm53",
+                "dcgm-shared-gpu3",
+                "otelcol-contrib"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T10:25:28.827057993+00:00",
+              "action": "compose_manager_started",
+              "container": "compose-manager",
+              "image": "nearaidev/compose-manager@sha256:a0c0730...(97 chars)"
+            },
+            {
+              "timestamp": "2026-11-08T10:33:19.960404687+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.551",
+              "commit": "f2b0b35c9189a5a059ab3b6a795271d9d504f9af",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "27b1d5258031897cc5f13ee8bb4656176534764fc7cebeff3868e660ab39bd27",
+              "services": [
+                "sage"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T10:44:01.823395883+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.551",
+              "commit": "f2b0b35c9189a5a059ab3b6a795271d9d504f9af",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "27b1d5258031897cc5f13ee8bb4656176534764fc7cebeff3868e660ab39bd27",
+              "services": [
+                "model-downloader",
+                "model-downloader-qwen38",
+                "qwen38-lora-adapter-downloader"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T10:44:53.675857072+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.551",
+              "commit": "f2b0b35c9189a5a059ab3b6a795271d9d504f9af",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "27b1d5258031897cc5f13ee8bb4656176534764fc7cebeff3868e660ab39bd27",
+              "services": [
+                "model-downloader",
+                "nginx",
+                "model-proxy-registrar",
+                "proxy-qwen36-35b-a3b",
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1",
+                "model-downloader-qwen38",
+                "proxy-qwen38-27b",
+                "model-sg-qwen38-27b-fp8-tp1-coloc",
+                "nginx-qwen38",
+                "qwen38-lora-adapter-downloader",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-glm53",
+                "model-sg-glm53-w4afp8-tp2-r1",
+                "model-sg-glm53-w4afp8-tp2-r2",
+                "glm53-ghost-aggregator",
+                "proxy-flux2-klein-4b",
+                "model-sg-flux2-klein-4b-tp1",
+                "proxy-qwen3-embedding-0.6b",
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "proxy-qwen3-reranker-0.6b",
+                "model-vllm-qwen3-reranker-0.6b-tp1",
+                "proxy-whisper-large-v3",
+                "model-vllm-whisper-large-v3-tp1",
+                "proxy-privacy-filter",
+                "model-privacy-filter",
+                "dcgm-privacy-filter",
+                "dcgm-qwen36-35b-a3b",
+                "dcgm-glm53",
+                "dcgm-shared-gpu3",
+                "otelcol-contrib",
+                "qwen38-registrar",
+                "qwen38-abliterated-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T11:19:06.320960722+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.551",
+              "commit": "f2b0b35c9189a5a059ab3b6a795271d9d504f9af",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "27b1d5258031897cc5f13ee8bb4656176534764fc7cebeff3868e660ab39bd27",
+              "services": [
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1",
+                "proxy-qwen3vl-30b-a3b"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T21:02:50.218862854+00:00",
+              "action": "compose_stage",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "nginx",
+                "nginx-qwen38",
+                "proxy-whisper-large-v3",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-flux2-klein-4b",
+                "proxy-privacy-filter",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen36-35b-a3b"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T21:04:15.853175397+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "proxy-whisper-large-v3",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-flux2-klein-4b",
+                "proxy-privacy-filter",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen36-35b-a3b"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T21:05:09.930722024+00:00",
+              "action": "docker_restart",
+              "container": "nginx"
+            },
+            {
+              "timestamp": "2026-11-08T21:05:20.965068720+00:00",
+              "action": "docker_restart",
+              "container": "nginx-qwen38"
+            },
+            {
+              "timestamp": "2026-11-08T21:08:37.422767909+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "proxy-glm53"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T21:10:33.139332793+00:00",
+              "action": "docker_restart",
+              "container": "nginx"
+            },
+            {
+              "timestamp": "2026-11-08T21:24:35.139227764+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-privacy-filter",
+                "model-sg-flux2-klein-4b-tp1",
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1",
+                "model-sg-qwen38-27b-fp8-tp1-coloc",
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "model-vllm-qwen3-reranker-0.6b-tp1",
+                "model-vllm-whisper-large-v3-tp1",
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T21:27:48.420997542+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "model-privacy-filter",
+                "model-sg-flux2-klein-4b-tp1",
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1",
+                "model-sg-qwen38-27b-fp8-tp1-coloc",
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "model-vllm-qwen3-reranker-0.6b-tp1",
+                "model-vllm-whisper-large-v3-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T21:28:39.840471277+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "proxy-flux2-klein-4b",
+                "proxy-glm53",
+                "proxy-privacy-filter",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-whisper-large-v3",
+                "nginx",
+                "nginx-qwen38"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T21:32:09.618148419+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-sg-glm53-w4afp8-tp2-r1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T21:34:46.424661944+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "model-sg-glm53-w4afp8-tp2-r1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T21:36:17.064832763+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T21:39:58.411721506+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-sg-glm53-w4afp8-tp2-r2"
+              ]
+            },
+            {
+              "timestamp": "2026-11-08T21:42:27.521077496+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "model-sg-glm53-w4afp8-tp2-r2"
+              ]
+            },
+            {
+              "timestamp": "2026-11-09T06:29:37.961519390+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-proxy-registrar",
+                "qwen38-registrar",
+                "qwen38-abliterated-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-09T06:32:57.145175399+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "dcgm-glm53",
+                "dcgm-privacy-filter",
+                "dcgm-qwen36-35b-a3b",
+                "dcgm-shared-gpu3",
+                "glm53-ghost-aggregator",
+                "model-privacy-filter",
+                "model-sg-flux2-klein-4b-tp1",
+                "model-sg-glm53-w4afp8-tp2-r1",
+                "model-sg-glm53-w4afp8-tp2-r2",
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1",
+                "model-sg-qwen38-27b-fp8-tp1-coloc",
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "model-vllm-qwen3-reranker-0.6b-tp1",
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1",
+                "model-vllm-whisper-large-v3-tp1",
+                "nginx-qwen38",
+                "nginx",
+                "otelcol-contrib",
+                "proxy-flux2-klein-4b",
+                "proxy-glm53",
+                "proxy-privacy-filter",
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen38-27b",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-whisper-large-v3"
+              ]
+            },
+            {
+              "timestamp": "2026-11-09T07:09:57.447265131+00:00",
+              "action": "compose_manager_started",
+              "container": "compose-manager",
+              "image": "nearaidev/compose-manager@sha256:a0c0730...(97 chars)"
+            },
+            {
+              "timestamp": "2026-11-09T07:10:38.082028187+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "sage"
+              ]
+            },
+            {
+              "timestamp": "2026-11-09T07:15:52.736816064+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "model-downloader",
+                "nginx",
+                "model-proxy-registrar",
+                "proxy-qwen36-35b-a3b",
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1",
+                "model-downloader-qwen38",
+                "proxy-qwen38-27b",
+                "model-sg-qwen38-27b-fp8-tp1-coloc",
+                "nginx-qwen38",
+                "qwen38-lora-adapter-downloader",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-glm53",
+                "model-sg-glm53-w4afp8-tp2-r1",
+                "model-sg-glm53-w4afp8-tp2-r2",
+                "glm53-ghost-aggregator",
+                "proxy-flux2-klein-4b",
+                "model-sg-flux2-klein-4b-tp1",
+                "proxy-qwen3-embedding-0.6b",
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "proxy-qwen3-reranker-0.6b",
+                "model-vllm-qwen3-reranker-0.6b-tp1",
+                "proxy-whisper-large-v3",
+                "model-vllm-whisper-large-v3-tp1",
+                "proxy-privacy-filter",
+                "model-privacy-filter",
+                "dcgm-privacy-filter",
+                "dcgm-qwen36-35b-a3b",
+                "dcgm-glm53",
+                "dcgm-shared-gpu3",
+                "otelcol-contrib",
+                "qwen38-registrar",
+                "qwen38-abliterated-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-09T07:44:44.298862587+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-09T13:09:14.916712108+00:00",
+              "action": "compose_stage",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "proxy-glm53",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-whisper-large-v3",
+                "proxy-privacy-filter",
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-flux2-klein-4b",
+                "proxy-qwen38-27b"
+              ]
+            },
+            {
+              "timestamp": "2026-11-09T13:13:34.170063979+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "sage"
+              ]
+            },
+            {
+              "timestamp": "2026-11-09T13:40:31.746204189+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "proxy-glm53",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-whisper-large-v3",
+                "proxy-privacy-filter",
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-flux2-klein-4b",
+                "proxy-qwen38-27b"
+              ]
+            },
+            {
+              "timestamp": "2026-11-09T13:41:06.676079293+00:00",
+              "action": "docker_restart",
+              "container": "nginx"
+            },
+            {
+              "timestamp": "2026-11-09T13:41:17.494269025+00:00",
+              "action": "docker_restart",
+              "container": "nginx-qwen38"
+            },
+            {
+              "timestamp": "2026-11-09T14:25:25.955480172+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.553",
+              "commit": "4d64477b298038f59e92b268a2a5feb34e597fe0",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f449fa7470bb4a833df6dc5feb2c726811b3ad987a319193dfd4fa76852b417e",
+              "services": [
+                "proxy-glm53",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-whisper-large-v3",
+                "proxy-privacy-filter",
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-flux2-klein-4b",
+                "proxy-qwen38-27b",
+                "model-proxy-registrar",
+                "qwen38-registrar",
+                "qwen38-abliterated-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-09T14:26:00.697226152+00:00",
+              "action": "docker_restart",
+              "container": "nginx"
+            },
+            {
+              "timestamp": "2026-11-09T14:26:11.448089505+00:00",
+              "action": "docker_restart",
+              "container": "nginx-qwen38"
+            },
+            {
+              "timestamp": "2026-11-09T14:49:00.848581153+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.554",
+              "commit": "fe7493ee3a0b3d36c1079c095de554e7b218da5c",
+              "file": "prod/sage-pull.yaml",
+              "file_sha256": "ff13b07ffb00c884718634837073276637e211893fedf3a2fb1f5f3eebba1ddc"
+            },
+            {
+              "timestamp": "2026-11-09T14:49:40.581541912+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.554",
+              "commit": "fe7493ee3a0b3d36c1079c095de554e7b218da5c",
+              "file": "prod/sage-pull.yaml"
+            },
+            {
+              "timestamp": "2026-11-09T14:50:43.815219608+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.554",
+              "commit": "fe7493ee3a0b3d36c1079c095de554e7b218da5c",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "5cd125c74f2316ec2028691cf561df7f18fa4e9726b98d7133113ccef071ebdd",
+              "services": [
+                "sage"
+              ]
+            },
+            {
+              "timestamp": "2026-11-09T21:05:08.978058446+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.554",
+              "commit": "fe7493ee3a0b3d36c1079c095de554e7b218da5c",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-09T21:08:26.437013721+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.554",
+              "commit": "fe7493ee3a0b3d36c1079c095de554e7b218da5c",
+              "file": "prod/small-models.yaml",
+              "services": [
+                "dcgm-glm53",
+                "dcgm-privacy-filter",
+                "dcgm-qwen36-35b-a3b",
+                "dcgm-shared-gpu3",
+                "glm53-ghost-aggregator",
+                "model-privacy-filter",
+                "model-proxy-registrar",
+                "model-sg-flux2-klein-4b-tp1",
+                "model-sg-glm53-w4afp8-tp2-r1",
+                "model-sg-glm53-w4afp8-tp2-r2",
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1",
+                "model-sg-qwen38-27b-fp8-tp1-coloc",
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "model-vllm-qwen3-reranker-0.6b-tp1",
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1",
+                "model-vllm-whisper-large-v3-tp1",
+                "nginx",
+                "nginx-qwen38",
+                "proxy-flux2-klein-4b",
+                "proxy-glm53",
+                "proxy-privacy-filter",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-whisper-large-v3",
+                "qwen38-abliterated-registrar",
+                "qwen38-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-10T00:35:55.604632305+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.554",
+              "commit": "fe7493ee3a0b3d36c1079c095de554e7b218da5c",
+              "file": "prod/rotate-compose-manager-token.yaml",
+              "file_sha256": "3154095bde664e261c18e034f2c74419014559583e260799f1528fd9bb016371",
+              "services": [
+                "rotate-token"
+              ]
+            },
+            {
+              "timestamp": "2026-11-10T00:35:59.373805004+00:00",
+              "action": "compose_manager_started",
+              "container": "compose-manager",
+              "image": "nearaidev/compose-manager@sha256:a0c0730...(97 chars)"
+            },
+            {
+              "timestamp": "2026-11-10T00:36:24.210940833+00:00",
+              "action": "compose_down",
+              "tag": "v0.0.554",
+              "commit": "fe7493ee3a0b3d36c1079c095de554e7b218da5c",
+              "file": "prod/rotate-compose-manager-token.yaml",
+              "services": [
+                "rotate-token"
+              ]
+            },
+            {
+              "timestamp": "2026-11-10T01:44:55.834823935+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.554",
+              "commit": "fe7493ee3a0b3d36c1079c095de554e7b218da5c",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "5cd125c74f2316ec2028691cf561df7f18fa4e9726b98d7133113ccef071ebdd",
+              "services": [
+                "model-downloader",
+                "model-proxy-registrar",
+                "proxy-qwen36-35b-a3b",
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1",
+                "model-downloader-qwen38",
+                "proxy-qwen38-27b",
+                "model-sg-qwen38-27b-fp8-tp1-coloc",
+                "nginx-qwen38",
+                "qwen38-registrar",
+                "qwen38-lora-adapter-downloader",
+                "proxy-qwen38-27b-abliterated",
+                "qwen38-abliterated-registrar",
+                "proxy-glm53",
+                "model-sg-glm53-w4afp8-tp2-r1",
+                "model-sg-glm53-w4afp8-tp2-r2",
+                "glm53-ghost-aggregator",
+                "proxy-flux2-klein-4b",
+                "model-sg-flux2-klein-4b-tp1",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-qwen3-embedding-0.6b",
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "proxy-qwen3-reranker-0.6b",
+                "model-vllm-qwen3-reranker-0.6b-tp1",
+                "proxy-whisper-large-v3",
+                "model-vllm-whisper-large-v3-tp1",
+                "proxy-privacy-filter",
+                "model-privacy-filter",
+                "dcgm-privacy-filter",
+                "dcgm-qwen36-35b-a3b",
+                "dcgm-glm53",
+                "dcgm-shared-gpu3",
+                "nginx"
+              ]
+            },
+            {
+              "timestamp": "2026-11-10T02:44:44.405496907+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.554",
+              "commit": "fe7493ee3a0b3d36c1079c095de554e7b218da5c",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "5cd125c74f2316ec2028691cf561df7f18fa4e9726b98d7133113ccef071ebdd",
+              "services": [
+                "model-proxy-registrar",
+                "proxy-flux2-klein-4b",
+                "proxy-glm53",
+                "proxy-privacy-filter",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-whisper-large-v3",
+                "qwen38-abliterated-registrar",
+                "qwen38-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-10T03:02:14.571491821+00:00",
+              "action": "docker_restart",
+              "container": "nginx-qwen38"
+            },
+            {
+              "timestamp": "2026-11-10T03:02:15.210058517+00:00",
+              "action": "docker_restart",
+              "container": "nginx"
+            },
+            {
+              "timestamp": "2026-11-10T03:09:10.033300703+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.554",
+              "commit": "fe7493ee3a0b3d36c1079c095de554e7b218da5c",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "5cd125c74f2316ec2028691cf561df7f18fa4e9726b98d7133113ccef071ebdd",
+              "services": [
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-10T04:56:41.288010832+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.554",
+              "commit": "fe7493ee3a0b3d36c1079c095de554e7b218da5c",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "5cd125c74f2316ec2028691cf561df7f18fa4e9726b98d7133113ccef071ebdd",
+              "services": [
+                "model-proxy-registrar",
+                "proxy-flux2-klein-4b",
+                "proxy-glm53",
+                "proxy-privacy-filter",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-whisper-large-v3",
+                "qwen38-abliterated-registrar",
+                "qwen38-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-10T04:57:11.379401502+00:00",
+              "action": "docker_restart",
+              "container": "nginx-qwen38"
+            },
+            {
+              "timestamp": "2026-11-10T04:57:16.103095634+00:00",
+              "action": "docker_restart",
+              "container": "nginx"
+            },
+            {
+              "timestamp": "2026-11-10T22:02:23.346412873+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.554",
+              "commit": "fe7493ee3a0b3d36c1079c095de554e7b218da5c",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "5cd125c74f2316ec2028691cf561df7f18fa4e9726b98d7133113ccef071ebdd",
+              "services": [
+                "otelcol-contrib"
+              ]
+            },
+            {
+              "timestamp": "2026-11-11T00:13:56.422209619+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.556",
+              "commit": "eb5fd4bc1d11c719def5e02ee93c9f82d69a971a",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "f5455af6fbf7763f0aaefd6a6aa31fd3632526aa2b3918dd6c11a560410eb6f8",
+              "services": [
+                "model-proxy-registrar"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T06:37:54.768796113+00:00",
+              "action": "compose_manager_started",
+              "container": "compose-manager",
+              "image": "nearaidev/compose-manager@sha256:a0c0730...(97 chars)"
+            },
+            {
+              "timestamp": "2026-11-12T07:06:37.127265890+00:00",
+              "action": "docker_restart",
+              "container": "sage"
+            },
+            {
+              "timestamp": "2026-11-12T07:09:50.927460466+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.565",
+              "commit": "efc1618e8d0901a25ba302df4ea3112dad134328",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "85394fd3864b28acf0f6653061705b562f9464bb07de2380a6edbd75e2ecbbe1",
+              "services": [
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-glm53",
+                "proxy-flux2-klein-4b",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-whisper-large-v3",
+                "proxy-privacy-filter"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T07:11:03.622079539+00:00",
+              "action": "docker_restart",
+              "container": "nginx"
+            },
+            {
+              "timestamp": "2026-11-12T07:11:04.114880929+00:00",
+              "action": "docker_restart",
+              "container": "nginx-qwen38"
+            },
+            {
+              "timestamp": "2026-11-12T16:49:15.910053879+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.571",
+              "commit": "4bde267d2d3f23b70235d914f06dbe7c6014528f",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "d3f4100b84116659babfc6ce21e38c3f4af1bfaf737141ba8a0b2c5d98fa3de3",
+              "services": [
+                "model-vllm-qwen3-embedding-0.6b-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T16:56:24.336524605+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.571",
+              "commit": "4bde267d2d3f23b70235d914f06dbe7c6014528f",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "d3f4100b84116659babfc6ce21e38c3f4af1bfaf737141ba8a0b2c5d98fa3de3",
+              "services": [
+                "model-vllm-qwen3-reranker-0.6b-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T16:59:34.442776104+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.571",
+              "commit": "4bde267d2d3f23b70235d914f06dbe7c6014528f",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "d3f4100b84116659babfc6ce21e38c3f4af1bfaf737141ba8a0b2c5d98fa3de3",
+              "services": [
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T17:02:22.323498632+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.571",
+              "commit": "4bde267d2d3f23b70235d914f06dbe7c6014528f",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "d3f4100b84116659babfc6ce21e38c3f4af1bfaf737141ba8a0b2c5d98fa3de3",
+              "services": [
+                "model-vllm-whisper-large-v3-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T17:05:30.478514556+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.571",
+              "commit": "4bde267d2d3f23b70235d914f06dbe7c6014528f",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "d3f4100b84116659babfc6ce21e38c3f4af1bfaf737141ba8a0b2c5d98fa3de3",
+              "services": [
+                "model-sg-flux2-klein-4b-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T17:13:58.829806466+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.571",
+              "commit": "4bde267d2d3f23b70235d914f06dbe7c6014528f",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "d3f4100b84116659babfc6ce21e38c3f4af1bfaf737141ba8a0b2c5d98fa3de3",
+              "services": [
+                "model-sg-qwen36-35b-a3b-fp8-tp1-r1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T17:14:38.691414750+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.565",
+              "commit": "efc1618e8d0901a25ba302df4ea3112dad134328",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "85394fd3864b28acf0f6653061705b562f9464bb07de2380a6edbd75e2ecbbe1",
+              "services": [
+                "model-vllm-whisper-large-v3-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T17:15:17.737816186+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.565",
+              "commit": "efc1618e8d0901a25ba302df4ea3112dad134328",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "85394fd3864b28acf0f6653061705b562f9464bb07de2380a6edbd75e2ecbbe1",
+              "services": [
+                "model-sg-flux2-klein-4b-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T17:16:49.063658773+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.571",
+              "commit": "4bde267d2d3f23b70235d914f06dbe7c6014528f",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "d3f4100b84116659babfc6ce21e38c3f4af1bfaf737141ba8a0b2c5d98fa3de3",
+              "services": [
+                "model-sg-qwen38-27b-fp8-tp1-coloc"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T17:28:05.803269229+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.571",
+              "commit": "4bde267d2d3f23b70235d914f06dbe7c6014528f",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "d3f4100b84116659babfc6ce21e38c3f4af1bfaf737141ba8a0b2c5d98fa3de3",
+              "services": [
+                "model-sg-glm53-w4afp8-tp2-r1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T17:58:45.539601263+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.571",
+              "commit": "4bde267d2d3f23b70235d914f06dbe7c6014528f",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "d3f4100b84116659babfc6ce21e38c3f4af1bfaf737141ba8a0b2c5d98fa3de3",
+              "services": [
+                "model-sg-glm53-w4afp8-tp2-r2"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T20:16:36.487007516+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.565",
+              "commit": "efc1618e8d0901a25ba302df4ea3112dad134328",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "85394fd3864b28acf0f6653061705b562f9464bb07de2380a6edbd75e2ecbbe1",
+              "services": [
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T20:22:13.304134948+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.565",
+              "commit": "efc1618e8d0901a25ba302df4ea3112dad134328",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "85394fd3864b28acf0f6653061705b562f9464bb07de2380a6edbd75e2ecbbe1",
+              "services": [
+                "model-vllm-qwen3-embedding-0.6b-tp1",
+                "model-vllm-qwen3-reranker-0.6b-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-12T20:22:59.958732849+00:00",
+              "action": "docker_restart",
+              "container": "model-sg-flux2-klein-4b-tp1"
+            },
+            {
+              "timestamp": "2026-11-12T21:17:50.779410534+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.578",
+              "commit": "ed8069aa5d1dba7f6972f2dd18bd86de3c9cda06",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "b9f07005df8d1fc1c206d45a0a12e64bfffbac7634246c3908328633dbacc51d",
+              "services": [
+                "model-privacy-filter"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T00:59:04.862252236+00:00",
+              "action": "compose_stage",
+              "tag": "v0.0.581",
+              "commit": "777750741778f149fdb3932bebfe30ff4318cf1d",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "c9bcfb9f090a984ec722aed2769f02c26eac54890388b16c784d3282c047d320",
+              "services": [
+                "proxy-qwen36-35b-a3b",
+                "proxy-glm53",
+                "proxy-flux2-klein-4b",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-whisper-large-v3",
+                "proxy-privacy-filter"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T00:59:30.436138422+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.581",
+              "commit": "777750741778f149fdb3932bebfe30ff4318cf1d",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "c9bcfb9f090a984ec722aed2769f02c26eac54890388b16c784d3282c047d320",
+              "services": [
+                "proxy-qwen36-35b-a3b",
+                "proxy-glm53",
+                "proxy-flux2-klein-4b",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-whisper-large-v3",
+                "proxy-privacy-filter"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T01:00:28.805096076+00:00",
+              "action": "docker_restart",
+              "container": "nginx"
+            },
+            {
+              "timestamp": "2026-11-13T01:18:06.363574329+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.581",
+              "commit": "777750741778f149fdb3932bebfe30ff4318cf1d",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "c9bcfb9f090a984ec722aed2769f02c26eac54890388b16c784d3282c047d320",
+              "services": [
+                "model-sg-qwen38-27b-fp8-tp1-coloc",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated",
+                "engine-egress-probe",
+                "otelcol-contrib"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T01:19:52.978574070+00:00",
+              "action": "docker_restart",
+              "container": "nginx-qwen38"
+            },
+            {
+              "timestamp": "2026-11-13T01:20:04.422372603+00:00",
+              "action": "docker_restart",
+              "container": "qwen38-registrar"
+            },
+            {
+              "timestamp": "2026-11-13T01:20:15.776372436+00:00",
+              "action": "docker_restart",
+              "container": "qwen38-abliterated-registrar"
+            },
+            {
+              "timestamp": "2026-11-13T05:47:46.035468936+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.583",
+              "commit": "c330ab4ad48058839f666e0cc4edc0867e65e3aa",
+              "file": "prod/pack-small-models.yaml",
+              "file_sha256": "7756d1977f56f43884f03f364cb007d8f0d301cb71c37a7f4b68a2f4cfa497be",
+              "services": [
+                "model-vllm-qwen3-reranker-0.6b-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T06:09:46.924047777+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.583",
+              "commit": "c330ab4ad48058839f666e0cc4edc0867e65e3aa",
+              "file": "prod/pack-small-models.yaml",
+              "file_sha256": "7756d1977f56f43884f03f364cb007d8f0d301cb71c37a7f4b68a2f4cfa497be",
+              "services": [
+                "model-vllm-qwen3-embedding-0.6b-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T06:11:34.840503259+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.583",
+              "commit": "c330ab4ad48058839f666e0cc4edc0867e65e3aa",
+              "file": "prod/pack-small-models.yaml",
+              "file_sha256": "7756d1977f56f43884f03f364cb007d8f0d301cb71c37a7f4b68a2f4cfa497be",
+              "services": [
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T06:15:54.360728426+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.583",
+              "commit": "c330ab4ad48058839f666e0cc4edc0867e65e3aa",
+              "file": "prod/pack-small-models.yaml",
+              "file_sha256": "7756d1977f56f43884f03f364cb007d8f0d301cb71c37a7f4b68a2f4cfa497be",
+              "services": [
+                "model-vllm-whisper-large-v3-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T06:19:00.404779114+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.583",
+              "commit": "c330ab4ad48058839f666e0cc4edc0867e65e3aa",
+              "file": "prod/pack-small-models.yaml",
+              "file_sha256": "7756d1977f56f43884f03f364cb007d8f0d301cb71c37a7f4b68a2f4cfa497be",
+              "services": [
+                "model-sg-flux2-klein-4b-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T06:31:49.151565503+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.565",
+              "commit": "efc1618e8d0901a25ba302df4ea3112dad134328",
+              "file": "prod/small-models.yaml",
+              "file_sha256": "85394fd3864b28acf0f6653061705b562f9464bb07de2380a6edbd75e2ecbbe1",
+              "services": [
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T06:33:01.640180077+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.583",
+              "commit": "c330ab4ad48058839f666e0cc4edc0867e65e3aa",
+              "file": "prod/pack-small-models.yaml",
+              "file_sha256": "7756d1977f56f43884f03f364cb007d8f0d301cb71c37a7f4b68a2f4cfa497be",
+              "services": [
+                "engine-egress-probe"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T07:31:55.256412054+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.585",
+              "commit": "b455cc0933619fd5b662a4d6fd5d8914f00c963c",
+              "file": "prod/pack-small-models.yaml",
+              "file_sha256": "a59dd69cbb07cc8034f884a094e4ec01408674c31832ec29be2253e1f0ca84d4",
+              "services": [
+                "model-vllm-qwen3vl-30b-a3b-fp8-tp1"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T17:26:45.009099131+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.585",
+              "commit": "b455cc0933619fd5b662a4d6fd5d8914f00c963c",
+              "file": "prod/pack-small-models.yaml",
+              "file_sha256": "a59dd69cbb07cc8034f884a094e4ec01408674c31832ec29be2253e1f0ca84d4",
+              "services": [
+                "proxy-qwen36-35b-a3b",
+                "proxy-qwen38-27b",
+                "proxy-qwen38-27b-abliterated",
+                "proxy-flux2-klein-4b",
+                "proxy-qwen3vl-30b-a3b",
+                "proxy-qwen3-embedding-0.6b",
+                "proxy-qwen3-reranker-0.6b",
+                "proxy-whisper-large-v3",
+                "proxy-privacy-filter"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T17:27:48.242645049+00:00",
+              "action": "docker_restart",
+              "container": "nginx"
+            },
+            {
+              "timestamp": "2026-11-13T17:27:49.896971413+00:00",
+              "action": "docker_restart",
+              "container": "nginx-qwen38"
+            },
+            {
+              "timestamp": "2026-11-13T17:37:06.690185159+00:00",
+              "action": "compose_up",
+              "tag": "v0.0.585",
+              "commit": "b455cc0933619fd5b662a4d6fd5d8914f00c963c",
+              "file": "prod/pack-small-models.yaml",
+              "file_sha256": "a59dd69cbb07cc8034f884a094e4ec01408674c31832ec29be2253e1f0ca84d4",
+              "services": [
+                "proxy-glm53"
+              ]
+            },
+            {
+              "timestamp": "2026-11-13T17:37:41.552051477+00:00",
+              "action": "docker_restart",
+              "container": "nginx"
+            }
+          ],
+          "actions_hash": "8f7378ab059d9107494cfddaddfaf6a1d4ceae36b9822a23bdd7beaac008a433",
+          "nonce": "ab3186884e23ea8db06e5d83773a701801b1cb4cf105db413bbd1dc1980dac56",
+          "nonce_source": "server",
+          "quote": "040002008100000000000000939a7233f79c4ca9...(10012 chars)",
+          "event_log": "[{\"imr\":0,\"event_type\":2147483659,\"diges...(4927 chars)",
+          "report_data": "8f7378ab059d9107494cfddaddfaf6a1d4ceae36...(128 chars)",
+          "vm_config": "{\"os_image_hash\":\"91fd5d69ccee3e5ea4f2ae...(352 chars)"
+        },
+        "ohttp_key_config": "01002087abaee9db9b6bdd394130be6daa773b00...(90 chars)"
+      }
+    ],
+    "ohttp_key_config": "010020e4e354364111f2295e2d2ed97ce1103c9f...(90 chars)",
+    "ohttp_attestation": {
+      "signing_algo": "ed25519",
+      "signing_key": "40599fb284f43953bb356b09080fd803c960fc10285ad90eca462ca711ad4acb",
+      "key_config": "010020e4e354364111f2295e2d2ed97ce1103c9f...(90 chars)",
+      "signature": "823086655feb1660e7975d8dfdbfd728af36cc77...(128 chars)"
+    }
+  }
+}

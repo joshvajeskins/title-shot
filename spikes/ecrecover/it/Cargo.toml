@@ -1,0 +1,21 @@
+[package]
+name = "ecrecover-it"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Sandbox integration tests + synthetic-vector generator. Own workspace on purpose: the contract
+# builds with Rust 1.86 (nearcore VM requirement) while near-workspaces needs a newer toolchain.
+[workspace]
+
+[dependencies]
+near-workspaces = "~0.23"
+tokio = { version = "1", features = ["full"] }
+serde_json = "1"
+hex = "0.4"
+base64 = "0.22"
+anyhow = "1"
+sha2 = "0.10"
+sha3 = "0.10"
+k256 = { version = "0.13", features = ["ecdsa"] }
+rand_core = { version = "0.6", features = ["getrandom"] }

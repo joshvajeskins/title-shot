@@ -1,0 +1,7 @@
+# ~/Documents/agents/bin/ar (a fleet script) shadows the system archiver on this Mac's PATH.
+# Pin the archiver so cc-based build scripts never execute it.
+[env]
+AR = "/usr/bin/ar"
+AR_aarch64_apple_darwin = "/usr/bin/ar"
+AR_wasm32_unknown_unknown = "/usr/bin/ar"
+AR_wasm32_wasip2 = "/usr/bin/ar"

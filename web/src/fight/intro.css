@@ -1,0 +1,22 @@
+.intro {
+  position: relative; isolation: isolate; overflow: hidden; cursor: pointer;
+  min-height: 100dvh; display: grid; align-content: center; justify-items: center; gap: 18px;
+  padding: 24px var(--gutter);
+}
+.intro-bg { position: absolute; inset: 0; z-index: -1; background: radial-gradient(50% 50% at 50% 45%, rgba(232, 64, 44, 0.3), transparent 70%), linear-gradient(90deg, rgba(233, 185, 73, 0.12), transparent 40%, transparent 60%, rgba(61, 107, 224, 0.16)), var(--ink); }
+.intro-belt { display: grid; justify-items: center; gap: 4px; animation: intro-drop 700ms var(--ease-out) both; }
+.intro-belt img { width: min(420px, 70vw); filter: drop-shadow(0 16px 20px rgba(0, 0, 0, 0.6)); }
+.intro-belt span { font-size: 22px; color: var(--gold); letter-spacing: 0.06em; }
+@keyframes intro-drop { from { opacity: 0; transform: translateY(-30px) scale(0.96); } }
+.intro-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: clamp(8px, 3vw, 40px); width: 100%; max-width: 1100px; }
+.intro-side { display: grid; justify-items: center; }
+.intro-side .poster { --w: clamp(140px, 30vw, 340px); }
+.intro-left { animation: intro-left 700ms var(--ease-out) both 150ms; }
+.intro-right { animation: intro-right 700ms var(--ease-out) both 1800ms; }
+@keyframes intro-left { from { opacity: 0; transform: translateX(-60vw) rotate(-8deg); } }
+@keyframes intro-right { from { opacity: 0; transform: translateX(60vw) rotate(8deg); } }
+.intro-vs { font-size: clamp(56px, 10vw, 140px); color: var(--red); text-shadow: 0.05em 0.05em 0 var(--paper); animation: callout-in 600ms var(--ease-punch) both 1200ms; }
+.intro-rule { font-size: 13px; color: var(--paper-dim); text-align: center; animation: intro-drop 500ms var(--ease-out) both 2600ms; }
+.intro-rule b { color: var(--gold); }
+.intro-skip { position: absolute; bottom: calc(18px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); }
+@media (max-width: 600px) { .intro-side .poster-sentence { display: none; } .intro-side .poster-title { display: none; } }

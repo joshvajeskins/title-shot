@@ -1,0 +1,324 @@
+{
+  "model": "moonshotai/kimi-k3",
+  "http": 200,
+  "ms": 3848,
+  "tee_attested": true,
+  "signers": {
+    "gateway": "0xb98a789cdc4817275f5155593ba73ef2a957e779",
+    "model": [
+      {
+        "has_intel_quote": false,
+        "has_nvidia_payload": false
+      }
+    ]
+  },
+  "summary": {
+    "gateway_attestation": {
+      "signing_address": "0xb98a789cdc4817275f5155593ba73ef2a957e779",
+      "signing_algo": "ecdsa",
+      "intel_quote": "040002008100000000000000939a7233f79c4ca9...(10012 chars)",
+      "event_log": "[{\"imr\":0,\"event_type\":2147483659,\"diges...(4927 chars)",
+      "report_data": "b98a789cdc4817275f5155593ba73ef2a957e779...(128 chars)",
+      "request_nonce": "7d949c685230638f307d701931208b187e1d895e8399aab29149adc549cea678",
+      "info": {
+        "app_id": "f550fdfb4eb8ad787c1bcd423f091cbb4a4431ae",
+        "instance_id": "f93a165cf985a259b46793e5427163999fb628ad",
+        "app_cert": "-----BEGIN CERTIFICATE-----\nMIIa/jCCGqSg...(10740 chars)",
+        "tcb_info": {
+          "mrtd": "7fe60787222bd394cb516abca2435f22f035ab2c...(96 chars)",
+          "rtmr0": "d090162bff4b1d1dc74dc59dc548838efc4b811b...(96 chars)",
+          "rtmr1": "4ae609807c765916a31d724786ed74bcb97e168a...(96 chars)",
+          "rtmr2": "764489f277a8540189761e72b4238ba36d4d647e...(96 chars)",
+          "rtmr3": "74a9c9e45acbe8cfe5c8c18b5598abb4c775bb8d...(96 chars)",
+          "os_image_hash": "8db40cb23008d6213668b5816702d100b37b859a8a5bfd18d938ae3a1b3715bd",
+          "compose_hash": "7c15cbaa24e4e9aa70f4b1aae215e55268d08f64dbadbbcdd791287de191a255",
+          "device_id": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "app_compose": "{\"manifest_version\":2,\"name\":\"dstack-0.5...(31725 chars)",
+          "event_log": [
+            {
+              "imr": 0,
+              "event_type": 2147483659,
+              "digest": "2e070cda358b5aa00f27cca25c47381bb564f4be...(96 chars)",
+              "event": "",
+              "event_payload": "095464785461626c65000100000000000000af96...(84 chars)"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483658,
+              "digest": "344bc51c980ba621aaa00da3ed7436f7d6e54919...(96 chars)",
+              "event": "",
+              "event_payload": "2946762858585858585858582d585858582d5858...(116 chars)"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483649,
+              "digest": "9dc3a1f80bcec915391dcda5ffbb15e7419f77ea...(96 chars)",
+              "event": "",
+              "event_payload": "61dfe48bca93d211aa0d00e098032b8c0a000000...(104 chars)"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483649,
+              "digest": "6f2e3cbc14f9def86980f5f66fd85e99d63e69a7...(96 chars)",
+              "event": "",
+              "event_payload": "61dfe48bca93d211aa0d00e098032b8c0200000000000000000000000000000050004b00"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483649,
+              "digest": "d607c0efb41c0d757d69bca0615c3a9ac0b1db06...(96 chars)",
+              "event": "",
+              "event_payload": "61dfe48bca93d211aa0d00e098032b8c030000000000000000000000000000004b0045004b00"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483649,
+              "digest": "08a74f8963b337acb6c93682f934496373679dd2...(96 chars)",
+              "event": "",
+              "event_payload": "cbb219d73a3d9645a3bcdad00e67656f0200000000000000000000000000000064006200"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483649,
+              "digest": "18cc6e01f0c6ea99aa23f8a280423e94ad81d96d...(96 chars)",
+              "event": "",
+              "event_payload": "cbb219d73a3d9645a3bcdad00e67656f03000000000000000000000000000000640062007800"
+            },
+            {
+              "imr": 0,
+              "event_type": 4,
+              "digest": "394341b7182cd227c5c6b07ef8000cdfd86136c4...(96 chars)",
+              "event": "",
+              "event_payload": "00000000"
+            },
+            {
+              "imr": 0,
+              "event_type": 10,
+              "digest": "05c95712d2254a1d418dfc9abd53fa60e63b8743...(96 chars)",
+              "event": "",
+              "event_payload": "414350492044415441"
+            },
+            {
+              "imr": 0,
+              "event_type": 10,
+              "digest": "bcf576f33bfaca1ede8d8f964ff7d219cde03043...(96 chars)",
+              "event": "",
+              "event_payload": "414350492044415441"
+            },
+            {
+              "imr": 0,
+              "event_type": 10,
+              "digest": "1ff25d173a9b9a877a2f354410e62300d5c42514...(96 chars)",
+              "event": "",
+              "event_payload": "414350492044415441"
+            },
+            {
+              "imr": 1,
+              "event_type": 2147483651,
+              "digest": "48368ab87e5b8fecfb216bc26bbccfe13081bf8b...(96 chars)",
+              "event": "",
+              "event_payload": "18e0fd7a00000000008485000000000000000000...(148 chars)"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483650,
+              "digest": "1dd6f7b457ad880d840d41c961283bab688e94e4...(96 chars)",
+              "event": "",
+              "event_payload": "61dfe48bca93d211aa0d00e098032b8c09000000...(104 chars)"
+            },
+            {
+              "imr": 0,
+              "event_type": 2147483650,
+              "digest": "23ada07f5261f12f34a0bd8e46760962d6b4d576...(96 chars)",
+              "event": "",
+              "event_payload": "61dfe48bca93d211aa0d00e098032b8c08000000...(220 chars)"
+            },
+            {
+              "imr": 1,
+              "event_type": 2147483655,
+              "digest": "77a0dab2312b4e1e57a84d865a21e5b2ee8d677a...(96 chars)",
+              "event": "",
+              "event_payload": "43616c6c696e6720454649204170706c69636174696f6e2066726f6d20426f6f74204f7074696f6e"
+            },
+            {
+              "imr": 1,
+              "event_type": 4,
+              "digest": "394341b7182cd227c5c6b07ef8000cdfd86136c4...(96 chars)",
+              "event": "",
+              "event_payload": "00000000"
+            },
+            {
+              "imr": 2,
+              "event_type": 6,
+              "digest": "549e21b8d8898430a0be6e53191717f1d30d6658...(96 chars)",
+              "event": "",
+              "event_payload": "ed223b8f1a0000004c4f414445445f494d4147453a3a4c6f61644f7074696f6e7300"
+            },
+            {
+              "imr": 2,
+              "event_type": 6,
+              "digest": "fd01285d396a483667123c1a1a64d83b2dd5c6ce...(96 chars)",
+              "event": "",
+              "event_payload": "ec223b8f0d0000004c696e757820696e6974726400"
+            },
+            {
+              "imr": 1,
+              "event_type": 2147483655,
+              "digest": "214b0bef1379756011344877743fdc2a5382bac6...(96 chars)",
+              "event": "",
+              "event_payload": "4578697420426f6f7420536572766963657320496e766f636174696f6e"
+            },
+            {
+              "imr": 1,
+              "event_type": 2147483655,
+              "digest": "0a2e01c85deae718a530ad8c6d20a84009babe6c...(96 chars)",
+              "event": "",
+              "event_payload": "4578697420426f6f742053657276696365732052657475726e656420776974682053756363657373"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "f9974020ef507068183313d0ca808e0d1ca9b2d1...(96 chars)",
+              "event": "system-preparing",
+              "event_payload": ""
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "6fe75c63216de0f223bd4bb71a46a508f6cd5a51...(96 chars)",
+              "event": "app-id",
+              "event_payload": "f550fdfb4eb8ad787c1bcd423f091cbb4a4431ae"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "9f5574625d7e0d28384c83e2313e03a24d4c4f4d...(96 chars)",
+              "event": "compose-hash",
+              "event_payload": "7c15cbaa24e4e9aa70f4b1aae215e55268d08f64dbadbbcdd791287de191a255"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "3032c076122d682462c8c0c0119155f0cb3c3b48...(96 chars)",
+              "event": "instance-id",
+              "event_payload": "f93a165cf985a259b46793e5427163999fb628ad"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "98bd7e6bd3952720b65027fd494834045d06b4a7...(96 chars)",
+              "event": "boot-mr-done",
+              "event_payload": ""
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "4eab9203bdacdb5ecd598d9e39cb9e3e26b49e0f...(96 chars)",
+              "event": "mr-kms",
+              "event_payload": "22a6652c0ce74e50b549c0f9c21d53c5861598ec4d58cf3286d158104923bc56"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "9381eb17a317a6ebabc892bd4601743106b3f741...(96 chars)",
+              "event": "os-image-hash",
+              "event_payload": "8db40cb23008d6213668b5816702d100b37b859a8a5bfd18d938ae3a1b3715bd"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "9de6782ab6dfadb59a95bab8378e28a748331441...(96 chars)",
+              "event": "key-provider",
+              "event_payload": "7b226e616d65223a226b6d73222c226964223a22...(408 chars)"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "ba51104636900268b0e059fa3d266419d079d1e9...(96 chars)",
+              "event": "storage-fs",
+              "event_payload": "7a6673"
+            },
+            {
+              "imr": 3,
+              "event_type": 134217729,
+              "digest": "1a76b2a80a0be71eae59f80945d876351a7a3fb8...(96 chars)",
+              "event": "system-ready",
+              "event_payload": ""
+            }
+          ]
+        },
+        "app_name": "dstack-0.5.12",
+        "device_id": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mr_aggregated": "58dbe23ecb61d6a06b5489a22a186598cbc177e29affd2c2c0e1024649ddf36f",
+        "os_image_hash": "8db40cb23008d6213668b5816702d100b37b859a8a5bfd18d938ae3a1b3715bd",
+        "key_provider_info": "{\"name\":\"kms\",\"id\":\"3059301306072a8648ce...(204 chars)",
+        "compose_hash": "7c15cbaa24e4e9aa70f4b1aae215e55268d08f64dbadbbcdd791287de191a255",
+        "vm_config": "{\"os_image_hash\":\"8db40cb23008d6213668b5...(341 chars)"
+      }
+    },
+    "model_attestations": [
+      {
+        "provider": "chutes",
+        "verified": true,
+        "model": "moonshotai/kimi-k3",
+        "instance_id": "5c5a9255-dcbd-440d-be8e-db9411f9ff5d",
+        "measurement_config": "8xb300 [10.2.1, flat-252c-2304g] v1.5.0",
+        "tcb_status": "UpToDate",
+        "gpu_verdict": "PASS",
+        "gpu_evidence": [
+          {
+            "certificate": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1J...(6540 chars)",
+            "evidence": "EeAB/0IRD8JBkE+yMHrzMZM3uofWGNylTzJ+/3Wf...(5520 chars)",
+            "arch": "BLACKWELL"
+          },
+          {
+            "certificate": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1J...(6544 chars)",
+            "evidence": "EeAB/0IRD8JBkE+yMHrzMZM3uofWGNylTzJ+/3Wf...(5520 chars)",
+            "arch": "BLACKWELL"
+          },
+          {
+            "certificate": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1J...(6544 chars)",
+            "evidence": "EeAB/0IRD8JBkE+yMHrzMZM3uofWGNylTzJ+/3Wf...(5520 chars)",
+            "arch": "BLACKWELL"
+          },
+          {
+            "certificate": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1J...(6540 chars)",
+            "evidence": "EeAB/0IRD8JBkE+yMHrzMZM3uofWGNylTzJ+/3Wf...(5520 chars)",
+            "arch": "BLACKWELL"
+          },
+          {
+            "certificate": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1J...(6540 chars)",
+            "evidence": "EeAB/0IRD8JBkE+yMHrzMZM3uofWGNylTzJ+/3Wf...(5520 chars)",
+            "arch": "BLACKWELL"
+          },
+          {
+            "certificate": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1J...(6540 chars)",
+            "evidence": "EeAB/0IRD8JBkE+yMHrzMZM3uofWGNylTzJ+/3Wf...(5520 chars)",
+            "arch": "BLACKWELL"
+          },
+          {
+            "certificate": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1J...(6544 chars)",
+            "evidence": "EeAB/0IRD8JBkE+yMHrzMZM3uofWGNylTzJ+/3Wf...(5520 chars)",
+            "arch": "BLACKWELL"
+          },
+          {
+            "certificate": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1J...(6544 chars)",
+            "evidence": "EeAB/0IRD8JBkE+yMHrzMZM3uofWGNylTzJ+/3Wf...(5520 chars)",
+            "arch": "BLACKWELL"
+          }
+        ],
+        "e2e_pubkey": "qssUEMZL3yHGl5cQyfFzHCyLBdeUhIumtQUhuKhQ...(1580 chars)",
+        "nonce": "172b38abbba40728ade020b0ca7169be73b1ce2f8915383cc5a8d6b48be20630",
+        "quote_b64": "BAACAIEAAAAAAAAAk5pyM/ecTKmUCg2zlX8GB3Hn...(6992 chars)",
+        "certificate_b64": "MIIEwDCCAqigAwIBAgIBATANBgkqhkiG9w0BAQsF...(1628 chars)"
+      }
+    ],
+    "ohttp_key_config": "010020e4e354364111f2295e2d2ed97ce1103c9f...(90 chars)",
+    "ohttp_attestation": {
+      "signing_algo": "ed25519",
+      "signing_key": "40599fb284f43953bb356b09080fd803c960fc10285ad90eca462ca711ad4acb",
+      "key_config": "010020e4e354364111f2295e2d2ed97ce1103c9f...(90 chars)",
+      "signature": "823086655feb1660e7975d8dfdbfd728af36cc77...(128 chars)"
+    }
+  }
+}

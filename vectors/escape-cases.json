@@ -1,0 +1,50 @@
+[
+  {
+    "input": "",
+    "escaped": ""
+  },
+  {
+    "input": "plain sentence",
+    "escaped": "plain sentence"
+  },
+  {
+    "input": "she said \"no\" and left",
+    "escaped": "she said \\\"no\\\" and left"
+  },
+  {
+    "input": "back\\slash and /slash",
+    "escaped": "back\\\\slash and /slash"
+  },
+  {
+    "input": "line1\nline2\r\n\ttabbed",
+    "escaped": "line1\\nline2\\r\\n\\ttabbed"
+  },
+  {
+    "input": "ctrl \u0001 \u001f \b \f chars",
+    "escaped": "ctrl \\u0001 \\u001f \\b \\f chars"
+  },
+  {
+    "input": "del  stays raw",
+    "escaped": "del  stays raw"
+  },
+  {
+    "input": "emoji 🥊 and 🏆",
+    "escaped": "emoji 🥊 and 🏆"
+  },
+  {
+    "input": "日本語 éè Привет",
+    "escaped": "日本語 éè Привет"
+  },
+  {
+    "input": "ls   ps   stay raw",
+    "escaped": "ls   ps   stay raw"
+  },
+  {
+    "input": "</script><!-- & < > -->",
+    "escaped": "</script><!-- & < > -->"
+  },
+  {
+    "input": "quote's and `ticks` and ${tmpl}",
+    "escaped": "quote's and `ticks` and ${tmpl}"
+  }
+]

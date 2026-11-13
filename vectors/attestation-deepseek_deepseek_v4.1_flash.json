@@ -1,0 +1,18 @@
+{
+  "model": "deepseek/deepseek-v4.1-flash",
+  "http": 503,
+  "ms": 240,
+  "tee_attested": false,
+  "signers": {
+    "gateway": null,
+    "model": []
+  },
+  "summary": {
+    "error": {
+      "message": "Provider error: Failed to fetch attestat...(213 chars)",
+      "type": "provider_error",
+      "param": null,
+      "code": null
+    }
+  }
+}

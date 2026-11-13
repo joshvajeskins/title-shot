@@ -20,3 +20,14 @@ STATUS.md
 .DS_Store
 scratch/
 *.log
+
+# audio lane: python cache and reproducible scratch (raw/vo, raw/sfx, raw/music stay: they are the paid ElevenLabs sources, 11 MB)
+__pycache__/
+*.pyc
+assets/audio/raw/previews/
+assets/audio/raw/sfx_rejected/
+
+# raw generated art (large PNGs; web-sized WebP lives in web/public/art)
+assets/art/raw/*.png
+assets/art/raw/*.log
+assets/art/raw/*.out

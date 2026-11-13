@@ -1,0 +1,97 @@
+.corner { --accent: var(--gold); }
+.corner.accent-blue { --accent: var(--blue); }
+.corner.accent-red { --accent: var(--red); }
+.corner-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.corner-back { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--paper-dim); }
+.corner-back:hover { color: var(--paper); }
+.corner-belt { display: flex; align-items: center; gap: 10px; }
+.corner-belt img { width: 120px; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6)); }
+.corner-belt span { font-size: 20px; color: var(--accent); }
+.corner-grid { display: grid; grid-template-columns: 1fr; gap: 28px; }
+@media (min-width: 1100px) { .corner-grid { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 40px; } }
+.corner-champ, .corner-write { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.corner-champ-row { display: grid; grid-template-columns: 1fr; gap: 18px; justify-items: center; }
+@media (min-width: 640px) { .corner-champ-row { grid-template-columns: auto 1fr; justify-items: stretch; align-items: start; } }
+.corner-champ-row .poster { --w: 260px; }
+@media (max-width: 639px) { .corner-champ-row .poster { --w: 230px; } }
+.corner-champ-detail { padding: 16px; display: grid; gap: 14px; width: 100%; }
+.corner-school { display: flex; gap: 6px; flex-wrap: wrap; }
+.corner-hint { margin: 0; font-size: 12.5px; color: var(--paper-dim); }
+.corner-cry { margin: 0; font-size: 18px; color: var(--accent); }
+.corner-h { margin: 0; font-size: clamp(38px, 6vw, 64px); }
+.corner-lede { margin: 0; font-family: var(--font-serif); font-style: italic; font-size: 19px; line-height: 1.3; color: var(--paper-dim); max-width: 52ch; }
+
+.sheet {
+  position: relative; display: block;
+  padding: 18px 20px 30px; border-radius: 4px;
+  box-shadow: 0 24px 40px -22px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(0, 0, 0, 0.2);
+  transform: rotate(-0.4deg);
+  background-image:
+    repeating-linear-gradient(180deg, transparent 0 37px, rgba(26, 22, 18, 0.12) 37px 38px),
+    url('/art/paper-texture.webp');
+  background-size: auto, 384px;
+}
+.sheet::before { content: ''; position: absolute; left: 44px; top: 0; bottom: 0; width: 1.5px; background: rgba(232, 64, 44, 0.45); }
+.sheet textarea {
+  display: block; width: 100%; resize: none; border: 0; outline: 0; background: transparent;
+  padding: 0 0 0 36px;
+  font-family: var(--font-serif); font-style: italic; font-size: clamp(24px, 3.4vw, 32px); line-height: 38px;
+  color: var(--on-paper); caret-color: var(--red);
+}
+.sheet textarea::placeholder { color: rgba(26, 22, 18, 0.32); }
+.sheet-count { position: absolute; right: 14px; bottom: 8px; font-size: 11px; color: var(--on-paper-dim); }
+.sheet-count.is-over { color: var(--red-deep); font-weight: 600; }
+.sheet:focus-within { box-shadow: 0 24px 40px -22px rgba(0, 0, 0, 0.9), 0 0 0 2px var(--gold); }
+.corner-err { margin: 0; display: flex; align-items: center; gap: 8px; color: #ff8a78; font-size: 13px; }
+.corner-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+@media (max-width: 520px) { .corner-actions .btn { flex: 1 1 100%; } }
+
+.corner-preview { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; transition: opacity var(--t-ui) ease, filter var(--t-ui) ease; animation: preview-in 520ms var(--ease-out) both; }
+@keyframes preview-in { from { opacity: 0; transform: translateY(10px) rotate(-0.6deg); } }
+.corner-preview.is-stale { opacity: 0.55; filter: saturate(0.6); }
+@media (min-width: 640px) { .corner-preview { grid-template-columns: auto 1fr; } }
+.corner-preview-poster { position: relative; justify-self: center; }
+.corner-preview-poster .poster { --w: 250px; }
+.corner-preview-detail { display: grid; gap: 16px; min-width: 0; }
+.corner-note { margin: 0; font-size: 12px; color: var(--paper-faint); line-height: 1.5; }
+
+.stamp {
+  position: absolute; right: -10px; top: 46%;
+  padding: 4px 12px 2px; border: 3px solid currentColor; border-radius: 6px;
+  font-family: var(--font-display); font-weight: 900; font-size: 26px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--red); background: rgba(242, 232, 213, 0.06);
+  transform: rotate(-14deg);
+  mix-blend-mode: normal;
+  animation: stamp-in 380ms var(--ease-punch) both 120ms;
+  pointer-events: none;
+}
+.stamp-gold { color: var(--gold); }
+@keyframes stamp-in { from { opacity: 0; transform: rotate(-14deg) scale(1.9); } 60% { opacity: 1; } }
+
+.odds { display: grid; gap: 10px; padding: 16px; border-radius: 14px; background: rgba(61, 107, 224, 0.08); box-shadow: 0 0 0 1px rgba(61, 107, 224, 0.3) inset; }
+.odds-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.odds-big { font-size: 64px; line-height: 0.85; color: #9db8ff; }
+.odds-label { font-size: 13px; color: var(--paper-dim); }
+.odds-label b { color: var(--paper); }
+.odds-bar { display: flex; height: 12px; border-radius: 99px; overflow: hidden; gap: 2px; }
+.odds-bar span { flex-basis: 0; transition: flex-grow 700ms var(--ease-out); }
+.odds-win { background: var(--blue); }
+.odds-draw { background: rgba(242, 232, 213, 0.35); }
+.odds-loss { background: var(--gold); }
+.odds-legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 11.5px; color: var(--paper-dim); }
+.odds-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.odds-legend i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+.odds-foot { margin: 0; font-size: 11px; color: var(--paper-faint); }
+
+.toll { padding: 0; overflow: hidden; }
+.toll-toggle { width: 100%; display: flex; align-items: center; gap: 10px; padding: 14px 16px; font-size: 13px; color: var(--paper-dim); text-align: left; }
+.toll-toggle:hover { color: var(--paper); }
+.toll-caret { margin-left: auto; font-size: 20px; line-height: 1; transition: transform var(--t-fast) var(--ease-out); }
+.toll-caret.is-open { transform: rotate(45deg); }
+.toll-body { padding: 0 16px 16px; display: grid; gap: 12px; font-size: 12.5px; color: var(--paper-dim); animation: preview-in 260ms var(--ease-out) both; }
+.toll-body ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.toll-body li { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 6px; border-bottom: 1px dashed var(--line); }
+.toll-body li b { color: var(--paper); font-weight: 600; }
+.toll-body p { margin: 0; line-height: 1.55; }
+.toll-rule { display: flex; gap: 8px; align-items: baseline; color: var(--gold); }
+.toll-rule b { color: var(--paper); }

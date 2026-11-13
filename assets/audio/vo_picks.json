@@ -1,0 +1,638 @@
+{
+ "intro_1": {
+  "text": "Ladies and gentlemen... welcome to the main event!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Ladies and gentlemen, welcome to the main event",
+    "sim": 1.0,
+    "dur": 4.8
+   },
+   {
+    "take": 1,
+    "heard": "Ladies and gentlemen, welcome to the main event",
+    "sim": 1.0,
+    "dur": 4.48
+   }
+  ]
+ },
+ "intro_2": {
+  "text": "Tonight, one sentence takes the belt.",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Tonight, one sentence takes the belt",
+    "sim": 1.0,
+    "dur": 3.44
+   }
+  ]
+ },
+ "corner_champ": {
+  "text": "In this corner... the reigning champion!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "In this corner, the reigning champion",
+    "sim": 1.0,
+    "dur": 4.56
+   }
+  ]
+ },
+ "corner_challenger": {
+  "text": "And in this corner... the challenger!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "And in this corner, the challenger",
+    "sim": 1.0,
+    "dur": 3.76
+   }
+  ]
+ },
+ "forge_1": {
+  "text": "The forge is lit. Let's see what your words are made of.",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "The forge is lit. Let's see what your words are made of",
+    "sim": 1.0,
+    "dur": 4.72
+   }
+  ]
+ },
+ "forge_2": {
+  "text": "Hot off the press!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Hot off the press",
+    "sim": 1.0,
+    "dur": 1.68
+   }
+  ]
+ },
+ "round_1": {
+  "text": "Round one!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Round one",
+    "sim": 1.0,
+    "dur": 2.4
+   }
+  ]
+ },
+ "round_2": {
+  "text": "Round two!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Round two!",
+    "sim": 1.0,
+    "dur": 1.52
+   }
+  ]
+ },
+ "round_3": {
+  "text": "Final round!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Final round",
+    "sim": 1.0,
+    "dur": 1.6
+   }
+  ]
+ },
+ "fight": {
+  "text": "Fight!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Fight!",
+    "sim": 1.0,
+    "dur": 1.04
+   },
+   {
+    "take": 1,
+    "heard": "Hey!",
+    "sim": 0.25,
+    "dur": 1.28
+   }
+  ]
+ },
+ "ko": {
+  "text": "Knockout!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Knockout!",
+    "sim": 1.0,
+    "dur": 1.28
+   },
+   {
+    "take": 1,
+    "heard": "Knockout!",
+    "sim": 1.0,
+    "dur": 1.2
+   }
+  ]
+ },
+ "new_champ": {
+  "text": "And the new... champion... of the belt!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "And the new champion of the belt",
+    "sim": 1.0,
+    "dur": 4.88
+   },
+   {
+    "take": 1,
+    "heard": "And the new champion of the belt",
+    "sim": 1.0,
+    "dur": 3.76
+   }
+  ]
+ },
+ "holds": {
+  "text": "The champion holds the belt!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "The champion holds the belt",
+    "sim": 1.0,
+    "dur": 2.48
+   }
+  ]
+ },
+ "draw": {
+  "text": "It's a draw! The belt stays right where it is.",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "It's a draw. The belt stays right where it is",
+    "sim": 1.0,
+    "dur": 4.48
+   }
+  ]
+ },
+ "crit_1": {
+  "text": "What a shot!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "What a shot!",
+    "sim": 1.0,
+    "dur": 1.28
+   }
+  ]
+ },
+ "crit_2": {
+  "text": "Right on the button!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Right on the button",
+    "sim": 1.0,
+    "dur": 2.0
+   }
+  ]
+ },
+ "crit_3": {
+  "text": "Oh, that one landed!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Oh, that one landed",
+    "sim": 1.0,
+    "dur": 1.76
+   }
+  ]
+ },
+ "comeback": {
+  "text": "Off the canvas! Unbelievable!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Off the canvas! Unbelievable!",
+    "sim": 1.0,
+    "dur": 3.84
+   }
+  ]
+ },
+ "close": {
+  "text": "It's close, folks! Anybody's fight!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "It's close, folks. Anybody's fight",
+    "sim": 1.0,
+    "dur": 3.04
+   }
+  ]
+ },
+ "bell_season": {
+  "text": "That's the bell! The season is over!",
+  "picked": 1,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "That's the bell. The season is over",
+    "sim": 1.0,
+    "dur": 3.92
+   },
+   {
+    "take": 1,
+    "heard": "That's the bell. The season is over",
+    "sim": 1.0,
+    "dur": 4.4
+   }
+  ]
+ },
+ "purse": {
+  "text": "The purse goes to the champion!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "The purse goes to the champion",
+    "sim": 1.0,
+    "dur": 4.0
+   }
+  ]
+ },
+ "new_season": {
+  "text": "A new season begins! Fresh belt, fresh blood!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "A new season begins. Fresh belt, fresh blood",
+    "sim": 1.0,
+    "dur": 4.88
+   }
+  ]
+ },
+ "rule_reveal": {
+  "text": "Tonight's sealed rule is...",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Tonight's sealed rule is",
+    "sim": 1.0,
+    "dur": 2.72
+   }
+  ]
+ },
+ "toll": {
+  "text": "The toll goes to the champ's corner.",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "The toll goes to the champ's corner",
+    "sim": 1.0,
+    "dur": 2.72
+   },
+   {
+    "take": 1,
+    "heard": "The toe goes to the champ's corner",
+    "sim": 0.957,
+    "dur": 2.72
+   },
+   {
+    "take": 2,
+    "heard": "The toll goes to the champs' corner",
+    "sim": 0.971,
+    "dur": 2.96
+   },
+   {
+    "take": 3,
+    "heard": "The tallow goes to the champ's corner",
+    "sim": 0.944,
+    "dur": 2.96
+   }
+  ]
+ },
+ "rematch": {
+  "text": "Back for more? I like it.",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Back for more? I like it",
+    "sim": 1.0,
+    "dur": 2.56
+   }
+  ]
+ },
+ "welcome": {
+  "text": "Welcome back to the ring.",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Welcome back to the ring",
+    "sim": 1.0,
+    "dur": 2.24
+   }
+  ]
+ },
+ "odds_long": {
+  "text": "Long odds, kid. Long odds.",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Long odds, kid. Long odds",
+    "sim": 1.0,
+    "dur": 3.52
+   }
+  ]
+ },
+ "odds_good": {
+  "text": "Now that's a contender.",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Now that's a contender",
+    "sim": 1.0,
+    "dur": 2.4
+   }
+  ]
+ },
+ "vance_1": {
+  "text": "Velvet Vance here, and I've got a fighter you'll never beat.",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Velvet Vance here, and I've got a fighter you'll never beat",
+    "sim": 1.0,
+    "dur": 3.52
+   }
+  ]
+ },
+ "vance_2": {
+  "text": "Season's open, kids. Bring me your best sentence.",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Season's open, kids. Bring me your best sentence",
+    "sim": 1.0,
+    "dur": 3.12
+   }
+  ]
+ },
+ "vance_3": {
+  "text": "The purse is funded. Step right up.",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "The purse is funded. Step right up",
+    "sim": 1.0,
+    "dur": 2.72
+   }
+  ]
+ },
+ "vance_4": {
+  "text": "Another challenger falls. Tolls, tolls, tolls.",
+  "picked": 3,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Another challenger falls. Tolls, tolls, tolls",
+    "sim": 1.0,
+    "dur": 3.92
+   },
+   {
+    "take": 1,
+    "heard": "Another challenger falls. Toles, Toles, Toles",
+    "sim": 0.929,
+    "dur": 4.16
+   },
+   {
+    "take": 2,
+    "heard": "Another challenger falls. Toles, Toles, Toles",
+    "sim": 0.929,
+    "dur": 3.92
+   },
+   {
+    "take": 3,
+    "heard": "Another challenger falls. Tolls, tolls, tolls",
+    "sim": 1.0,
+    "dur": 4.56
+   }
+  ]
+ },
+ "vance_5": {
+  "text": "Somebody finally took my belt? Ha. Run it back next season.",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "Somebody finally took my belt? Ha, run it back next season",
+    "sim": 1.0,
+    "dur": 5.12
+   }
+  ]
+ },
+ "fighter_gruff_veteran": {
+  "text": "You picked the wrong sentence to fight!",
+  "picked": 2,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "You picked the wrong sins to fight",
+    "sim": 0.889,
+    "dur": 2.56
+   },
+   {
+    "take": 1,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 2.56
+   },
+   {
+    "take": 2,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 2.72
+   },
+   {
+    "take": 3,
+    "heard": "You picked the wrong sins to fight",
+    "sim": 0.889,
+    "dur": 3.12
+   }
+  ]
+ },
+ "fighter_squeaky_tiny": {
+  "text": "You picked the wrong sentence to fight!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 1.92
+   }
+  ]
+ },
+ "fighter_regal_grand": {
+  "text": "You picked the wrong sentence to fight!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 2.72
+   }
+  ]
+ },
+ "fighter_deadpan_robot": {
+  "text": "You picked the wrong sentence to fight!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 2.72
+   },
+   {
+    "take": 1,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 2.48
+   },
+   {
+    "take": 2,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 2.48
+   },
+   {
+    "take": 3,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 2.64
+   }
+  ]
+ },
+ "fighter_sweet_elderly": {
+  "text": "You picked the wrong sentence to fight!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 2.72
+   }
+  ]
+ },
+ "fighter_hyper_teen": {
+  "text": "You picked the wrong sentence to fight!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 2.32
+   }
+  ]
+ },
+ "fighter_theatrical_villain": {
+  "text": "You picked the wrong sentence to fight!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 3.36
+   }
+  ]
+ },
+ "fighter_calm_monk": {
+  "text": "You picked the wrong sentence to fight!",
+  "picked": 1,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "You picked the rock sentence to fight",
+    "sim": 0.933,
+    "dur": 2.4
+   },
+   {
+    "take": 1,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 2.48
+   },
+   {
+    "take": 2,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 2.48
+   },
+   {
+    "take": 3,
+    "heard": "You picked the wrong sentence to fight",
+    "sim": 1.0,
+    "dur": 2.48
+   }
+  ]
+ },
+ "vo_stun": {
+  "text": "They're seeing stars!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "They're seeing stars",
+    "sim": 1.0,
+    "dur": 2.08
+   }
+  ]
+ },
+ "vo_burn": {
+  "text": "That's gonna leave a mark!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "That's gonna leave a mark!",
+    "sim": 1.0,
+    "dur": 2.32
+   }
+  ]
+ }
+}

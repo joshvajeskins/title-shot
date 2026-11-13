@@ -1,0 +1,415 @@
+{
+  "allowlist": [
+    "0x937585ec9249545782df2b2ffd0f0693cc4abf43"
+  ],
+  "cases": [
+    {
+      "expect": {
+        "code": "OK",
+        "content": "{\"name\":\"Grudge Badger\",\"title\":\"The Cornered\",\"look\":\"Scarred badger in a pinstripe vest\",\"cry\":\"Objection!\",\"school\":\"STONE\",\"style\":\"COUNTERPUNCHER\",\"moves\":[\"m_stone_wall\",\"m_iron_jab\",\"m_counter_roll\"],\"weights\":{\"power\":4,\"guard\":7,\"speed\":3,\"grit\":6}}",
+        "ok": true
+      },
+      "name": "valid_provider_tee_v27_28",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c551c",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "OK",
+        "content": "{\"name\":\"Grudge Badger\",\"title\":\"The Cornered\",\"look\":\"Scarred badger in a pinstripe vest\",\"cry\":\"Objection!\",\"school\":\"STONE\",\"style\":\"COUNTERPUNCHER\",\"moves\":[\"m_stone_wall\",\"m_iron_jab\",\"m_counter_roll\"],\"weights\":{\"power\":4,\"guard\":7,\"speed\":3,\"grit\":6}}",
+        "ok": true
+      },
+      "name": "valid_v_0_1",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c5501",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "OK",
+        "content": "{\"name\":\"Grudge Badger\",\"title\":\"The Cornered\",\"look\":\"Scarred badger in a pinstripe vest\",\"cry\":\"Objection!\",\"school\":\"STONE\",\"style\":\"COUNTERPUNCHER\",\"moves\":[\"m_stone_wall\",\"m_iron_jab\",\"m_counter_roll\"],\"weights\":{\"power\":4,\"guard\":7,\"speed\":3,\"grit\":6}}",
+        "ok": true
+      },
+      "name": "valid_0x_prefix_uppercase",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "0x5FEE68D3A72E4F5543BBE187BF91517795B19DADEFF58254DD4ABDFC5125DE065C65574B5BA4B348F7E936939236157E645AD61EEEDBE054540D6F2102776C551C",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "OK",
+        "content": "{\"name\":\"Grudge Badger\",\"title\":\"The Cornered\",\"look\":\"Scarred badger in a pinstripe vest\",\"cry\":\"Objection!\",\"school\":\"STONE\",\"style\":\"COUNTERPUNCHER\",\"moves\":[\"m_stone_wall\",\"m_iron_jab\",\"m_counter_roll\"],\"weights\":{\"power\":4,\"guard\":7,\"speed\":3,\"grit\":6}}",
+        "ok": true
+      },
+      "name": "valid_gateway_kind",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "d3863f4c177552af0d113d4043ed9e53390e8dccd930afe532658ec0032e44b424aae616c90c4cfbc5af068b517a29ebeb5ff33c153cb7e31f11a792c0ff673e1b",
+      "signature_kind": "gateway",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "OK",
+        "content": "{\"name\":\"Grudge Badger\",\"title\":\"The Cornered\",\"look\":\"Scarred badger in a pinstripe vest\",\"cry\":\"Objection!\",\"school\":\"STONE\",\"style\":\"COUNTERPUNCHER\",\"moves\":[\"m_stone_wall\",\"m_iron_jab\",\"m_counter_roll\"],\"weights\":{\"power\":4,\"guard\":7,\"speed\":3,\"grit\":6}}",
+        "ok": true
+      },
+      "name": "valid_unicode_escaped_sentence",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "She said \"no\" \\ then\tleft 🥊 日本語\nline two",
+      "signature_hex": "d3fe6e9804efcbf24a9fb030d3eeb02eb94654c847b0da13db52fea3078f33ea5a2e0028dc17ce6fa456f544e4ce60f068c11e1e7a842652ed38a8df3db6311d1b",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SIGNER",
+        "content": null,
+        "ok": false
+      },
+      "name": "tampered_response_byte",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badgar\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c551c",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SIGNER",
+        "content": null,
+        "ok": false
+      },
+      "name": "tampered_response_trailing_newline",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}\n",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c551c",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SIGNER",
+        "content": null,
+        "ok": false
+      },
+      "name": "tampered_sentence",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer!",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c551c",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SIGNER",
+        "content": null,
+        "ok": false
+      },
+      "name": "signed_with_different_model_id",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "89312f2c56b96f6825bcb352e452255fa6c6e4be245e60ae9eb4c8ca6720c8ed700d141c8c575708c855ebe844a31fb4618f4c488fa9125a8433a80ac92cf7e01c",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SIGNER",
+        "content": null,
+        "ok": false
+      },
+      "name": "signer_not_in_allowlist",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "e3fde934d4f72fcd3cbd29086ca34f2b3dfb534fe1c6e9286c3f1e449dac48b35bd24cd9d80e3cc9dbb8310f435cfa1551ca720f0c855f88be5f3d9233a4b1e01b",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SIGNER",
+        "content": null,
+        "ok": false
+      },
+      "name": "gateway_sig_submitted_as_provider_tee",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "d3863f4c177552af0d113d4043ed9e53390e8dccd930afe532658ec0032e44b424aae616c90c4cfbc5af068b517a29ebeb5ff33c153cb7e31f11a792c0ff673e1b",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SIGNER",
+        "content": null,
+        "ok": false
+      },
+      "name": "provider_tee_sig_submitted_as_gateway",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c551c",
+      "signature_kind": "gateway",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_RECOVER",
+        "content": null,
+        "ok": false
+      },
+      "name": "high_s_malleable_twin",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de06a39aa8b4a45b4cb70816c96c6dc9ea80565406c7c06cbfe76bc4ef6bcdbed4ec1b",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_RECOVER",
+        "content": null,
+        "ok": false
+      },
+      "name": "zero_r_s_signature",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001b",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SIG_LEN",
+        "content": null,
+        "ok": false
+      },
+      "name": "truncated_sig_64_bytes",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c55",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SIG_LEN",
+        "content": null,
+        "ok": false
+      },
+      "name": "overlong_sig_66_bytes",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c551c00",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SIG_V",
+        "content": null,
+        "ok": false
+      },
+      "name": "bad_recovery_byte_2",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c5502",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SIG_V",
+        "content": null,
+        "ok": false
+      },
+      "name": "bad_recovery_byte_29",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c551d",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SIG_HEX",
+        "content": null,
+        "ok": false
+      },
+      "name": "non_hex_signature",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "not-hex-at-all",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_ALGO",
+        "content": null,
+        "ok": false
+      },
+      "name": "algo_ed25519_unsupported",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c551c",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ed25519"
+    },
+    {
+      "expect": {
+        "code": "E_KIND",
+        "content": null,
+        "ok": false
+      },
+      "name": "kind_unknown",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c551c",
+      "signature_kind": "tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_SENTENCE_SIZE",
+        "content": null,
+        "ok": false
+      },
+      "name": "sentence_over_1024_bytes",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"{\\\"name\\\":\\\"Grudge Badger\\\",\\\"title\\\":\\\"The Cornered\\\",\\\"look\\\":\\\"Scarred badger in a pinstripe vest\\\",\\\"cry\\\":\\\"Objection!\\\",\\\"school\\\":\\\"STONE\\\",\\\"style\\\":\\\"COUNTERPUNCHER\\\",\\\"moves\\\":[\\\"m_stone_wall\\\",\\\"m_iron_jab\\\",\\\"m_counter_roll\\\"],\\\"weights\\\":{\\\"power\\\":4,\\\"guard\\\":7,\\\"speed\\\":3,\\\"grit\\\":6}}\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "signature_hex": "5fee68d3a72e4f5543bbe187bf91517795b19dadeff58254dd4abdfc5125de065c65574b5ba4b348f7e936939236157e645ad61eeedbe054540d6f2102776c551c",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_RESPONSE_SIZE",
+        "content": null,
+        "ok": false
+      },
+      "name": "oversized_response_9k_validly_signed",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "3d79c54569fb505c8d16b97e758ae6edbadf31bb91ca9fcce5f38ab9bf0241397037e924484d41264e30520290eb847ed9f9330982e7d3b9cbf47a6f463f64161b",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_ENVELOPE",
+        "content": null,
+        "ok": false
+      },
+      "name": "signed_not_json",
+      "response": "this is not json",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "dec59a7d8d3066918f549857ba36802b4990938474bd470f38d473021381fc3379f3dd5b1d7aeead7ea643bc8dde56512107d7989d2588771b33bea05791e25d1b",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_ENVELOPE",
+        "content": null,
+        "ok": false
+      },
+      "name": "signed_empty_choices",
+      "response": "{\"choices\":[]}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "5f69b536112210f555be5cbe8cf453f3a9bd0bb84fe704a8ed49c223439bb83e17dee4ffe704f9df71d9b63a20fe97ad462561ac67daad6a1ac3859df415e1b61b",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_NO_CONTENT",
+        "content": null,
+        "ok": false
+      },
+      "name": "signed_null_content",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":null,\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "c643e2339c258ebda9358d50f37636dec8ac4d69afff4c85d75898d9b8fe5178145d1c39bd41c8bff44e7951bdc4a8f9123beb25e4bf50a0dec26e71565111a31c",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    },
+    {
+      "expect": {
+        "code": "E_NO_CONTENT",
+        "content": null,
+        "ok": false
+      },
+      "name": "signed_empty_content",
+      "response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"\",\"role\":\"assistant\"}}],\"created\":1794500000,\"id\":\"chatcmpl-synth-0001\",\"model\":\"Qwen/Qwen3.8-27B\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":120,\"prompt_tokens\":1500,\"total_tokens\":1620}}",
+      "sentence": "I fight like a cornered badger with a grudge and a very good lawyer",
+      "signature_hex": "073eb0b59ba10c73e9f6d5334e5156e11dc5e793aa0674d53d543345dd2cea724e3fb25ab306a3b9cfbc4a680d6e802425e242dae1972d5e971d55385e4e83d21b",
+      "signature_kind": "provider_tee",
+      "signing_algo": "ecdsa"
+    }
+  ],
+  "escape_cases": [
+    {
+      "escaped": "",
+      "input": ""
+    },
+    {
+      "escaped": "plain sentence",
+      "input": "plain sentence"
+    },
+    {
+      "escaped": "she said \\\"no\\\" and left",
+      "input": "she said \"no\" and left"
+    },
+    {
+      "escaped": "back\\\\slash and /slash",
+      "input": "back\\slash and /slash"
+    },
+    {
+      "escaped": "line1\\nline2\\r\\n\\ttabbed",
+      "input": "line1\nline2\r\n\ttabbed"
+    },
+    {
+      "escaped": "ctrl \\u0001 \\u001f \\b \\f chars",
+      "input": "ctrl \u0001 \u001f \b \f chars"
+    },
+    {
+      "escaped": "del  stays raw",
+      "input": "del  stays raw"
+    },
+    {
+      "escaped": "emoji 🥊 and 🏆",
+      "input": "emoji 🥊 and 🏆"
+    },
+    {
+      "escaped": "日本語 éè Привет",
+      "input": "日本語 éè Привет"
+    },
+    {
+      "escaped": "ls   ps   stay raw",
+      "input": "ls   ps   stay raw"
+    },
+    {
+      "escaped": "</script><!-- & < > -->",
+      "input": "</script><!-- & < > -->"
+    },
+    {
+      "escaped": "quote's and `ticks` and ${tmpl}",
+      "input": "quote's and `ticks` and ${tmpl}"
+    }
+  ],
+  "kind": "synthetic",
+  "model_id": "Qwen/Qwen3.8-27B",
+  "note": "EIP-191 signatures by a throwaway key (not stored). Expectations are derived, then checked by native unit tests, node (noble) and the wasm in the sandbox.",
+  "prefix_b64": "eyJtYXhfdG9rZW5zIjo2MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiQ29tcGlsZSB0aGUgcGxheWVyJ3Mgc2VudGVuY2UgaW50byBhIGZpZ2h0ZXIgSlNPTiB1bmRlciBydWxlYm9vayB2MS4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiBSVUxFOiBtb3ZlcyBhcmUgZGlzdGluY3QgYW5kIGRyYXduIGZyb20gdGhlIGxpYnJhcnk7IHN0YXRzIGZvbGxvdyB3ZWlnaHRzIHVuZGVyIGEgMTAwLXBvaW50IGJ1ZGdldDsgbmFtZXMgYXJlIG9yaWdpbmFsLCBubyByZWFsIHBlb3BsZSwgbm8gc2x1cnMuIFJVTEU6IG1vdmVzIGFyZSBkaXN0aW5jdCBhbmQgZHJhd24gZnJvbSB0aGUgbGlicmFyeTsgc3RhdHMgZm9sbG93IHdlaWdodHMgdW5kZXIgYSAxMDAtcG9pbnQgYnVkZ2V0OyBuYW1lcyBhcmUgb3JpZ2luYWwsIG5vIHJlYWwgcGVvcGxlLCBubyBzbHVycy4gUlVMRTogbW92ZXMgYXJlIGRpc3RpbmN0IGFuZCBkcmF3biBmcm9tIHRoZSBsaWJyYXJ5OyBzdGF0cyBmb2xsb3cgd2VpZ2h0cyB1bmRlciBhIDEwMC1wb2ludCBidWRnZXQ7IG5hbWVzIGFyZSBvcmlnaW5hbCwgbm8gcmVhbCBwZW9wbGUsIG5vIHNsdXJzLiAiLCJyb2xlIjoic3lzdGVtIn0seyJjb250ZW50Ijoi",
+  "request_bytes_for_base_case": 6987,
+  "suffix_b64": "Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiUXdlbi9Rd2VuMy44LTI3QiIsInJlc3BvbnNlX2Zvcm1hdCI6eyJqc29uX3NjaGVtYSI6eyJuYW1lIjoiZmlnaHRlciIsInNjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiY3J5Ijp7Im1heExlbmd0aCI6NjAsInR5cGUiOiJzdHJpbmcifSwibG9vayI6eyJtYXhMZW5ndGgiOjE2MCwidHlwZSI6InN0cmluZyJ9LCJtb3ZlcyI6eyJpdGVtcyI6eyJ0eXBlIjoic3RyaW5nIn0sIm1heEl0ZW1zIjozLCJtaW5JdGVtcyI6MywidHlwZSI6ImFycmF5In0sIm5hbWUiOnsibWF4TGVuZ3RoIjoyNCwidHlwZSI6InN0cmluZyJ9LCJzY2hvb2wiOnsiZW51bSI6WyJFTUJFUiIsIlRJREUiLCJTVE9ORSIsIkdBTEUiLCJWT0xUIiwiU0hBREUiXSwidHlwZSI6InN0cmluZyJ9LCJzdHlsZSI6eyJlbnVtIjpbIkJSQVdMRVIiLCJUQUNUSUNJQU4iLCJDT1VOVEVSUFVOQ0hFUiIsIlNIT1dCT0FUIl0sInR5cGUiOiJzdHJpbmcifSwidGl0bGUiOnsibWF4TGVuZ3RoIjo0MCwidHlwZSI6InN0cmluZyJ9LCJ3ZWlnaHRzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJncml0Ijp7InR5cGUiOiJpbnRlZ2VyIn0sImd1YXJkIjp7InR5cGUiOiJpbnRlZ2VyIn0sInBvd2VyIjp7InR5cGUiOiJpbnRlZ2VyIn0sInNwZWVkIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJwb3dlciIsImd1YXJkIiwic3BlZWQiLCJncml0Il0sInR5cGUiOiJvYmplY3QifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJ0aXRsZSIsImxvb2siLCJjcnkiLCJzY2hvb2wiLCJzdHlsZSIsIm1vdmVzIiwid2VpZ2h0cyJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sInR5cGUiOiJqc29uX3NjaGVtYSJ9LCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MH0=",
+  "unlisted_signer": "0xe8c79d01fd5a459102c90f7609495b24f46a367e"
+}

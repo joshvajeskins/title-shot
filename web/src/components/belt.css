@@ -1,0 +1,51 @@
+.beltcard {
+  --accent: var(--gold);
+  position: relative;
+  display: grid; gap: 16px;
+  padding: 18px 18px 14px;
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 60% at 50% -10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%),
+    linear-gradient(180deg, #1a1720, #121016);
+  box-shadow: 0 0 0 1px var(--line), 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+  animation: card-in 520ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+  min-width: 0;
+}
+@keyframes card-in { from { opacity: 0; transform: translateY(14px); } }
+.beltcard.accent-blue { --accent: var(--blue); }
+.beltcard.accent-red { --accent: var(--red); }
+.beltcard-belt { margin: -6px -4px 0; filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.55)); }
+.beltcard-belt img { width: 100%; height: auto; transition: transform 500ms var(--ease-out); }
+@media (hover: hover) { .beltcard:hover .beltcard-belt img { transform: translateY(-3px) scale(1.015); } }
+.beltcard-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.beltcard-name { margin: 0; font-size: 30px; color: var(--paper); }
+.beltcard-champ { display: grid; grid-template-columns: 116px 1fr; gap: 16px; align-items: center; }
+.beltcard-champ .poster { --w: 116px; }
+.beltcard-champ .poster .poster-name { font-size: 15px; }
+.beltcard-champ .poster .poster-title { display: none; }
+.beltcard-champ-text { display: grid; gap: 4px; min-width: 0; }
+.beltcard-champ-name { font-size: 26px; line-height: 0.95; color: var(--accent); }
+.beltcard-sentence { font-size: 19px; line-height: 1.2; color: var(--paper); quotes: '“' '”'; }
+.beltcard-record { display: flex; gap: 14px; margin-top: 4px; font-size: 12px; color: var(--paper-faint); }
+.beltcard-record b { color: var(--paper); font-weight: 600; }
+.beltcard-facts { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; border-radius: 12px; overflow: hidden; background: var(--line); }
+.beltcard-facts > div { padding: 10px 12px; background: #16141b; display: grid; gap: 2px; }
+.beltcard-facts dt { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-faint); }
+.beltcard-facts dd { margin: 0; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.beltcard-facts small { font-weight: 400; color: var(--paper-faint); }
+.sealed { display: inline-flex; align-items: center; gap: 5px; color: var(--gold); }
+.beltcard-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.beltcard-bell { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--paper-dim); }
+.beltcard-bell b { color: var(--paper); font-weight: 600; }
+.beltcard-bell.is-closing { color: #ff8a78; }
+.beltcard-bell.is-closing svg { animation: bell-wobble 1.2s var(--ease-in-out) infinite; }
+@keyframes bell-wobble { 0%, 60%, 100% { transform: rotate(0); } 70% { transform: rotate(-14deg); } 80% { transform: rotate(12deg); } 90% { transform: rotate(-6deg); } }
+.beltcard-purse-link { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--paper-faint); }
+.beltcard-purse-link:hover { color: var(--paper-dim); }
+@media (max-width: 420px) {
+  .beltcard-champ { grid-template-columns: 96px 1fr; gap: 12px; }
+  .beltcard-champ .poster { --w: 96px; }
+  .beltcard-foot { flex-direction: column; align-items: stretch; }
+  .beltcard-foot .btn { width: 100%; }
+}
