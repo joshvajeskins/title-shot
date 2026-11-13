@@ -1,0 +1,6 @@
+{
+  "display": {
+    "name": "Title Shot forge"
+  },
+  "operations": ["forge", "ping", "probe"]
+}
