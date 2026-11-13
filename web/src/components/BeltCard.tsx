@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { BellCinematic } from './BellCinematic'
 import { sound } from '../audio/sound'
 import type { Belt } from '../game/types'
 import { countdown, eth, near, shortHex } from '../lib/format'
@@ -18,6 +19,7 @@ export function BeltCard({ belt, index = 0 }: { belt: Belt; index?: number }) {
   const left = belt.season.endsAt - now
   const closing = left > 0 && left < 3600e3
   const reignH = Math.max(0, (now - belt.reignSince) / 3600e3)
+  const [bellOpen, setBellOpen] = useState(false)
   return (
     <article className={`beltcard accent-${belt.accent}`} style={{ ['--i' as string]: index }}>
       <div className="beltcard-belt">
@@ -54,6 +56,12 @@ export function BeltCard({ belt, index = 0 }: { belt: Belt; index?: number }) {
           Take your shot <Icon name="arrow" />
         </Link>
       </footer>
+      {belt.lastBell && (
+        <button className="beltcard-lastbell" onClick={() => setBellOpen(true)}>
+          <Icon name="bell" size={14} /> Season {belt.lastBell.seasonId} bell: {eth(belt.lastBell.purseWei)} ETH paid to {belt.lastBell.payouts.length} corners on Base <span>Watch</span>
+        </button>
+      )}
+      {bellOpen && belt.lastBell && <BellCinematic bell={belt.lastBell} beltName={belt.name} onClose={() => setBellOpen(false)} />}
       <a className="beltcard-purse-link" href={belt.season.purse.explorer} target="_blank" rel="noreferrer">
         Purse wallet {shortHex(belt.season.purse.address)} · no one holds this key <Icon name="external" size={12} />
       </a>

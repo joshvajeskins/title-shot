@@ -103,3 +103,10 @@
 .arena-log span:last-child { color: var(--paper); }
 .arena-ctrl { display: flex; gap: 8px; flex-shrink: 0; }
 .arena-ctrl .btn { background: rgba(14, 13, 18, 0.7); backdrop-filter: blur(6px); }
+
+@media (max-aspect-ratio: 4/5) {
+  .arena-floor { align-items: center; padding-bottom: 18vh; }
+  .arena-card .poster { --w: 45vw; }
+  .arena-round .display { font-size: 30px; }
+}
+.arena-flash { position: absolute; inset: 0; z-index: 7; pointer-events: none; background: radial-gradient(circle at 50% 45%, #fff, rgba(242, 232, 213, 0.6) 60%); opacity: 0; mix-blend-mode: screen; }

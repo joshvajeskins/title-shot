@@ -12,11 +12,11 @@
 .intro-side { display: grid; justify-items: center; }
 .intro-side .poster { --w: clamp(140px, 30vw, 340px); }
 .intro-left { animation: intro-left 700ms var(--ease-out) both 150ms; }
-.intro-right { animation: intro-right 700ms var(--ease-out) both 1800ms; }
+.intro-right { animation: intro-right 700ms var(--ease-out) both 2900ms; }
 @keyframes intro-left { from { opacity: 0; transform: translateX(-60vw) rotate(-8deg); } }
 @keyframes intro-right { from { opacity: 0; transform: translateX(60vw) rotate(8deg); } }
 .intro-vs { font-size: clamp(56px, 10vw, 140px); color: var(--red); text-shadow: 0.05em 0.05em 0 var(--paper); animation: callout-in 600ms var(--ease-punch) both 1200ms; }
-.intro-rule { font-size: 13px; color: var(--paper-dim); text-align: center; animation: intro-drop 500ms var(--ease-out) both 2600ms; }
+.intro-rule { font-size: 13px; color: var(--paper-dim); text-align: center; animation: intro-drop 500ms var(--ease-out) both 3800ms; }
 .intro-rule b { color: var(--gold); }
 .intro-skip { position: absolute; bottom: calc(18px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); }
 @media (max-width: 600px) { .intro-side .poster-sentence { display: none; } .intro-side .poster-title { display: none; } }

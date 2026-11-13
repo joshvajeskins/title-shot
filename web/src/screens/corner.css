@@ -95,3 +95,16 @@
 .toll-body p { margin: 0; line-height: 1.55; }
 .toll-rule { display: flex; gap: 8px; align-items: baseline; color: var(--gold); }
 .toll-rule b { color: var(--paper); }
+
+/* phone: compact champion header so the writing sheet is above the fold */
+@media (max-width: 639px) {
+  .corner-champ-row { grid-template-columns: 128px 1fr; justify-items: stretch; align-items: start; gap: 12px; }
+  .corner-champ-row .poster { --w: 128px; }
+  .corner-champ-row .poster .poster-title, .corner-champ-row .poster .poster-sentence { display: none; }
+  .corner-champ-row .poster .poster-name { font-size: 15px; }
+  .corner-champ-detail { padding: 12px; gap: 10px; }
+  .corner-champ-detail .statbars, .corner-hint { display: none; }
+  .corner-champ-detail .movelist-label { font-size: 16px; }
+  .corner-cry { font-size: 15px; }
+  .corner-grid { gap: 18px; }
+}

@@ -29,7 +29,8 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
   const [speed, setSpeed] = useState(1)
   const [koSide, setKoSide] = useState<Side | null>(null)
 
-  useEffect(() => { clock.current.speed = speed }, [speed])
+  const speedRef = useRef(1)
+  useEffect(() => { clock.current.speed = speed; speedRef.current = speed }, [speed])
 
   useEffect(() => {
     const c = clock.current
@@ -48,10 +49,24 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
       const a = el.getBoundingClientRect(), b = st.getBoundingClientRect()
       return { x: a.left - b.left + a.width / 2, y: a.top - b.top + a.height * 0.4 }
     }
+    const finishers = new Set<number>()
+    fight.events.forEach((e, i) => {
+      if (e.t !== 'round_end' || e.reason !== 'ko') return
+      for (let j = i - 1; j >= 0; j--) { const p = fight.events[j]; if (p.t === 'act' || p.t === 'upkeep') { finishers.add(j); break } }
+    })
+    const flash = (strong: boolean) => {
+      const el = stage.current?.querySelector('.arena-flash') as HTMLElement | null
+      if (el) animate(el, { opacity: [strong ? 0.85 : 0.5, 0] }, { duration: strong ? 0.5 : 0.22 })
+    }
     const run = async () => {
       void sound.music('fight_loop', 900)
+      sound.play('crowd_ambience', { volume: 0.35 })
+      let idx = -1
       let lastRound = 0
       for (const ev of fight.events) {
+        idx++
+        const finisher = finishers.has(idx)
+        if (finisher) { c.speed = Math.min(c.speed, 1) * 0.45; sound.play('heartbeat_loop', { volume: 0.5 }) }
         switch (ev.t) {
           case 'match_start':
             setMaxHp(ev.max_hp); setHp(ev.max_hp); setGhost(ev.max_hp)
@@ -77,7 +92,7 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
             if (ae) animate(ae, { x: [0, dir * 54, 0], rotate: [0, dir * 3, 0], scale: [1, 1.07, 1] }, { duration: 0.34 / c.speed, ease: EASE })
             await c.wait(170)
             const hitting = ev.outcome === 'hit' || ev.outcome === 'crit' || ev.outcome === 'countered'
-            if (ev.outcome === 'crit') { await c.wait(150); if (stage.current) animate(stage.current, { x: [0, -12, 9, -5, 2, 0], y: [0, 7, -4, 2, 0] }, { duration: 0.38 }) }
+            if (ev.outcome === 'crit' || finisher) { await c.wait(150); flash(finisher); if (stage.current) animate(stage.current, { x: [0, -12, 9, -5, 2, 0], y: [0, 7, -4, 2, 0] }, { duration: 0.38 }) }
             actSound(ev, schoolOf(fight, a))
             const p = center(f)
             if (hitting && ev.dmg > 0) {
@@ -124,6 +139,7 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
           }
           case 'round_end': {
             setHp(ev.hp); setGhost(ev.hp)
+            c.speed = speedRef.current
             if (ev.reason === 'ko') {
               const loser = (1 - ev.winner) as Side
               setKoSide(loser); sound.play('ko_impact'); sound.play('ko'); sound.pick('crowd_roar', 2)
@@ -146,7 +162,7 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
       onDone()
     }
     run().catch(() => { /* aborted on unmount */ })
-    return () => { c.aborted = true; vfx.destroy() }
+    return () => { c.aborted = true; vfx.destroy(); sound.stop('crowd_ambience'); sound.stop('heartbeat_loop') }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fight])
 
@@ -186,6 +202,7 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
         ))}
       </div>
       <canvas ref={canvas} className="arena-vfx" aria-hidden="true" />
+      <div className="arena-flash" aria-hidden="true" />
       <div className="arena-crowd" aria-hidden="true" />
       {callout && <div key={callout.text} className={`callout callout-${callout.kind} display print`}>{callout.text}</div>}
       <footer className="arena-foot">

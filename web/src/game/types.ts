@@ -46,6 +46,27 @@ export interface Season {
   challenges: number
 }
 
+export interface PayoutRow {
+  payee: string
+  name: string
+  share: 'holder' | 'defences' | 'refund'
+  defences?: number
+  amountWei: string
+  status: 'unsigned' | 'signed' | 'mined' | 'unclaimed'
+  tx?: string
+  explorer?: string
+}
+
+export interface Bell {
+  seasonId: number
+  at: number
+  holder: string
+  holderName: string
+  purseWei: string
+  sidePotYocto: string
+  payouts: PayoutRow[]
+}
+
 export interface Belt {
   id: string
   name: string
@@ -58,6 +79,7 @@ export interface Belt {
   writerEarnedYocto: string
   tollYocto: string
   season: Season
+  lastBell?: Bell | null
 }
 
 export type Outcome = 'hit' | 'crit' | 'miss' | 'blocked' | 'countered' | 'used'

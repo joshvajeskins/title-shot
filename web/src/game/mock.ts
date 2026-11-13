@@ -70,6 +70,14 @@ export class MockClient implements GameClient {
       mk('tide', 'The Tide Belt', '/art/belt-tide.webp', 'blue', 'a very polite kraken', 'mara-quill.testnet', 9.5, null, '2500000000000000'),
       mk('wildcard', 'The Wildcard Belt', '/art/belt-wildcard.webp', 'red', "the world's angriest goose", 'otto-ink.testnet', 0.4, { id: 6, name: 'Slow Burn', desc: 'Burn ticks deal double damage.' }, '1500000000000000'),
     ]
+    this.beltsState[2].lastBell = {
+      seasonId: 2, at: now - 26 * 3600e3, holder: 'otto-ink.testnet', holderName: 'Honk Vengeance', purseWei: '1500000000000000', sidePotYocto: '1350000000000000000000000',
+      payouts: [
+        { payee: 'otto-ink.testnet', name: 'Honk Vengeance', share: 'holder', amountWei: '937500000000000', status: 'signed' },
+        { payee: 'mara-quill.testnet', name: 'Sir Squidley', share: 'defences', defences: 9, amountWei: '375000000000000', status: 'signed' },
+        { payee: 'velvet-vance.titleshot.testnet', name: 'Granny Purl', share: 'defences', defences: 5, amountWei: '187500000000000', status: 'signed' },
+      ],
+    }
   }
 
   async account() { return this.acct }

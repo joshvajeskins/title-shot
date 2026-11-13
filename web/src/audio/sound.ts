@@ -72,12 +72,18 @@ export const sound = {
     h.play()
     h.fade(0, VOL.music, fadeMs)
   },
+  stop(id: string) { howls.get(id)?.stop() },
   stopAll() { howls.forEach((h) => h.stop()); musicId = null },
   isMuted() { return muted },
   setMuted(m: boolean) {
     muted = m
     Howler.mute(m)
     try { localStorage.setItem('ts-muted', m ? '1' : '0') } catch { /* storage blocked */ }
+  },
+  /** a fighter's battle cry from the worker's TTS cache; silent if unavailable */
+  cry(hash: string) {
+    if (!hash || muted) return
+    fetch(`/api/cry/${hash}`, { method: 'HEAD' }).then((r) => { if (r.ok && (r.headers.get('content-type') ?? '').includes('audio')) sound.url(`/api/cry/${hash}`, 1) }).catch(() => { /* no TTS endpoint */ })
   },
   /** play an arbitrary URL (runtime TTS battle cries) */
   url(src: string, volume = 1) {
