@@ -72,7 +72,7 @@ export function Corner({ beltId }: { beltId: string }) {
             <FighterPoster fighter={champ} corner="champ" size="md" tilt={-2} />
             <div className="corner-champ-detail panel">
               <div className="corner-school"><span className="chip chip-gold">{SCHOOL_LABEL[champ.spec.school]}</span><span className="chip">{champ.spec.style.toLowerCase()}</span></div>
-              <p className="corner-hint">{SCHOOL_LABEL[champ.spec.school]} fighters lean on {SCHOOL_HINT[champ.spec.school]}.</p>
+              <p className="corner-hint">{SCHOOL_LABEL[champ.spec.school]} fighters lean on {SCHOOL_HINT[champ.spec.school]}. In the ring, stat points above 20 count half.</p>
               <StatBars spec={champ.spec} compact />
               <MoveList spec={champ.spec} names={moveInfo} />
               <p className="corner-cry serif-i">“{champ.spec.cry}”</p>
