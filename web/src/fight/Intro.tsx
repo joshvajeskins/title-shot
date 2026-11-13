@@ -6,8 +6,9 @@ import './intro.css'
 
 export function Intro({ fight, beltArt, beltName, onDone }: { fight: Fight; beltArt: string; beltName: string; onDone: () => void }) {
   useEffect(() => {
-    sound.play('crowd_roar_1', { volume: 0.5 })
-    const t1 = setTimeout(() => sound.play('corner_champ'), 500)
+    void sound.music(null, 500)
+    sound.play('crowd_roar_1', { volume: 0.18 })
+    const t1 = setTimeout(() => sound.play('corner_champ'), 800)
     const c1 = setTimeout(() => sound.cry(fight.champion.sentenceHash), 1900)
     const t2 = setTimeout(() => sound.play('corner_challenger'), 3200)
     const c2 = setTimeout(() => sound.cry(fight.challenger.sentenceHash), 4500)

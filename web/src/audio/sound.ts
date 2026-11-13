@@ -94,14 +94,19 @@ export const sound = {
   },
 }
 
+const BEDS = ['crowd_ambience']
 function duck(h: Howl, pid: number) {
   const m = musicId ? howls.get(musicId) : null
-  if (!m) return
+  const beds = BEDS.map((b) => howls.get(b)).filter((x): x is Howl => !!x && x.playing())
+  if (!m && !beds.length) return
   duckDepth++
-  m.fade(m.volume(), VOL.music * 0.35, 120)
+  if (m) m.fade(m.volume(), VOL.music * 0.28, 120)
+  beds.forEach((b) => b.fade(b.volume(), 0.07, 120))
   const restore = () => {
     duckDepth = Math.max(0, duckDepth - 1)
-    if (duckDepth === 0 && musicId && howls.get(musicId) === m) m.fade(m.volume(), VOL.music, 400)
+    if (duckDepth > 0) return
+    if (m && musicId && howls.get(musicId) === m) m.fade(m.volume(), VOL.music, 400)
+    beds.forEach((b) => b.fade(b.volume(), 0.22, 400))
   }
   h.once('end', restore, pid)
   h.once('stop', restore, pid)

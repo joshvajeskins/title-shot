@@ -79,3 +79,18 @@ export function roundVo(round: number, last: boolean) {
   sound.play('bell_ding')
   sound.play(last ? 'round_3' : round === 1 ? 'round_1' : 'round_2')
 }
+
+/** Announcer barks: at most one every 5 s and each line at most twice per bout, so calls stay special. */
+export class Caller {
+  private last = 0
+  private used = new Map<string, number>()
+  say(id: string, force = false): boolean {
+    const now = performance.now()
+    const n = this.used.get(id) ?? 0
+    if (!force && (now - this.last < 5000 || n >= 2)) return false
+    this.last = now
+    this.used.set(id, n + 1)
+    sound.play(id)
+    return true
+  }
+}

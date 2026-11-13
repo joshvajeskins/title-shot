@@ -4,7 +4,7 @@ import { sound } from '../audio/sound'
 import { FighterPoster } from '../components/FighterPoster'
 import type { Fight, Side } from '../game/types'
 import { FX } from '../game/types'
-import { actSound, applyFx, Clock, fighterName, fxNames, moveLabel, NO_STATUS, roundVo, schoolOf, type Callout, type Pop, type Status } from './director'
+import { actSound, applyFx, Caller, Clock, fighterName, fxNames, moveLabel, NO_STATUS, roundVo, schoolOf, type Callout, type Pop, type Status } from './director'
 import { Vfx } from './vfx'
 import { moveByIndex } from '../game/library'
 import './arena.css'
@@ -38,6 +38,7 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
     const c = clock.current
     c.aborted = false
     const vfx = new Vfx(canvas.current!)
+    const caller = new Caller()
     let popId = 0
     const pop = (side: Side, text: string, kind: Pop['kind']) => {
       const id = ++popId
@@ -62,7 +63,7 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
     }
     const run = async () => {
       void sound.music('fight_loop', 900)
-      sound.play('crowd_ambience', { volume: 0.35 })
+      sound.play('crowd_ambience', { volume: 0.22 })
       let idx = -1
       let lastRound = 0
       for (const ev of fight.events) {
@@ -105,7 +106,7 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
               vfx.burst(p.x, p.y, mvSchool, ev.outcome === 'crit' ? 1.6 : ev.dmg > 40 ? 1.25 : 0.85, dir)
               vfx.burst(p.x, p.y, 'INK', 0.8, dir)
               pop(f, `-${ev.dmg}`, ev.outcome === 'crit' ? 'crit' : 'dmg')
-              if (ev.outcome === 'crit') { pop(f, 'Critical!', 'status'); if (Math.random() < 0.45) sound.play(`crit_${1 + Math.floor(Math.random() * 3)}`) }
+              if (ev.outcome === 'crit') { pop(f, 'Critical!', 'status'); caller.say(`crit_${1 + Math.floor(Math.random() * 3)}`) }
             } else if (ev.outcome === 'miss') {
               if (fe) animate(fe, { x: [0, dir * 34, 0], rotate: [0, -dir * 7, 0] }, { duration: 0.4, ease: EASE })
               pop(f, 'Miss', 'miss')
@@ -130,14 +131,14 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
           case 'skip': {
             const el = cards[ev.actor].current
             if (el) animate(el, { rotate: [0, -4, 4, -3, 0] }, { duration: 0.6 })
-            pop(ev.actor, 'Seeing stars', 'status'); sound.play('stun'); if (Math.random() < 0.5) sound.play('vo_stun')
+            pop(ev.actor, 'Seeing stars', 'status'); sound.play('stun'); caller.say('vo_stun')
             setStatus((s) => { const n: [Status, Status] = [{ ...s[0] }, { ...s[1] }]; n[ev.actor] = { ...n[ev.actor], stun: false }; return n })
             say(`${fighterName(fight, ev.actor)} is stunned and loses the turn`)
             await c.wait(560)
             break
           }
           case 'upkeep': {
-            if (ev.burn > 0) { pop(ev.side, `-${ev.burn}`, 'burn'); sound.play('burn', { volume: 0.6 }) }
+            if (ev.burn > 0) { pop(ev.side, `-${ev.burn}`, 'burn'); sound.play('burn', { volume: 0.6 }); if (ev.burn >= 12) caller.say('vo_burn') }
             setHp(ev.hp); setTimeout(() => setGhost(ev.hp), 400)
             if (ev.expired) setStatus((s) => { const n: [Status, Status] = [{ ...s[0] }, { ...s[1] }]; n[ev.side] = applyFx(n[ev.side], ev.expired, false); return n })
             await c.wait(ev.burn > 0 ? 380 : 40)
@@ -153,6 +154,7 @@ export function Arena({ fight, onDone }: { fight: Fight; onDone: () => void }) {
               if (stage.current) animate(stage.current, { scale: [1, 1.05, 1] }, { duration: 1.2, ease: EASE })
             } else {
               sound.play('bell_triple')
+              if (ev.winner !== 2 && Math.abs(ev.hp[0] - ev.hp[1]) < 20) caller.say('close', true)
               setCallout({ text: ev.winner === 2 ? 'Even round' : 'Time · on points', kind: ev.winner === 2 ? 'draw' : 'time' })
             }
             if (ev.winner !== 2) setWins((w) => { const n: [number, number] = [w[0], w[1]]; n[ev.winner as Side]++; return n })
