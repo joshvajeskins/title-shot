@@ -1,0 +1,28 @@
+[package]
+name = "chainsig-spike"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.86"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = { version = "=5.17.2", default-features = false, features = ["unstable"] }
+omni-transaction = { version = "0.5.0", default-features = false, features = ["evm"] }
+hex = { version = "0.4", default-features = false, features = ["alloc"] }
+
+[dev-dependencies]
+near-sdk = { version = "=5.17.2", default-features = false, features = ["unit-testing", "unstable"] }
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true
+strip = true
+
+[workspace]

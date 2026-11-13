@@ -1,0 +1,18 @@
+{
+ "from": "0x18b9ea900d2a8891b135bf6614e1ef24e0c65ac7",
+ "to": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+ "value": "100000000000000",
+ "nonce": 0,
+ "payoutId": 1794600899062,
+ "nearTx": "FACnHdNqe5ap6FsJcrA1LSBVdFgeciZEB6DLCgUd39dJ",
+ "signMs": 6164,
+ "gasTgas": 13.986194376451,
+ "raw": "0x02f87183014a3480830f424083f42400825208946b9ad963c764a06a7ef8ff96d38d0cb86575ec00865af3107a400080c001a0e07a7cb78ca04a3a1ba5493172989182cee7bb8b91b9280deb4ec5066c74b39fa05386bb750ac07c046295dc9de393ce3e642288d956b0c835ae9dffd3fff701e2",
+ "replayTx": "BLxH2aDKmiokBkoUZDZfAFaBjBfMUSsKD7TFiiQ7VkJU",
+ "replaySameRaw": true,
+ "replaySignerCalled": false,
+ "maxFee": "16000000",
+ "prio": "1000000",
+ "baseFee": "5000000",
+ "broadcastError": "Transaction creation failed."
+}
