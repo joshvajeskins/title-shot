@@ -42,6 +42,15 @@ export interface FundResult { ok: boolean; code?: string; txHash?: string; addre
 /** Smallest purse worth opening a season with (0.0005 ETH). */
 export const MIN_PURSE_WEI = 500_000_000_000_000n
 
+/**
+ * Base is an OP-stack chain: every tx also pays an L1 data fee, which the contract's value + gas x maxFee does not count.
+ * A purse whose only payout spends its exact balance is refused as "insufficient funds" (Wildcard season 2, 14 Nov).
+ * Vance sends this much on top of the declared purse, so the last payout can always pay its L1 fee.
+ */
+export const L1_FEE_RESERVE_WEI = 10_000_000_000_000n // 0.00001 ETH
+/** What a purse holding `held` wei declares to open_season: its balance minus the L1 fee reserve. */
+export const declaredPurse = (held: bigint): bigint => (held > L1_FEE_RESERVE_WEI ? held - L1_FEE_RESERVE_WEI : 0n)
+
 export interface FundDeps { near: Rpc; base: Rpc; vance: Signer; mpc: string }
 
 /** Decide how much Vance can put in a purse: the configured amount, scaled down to what its address holds. */
@@ -65,7 +74,8 @@ async function waitReceipt(base: Rpc, hash: string, tries = 25): Promise<'ok' | 
 }
 
 /**
- * Send `want` wei (or what is affordable) from Vance's MPC address to the season's purse address.
+ * Send `want` wei plus the L1 fee reserve (or what is affordable) from Vance's MPC address to the season's purse address;
+ * `purseWei` in the result is the declared amount (sent minus the reserve).
  * `saved` is a funding tx an earlier tick already broadcast for this purse: it is awaited, never re-sent.
  */
 export async function fundPurse(d: FundDeps, purseAddr: string, want: bigint, saved?: SavedFunding | null, save?: (s: SavedFunding) => Promise<void>): Promise<FundResult> {
@@ -79,8 +89,9 @@ export async function fundPurse(d: FundDeps, purseAddr: string, want: bigint, sa
   }
   const balance = await getBalance(d.base, from)
   const fees = feeParams(await getFeeHistory(d.base))
-  const plan = pursePlan(balance, want, fees.maxFee)
-  if (!plan.ok) return { ok: false, code: 'VANCE_DRY', address: from, balanceWei: balance.toString(), detail: `fund ${from} on Base Sepolia` }
+  const plan = pursePlan(balance, want + L1_FEE_RESERVE_WEI, fees.maxFee)
+  const declared = declaredPurse(plan.purse)
+  if (!plan.ok || declared < MIN_PURSE_WEI) return { ok: false, code: 'VANCE_DRY', address: from, balanceWei: balance.toString(), detail: `fund ${from} on Base Sepolia` }
   const nonce = await getNonce(d.base, from)
   const tx: Eip1559Tx = { type: 'eip1559', chainId: BASE_CHAIN_ID, nonce: Number(nonce), to: purseAddr as Hex, value: plan.purse, gas: TRANSFER_GAS, maxFeePerGas: fees.maxFee, maxPriorityFeePerGas: fees.priority }
   const digest = txDigest(tx)
@@ -90,9 +101,9 @@ export async function fundPurse(d: FundDeps, purseAddr: string, want: bigint, sa
   if (recovered.toLowerCase() !== from.toLowerCase()) return { ok: false, code: 'SIG_MISMATCH', address: from, balanceWei: balance.toString() }
   const hash = txHashOf(raw)
   // Save BEFORE broadcasting, and only broadcast once the record is really stored: with no record, a retry could fund a second time.
-  try { await save?.({ hash, purse: plan.purse.toString(), raw }) } catch { return { ok: false, code: 'FUND_SAVE_FAILED', address: from, balanceWei: balance.toString(), detail: 'not broadcast; retried next tick' } }
+  try { await save?.({ hash, purse: declared.toString(), raw }) } catch { return { ok: false, code: 'FUND_SAVE_FAILED', address: from, balanceWei: balance.toString(), detail: 'not broadcast; retried next tick' } }
   await sendRaw(d.base, raw)
   const st = await waitReceipt(d.base, hash)
-  const base = { txHash: hash, address: from, balanceWei: balance.toString(), purseWei: plan.purse.toString() }
+  const base = { txHash: hash, address: from, balanceWei: balance.toString(), purseWei: declared.toString() }
   return st === 'ok' ? { ok: true, ...base } : { ok: false, code: st === 'reverted' ? 'FUND_REVERTED' : 'FUND_PENDING', ...base }
 }

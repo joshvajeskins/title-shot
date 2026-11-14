@@ -6,7 +6,7 @@ import { getJson, putJson, putJsonStrict } from './cache'
 import { deriveEvmAddress, getBalance } from './evm'
 import { DEFAULTS } from './env'
 import { writeOpener } from './opener'
-import { fundPurse, MIN_PURSE_WEI, VANCE_PATH, type FundResult, type SavedFunding } from './purse'
+import { declaredPurse, fundPurse, MIN_PURSE_WEI, VANCE_PATH, type FundResult, type SavedFunding } from './purse'
 import { detailOf, tickKey, type Log, type TickDeps } from './tickTypes'
 
 const OPEN_GAS_YOCTO = 30_000_000_000_000_000_000_000n // 300 Tgas at the testnet minimum gas price (0.03 NEAR)
@@ -48,7 +48,7 @@ const FUND_RECORD_SEC = 7 * 86_400
 async function alreadyFunded(d: TickDeps, purseAddr: string, vanceAccount: string): Promise<FundResult | null> {
   const from = await deriveEvmAddress(d.near, d.mpc, VANCE_PATH, vanceAccount)
   if (from.toLowerCase() === purseAddr.toLowerCase()) return null // degenerate config: Vance's own balance is not a funded purse
-  const held = await purseBalance(d, purseAddr)
+  const held = declaredPurse(await purseBalance(d, purseAddr)) // keep the L1 fee reserve out of the declared purse
   return held >= MIN_PURSE_WEI ? { ok: true, address: from, balanceWei: '0', purseWei: held.toString(), detail: 'already funded' } : null
 }
 

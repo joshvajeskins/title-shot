@@ -3,7 +3,8 @@ import { archetypes, env, mpcSign, recordedExchange, sim, TEST_ADDRESS } from '.
 import { belt, challenge, FEE, NOW_MS, ns, payout, season, CONTRACT } from './fixtures'
 import { run, setup, world, methods, type World } from './tick-rig'
 import { needsOpening } from '../functions/_lib/tickOpen'
-import { fundPurse, parseMpcSignature, pursePlan } from '../functions/_lib/purse'
+import { declaredPurse, fundPurse, L1_FEE_RESERVE_WEI, parseMpcSignature, pursePlan } from '../functions/_lib/purse'
+import { parseTransaction } from 'viem'
 import { tidyOpener, openerOk, writeOpener, FALLBACK_OPENERS } from '../functions/_lib/opener'
 import { getJson, putJson, scoped } from '../functions/_lib/cache'
 import type { RawBelt, RawChallenge } from '../src/game/chain/views'
@@ -136,6 +137,17 @@ describe('Vance opens the next season', () => {
     expect(sent.length).toBe(0)
     expect(methods(calls)).not.toContain('sign')
     expect(calls.find((c) => c.method === 'open_season')!.args.purse_wei).toBe('1500000000000000')
+  })
+  it('a purse is funded with an L1 fee reserve on top of the declared amount (Base charges an L1 data fee per tx)', async () => {
+    const { d, sent } = setup(world({ belts: [closedBelt()], autoMine: true }))
+    let savedPurse = ''
+    const r = await fundPurse({ near: d.near, base: d.base, vance: d.vance!, mpc: d.mpc }, '0x' + 'cd'.repeat(20), 2_000_000_000_000_000n, null, async (sv) => { savedPurse = sv.purse })
+    expect(r).toMatchObject({ ok: true, purseWei: '2000000000000000' })
+    expect(savedPurse).toBe('2000000000000000')
+    expect(parseTransaction(sent[0] as `0x02${string}`).value).toBe(2_000_000_000_000_000n + L1_FEE_RESERVE_WEI)
+    // a purse already holding a season's worth declares its balance minus the reserve
+    expect(declaredPurse(2_010_000_000_000_000n)).toBe(2_000_000_000_000_000n)
+    expect(declaredPurse(L1_FEE_RESERVE_WEI)).toBe(0n)
   })
   it('the funding tx is saved with its raw bytes BEFORE it is broadcast', async () => {
     const { d, sent } = setup(world({ belts: [closedBelt()], autoMine: true }))
