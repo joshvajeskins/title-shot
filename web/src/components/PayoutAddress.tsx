@@ -75,16 +75,16 @@ export function PayoutAddressDialog({ onClose, claim }: { onClose: () => void; c
           <p className="pa-note">The offline demo has no chain, so there is nothing to save here.</p>
         ) : (
           <>
-            <div className="pa-paths" role="tablist" aria-label="How to give your address">
+            <div className={`pa-paths ${self ? 'has-self' : ''}`} role="tablist" aria-label="How to give your address">
               {self && <button type="button" role="tab" aria-selected={path === 'self'} className={path === 'self' ? 'is-on' : ''} onClick={() => choose('self')}>This account</button>}
-              <button type="button" role="tab" aria-selected={path === 'wallet'} className={path === 'wallet' ? 'is-on' : ''} onClick={() => choose('wallet')}>Connect a wallet</button>
-              <button type="button" role="tab" aria-selected={path === 'paste'} className={path === 'paste' ? 'is-on' : ''} onClick={() => choose('paste')}>Paste address or Basename</button>
+              <button type="button" role="tab" aria-selected={path === 'wallet'} className={path === 'wallet' ? 'is-on' : ''} onClick={() => choose('wallet')}>{self ? 'Another wallet' : 'Connect a wallet'}</button>
+              <button type="button" role="tab" aria-selected={path === 'paste'} className={path === 'paste' ? 'is-on' : ''} onClick={() => choose('paste')}>{self ? 'Paste' : 'Paste address or Basename'}</button>
             </div>
             {path === 'self' && self ? (
               <div role="tabpanel" aria-label="This account's address" className="pa-paste">
                 <div className="pa-target">
                   <span className="eyebrow">Pays to your own address</span>
-                  <b className="pa-target-name"><BaseName address={self} /></b>
+                  <b className="pa-target-name"><BaseName address={self} chars={6} /></b>
                   <code className="pa-target-addr">{self}</code>
                 </div>
                 <p className="pa-note">You signed in with an Ethereum wallet, so your NEAR account is this address. The purse goes straight to it on Base Sepolia: no second wallet to connect. Saving asks your wallet to confirm one transaction.</p>

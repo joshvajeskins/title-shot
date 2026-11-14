@@ -45,3 +45,4 @@ a.bn:hover .bn-name { text-decoration: underline; text-underline-offset: 3px; }
 .pa-paths button.is-on { color: var(--on-paper); background: var(--paper); box-shadow: 2px 2px 0 var(--gold-deep); }
 .pa-paths button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .pa-paste { display: grid; gap: 12px; }
+.pa-paths.has-self { grid-template-columns: repeat(3, 1fr); }
