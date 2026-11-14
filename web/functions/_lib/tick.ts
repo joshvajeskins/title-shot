@@ -2,7 +2,7 @@
 //   close_season -> sign_payout -> broadcast -> open the next season (Vance) -> relayer fallback / expiry sweep.
 import { TGAS } from '../../src/game/chain/signer'
 import type { RawBelt } from '../../src/game/chain/views'
-import { compile } from './nearai'
+import { compileFor } from './compiler'
 import { getJson, putJson } from './cache'
 import { fixPurseAddress, needsOpening, openStep } from './tickOpen'
 import { payoutsStep } from './tickPayouts'
@@ -30,7 +30,7 @@ async function relay(d: TickDeps, log: Log, id: number, sentence: string, model:
   if (!d.relayer) return false
   let output: Record<string, unknown> = { ok: true }
   if (needCompile) {
-    const c = await compile(d.env, d.sim, model, sentence, d.fetchFn)
+    const c = await compileFor(d.env, d.sim, model, sentence, d.fetchFn)
     output = { ok: true, response: c.response, signature: c.signed.signature, signing_address: c.signed.signing_address, signing_algo: c.signed.signing_algo, signature_kind: c.signed.signature_kind, text: c.signed.text }
   }
   const out = await d.relayer.call(d.chain.id, 'submit_forge', { challenge_id: id, output_json: JSON.stringify(output) }, 300n * TGAS, 0n, 90_000)

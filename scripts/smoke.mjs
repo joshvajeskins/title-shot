@@ -47,7 +47,7 @@ const sentence = process.env.SMOKE_SENTENCE ?? 'a very polite kraken who files t
 const pv = await post('/api/preview', { sentence })
 if (pv.r.status === 200) {
   check('preview returns a spec', !!pv.j.spec?.name && pv.j.spec.moves?.length === 3, `${pv.j.spec?.name} canonical=${pv.j.canonical}`)
-  if (!pv.j.canonical) check('preview carries a verified NEAR AI signature', pv.j.verified === true && !!pv.j.signature?.signature, `signer ${pv.j.signer}`)
+  if (!pv.j.canonical) check(`preview carries a verified signature (compiler: ${pv.j.compiler ?? 'unknown'})`, pv.j.verified === true && !!pv.j.signature?.signature, `signer ${pv.j.signer}`)
   const pt = await call(pv.j.portrait)
   check('portrait endpoint answers (image or clean 404)', pt.r.status === 200 ? (pt.r.headers.get('content-type') ?? '').startsWith('image/') : pt.r.status === 404 && errShape(pt.j), `HTTP ${pt.r.status}`)
   const cry = await call('/api/cry/' + pv.j.hash)

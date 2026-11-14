@@ -15,6 +15,9 @@ const vars: [string, string | null][] = [
   ['RELAYER_KEY', loadCred('relay.titleshot.testnet')?.secret ?? null],
   ['NEARAI_API_KEY', envLocal('NEARAI_API_KEY')],
   ['ELEVENLABS_API_KEY', envLocal('ELEVENLABS_API_KEY')],
+  ['STANDIN_SIGNER_KEY', envLocal('STANDIN_SIGNER_KEY')], // staging stand-in referee (see scripts/gen-standin-key.mjs)
+  // stand-in mode only without a NEAR AI key (the Worker enforces that too); COMPILER_MODE in .env.local wins
+  ['COMPILER_MODE', envLocal('COMPILER_MODE') ?? (envLocal('STANDIN_SIGNER_KEY') && !envLocal('NEARAI_API_KEY') ? 'standin' : null)],
   ['TICK_SECRET', prev.get('TICK_SECRET') ?? randomBytes(24).toString('hex')],
   ['CONTRACT_ID', process.env.TS_CONTRACT_ID ?? prev.get('CONTRACT_ID') ?? null],
 ]

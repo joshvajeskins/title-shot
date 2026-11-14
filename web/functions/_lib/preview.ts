@@ -9,7 +9,8 @@ import { cachedJson, getJson, putJson } from './cache'
 import type { Chain } from './chain'
 import { DEFAULTS, type Env } from './env'
 import { ApiError } from './http'
-import { compile } from './nearai'
+import { compileFor } from './compiler'
+import { compilerOf, isStandin, STANDIN_MODEL } from './standin'
 import type { SignedResponse } from '../../src/game/chain/signature'
 import { missKey, previewKey, type FighterLook } from './lookup'
 import { CAPS, spendCap } from './ratelimit'
@@ -18,6 +19,8 @@ export const previewBody = z.object({ sentence: z.string().min(1).max(400) }).st
 
 export interface PreviewPayload {
   spec: Spec; canonical: boolean; portrait: string; hash: string; signer?: string
+  /** who compiled a non-canonical preview: 'standin' = the staging referee (not NEAR AI); absent on canonical results */
+  compiler?: 'nearai' | 'standin'
   /** the signature is internally consistent (text matches the request/response hashes, signature recovers to the stated address). NOT proof the signer is trusted: see `attested`. */
   verified?: boolean
   /** `verified` AND the signer is on the contract's active allowlist AND the signature kind is the contract's: what the paid forge would accept. null = could not check (contract unreachable or not deployed). Show "attested" only when true. */
@@ -55,18 +58,18 @@ export async function runPreview(d: PreviewDeps, input: string): Promise<Preview
     }
   }
   const cached = await getJson<{ result: PreviewPayload }>(kv, previewKey(hash))
-  if (cached) return cached.result
+  if (cached && (cached.result.compiler ?? 'nearai') === compilerOf(d.env)) return cached.result // a compile from the other referee is not reused
 
-  const model = d.chain ? (await cachedJson(kv, 'cfg:model', 300, () => d.chain!.config())).model_id : d.env.NEARAI_MODEL ?? DEFAULTS.model
+  const model = d.chain ? (await cachedJson(kv, 'cfg:model', 300, () => d.chain!.config())).model_id : isStandin(d.env) ? STANDIN_MODEL : d.env.NEARAI_MODEL ?? DEFAULTS.model
   await spendCap(kv, CAPS.previewCompile) // uncached compiles only: cache hits and canonical lookups above cost nothing
-  const c = await compile(d.env, d.sim, model, sentence, d.fetchFn)
+  const c = await compileFor(d.env, d.sim, model, sentence, d.fetchFn)
   const n = d.sim.normalize(c.raw)
   if (!n.ok) {
     if (n.error.code === 'E_REFUSED') throw new ApiError(422, 'REFUSED', 'The referee refused this sentence. Try a different one.')
     throw new ApiError(422, 'BAD_COMPILE', `The compile was rejected (${n.error.code}). Try rewording.`)
   }
   const result: PreviewPayload = {
-    spec: toUiSpec(n.spec), canonical: false, portrait: `/api/portrait/${hash}`, hash, signer: c.signed.signing_address, verified: c.verification.verified, attested: await attest(d, c.signed, c.verification.verified),
+    spec: toUiSpec(n.spec), canonical: false, portrait: `/api/portrait/${hash}`, hash, compiler: compilerOf(d.env), signer: c.signed.signing_address, verified: c.verification.verified, attested: await attest(d, c.signed, c.verification.verified),
     raw: c.raw, signature: { text: c.signed.text, signing_address: c.signed.signing_address, signature: c.signed.signature, kind: c.signed.signature_kind },
     requestSha256: c.verification.requestSha256, responseSha256: c.verification.responseSha256,
   }

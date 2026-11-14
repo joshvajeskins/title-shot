@@ -22,8 +22,10 @@ export interface Env {
   GUEST_DEPOSIT_NEAR?: string // default 0.3: credited to a new guest's contract balance
   GUEST_GAS_NEAR?: string // default 0.1: transferred to a new guest account for gas (also the session key's allowance)
   MPC_SIGNER?: string
+  COMPILER_MODE?: string // 'standin' = staging referee (only when NEARAI_API_KEY is absent)
   // secrets
   NEARAI_API_KEY?: string
+  STANDIN_SIGNER_KEY?: string // 32-byte hex private key of the staging stand-in referee
   ELEVENLABS_API_KEY?: string
   SPONSOR_KEY?: string
   VANCE_KEY?: string

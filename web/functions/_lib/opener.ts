@@ -2,6 +2,8 @@
 import { sentenceProblem, cleanSentence } from '../../src/game/client'
 import type { Env } from './env'
 import { chatText } from './nearai'
+import { isStandin } from './standin'
+import { STANDIN_OPENERS } from './standinSpec'
 
 export const FALLBACK_OPENERS = [
   'a lighthouse keeper who bench-presses the lighthouse',
@@ -28,8 +30,13 @@ export const openerOk = (s: string): boolean => sentenceProblem(s) === null && s
 
 export interface OpenerCtx { seasonId: number; recent: string[] }
 
-export async function writeOpener(env: Env, model: string, ctx: OpenerCtx, fetchFn: typeof fetch = fetch): Promise<{ sentence: string; source: 'nearai' | 'fallback' }> {
+export async function writeOpener(env: Env, model: string, ctx: OpenerCtx, fetchFn: typeof fetch = fetch): Promise<{ sentence: string; source: 'nearai' | 'fallback' | 'standin' }> {
   const used = new Set(ctx.recent.map((s) => s.toLowerCase()))
+  if (isStandin(env)) { // staging: exact roster sentences, no model call
+    const n = STANDIN_OPENERS.length
+    const pick = Array.from({ length: n }, (_, i) => STANDIN_OPENERS[(ctx.seasonId + i) % n]!).find((s) => !used.has(s.toLowerCase())) ?? STANDIN_OPENERS[ctx.seasonId % n]!
+    return { sentence: pick, source: 'standin' }
+  }
   if (env.NEARAI_API_KEY) {
     try {
       const avoid = ctx.recent.slice(-6).join('; ')

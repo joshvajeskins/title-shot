@@ -237,6 +237,12 @@ describe('GET /api/state builds the whole lobby from the contract', () => {
     expect(s.tick).toMatchObject({ at: NOW_MS })
     expect(s.payouts).toEqual([]) // the current season is open: nothing to pay yet
   })
+  it('compiler says which referee compiles: nearai by default, standin only without a NEAR AI key and with COMPILER_MODE=standin', async () => {
+    const { e, near, base } = rig()
+    expect((await buildState(e, sim(), near, base, NOW_MS)).compiler).toBe('nearai')
+    expect((await buildState({ ...e, COMPILER_MODE: 'standin' }, sim(), near, base, NOW_MS)).compiler).toBe('standin')
+    expect((await buildState({ ...e, COMPILER_MODE: 'standin', NEARAI_API_KEY: 'k' }, sim(), near, base, NOW_MS)).compiler).toBe('nearai')
+  })
   it('rulebookMatch compares the wasm request prefix and suffix with the contract (sha256), and a mismatch is false', async () => {
     const { e, near, base } = rig()
     const ok = await buildState(e, sim(), near, base, NOW_MS)

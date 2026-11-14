@@ -12,6 +12,7 @@ import { Chain, type ContractConfig } from './chain'
 import { deriveEvmAddress, getBalance } from './evm'
 import { DEFAULTS, type Env } from './env'
 import { VANCE_PATH } from './purse'
+import { compilerOf } from './standin'
 import { trackKey } from './tickPayouts'
 import { publicTick, type PayoutTrack, type TickLog } from './tickTypes'
 
@@ -22,6 +23,8 @@ export interface PayoutState {
 }
 export interface StateResponse {
   at: number; contract: string; forgeMode: string; model: string
+  /** which referee compiles sentences: 'nearai' (attested TEE model) or 'standin' (staging stand-in, label it as such in the UI) */
+  compiler: 'nearai' | 'standin'
   /** hash of the rulebook in the bout-sim wasm shipped with this site (the contract has no rulebook hash of its own) */
   rulebookHash: string
   /** false = the wasm's request prefix/suffix differ from the ones stored in the contract (sha256 compared), so replays and previews would not match the paid forge */
@@ -104,7 +107,7 @@ export async function buildState(env: Env, sim: Sim, near: Rpc, base: Rpc, now =
   }))
 
   return {
-    at: now, contract: chain.id, forgeMode: cfg.forge_mode, model: cfg.model_id, rulebookHash: rb.hash, rulebookMatch: requestMatches(sim, cfg),
+    at: now, contract: chain.id, forgeMode: cfg.forge_mode, model: cfg.model_id, compiler: compilerOf(env), rulebookHash: rb.hash, rulebookMatch: requestMatches(sim, cfg),
     belts, fights, payouts, wallets: await cachedJson(env.TS_KV, 'wallets', 20, () => wallets(env, near, base), 40), tick: publicTick(await getJson<TickLog>(env.TS_KV, 'tick:last')),
   }
 }
