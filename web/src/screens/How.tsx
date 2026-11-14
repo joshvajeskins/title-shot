@@ -6,7 +6,7 @@ import './pages.css'
 const FLOW: { who: string; what: string; detail: string }[] = [
   { who: 'You', what: 'challenge(belt, sentence)', detail: 'Signed by a session key that can only call this method. The 0.1 NEAR toll comes out of your fight balance. No wallet popup.' },
   { who: 'Contract', what: 'request_execution → OutLayer', detail: 'Pays the forge fee and asks OutLayer to run forge.wasm once for this challenge id.' },
-  { who: 'OutLayer TEE', what: 'forge.wasm → NEAR AI Cloud', detail: 'Inside Intel TDX, with the API key as a sealed secret: one non-streamed call to a model running in a GPU TEE, plus a VRF seed.' },
+  { who: 'OutLayer TEE', what: 'forge.wasm → NEAR AI Cloud', detail: 'Inside Intel TDX, with the API key as a secret that opens only for calls through the game contract: one non-streamed call to a model running in a GPU TEE, plus a VRF seed. If a worker crashes and re-runs, only the first result the contract accepts counts.' },
   { who: 'NEAR AI Cloud', what: 'signed compile', detail: 'Returns the fighter JSON and an ECDSA signature over sha256(request) and sha256(response).' },
   { who: 'Contract', what: 'on_forged: verify, normalize, fight', detail: 'Rebuilds the request bytes from the public rulebook and your sentence, ecrecovers the AI signer against the allowlist, enforces the 100-point budget, runs best-of-three, splits the toll.' },
   { who: 'Your browser', what: 'replay', detail: 'Runs the same Rust referee compiled to WebAssembly and checks its state hash equals the one the contract stored.' },

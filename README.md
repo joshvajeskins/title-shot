@@ -41,11 +41,11 @@ sequenceDiagram
 | Piece | Job in the game | Without it | Code |
 |---|---|---|---|
 | NEAR AI Cloud | Compiles a sentence into a fighter under a public rulebook; signs every response. The contract verifies the signature (`ecrecover`) and rebuilds the request bytes itself, so it knows exactly which sentence and rulebook were compiled. | The compiler becomes our server and could quietly favour a champion. | `crates/bout-sim/src/rulebook.rs`, `contract/src/verify.rs` |
-| OutLayer | Runs `forge.wasm` exactly once per paid challenge inside Intel TDX, holding the API key as a secret no operator sees; draws the fight seed from its VRF. | A relayer holding the key could re-roll compiles or drop challenges. | `forge/`, `contract/src/challenge.rs` |
+| OutLayer | Runs `forge.wasm` for each paid challenge inside Intel TDX, holding the API key as a secret that opens only for calls arriving through the game contract; draws the fight seed from its VRF (alpha bound to this contract and challenge id). A crashed worker can re-run, but the contract settles only the first result, and a sentence's first settled compile is final forever. | A relayer holding the key could re-roll compiles or drop challenges. | `forge/`, `contract/src/challenge.rs` |
 | NEAR contract | The referee: budget enforcement, the fight, toll splits, seasons, refunds. The same `bout-sim` crate runs in the browser for replays. | A server decides winners; nobody can check. | `contract/`, `crates/bout-sim/` |
 | Function-call keys | The browser holds a key that can only call `challenge`. Value-moving methods need 1 yoctoNEAR, which a function-call key cannot attach. | A wallet popup on every challenge. | `contract/src/challenge.rs`, `web/src/game/near.ts` |
 | Chain Signatures | Each season's purse sits at a Base Sepolia address derived from the contract; only `close_season` → `sign_payout` can move it, only to the winners. | The purse becomes our custody. | `contract/src/payout.rs` |
-| NEP-171 | The belt is a token. Whoever holds it collects the champion's share and can transfer it. | No ownable title. | `contract/src/nft.rs` |
+| NEP-171 | The belt is a token. Whoever holds it collects the champion's share and can hand it to another account with `nft_transfer` (core transfer + NEP-177 metadata only; no approvals or `nft_transfer_call`, so marketplaces that need them won't list it). | No ownable title. | `contract/src/nft.rs` |
 
 ## The economy
 
@@ -58,7 +58,13 @@ sequenceDiagram
 - **Self-dealing loses money**: an alt-account challenge returns at most 95% of the remainder to the same person;
   the forge fee and the house share never come back (property test).
 - **Velvet Vance** is an AI promoter with its own NEAR account and a Chain Signatures Base address. It writes each
-  season's opening champion with NEAR AI, funds the purse from its Base address and earns the promoter share.
+  season's opening champion with NEAR AI, funds the purse from its Base address and earns the promoter share (in
+  NEAR). On testnet its Base address is pre-funded with test ETH: there is no testnet route to swap its NEAR income
+  into purses (that would be a mainnet 1Click/Intents swap, not built).
+- **Sealed arena rule**: each season's modifier (e.g. "stun chances halved") is drawn from the VRF seed of the
+  season's first bout and stays unknown until then, so nobody, the promoter included, can tune the opener to it. It is
+  public after that first bout. (The design brief asked for "hidden until the bell"; a referee that runs on chain
+  cannot fight under a secret rule, so we did not claim that.)
 
 ## Balance
 
@@ -71,9 +77,12 @@ mean |p−0.5| between random builds 0.149 vs a pure-dice baseline of 0.028: wor
 ## What we do not claim
 
 - The model and rulebook are public. Anyone can search for strong sentences offline, bots included. Our own
-  hill-climb shows how far that gets you (about 62% against the field, and every such build has a counter). The sealed
-  season rule, the defence-weighted purse and the per-account cap blunt the rest; they do not prevent it.
-- The AI signer allowlist is set by the contract owner from the model's attestation report; changes are timelocked.
+  hill-climb shows how far that gets you (about 62% against the field, and every such build has a counter). The rule
+  sealed until the first bout, the defence-weighted purse and the per-account cap blunt the rest; they do not prevent it.
+- The AI signer allowlist is set by the contract owner from the model's attestation report; the contract verifies
+  signatures against it, not the hardware quote itself. Allowlist changes are timelocked and public.
+- "Exactly once" is not claimed: OutLayer can re-run a crashed worker. The contract settles only the first result per
+  challenge and the first settled compile of a sentence is final, so a re-run can never change a fighter.
 - OutLayer's DAO can reach the master secret per its own docs, so "nobody can read the key" is not claimed.
 - Testnet only. Testnet NEAR and Sepolia ETH have no value.
 

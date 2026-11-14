@@ -10,11 +10,11 @@ import './landing.css'
 
 const STACK = [
   { k: 'NEAR AI Cloud', role: 'The compiler', d: 'A model running inside a TEE turns your sentence into stats and moves under a public rulebook, and signs its answer. The contract checks that signature with ecrecover.' },
-  { k: 'OutLayer', role: 'The sealed forge', d: 'Each paid challenge runs forge.wasm exactly once inside Intel TDX, with the API key as a secret no operator sees, and draws the fight seed from a VRF.' },
+  { k: 'OutLayer', role: 'The sealed forge', d: 'Each paid challenge runs forge.wasm inside Intel TDX, with the API key as a secret opened only for calls through the game contract, and draws the fight seed from a VRF. Only the first result the contract accepts ever counts.' },
   { k: 'NEAR contract', role: 'The referee', d: 'The fight runs inside the contract from a shared Rust crate. Your browser runs the same crate, so the replay you watch hashes to the same result.' },
   { k: 'Function-call keys', role: 'No popups', d: 'A session key that can only call challenge. It cannot withdraw, move the belt or touch your balance outside the toll.' },
   { k: 'Chain Signatures', role: 'The purse', d: 'Each season’s purse sits at a Base address derived from the contract. Only the bell can sign it out, only to the winners. Nobody holds that key.' },
-  { k: 'NEP-171', role: 'The belt', d: 'The title is a token. Whoever holds it collects the champion’s share of every challenge, and can even sell it.' },
+  { k: 'NEP-171', role: 'The belt', d: 'The title is a token. Whoever holds it collects the champion’s share of every challenge, and can hand it to another account with nft_transfer.' },
 ]
 
 export function Landing() {
@@ -67,7 +67,7 @@ export function Landing() {
         <p className="sec-sub">The skill is wordsmithing against the champion. Everything else is the show.</p>
         <ol className="loop">
           <li><span className="loop-n display">01</span><div className="loop-art loop-write paper"><span className="serif-i">a pigeon with a law degree</span></div><h3 className="display">Write</h3><p>Type up to 120 characters. Spar for free and see your odds against the champion before you pay a thing.</p></li>
-          <li><span className="loop-n display">02</span><div className="loop-art"><img src="/art/forge-press.webp" alt="" /></div><h3 className="display">Forge</h3><p>The AI reads it once, in a sealed enclave, and prints a fighter: a face, four stats, three moves named after your words.</p></li>
+          <li><span className="loop-n display">02</span><div className="loop-art"><img src="/art/forge-press.webp" alt="" /></div><h3 className="display">Forge</h3><p>An AI running in a sealed enclave reads it and prints a fighter: a face, four stats, three moves named after your words. The first forge of a sentence is final.</p></li>
           <li><span className="loop-n display">03</span><div className="loop-art loop-fight"><FighterPoster spec={{ name: 'Counselor Coo', title: '', look: '', cry: '', school: 'MIND', style: 'TACTICIAN', moves: [], stats: { power: 14, guard: 18, speed: 25, grit: 13 } }} portrait="/art/fighter-pigeon.webp" size="sm" tilt={-4} showSentence={false} /><FighterPoster spec={{ name: 'Granny Purl', title: '', look: '', cry: '', school: 'IRON', style: 'COUNTERPUNCHER', moves: [], stats: { power: 10, guard: 25, speed: 10, grit: 25 } }} portrait="/art/fighter-grandma.webp" size="sm" tilt={4} showSentence={false} /></div><h3 className="display">Fight</h3><p>Best of three, refereed by the contract. A draw keeps the champion. Rematch in one tap.</p></li>
           <li><span className="loop-n display">04</span><div className="loop-art"><img src="/art/belt-midnight.webp" alt="" /></div><h3 className="display">Hold the belt</h3><p>Win and every failed challenger pays you. Hold it when the bell rings and you take the purse.</p></li>
         </ol>
@@ -119,8 +119,9 @@ export function Landing() {
         <div className="limits panel">
           <h3 className="display">What we don't claim</h3>
           <ul>
-            <li>The model and rulebook are public, so anyone can search for strong sentences offline, bots included. The sealed season rule, the defence-weighted purse and the per-account cap blunt that; they don't stop it.</li>
-            <li>The AI signer allowlist is set by an admin from the model's attestation report. Changes are timelocked and public.</li>
+            <li>The model and rulebook are public, so anyone can search for strong sentences offline, bots included. The season's arena rule stays sealed only until the first bout (a referee on chain can't fight under a secret rule), so it blunts pre-season search; the defence-weighted purse and the per-account cap blunt the rest. None of it stops search outright.</li>
+            <li>The contract checks each AI signature against signer addresses the owner copied from the model's attestation report; it does not verify the hardware quote itself. Changes to that list are timelocked and public.</li>
+            <li>The promoter's Base wallet is pre-funded with test ETH. Its NEAR income is not converted into purses on testnet; that would need a mainnet swap route.</li>
             <li>This runs on NEAR testnet and Base Sepolia. Testnet tokens have no cash value.</li>
           </ul>
         </div>
