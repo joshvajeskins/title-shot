@@ -7,6 +7,7 @@ import { getJson, putJson } from './cache'
 import { fixPurseAddress, needsOpening, openStep } from './tickOpen'
 import { payoutsStep } from './tickPayouts'
 import { forgeChargeStep } from './tickForge'
+import { houseStep } from './house'
 import { Ledger } from './ledger'
 import { detailOf, tickKey, type Log, type StepLog, type TickDeps, type TickLog } from './tickTypes'
 
@@ -123,6 +124,7 @@ export async function runTick(d: TickDeps, opts: { force?: boolean } = {}): Prom
       if (needsOpening(belt, t0)) await safe(log, belt.id, 'open', () => openStep(d, log, belt))
     }
     await safe(log, undefined, 'forge_charge', () => forgeChargeStep(d, log))
+    await safe(log, undefined, 'house', () => houseStep(d, log, belts)) // house challengers (docs/LIVENESS.md), before the relayer sweep
     await safe(log, undefined, 'sweep', () => sweepStep(d, log))
   } catch (e) {
     log({ action: 'tick', ok: false, detail: String(e instanceof Error ? e.message : e).slice(0, 140) })

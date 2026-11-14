@@ -6,6 +6,7 @@ import { NearClient } from '../src/game/near'
 import { archiveStored, exportKey, loadStored, newGuestKeys, saveStored, type KeyStore } from '../src/game/nearKeys'
 import { GameError } from '../src/game/client'
 import { mapBelt, type RawChallenge, type RawFight } from '../src/game/chain/views'
+import { challengeGas } from '../src/game/chain/config'
 import { formatPublicKey, parseSecretKey, verify } from '../src/game/chain/keys'
 import { fromB64 } from '../src/game/chain/bytes'
 import { sha256 } from '@noble/hashes/sha2.js'
@@ -50,6 +51,7 @@ function rig(opts: { account?: boolean; forgeWaitMs?: number; balance?: string }
       [`${CONTRACT}:get_fighter`]: (a: { hash_hex: string }) => fighters.get(a.hash_hex) ?? null,
       [`${CONTRACT}:get_belt`]: () => beltRaw,
       [`${CONTRACT}:get_belts`]: () => [beltRaw],
+      [`${CONTRACT}:get_config`]: () => ({ forge_mode: 'relayer' }),
       [`${CONTRACT}:get_fights`]: () => [fightRow(9, 0, 1)],
     },
     accounts: {},
@@ -187,14 +189,17 @@ describe('challenge: the paid forge from the browser', () => {
     expect(fight.champion.spec.name).toBe('Counselor Coo')
     expect(fight.split.forgeFee).toBe(belt().forge_fee)
     expect(fight.receipts[0]!.label).toBe('challenge')
-    // exactly one transaction, a 300 Tgas, 0 deposit `challenge` call signed by the session key (not the full-access key)
+    // exactly one transaction, a 0 deposit `challenge` call signed by the session key (not the full-access key), with the gas
+    // the contract's forge mode needs: 50 Tgas in relayer mode (a 300 Tgas call is dropped for a guest holding 0.1 NEAR)
     expect(r.sent.length).toBe(1)
     const dec = decodeSignedTransaction(fromB64(r.sent[0]!))
     expect(dec.transaction.signerId).toBe(ME)
     expect(dec.transaction.receiverId).toBe(CONTRACT)
     const fc = dec.transaction.actions[0]!.functionCall!
     expect(fc.methodName).toBe('challenge')
-    expect(fc.gas).toBe(300_000_000_000_000n)
+    expect(fc.gas).toBe(50_000_000_000_000n)
+    expect(challengeGas('outlayer')).toBe(300_000_000_000_000n)
+    expect(challengeGas(undefined)).toBe(50_000_000_000_000n)
     expect(fc.deposit).toBe(0n)
     expect(JSON.parse(new TextDecoder().decode(Uint8Array.from(fc.args as ArrayLike<number>)))).toEqual({ belt_id: 1, sentence: SENTENCE })
     const stored = loadStored(r.store)!

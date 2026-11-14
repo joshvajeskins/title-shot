@@ -35,6 +35,18 @@ export interface Env {
   VANCE_KEY?: string
   RELAYER_KEY?: string
   TICK_SECRET?: string
+  BOXOFFICE_PRICE_USDC?: string // boxoffice: price of one title shot in test USDC, default 0.25 (docs/BOXOFFICE.md)
+  BOXOFFICE_FACILITATOR_URL?: string // boxoffice: x402 facilitator, default https://x402.org/facilitator
+  BOXOFFICE_PAY_TO?: string // boxoffice: override of Vance's derived Base address (normally derived live)
+  BOXOFFICE_DAILY_MAX?: string // boxoffice: paid bookings per UTC day, default 40
+  BOXOFFICE_OFF?: string // boxoffice: '1' closes the box office (quotes still answer)
+  BOXOFFICE_SEED?: string // boxoffice: secret that derives custodial guest keys (default: derived from SPONSOR_KEY)
+  HOUSE_A_KEY?: string // house: function-call key (challenge only) of house-a.titleshot.testnet
+  HOUSE_B_KEY?: string // house: function-call key (challenge only) of house-b.titleshot.testnet
+  HOUSE_A_ID?: string // house: default house-a.titleshot.testnet
+  HOUSE_B_ID?: string // house: default house-b.titleshot.testnet
+  HOUSE_EVERY_MIN?: string // house: minutes without a bout before a house NPC challenges a belt (default 25)
+  HOUSE_COMPILES_PER_DAY?: string // house: new fighters (compiles) the house may forge per UTC day (default 12), then it re-fields forged ones
 }
 
 export const DEFAULTS = {

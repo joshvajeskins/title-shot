@@ -6,7 +6,7 @@ import { Rpc, RpcError, RpcUnavailable, contractCode, parseOutcome } from './cha
 import { Signer } from './chain/signer'
 import { parseSecretKey } from './chain/keys'
 import { fn } from './chain/tx'
-import { GAS_CHALLENGE, txUrl } from './chain/config'
+import { challengeGas, txUrl } from './chain/config'
 import { describeChallenge, formatNear, gameErrorFor, networkError } from './chain/errors'
 import { computeOdds } from './chain/odds'
 import { assembleFight, mapBelt, mapFighter, mapFightSummary, mapSplit, ruleOf, type ChainBelt, type RawBelt, type RawChallenge, type RawFight, type RawFighter } from './chain/views'
@@ -236,11 +236,18 @@ export class NearClient implements GameClient {
     return fight
   }
 
+  private forgeModeP: Promise<string> | null = null
+  /** The contract's forge mode decides how much gas a challenge must attach (see challengeGas). Read once per page. */
+  private forgeMode(): Promise<string> {
+    this.forgeModeP ??= this.rpc.view<{ forge_mode?: string }>(this.contract, 'get_config', {}).then((c) => c?.forge_mode ?? 'relayer').catch(() => { this.forgeModeP = null; return 'relayer' })
+    return this.forgeModeP
+  }
+
   /** Send the challenge and learn its id from `get_pending` (or the tx result), surfacing a failed tx as a readable error. */
   private async submit(signer: Signer, beltId: number, sentence: string, ctx: { toll: bigint; balance: bigint }): Promise<{ id: number; hash: string }> {
     let hash: string
     try {
-      hash = await signer.send(this.contract, [fn('challenge', { belt_id: beltId, sentence }, GAS_CHALLENGE, 0n)])
+      hash = await signer.send(this.contract, [fn('challenge', { belt_id: beltId, sentence }, challengeGas(await this.forgeMode()), 0n)])
     } catch (e) {
       throw this.sendError(e)
     }
