@@ -6,6 +6,8 @@ import { GameError } from '../client'
 import { b58decode } from '../chain/base58'
 import { fromB64, toB64 } from '../chain/bytes'
 import { isRejection, messageOf } from './connector'
+import { evmProviderFor, isEvmAccount, personalSign } from './proveEvm'
+import type { WalletHost } from '../evm/discover'
 
 interface NonceRes { nonce: string; message: string; recipient: string; expiresAt: number }
 
@@ -30,8 +32,15 @@ export function signatureB64(sig: string): string {
 }
 
 /** Ask the wallet to sign the server's nonce and have the server verify it. Resolves with the verified account. */
-export async function proveControl(wallet: NearWalletBase, accountId: string, guestId: string, fetchFn: typeof fetch = (...a) => fetch(...a)): Promise<{ accountId: string; publicKey: string }> {
+export async function proveControl(wallet: NearWalletBase, accountId: string, guestId: string, fetchFn: typeof fetch = (...a) => fetch(...a), host?: WalletHost): Promise<{ accountId: string; publicKey: string }> {
   const n = await post<NonceRes>('/api/auth/nonce', { accountId, guestId }, fetchFn)
+  if (isEvmAccount(accountId)) {
+    // an Ethereum-address account: the same EVM key signs the nonce (EIP-191), found through EIP-6963 in this page
+    const signature = await personalSign(await evmProviderFor(accountId, host), accountId, n.message)
+    const ok = await post<{ ok: true; accountId: string }>('/api/auth/verify', { scheme: 'eip191', accountId, signature, nonce: n.nonce, recipient: n.recipient, message: n.message }, fetchFn)
+    return { accountId: ok.accountId, publicKey: '' }
+  }
+  if (wallet.manifest?.features?.signMessage === false) throw new GameError('E_WALLET', `${wallet.manifest.name} cannot sign the ownership message. Connect a wallet that can, such as Meteor or Intear.`)
   let signed: { accountId?: string; publicKey: string; signature: string }
   try {
     signed = await wallet.signMessage({ message: n.message, recipient: n.recipient, nonce: fromB64(n.nonce), signerId: accountId, network: 'testnet' })

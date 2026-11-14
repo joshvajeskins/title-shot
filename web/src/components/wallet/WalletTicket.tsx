@@ -63,7 +63,9 @@ export function WalletTicket({ connected, amount, onAmount, locked, onSwitch }: 
       {failed ? (
         <p className="wt-msg" role="alert">Could not read this account on NEAR testnet. <button className="wt-link" onClick={() => setTick((t) => t + 1)}>Try again</button></p>
       ) : empty && amount === null ? (
-        <p className="wt-msg" role="status">This wallet holds {near(funds!.spendable, 3)} NEAR on testnet: not enough for fight money and gas. Get free testnet NEAR at <a href={FAUCET} target="_blank" rel="noreferrer">near-faucet.io <Icon name="external" size={11} /></a>, then <button className="wt-link" onClick={() => setTick((t) => t + 1)}>check again</button>.</p>
+        connected.accountId.startsWith('0x')
+          ? <p className="wt-msg" role="status">Your Ethereum address is now a NEAR testnet account, but it holds {near(funds!.spendable, 3)} NEAR: not enough for fight money and gas. Send it 0.3 testnet NEAR from any NEAR testnet wallet (its NEAR account id is the address above), or open a demo account and use Move to my wallet, then <button className="wt-link" onClick={() => setTick((t) => t + 1)}>check again</button>.</p>
+          : <p className="wt-msg" role="status">This wallet holds {near(funds!.spendable, 3)} NEAR on testnet: not enough for fight money and gas. Get free testnet NEAR at <a href={FAUCET} target="_blank" rel="noreferrer">near-faucet.io <Icon name="external" size={11} /></a>, then <button className="wt-link" onClick={() => setTick((t) => t + 1)}>check again</button>.</p>
       ) : (
         <>
           <div className="wt-row">

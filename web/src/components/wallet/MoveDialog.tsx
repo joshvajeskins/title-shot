@@ -46,7 +46,7 @@ export function MoveDialog({ onClose }: { onClose: () => void }) {
     let c: Connected
     try {
       const [{ connectWallet }] = await mods()
-      c = await connectWallet({ signMessage: true })
+      c = await connectWallet()
       if (c.accountId === guest.accountId) throw new Error('That wallet is this guest account. Connect a different NEAR account.')
       setConn(c)
     } catch (e) { fail(e, 'connect'); return }

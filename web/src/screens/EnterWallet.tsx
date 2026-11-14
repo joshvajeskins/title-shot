@@ -87,7 +87,9 @@ export function EnterWallet({ busyElsewhere, onBusy, onDone }: { busyElsewhere: 
           : amount === 0n ? <>Approve in wallet <Icon name="arrow" /></>
           : <>Approve · {near(amount, 2)} NEAR <Icon name="arrow" /></>}
       </button>
-      {phase.k === 'approving' && <p className="ew-sub" role="status">Your wallet shows one request with {amount ? 'two transactions' : 'one transaction'}. Nothing leaves your wallet until you approve it there.</p>}
+      {phase.k === 'approving' && <p className="ew-sub" role="status">{c.walletId === 'ethereum-wallets'
+        ? <>A tab opens for your Ethereum wallet. NEAR runs one action per Ethereum transaction, so confirm {amount ? 'two transactions there (the key, then the deposit)' : 'one transaction there'}; after that, fights need no popup.</>
+        : <>Your wallet shows one request with {amount ? 'two transactions' : 'one transaction'}. Nothing leaves your wallet until you approve it there.</>}</p>}
       {err && <p className="enter-err" role="alert"><Icon name="x" size={14} /> {err}</p>}
     </div>
   )

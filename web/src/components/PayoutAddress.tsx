@@ -12,7 +12,9 @@ import { PayoutWallet } from './PayoutWallet'
 import './payout.css'
 
 type PayoutClient = GameClient & { payoutAddress?: () => Promise<string | null>; setPayoutAddress?: (a: string) => Promise<void> }
-type Path = 'wallet' | 'paste'
+type Path = 'self' | 'wallet' | 'paste'
+/** A NEAR account whose id is an Ethereum address (NEP-518, NEAR Connect's Ethereum Wallets): it is its own Base address. */
+const evmSelf = (id: string | undefined): string | null => (id && /^0x[0-9a-f]{40}$/.test(id) ? id : null)
 const same = (a: string | null, b: string | null) => !!a && !!b && a.toLowerCase() === b.toLowerCase()
 
 /** Where the season purse is paid: an EVM address on Base Sepolia (from a connected wallet that signs for it, typed, or looked up from a Basename), stored with set_evm_address. */
@@ -20,7 +22,8 @@ const same = (a: string | null, b: string | null) => !!a && !!b && a.toLowerCase
 export function PayoutAddressDialog({ onClose, claim }: { onClose: () => void; claim?: { payoutId: number; amountWei: string } }) {
   const { client, account } = useGame()
   const c = client as PayoutClient
-  const [path, setPath] = useState<Path>('wallet')
+  const self = evmSelf(account?.id)
+  const [path, setPath] = useState<Path>(self ? 'self' : 'wallet')
   const [current, setCurrent] = useState<string | null>(null)
   const [value, setValue] = useState('')
   const [lookup, setLookup] = useState<Lookup>({ state: 'idle' })
@@ -29,7 +32,7 @@ export function PayoutAddressDialog({ onClose, claim }: { onClose: () => void; c
   const link = useWalletLink(account?.id ?? null)
   // No wallet in this browser (a judge, a screener): open on the paste path instead of a dead end, unless the user picked a tab.
   const [picked, setPicked] = useState(false)
-  useEffect(() => { if (!picked && !link.discovering && link.wallets.length === 0) setPath('paste') }, [picked, link.discovering, link.wallets.length])
+  useEffect(() => { if (!self && !picked && !link.discovering && link.wallets.length === 0) setPath('paste') }, [self, picked, link.discovering, link.wallets.length])
   const supported = typeof (claim ? c.claimPayout : c.setPayoutAddress) === 'function'
   const input = useMemo(() => parsePayoutInput(value), [value])
   const key = inputKey(input)
@@ -47,7 +50,8 @@ export function PayoutAddressDialog({ onClose, claim }: { onClose: () => void; c
   useEffect(() => { setState('idle'); setMsg(null) }, [linked])
   // a claim may use the address already on file; a plain save only when it changes
   const onFile = claim ? null : current
-  const target = path === 'wallet' ? (linked && !same(linked, onFile) ? linked : null) : saveTarget(input, lookup, onFile)
+  const target = path === 'self' ? (self && (claim || !same(self, onFile)) ? self : null)
+    : path === 'wallet' ? (linked && !same(linked, onFile) ? linked : null) : saveTarget(input, lookup, onFile)
   const shown = lookup.state === 'resolved' && lookup.key === key ? lookup : null
   const choose = (p: Path) => { setPicked(true); setPath(p); setState('idle'); setMsg(null) }
   const save = async () => {
@@ -72,10 +76,20 @@ export function PayoutAddressDialog({ onClose, claim }: { onClose: () => void; c
         ) : (
           <>
             <div className="pa-paths" role="tablist" aria-label="How to give your address">
+              {self && <button type="button" role="tab" aria-selected={path === 'self'} className={path === 'self' ? 'is-on' : ''} onClick={() => choose('self')}>This account</button>}
               <button type="button" role="tab" aria-selected={path === 'wallet'} className={path === 'wallet' ? 'is-on' : ''} onClick={() => choose('wallet')}>Connect a wallet</button>
               <button type="button" role="tab" aria-selected={path === 'paste'} className={path === 'paste' ? 'is-on' : ''} onClick={() => choose('paste')}>Paste address or Basename</button>
             </div>
-            {path === 'wallet' ? (
+            {path === 'self' && self ? (
+              <div role="tabpanel" aria-label="This account's address" className="pa-paste">
+                <div className="pa-target">
+                  <span className="eyebrow">Pays to your own address</span>
+                  <b className="pa-target-name"><BaseName address={self} /></b>
+                  <code className="pa-target-addr">{self}</code>
+                </div>
+                <p className="pa-note">You signed in with an Ethereum wallet, so your NEAR account is this address. The purse goes straight to it on Base Sepolia: no second wallet to connect. Saving asks your wallet to confirm one transaction.</p>
+              </div>
+            ) : path === 'wallet' ? (
               <div role="tabpanel" aria-label="Connect a wallet"><PayoutWallet link={link} onPaste={() => choose('paste')} onFile={(a) => same(a, onFile)} /></div>
             ) : (
               <div role="tabpanel" aria-label="Paste an address" className="pa-paste">
@@ -99,8 +113,8 @@ export function PayoutAddressDialog({ onClose, claim }: { onClose: () => void; c
             )}
             {msg && <p className="pa-err">{msg}</p>}
             <div className="pa-actions">
-              {(path === 'paste' || linked || state !== 'idle') && <button className="btn btn-gold" disabled={!target || state === 'saving' || (claim && state === 'saved')} onClick={save}>
-                {state === 'saving' ? 'Saving on chain…' : !claim && path === 'wallet' && linked && !target && state !== 'saved' ? <><Icon name="check" size={16} /> On file</> : state === 'saved' && (claim || !target) ? <><Icon name="check" size={16} /> {claim ? 'Claimed' : 'Saved'}</> : claim ? 'Claim to this address' : 'Save address'}
+              {(path === 'paste' || path === 'self' || linked || state !== 'idle') && <button className="btn btn-gold" disabled={!target || state === 'saving' || (claim && state === 'saved')} onClick={save}>
+                {state === 'saving' ? 'Saving on chain…' : !claim && ((path === 'wallet' && linked) || path === 'self') && !target && state !== 'saved' ? <><Icon name="check" size={16} /> On file</> : state === 'saved' && (claim || !target) ? <><Icon name="check" size={16} /> {claim ? 'Claimed' : 'Saved'}</> : claim ? 'Claim to this address' : 'Save address'}
               </button>}
               {current && <span className="pa-current">On file: <BaseName address={current} /></span>}
             </div>
