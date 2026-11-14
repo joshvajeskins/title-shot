@@ -20,7 +20,7 @@ export function Money() {
         <div className="bill-in torn purse">
           <div className="purse-toll">
             <span className="bill-label">Every challenge · {near('50000000000000000000000')} NEAR toll</span>
-            <p className="purse-lede">The first 0.01 NEAR pays the AI forge at cost. The rest splits four ways:</p>
+            <p className="purse-lede">0.01 NEAR pays the AI forge, then the contract keeps what the bout's bytes cost to store. What's left splits four ways:</p>
             <div className="split-bar" role="img" aria-label="Champion 60%, promoter 25%, side-pot 10%, house 5%">
               {SPLIT.map((s) => <span key={s.k} className={s.c} style={{ flexGrow: s.v }}>{s.v >= 10 ? `${s.v}%` : ''}</span>)}
             </div>
@@ -34,7 +34,7 @@ export function Money() {
               <div><b className="display">50%</b><span>to whoever holds the belt</span></div>
               <div><b className="display">50%</b><span>split by defences, capped at 25% per account</span></div>
             </div>
-            <p className="purse-note">No token, no emissions, no faucet. Seasons are funded up front, so a last-minute snipe takes half, never all.</p>
+            <p className="purse-note">No token, no emissions. Purses are funded before the season opens, so a last-minute snipe takes half, never all.</p>
           </div>
         </div>
       </div>
