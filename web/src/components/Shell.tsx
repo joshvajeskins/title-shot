@@ -6,6 +6,7 @@ import { browserStore, exportKey } from '../game/nearKeys'
 import { useCompilerMode } from '../game/compiler'
 import { PayoutAddressDialog } from './PayoutAddress'
 import { navigate, usePath } from '../lib/router'
+import { txUrl } from '../game/chain/config'
 import { Icon } from './Icon'
 import { Link, Wordmark } from './Link'
 import './shell.css'
@@ -29,8 +30,9 @@ export function Shell({ children, bare = false }: { children: ReactNode; bare?: 
   const { account, client } = useGame()
   const [muted, setMuted] = useState(sound.isMuted())
   const [menu, setMenu] = useState(false)
+  const [mobileMenu, setMobileMenu] = useState(false)
   const compiler = useCompilerMode(client.mode)
-  useEffect(() => { setMenu(false) }, [path])
+  useEffect(() => { setMenu(false); setMobileMenu(false) }, [path])
   const toggleSound = () => { const m = !muted; setMuted(m); sound.setMuted(m); if (!m) sound.play('ui_tick') }
   return (
     <div className={`shell ${bare ? 'is-bare' : ''}`}>
@@ -70,6 +72,11 @@ export function Shell({ children, bare = false }: { children: ReactNode; bare?: 
             <Link href={`/enter?next=${encodeURIComponent(path)}`} className="btn btn-red btn-sm">Get in the ring</Link>
           </div>
         )}
+        {account && !bare && (
+          <div className="mobile-identity">
+            <IdentityBlock open={mobileMenu} setOpen={setMobileMenu} down onSignOut={async () => { await client.signOut(); navigate('/') }} />
+          </div>
+        )}
         {children}
       </main>
       <nav className="tabbar" aria-label="Main navigation">
@@ -88,7 +95,7 @@ export function Shell({ children, bare = false }: { children: ReactNode; bare?: 
   )
 }
 
-function IdentityBlock({ open, setOpen, onSignOut }: { open: boolean; setOpen: (o: boolean) => void; onSignOut: () => void }) {
+function IdentityBlock({ open, setOpen, onSignOut, down = false }: { open: boolean; setOpen: (o: boolean) => void; onSignOut: () => void; down?: boolean }) {
   const { account, client, refreshAccount } = useGame()
   const [note, setNote] = useState<string | null>(null)
   const [link, setLink] = useState<string | null>(null)
@@ -112,7 +119,6 @@ function IdentityBlock({ open, setOpen, onSignOut }: { open: boolean; setOpen: (
     setWorking(true); setLink(null); setNote('Approve the withdrawal in your wallet.')
     try {
       const tx = await client.withdraw()
-      const { txUrl } = await import('../game/chain/config')
       setNote(`Withdrawn to ${account.id}.`); setLink(txUrl(tx)); sound.play('kaching')
       await refreshAccount()
     } catch (e) { setNote(e instanceof Error ? e.message : 'The withdrawal did not go through.'); sound.play('ui_error') }
@@ -135,12 +141,12 @@ function IdentityBlock({ open, setOpen, onSignOut }: { open: boolean; setOpen: (
         <Icon name="dots" />
       </button>
       {open && (
-        <div className="identity-menu panel" role="menu">
+        <div className={`identity-menu panel ${down ? 'is-down' : ''}`} role="menu">
           {wallet && <p className="identity-wallet"><span className="identity-wallet-dot" aria-hidden="true" /> NEAR wallet connected<b title={account.id}>{account.id}</b></p>}
           <Link href="/play/book" className="identity-menu-item" role="menuitem"><Icon name="book" size={16} /> My bouts</Link>
           <Link href="/play/how" className="identity-menu-item" role="menuitem"><Icon name="info" size={16} /> How the money moves</Link>
           <button className="identity-menu-item" role="menuitem" onClick={() => setPayoutOpen(true)}><Icon name="coin" size={16} /> Purse payout address</button>
-          {live && wallet && BigInt(account.balanceYocto) > 0n && <button className="identity-menu-item" role="menuitem" onClick={withdraw} disabled={working}><Icon name="coin" size={16} /> Withdraw {near(account.balanceYocto, 3)} NEAR to my wallet</button>}
+          {live && wallet && BigInt(account.balanceYocto) > 0n && <button className="identity-menu-item" role="menuitem" onClick={withdraw} disabled={working}><Icon name="coin" size={16} /> Withdraw {near(account.balanceYocto, 3)} NEAR</button>}
           {live && !wallet && <button className="identity-menu-item" role="menuitem" onClick={() => { setMoveOpen(true); setOpen(false) }}><Icon name="arrow" size={16} /> Move to my wallet</button>}
           {live && !wallet && <button className="identity-menu-item" role="menuitem" onClick={backup}><Icon name="lock" size={16} /> Back up my key</button>}
           {note && <p className="identity-note">{note}{link && <> <a href={link} target="_blank" rel="noreferrer" className="identity-note-link">View tx <Icon name="external" size={10} /></a></>}</p>}

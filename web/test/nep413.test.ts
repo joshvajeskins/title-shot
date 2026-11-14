@@ -145,6 +145,15 @@ describe('issueNonce / verifyAuth', () => {
     expect(await code(verifyAuth(stranger.deps, await signedBody(stranger.deps), HOST))).toBe('401:KEY_NOT_ON_ACCOUNT')
   })
 
+  it('a missing key reported the older way (a result carrying an `error` string, as live testnet RPCs answer) is KEY_NOT_ON_ACCOUNT', async () => {
+    const fetchFn = (async (_u: string, init: RequestInit) => {
+      const { id } = JSON.parse(String(init.body))
+      return new Response(JSON.stringify({ jsonrpc: '2.0', id, result: { block_height: 1, block_hash: 'x', error: `access key ${pk} does not exist while viewing`, logs: [] } }))
+    }) as unknown as typeof fetch
+    const deps: AuthDeps = { kv: new MemKV(), rpc: new Rpc({ urls: ['https://rpc.test'], fetchFn }) }
+    expect(await code(verifyAuth(deps, await signedBody(deps), HOST))).toBe('401:KEY_NOT_ON_ACCOUNT')
+  })
+
   it('a tampered message or signature is refused', async () => {
     const { deps } = world()
     expect(await code(verifyAuth(deps, { ...(await signedBody(deps)), message: 'Title Shot: I control mallory.testnet.' }, HOST))).toBe('401:WRONG_MESSAGE')

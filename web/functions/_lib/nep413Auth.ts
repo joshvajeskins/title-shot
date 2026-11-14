@@ -103,6 +103,8 @@ export async function verifyAuth(deps: AuthDeps, raw: unknown, requestHost: stri
     if (e instanceof RpcError || e instanceof RpcUnavailable) throw new ApiError(502, 'CHAIN_UNAVAILABLE', 'The chain is not answering. Try again in a moment.')
     throw e
   }
-  if (key?.permission !== 'FullAccess') throw new ApiError(401, 'NOT_FULL_ACCESS', 'Sign in with a full-access key of this account.')
+  // some nodes report a missing key as a result carrying an `error` string instead of an UNKNOWN_ACCESS_KEY error
+  if (!key || typeof (key as { error?: unknown }).error === 'string' || key.permission === undefined) throw new ApiError(401, 'KEY_NOT_ON_ACCOUNT', 'That key does not belong to this account.')
+  if (key.permission !== 'FullAccess') throw new ApiError(401, 'NOT_FULL_ACCESS', 'Sign in with a full-access key of this account.')
   return { ok: true, accountId: body.accountId, publicKey: body.publicKey }
 }

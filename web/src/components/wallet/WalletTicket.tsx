@@ -55,7 +55,7 @@ export function WalletTicket({ connected, amount, onAmount, locked, onSwitch }: 
       <div className="wt-who">
         <span className="wt-mark"><NearMark size={22} /></span>
         <div className="wt-id">
-          <strong className="display" title={connected.accountId}>{connected.accountId}</strong>
+          <strong className={`display ${connected.accountId.length > 22 ? 'is-long' : ''}`} title={connected.accountId}>{connected.accountId}</strong>
           <small>via {connected.walletName}{funds ? ` · ${near(funds.spendable, 2)} NEAR free` : failed ? '' : ' · checking balance…'}</small>
         </div>
       </div>

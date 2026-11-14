@@ -10,6 +10,7 @@
 .wt-mark { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; background: var(--on-paper); color: var(--paper); box-shadow: 2px 2px 0 var(--red); }
 .wt-id { display: grid; gap: 2px; }
 .wt-id strong { font-size: clamp(26px, 6vw, 34px); line-height: 0.95; color: var(--on-paper); overflow-wrap: anywhere; text-transform: none; letter-spacing: 0; }
+.wt-id strong.is-long { font-size: clamp(20px, 4.6vw, 24px); line-height: 1.05; }
 .wt-id small { font-size: 11.5px; color: var(--on-paper-dim); }
 .wt-perf { height: 0; border-top: 2px dashed rgba(26, 22, 18, 0.28); margin: 2px -18px; }
 .wt-row { display: grid; gap: 8px; }

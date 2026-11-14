@@ -1,6 +1,7 @@
 // "Move to my wallet" for a guest: connect a NEAR wallet, prove control with a NEP-413 signed message, review exactly what
 // moves, then the guest's own full-access key (in this browser) withdraws the balance, transfers every belt and sends its NEAR.
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { sound } from '../../audio/sound'
 import { useGame } from '../../game/context'
 import { browserStore, loadStored } from '../../game/nearKeys'
@@ -81,7 +82,7 @@ export function MoveDialog({ onClose }: { onClose: () => void }) {
     } catch (e) { fail(e, 'done') }
   }
 
-  return (
+  return createPortal(
     <div className="wm-backdrop" onClick={(e) => { if (e.target === e.currentTarget && !busy) onClose() }}>
       <div className="wm panel" role="dialog" aria-modal="true" aria-labelledby="wm-title">
         <button className="wm-close" onClick={onClose} disabled={busy} aria-label="Close"><Icon name="x" size={16} /></button>
@@ -116,6 +117,7 @@ export function MoveDialog({ onClose }: { onClose: () => void }) {
         </div>
         {phase === 'done' && !err && plan && <p className="wm-note">Play from {conn?.accountId} adds a challenge-only session key in one wallet approval{plan.balance > 0n ? ` and deposits the ${near(plan.balance, 3)} NEAR fight money back` : ''}. This guest's keys stay in this browser's archive.</p>}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

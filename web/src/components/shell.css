@@ -124,3 +124,9 @@
 .identity-wallet-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127, 191, 106, 0.18); }
 .identity-note-link { display: inline-flex; align-items: center; gap: 3px; color: var(--paper); text-decoration: underline; text-underline-offset: 3px; }
 .identity-menu-item:disabled { opacity: 0.5; cursor: wait; }
+/* phones and tablets have no sidebar: the account sits in a slim bar at the top, its menu opens downward */
+.mobile-identity { position: sticky; top: 0; z-index: 45; display: flex; justify-content: flex-end; padding: 8px var(--gutter) 0; pointer-events: none; }
+.mobile-identity .identity-wrap { width: min(280px, 100%); pointer-events: auto; }
+.mobile-identity .identity { background: rgba(21, 19, 27, 0.92); backdrop-filter: blur(6px); }
+.identity-menu.is-down { top: calc(100% + 8px); bottom: auto; z-index: 60; transform-origin: top center; }
+@media (min-width: 1024px) { .mobile-identity { display: none; } }

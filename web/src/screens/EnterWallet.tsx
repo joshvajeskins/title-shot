@@ -71,7 +71,7 @@ export function EnterWallet({ busyElsewhere, onBusy, onDone }: { busyElsewhere: 
         <button className="btn btn-ghost ew-connect" onClick={connect} disabled={phase.k === 'connecting' || busyElsewhere}>
           <NearMark size={18} /> {phase.k === 'connecting' ? 'Opening NEAR Connect…' : 'Use my NEAR wallet'}
         </button>
-        <p className="ew-sub">Meteor, HOT, MyNearWallet, Intear, NEAR Mobile and more, on testnet. One approval, then no popups between fights.</p>
+        <p className="ew-sub">Meteor, Intear, Nightly, Ledger and more, on testnet. One approval, then no popups between fights.</p>
         {err && <p className="enter-err" role="alert"><Icon name="x" size={14} /> {err}</p>}
       </div>
     )
