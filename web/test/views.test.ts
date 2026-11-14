@@ -86,6 +86,9 @@ describe('the bell cinematic data', () => {
     expect(bell.payouts.map((p) => [p.share, p.status])).toEqual([['holder', 'unsigned'], ['defences', 'mined'], ['defences', 'unclaimed']])
     expect(bell.payouts[1]).toMatchObject({ defences: 5, tx: '0xfeed' })
     expect(bell.payouts[1]!.explorer).toContain('sepolia.basescan.org/tx/0xfeed')
+    // the unclaimed row keeps its payout id so its payee can claim it (claim_payout) from the bell screen
+    expect(bell.payouts[2]!.id).toBe(list[2]!.id)
+    expect(bell.payouts.every((p, i) => p.id === list[i]!.id)).toBe(true)
   })
   it('a season with no bouts marks the promoter row as a refund', () => {
     const bell = mapBell(season({ state: 'Closed', bouts: 0, final_holder: 'vance.titleshot.testnet' }), [payout(9, { payee: 'vance.titleshot.testnet' })], new Map(), 'vance.titleshot.testnet')!

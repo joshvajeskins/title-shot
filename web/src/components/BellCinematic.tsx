@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { sound } from '../audio/sound'
+import { useGame } from '../game/context'
 import type { Bell } from '../game/types'
 import { eth, near, shortAccount, shortHex } from '../lib/format'
 import { BaseName } from './BaseName'
+import { PayoutAddressDialog } from './PayoutAddress'
 import { Icon } from './Icon'
 import './bell.css'
 
 /** The season bell: purse split into Base Sepolia payouts signed by the contract through Chain Signatures. */
 export function BellCinematic({ bell, beltName, onClose }: { bell: Bell; beltName: string; onClose: () => void }) {
   const [step, setStep] = useState(0)
+  const { account } = useGame()
+  // the viewer's own share created while their corner had no Base address: claim it here (claim_payout)
+  const [claiming, setClaiming] = useState<{ payoutId: number; amountWei: string } | null>(null)
   // The parent passes a fresh onClose every render (it re-renders each second); keep the sequence from restarting.
   const close = useRef(onClose)
   close.current = onClose
@@ -53,7 +58,9 @@ export function BellCinematic({ bell, beltName, onClose }: { bell: Bell; beltNam
                   <div className="bellc-amt num">{eth(p.amountWei, 5)} ETH <small>{pct}%</small></div>
                   <div className="bellc-tx">
                     {p.status === 'mined' && p.explorer ? <a href={p.explorer} target="_blank" rel="noreferrer" className="chip chip-blue">{shortHex(p.tx ?? '', 4)} <Icon name="external" size={11} /></a>
-                      : <span className="chip">{p.status === 'unclaimed' ? 'awaiting address' : p.status === 'signed' ? 'signed · broadcasting' : 'signing'}</span>}
+                      : p.status === 'unclaimed' && account?.id === p.payee && p.id !== undefined
+                        ? <button type="button" className="chip chip-gold bellc-claim" onClick={() => setClaiming({ payoutId: p.id!, amountWei: p.amountWei })}>Claim</button>
+                        : <span className="chip">{p.status === 'unclaimed' ? 'awaiting address' : p.status === 'signed' ? 'signed · broadcasting' : 'signing'}</span>}
                   </div>
                 </li>
               )
@@ -62,6 +69,7 @@ export function BellCinematic({ bell, beltName, onClose }: { bell: Bell; beltNam
           <p className="bellc-note">Half the purse goes to whoever holds the belt at the bell, half by successful defences, at most 25% per account. The season side-pot of {near(bell.sidePotYocto, 3)} NEAR went to the final holder's balance.</p>
         </section>
       )}
+      {claiming ? <PayoutAddressDialog claim={claiming} onClose={() => setClaiming(null)} /> : null}
     </div>,
     document.body,
   )

@@ -4,6 +4,7 @@ import { sound } from '../audio/sound'
 import { basenames, inputKey, parsePayoutInput, resolvePayout, saveTarget, type Lookup } from '../game/chain/basenames'
 import type { GameClient } from '../game/client'
 import { useGame } from '../game/context'
+import { eth } from '../lib/format'
 import { BaseName, NameLabel } from './BaseName'
 import { Icon } from './Icon'
 import './payout.css'
@@ -11,7 +12,8 @@ import './payout.css'
 type PayoutClient = GameClient & { payoutAddress?: () => Promise<string | null>; setPayoutAddress?: (a: string) => Promise<void> }
 
 /** Where the season purse is paid: an EVM address on Base Sepolia (typed, or looked up from a Basename), stored with set_evm_address. */
-export function PayoutAddressDialog({ onClose }: { onClose: () => void }) {
+/** `claim`: the bell already created this payout with no address; saving names its address once (claim_payout). */
+export function PayoutAddressDialog({ onClose, claim }: { onClose: () => void; claim?: { payoutId: number; amountWei: string } }) {
   const { client } = useGame()
   const c = client as PayoutClient
   const [current, setCurrent] = useState<string | null>(null)
@@ -19,7 +21,7 @@ export function PayoutAddressDialog({ onClose }: { onClose: () => void }) {
   const [lookup, setLookup] = useState<Lookup>({ state: 'idle' })
   const [state, setState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const [msg, setMsg] = useState<string | null>(null)
-  const supported = typeof c.setPayoutAddress === 'function'
+  const supported = typeof (claim ? c.claimPayout : c.setPayoutAddress) === 'function'
   const input = useMemo(() => parsePayoutInput(value), [value])
   const key = inputKey(input)
   useEffect(() => { void c.payoutAddress?.().then((a) => { setCurrent(a); if (a) setValue(a) }).catch(() => undefined) }, [c])
@@ -31,12 +33,17 @@ export function PayoutAddressDialog({ onClose }: { onClose: () => void }) {
     const t = setTimeout(() => { void resolvePayout(parsePayoutInput(key), basenames).then((l) => { if (live) setLookup(l) }) }, 320)
     return () => { live = false; clearTimeout(t) }
   }, [key])
-  const target = saveTarget(input, lookup, current)
+  // a claim may use the address already on file; a plain save only when it changes
+  const target = saveTarget(input, lookup, claim ? null : current)
   const shown = lookup.state === 'resolved' && lookup.key === key ? lookup : null
   const save = async () => {
-    if (!target || !c.setPayoutAddress) return
+    if (!target || !(claim ? c.claimPayout : c.setPayoutAddress)) return
     setState('saving'); setMsg(null)
-    try { await c.setPayoutAddress(target); setCurrent(target); setState('saved'); sound.play('ui_confirm') }
+    try {
+      if (claim) await c.claimPayout!(claim.payoutId, target)
+      else { await c.setPayoutAddress!(target); setCurrent(target) }
+      setState('saved'); sound.play('ui_confirm')
+    }
     catch (e) { setState('error'); setMsg(e instanceof Error ? e.message : 'Could not save the address.'); sound.play('ui_error') }
   }
   return createPortal(
@@ -44,8 +51,8 @@ export function PayoutAddressDialog({ onClose }: { onClose: () => void }) {
       <div className="pa panel" role="dialog" aria-modal="true" aria-label="Purse payout address" onClick={(e) => e.stopPropagation()}>
         <button className="pa-close" onClick={onClose} aria-label="Close"><Icon name="x" size={16} /></button>
         <span className="eyebrow">Season purse</span>
-        <h2 className="display">Where your purse goes</h2>
-        <p>Hold a belt at the bell, or defend it, and the contract pays your share of the purse on Base Sepolia, signed through Chain Signatures. Paste any EVM address you control, or your Basename.</p>
+        <h2 className="display">{claim ? 'Claim your purse share' : 'Where your purse goes'}</h2>
+        <p>{claim ? `The bell set aside ${eth(claim.amountWei)} ETH for you, but your corner had no Base address. Name one: the contract records it once and signs the payout through Chain Signatures at the next tick.` : 'Hold a belt at the bell, or defend it, and the contract pays your share of the purse on Base Sepolia, signed through Chain Signatures. Paste any EVM address you control, or your Basename.'}</p>
         {!supported ? (
           <p className="pa-note">The offline demo has no chain, so there is nothing to save here.</p>
         ) : (
@@ -68,8 +75,8 @@ export function PayoutAddressDialog({ onClose }: { onClose: () => void }) {
             </div>
             {msg && <p className="pa-err">{msg}</p>}
             <div className="pa-actions">
-              <button className="btn btn-gold" disabled={!target || state === 'saving'} onClick={save}>
-                {state === 'saving' ? 'Saving on chain…' : state === 'saved' && !target ? <><Icon name="check" size={16} /> Saved</> : 'Save address'}
+              <button className="btn btn-gold" disabled={!target || state === 'saving' || (claim && state === 'saved')} onClick={save}>
+                {state === 'saving' ? 'Saving on chain…' : state === 'saved' && (claim || !target) ? <><Icon name="check" size={16} /> {claim ? 'Claimed' : 'Saved'}</> : claim ? 'Claim to this address' : 'Save address'}
               </button>
               {current && <span className="pa-current">On file: <BaseName address={current} /></span>}
             </div>

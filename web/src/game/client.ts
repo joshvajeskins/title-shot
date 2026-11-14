@@ -38,6 +38,8 @@ export interface GameClient {
   payoutAddress?(): Promise<string | null>
   /** Register the Base address for purse payouts (0x + 40 hex, any casing). Throws GameError E_ADDRESS on a bad address. */
   setPayoutAddress?(addr: string): Promise<void>
+  /** Name the Base address for a purse payout created while the payee had none (claim_payout). Returns the tx hash. */
+  claimPayout?(payoutId: number, addr: string): Promise<string>
 }
 
 export class GameError extends Error {

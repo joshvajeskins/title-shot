@@ -47,6 +47,8 @@ export interface Season {
 }
 
 export interface PayoutRow {
+  /** The contract's payout id (claim_payout takes it). */
+  id?: number
   payee: string
   name: string
   share: 'holder' | 'defences' | 'refund'
