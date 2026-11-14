@@ -21,5 +21,5 @@ rustup target add wasm32-unknown-unknown >/dev/null 2>&1 || true
 # the cdylib crate type is requested here so the crate stays a plain rlib for the contract and tests
 cargo rustc --release --lib --target wasm32-unknown-unknown --features wasm --crate-type cdylib
 rm -rf pkg
-"$WB" --target web --out-dir pkg --out-name bout_sim target/wasm32-unknown-unknown/release/bout_sim.wasm
+"$WB" --target web --out-dir pkg --out-name bout_sim "$(cd "$(dirname "$0")/../.." && pwd)/target/wasm32-unknown-unknown/release/bout_sim.wasm"
 ls -l pkg

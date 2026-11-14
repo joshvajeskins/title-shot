@@ -6,3 +6,7 @@ AR = "/usr/bin/ar"
 AR_aarch64_apple_darwin = "/usr/bin/ar"
 AR_wasm32_unknown_unknown = "/usr/bin/ar"
 AR_wasm32_wasip2 = "/usr/bin/ar"
+
+# One target directory for every crate in this repo (disk rule, 2026-11-14). Relative to the repo root.
+[build]
+target-dir = "target"

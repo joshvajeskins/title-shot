@@ -75,7 +75,7 @@ echo "+ cd web && VITE_CONTRACT_ID=$CONTRACT_ID pnpm build"
 run "${W[@]}" pages deploy dist --project-name "$PROJECT" --branch "$BRANCH" --commit-dirty=true
 
 # 4. check the deployed API reports the right compiler and contract
-URL="https://$BRANCH.$PROJECT.pages.dev"
+URL="https://$BRANCH.$PROJECT.pages.dev"; [ "$BRANCH" = main ] && URL="https://$PROJECT.pages.dev"   # the production branch serves the bare domain
 WANT=${COMPILER:-nearai}
 FORGE=relayer; [ "$MODE" = production ] && FORGE=outlayer
 EXPECT="$WANT $CONTRACT_ID $FORGE"

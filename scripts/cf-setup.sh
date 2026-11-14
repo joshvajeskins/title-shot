@@ -9,7 +9,7 @@ W="pnpm exec wrangler"
 PROJECT=title-shot
 
 # 1. KV namespace (idempotent: reuse the id if the title already exists)
-ID=$($W kv namespace list 2>/dev/null | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const a=JSON.parse(s);const n=a.find(x=>x.title==="title-shot-TS_KV"||x.title==="TS_KV");console.log(n?n.id:"")}catch{console.log("")}})')
+ID=$($W kv namespace list 2>/dev/null | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const a=JSON.parse(s.slice(s.indexOf("[")));const n=a.find(x=>x.title==="title-shot-TS_KV"||x.title==="TS_KV");console.log(n?n.id:"")}catch{console.log("")}})')
 if [ -z "$ID" ]; then
   ID=$($W kv namespace create TS_KV 2>&1 | sed -n 's/.*"id": "\([0-9a-f]\{32\}\)".*/\1/p' | head -1)
 fi

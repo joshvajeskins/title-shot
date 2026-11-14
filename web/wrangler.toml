@@ -9,7 +9,7 @@ pages_build_output_dir = "dist"
 [[kv_namespaces]]
 binding = "TS_KV"
 # Local dev uses an on-disk simulation. scripts/cf-setup.sh replaces this id with the real namespace before the first deploy.
-id = "00000000000000000000000000000000"
+id = "e60c0da96bd64a4e93f53e554987c379"
 
 [vars]
 # Set after the contract is deployed (a blank value keeps the API in "not deployed" mode: preview and static routes still work).
