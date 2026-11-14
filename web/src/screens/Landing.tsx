@@ -5,6 +5,7 @@ import { Icon } from '../components/Icon'
 import { Link, Wordmark } from '../components/Link'
 import { useAsync, useGame } from '../game/context'
 import { eth, near } from '../lib/format'
+import { useCompilerMode } from '../game/compiler'
 import './landing.css'
 
 const STACK = [
@@ -20,6 +21,7 @@ export function Landing() {
   const { client, account } = useGame()
   const { data: belts } = useAsync(() => client.belts(), [client])
   const [started, setStarted] = useState(false)
+  const compiler = useCompilerMode(client.mode)
   useEffect(() => { document.title = 'TITLE SHOT — one sentence, one belt' }, [])
   const start = () => { if (!started) { setStarted(true); void sound.music('lobby_loop'); sound.play('intro_1') } }
   const cta = account ? { href: '/play', label: 'Open the belts' } : { href: '/enter', label: 'Enter the ring' }
@@ -39,6 +41,8 @@ export function Landing() {
         <div className="hero-art" aria-hidden="true"><img src="/art/keyart.webp" alt="" /></div>
         <div className="hero-copy">
           <span className="eyebrow">A NEAR game with a real economy · live on testnet</span>
+          {compiler === 'standin' && <span className="chip chip-gold hero-mode">Staging contract: fighters compiled by a labeled stand-in until the NEAR AI key lands</span>}
+          {compiler === 'mock' && <span className="chip hero-mode">Offline demo: simulated chain</span>}
           <h1 className="display hero-title"><span className="print">Title</span> <span className="hero-shot">Shot</span></h1>
           <p className="hero-sub">Write one sentence. An attested AI forges it into a fighter. Pay the toll, fight the champion, take the belt. Lose, and your toll pays the champ.</p>
           <div className="hero-cta">
