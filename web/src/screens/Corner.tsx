@@ -10,6 +10,7 @@ import { useAsync, useGame } from '../game/context'
 import { near } from '../lib/format'
 import { navigate } from '../lib/router'
 import { moveInfo } from '../game/library'
+import { useCompilerMode } from '../game/compiler'
 import './corner.css'
 
 const IDEAS = ['a pigeon with a law degree', 'a toaster that believes it is a dragon', 'a librarian who bans noise', 'a snail with a rocket backpack', 'a ghost who haunts the DMV', 'the north wind in a bad mood']
@@ -24,6 +25,7 @@ export function Corner({ beltId }: { beltId: string }) {
   const [err, setErr] = useState<string | null>(null)
   const [idea, setIdea] = useState(0)
   const lastKey = useRef(0)
+  const compiler = useCompilerMode(client.mode)
   useEffect(() => { void sound.music('lobby_loop') }, [])
   useEffect(() => { const t = setInterval(() => setIdea((i) => (i + 1) % IDEAS.length), 3200); return () => clearInterval(t) }, [])
 
@@ -119,7 +121,11 @@ export function Corner({ beltId }: { beltId: string }) {
                 <p className="corner-note">
                   {preview.canonical
                     ? 'This sentence was already forged on chain, so this is exactly the fighter you will get.'
-                    : 'Free preview from the same model and rulebook. The paid forge runs once inside a TEE and is final; at temperature 0 it almost always matches.'}
+                    : compiler === 'standin'
+                      ? 'Staging preview from the labeled stand-in compiler. The paid forge uses the same stand-in until the NEAR AI key lands; the first paid forge of a sentence is final.'
+                      : compiler === 'mock'
+                        ? 'Offline demo preview. Nothing here touches the chain.'
+                        : 'Free preview from the same model and rulebook. The paid forge runs once inside a TEE and is final; at temperature 0 it almost always matches.'}
                 </p>
               </div>
             </div>
