@@ -90,6 +90,11 @@ describe('the bell cinematic data', () => {
     expect(bell.payouts[2]!.id).toBe(list[2]!.id)
     expect(bell.payouts.every((p, i) => p.id === list[i]!.id)).toBe(true)
   })
+  it('the house NPCs and the promoter appear by persona on the bell', () => {
+    const bell = mapBell(season({ state: 'Closed', final_holder: 'house-b.titleshot.testnet' }), [payout(9, { payee: 'house-b.titleshot.testnet' }), payout(10, { payee: 'vance.titleshot.testnet' })], new Map(), 'vance.titleshot.testnet')!
+    expect(bell.holderName).toBe('Professor Quill')
+    expect(bell.payouts.map((p) => p.name)).toEqual(['Professor Quill', 'Velvet Vance'])
+  })
   it('a season with no bouts marks the promoter row as a refund', () => {
     const bell = mapBell(season({ state: 'Closed', bouts: 0, final_holder: 'vance.titleshot.testnet' }), [payout(9, { payee: 'vance.titleshot.testnet' })], new Map(), 'vance.titleshot.testnet')!
     expect(bell.payouts[0]!.share).toBe('holder') // the promoter is also the final holder

@@ -1,6 +1,7 @@
 // A closed season -> the UI's `Bell` (the purse cinematic). Pure: payout tracking comes in as plain data.
 import type { Bell, PayoutRow } from '../types'
 import { baseTxUrl } from './config'
+import { personaOf } from '../../lib/format'
 import { nsToMs, type RawPayout, type RawSeason } from './views'
 
 export type PayoutStatus = 'claimable' | 'unsigned' | 'signing' | 'signed' | 'sent' | 'mined' | 'reverted'
@@ -18,7 +19,8 @@ const UI_STATUS: Record<PayoutStatus, PayoutRow['status']> = {
 }
 
 /** First DNS label of a NEAR account: "otto-ink.testnet" -> "otto-ink". */
-export const displayName = (account: string): string => account.split('.')[0] ?? account
+/** The house NPCs and the promoter by persona (Mother Ruckus, not house-a); anyone else by the first label of the account. */
+export const displayName = (account: string): string => personaOf(account) ?? account.split('.')[0] ?? account
 
 export function mapBell(season: RawSeason, payouts: RawPayout[], tracks: Map<number, PayoutTrackLite | null>, promoter: string): Bell | null {
   if (season.state !== 'Closed' || !season.final_holder) return null
