@@ -25,8 +25,14 @@ const RELAYER: Partial<Record<ForgeStage, { title: string; sub: string }>> = {
   fight: { title: 'The referee rules', sub: 'Best of three inside the NEAR contract, seeded from the block.' },
 }
 
-export function Forge({ sentence, progress, failed, compiler = 'nearai', forgeMode = 'outlayer' }: { sentence: string; progress: ForgeProgress[]; failed: string | null; compiler?: string; forgeMode?: string }) {
-  const over = compiler === 'standin' ? STANDIN : forgeMode === 'relayer' ? RELAYER : null
+// Until /api/state says which mode is live, claim neither: no OutLayer copy flashes before the relayer copy.
+const NEUTRAL: Partial<Record<ForgeStage, { title: string; sub: string }>> = {
+  tee: { title: 'Forge request posted', sub: 'Your challenge is on chain; the AI compile is on its way.' },
+  fight: { title: 'The referee rules', sub: 'Best of three, run inside the NEAR contract.' },
+}
+
+export function Forge({ sentence, progress, failed, compiler = 'nearai', forgeMode = 'unknown' }: { sentence: string; progress: ForgeProgress[]; failed: string | null; compiler?: string; forgeMode?: string }) {
+  const over = compiler === 'standin' ? STANDIN : forgeMode === 'outlayer' ? null : forgeMode === 'relayer' ? RELAYER : NEUTRAL
   const steps = over ? STEPS.map((s) => ({ ...s, ...(over[s.stage] ?? {}) })) : STEPS
   const [typed, setTyped] = useState(0)
   const [start] = useState(Date.now())

@@ -38,12 +38,15 @@ export function TollBreakdown({ tollYocto, champName, rule }: { tollYocto: strin
   const t = BigInt(tollYocto)
   const fee = 10n ** 22n // 0.01 NEAR forge fee
   const rest = t > fee ? t - fee : 0n
-  const rows: [string, bigint][] = [
-    [`${champName}'s writer (if you lose)`, (rest * 60n) / 100n],
-    ['Promoter (funds purses and openers)', (rest * 25n) / 100n],
-    ['Season side-pot (paid at the bell)', (rest * 10n) / 100n],
-    ['House', rest - (rest * 60n) / 100n - (rest * 25n) / 100n - (rest * 10n) / 100n],
-    ['Forge (NEAR AI compile and delivery)', fee],
+  // Order the contract applies: forge fee, then storage for the bytes this bout keeps (a new fighter costs more than a
+  // cached one; capped at half of what is left), then 60/25/10/5 of the remainder. Storage is known only after the bout.
+  const rows: [string, string][] = [
+    ['Forge (NEAR AI compile and delivery)', near(fee, 4)],
+    ['Storage for what this bout keeps on chain', `up to ${near(rest / 2n, 4)}`],
+    [`${champName}'s writer (if you lose)`, '60% of the rest'],
+    ['Promoter (funds purses and openers)', '25% of the rest'],
+    ['Season side-pot (paid at the bell)', '10% of the rest'],
+    ['House', '5% of the rest'],
   ]
   return (
     <div className="toll panel">
@@ -54,7 +57,7 @@ export function TollBreakdown({ tollYocto, champName, rule }: { tollYocto: strin
       </button>
       {open && (
         <div className="toll-body">
-          <ul>{rows.map(([k, v]) => <li key={k}><span>{k}</span><b className="num">{near(v, 4)}</b></li>)}</ul>
+          <ul>{rows.map(([k, v]) => <li key={k}><span>{k}</span><b className="num">{v}</b></li>)}</ul>
           <p>Win and the belt is yours: from then on every failed challenger's split pays <i>you</i>. A draw keeps the champion. If the forge times out or the AI refuses your sentence, the toll comes back minus the forge fee.</p>
           <p className="toll-rule"><Icon name="lock" size={13} /> Arena rule: {rule ? <><b>{rule.name}</b> · {rule.desc}</> : <>sealed until the first bout of the season. Nobody, the promoter included, knew it when tonight's opener was written.</>}</p>
         </div>

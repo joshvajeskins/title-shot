@@ -84,19 +84,18 @@ export function Landing() {
         <p className="sec-sub">No token, no emissions, no faucet. Closed seasons, funded up front. The champion is paid for being the target.</p>
         <div className="money-grid">
           <div className="money-card panel">
-            <span className="eyebrow">Every challenge · {near('50000000000000000000000')} NEAR toll</span>
-            <div className="split-bar" role="img" aria-label="Toll split">
-              <span style={{ flexGrow: 48 }} className="sb-champ">Champion 48%</span>
-              <span style={{ flexGrow: 20 }} className="sb-prom">Promoter</span>
-              <span style={{ flexGrow: 20 }} className="sb-forge">Forge</span>
-              <span style={{ flexGrow: 8 }} className="sb-pot">Pot</span>
-              <span style={{ flexGrow: 4 }} className="sb-house">House</span>
+            <span className="eyebrow">Every challenge · {near('50000000000000000000000')} NEAR toll · what's left after the forge and storage</span>
+            <div className="split-bar" role="img" aria-label="Split of the toll after the forge fee and storage">
+              <span style={{ flexGrow: 60 }} className="sb-champ">Champion 60%</span>
+              <span style={{ flexGrow: 25 }} className="sb-prom">Promoter 25%</span>
+              <span style={{ flexGrow: 10 }} className="sb-pot">Pot</span>
+              <span style={{ flexGrow: 5 }} className="sb-house">House</span>
             </div>
             <ul className="money-list">
-              <li><b>48%</b> to the champion's holder, win or lose: they are the target.</li>
-              <li><b>20%</b> to the promoter who funded the purse and wrote the opener.</li>
-              <li><b>20%</b> forge fee (0.01 NEAR): the AI compile and its delivery, at cost.</li>
-              <li><b>8%</b> into the season side-pot, paid at the bell. <b>4%</b> to the house.</li>
+              <li>First <b>0.01 NEAR</b> pays the forge (the AI compile and its delivery, at cost), then the bytes the bout keeps on chain: more for a brand-new fighter, never more than half of what's left.</li>
+              <li><b>60%</b> of the rest to the champion's holder, win or lose: they are the target.</li>
+              <li><b>25%</b> to the promoter who funded the purse and wrote the opener.</li>
+              <li><b>10%</b> into the season side-pot, paid at the bell. <b>5%</b> to the house.</li>
             </ul>
           </div>
           <div className="money-card panel">
