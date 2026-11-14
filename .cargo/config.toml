@@ -1,6 +1,7 @@
-# ~/Documents/agents/bin/ar (a fleet script) shadows the system archiver on this Mac's PATH.
+# ~/Documents/agents/bin held fleet scripts named ar/as that shadow system tools (ar is now renamed fleet-ar).
 # Pin the archiver so cc-based build scripts never execute it.
 [env]
+AS = "/usr/bin/as"
 AR = "/usr/bin/ar"
 AR_aarch64_apple_darwin = "/usr/bin/ar"
 AR_wasm32_unknown_unknown = "/usr/bin/ar"
