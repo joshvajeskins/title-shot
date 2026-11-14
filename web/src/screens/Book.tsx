@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Icon } from '../components/Icon'
 import { Link } from '../components/Link'
 import { useAsync, useGame } from '../game/context'
-import { ago, near, shortAccount } from '../lib/format'
+import { ago, near, shortAccount, shortHex } from '../lib/format'
 import './pages.css'
 
 export function Book() {
@@ -12,6 +12,11 @@ export function Book() {
   const belts = useAsync(() => client.belts(), [client])
   const hist = useAsync(() => client.history(belt === 'all' ? undefined : belt), [client, belt])
   const rows = (hist.data ?? []).filter((r) => !mine || r.challenger === account?.id || r.champion === account?.id)
+  // Title shots bought on Base over x402 (functions/api/boxoffice/recent): the corner account → who paid on Base.
+  const base = useAsync(() => (client.mode === 'mock' ? Promise.resolve(new Map<string, string>()) : fetch('/api/boxoffice/recent')
+    .then((r) => (r.ok ? r.json() : { bookings: [] }))
+    .then((j: { bookings?: { guest: string; payer: string; payerName: string | null }[] }) => new Map((j.bookings ?? []).map((b) => [b.guest, b.payerName ?? shortHex(b.payer)] as const)))
+    .catch(() => new Map<string, string>())), [client])
   const counts = { all: hist.data?.length ?? 0, won: (hist.data ?? []).filter((r) => r.winner === 1).length }
   return (
     <div className="page pages">
@@ -51,7 +56,7 @@ export function Book() {
               <Link href={`/play/bout/${r.id}`} className="book-row">
                 <span className={`book-result res-${r.winner}`}>{r.winner === 1 ? 'New champ' : r.winner === 2 ? 'Draw' : 'Defended'}</span>
                 <span className="book-names"><b>{r.challengerName}</b> <i>vs</i> <b>{r.championName}</b></span>
-                <span className="book-meta">{shortAccount(r.challenger)} · {near(r.tollYocto)} NEAR toll · {ago(r.at)}</span>
+                <span className="book-meta">{base.data?.get(r.challenger) ? <span className="book-chip">from Base · {base.data.get(r.challenger)}</span> : null}{shortAccount(r.challenger)} · {near(r.tollYocto)} NEAR toll · {ago(r.at)}</span>
                 <Icon name="arrow" size={16} />
               </Link>
             </li>

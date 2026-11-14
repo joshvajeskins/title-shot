@@ -34,6 +34,7 @@
 .book-names { grid-area: names; font-size: 15px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .book-names i { color: var(--paper-faint); font-style: normal; margin: 0 4px; }
 .book-meta { grid-area: meta; font-size: 11.5px; color: var(--paper-faint); }
+.book-chip { display: inline-block; margin-right: 8px; padding: 1px 7px; border-radius: 4px; background: var(--blue-deep); color: var(--paper); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em; }
 
 /* promoter */
 .vance { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: center; }

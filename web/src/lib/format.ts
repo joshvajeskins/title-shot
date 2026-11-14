@@ -28,7 +28,17 @@ export function eth(wei: string | bigint, dp = 4): string {
   try { return fixed(BigInt(wei), WEI, dp) } catch { return '0' }
 }
 
+/** The game's own NPC accounts, shown by persona (web/functions/_lib/houseNpcs.ts holds the house NPCs' bios). */
+const PERSONAS: Record<string, string> = {
+  'vance.titleshot.testnet': 'Velvet Vance',
+  'house-a.titleshot.testnet': 'Mother Ruckus',
+  'house-b.titleshot.testnet': 'Professor Quill',
+}
+export const personaOf = (id: string): string | null => PERSONAS[id] ?? null
+
 export function shortAccount(id: string): string {
+  const persona = PERSONAS[id]
+  if (persona) return persona
   if (id.length <= 22) return id
   if (/^[0-9a-f]{64}$/.test(id)) return id.slice(0, 6) + '…' + id.slice(-4)
   const parts = id.split('.')
