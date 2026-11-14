@@ -27,6 +27,9 @@ export function PayoutAddressDialog({ onClose, claim }: { onClose: () => void; c
   const [state, setState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const [msg, setMsg] = useState<string | null>(null)
   const link = useWalletLink(account?.id ?? null)
+  // No wallet in this browser (a judge, a screener): open on the paste path instead of a dead end, unless the user picked a tab.
+  const [picked, setPicked] = useState(false)
+  useEffect(() => { if (!picked && !link.discovering && link.wallets.length === 0) setPath('paste') }, [picked, link.discovering, link.wallets.length])
   const supported = typeof (claim ? c.claimPayout : c.setPayoutAddress) === 'function'
   const input = useMemo(() => parsePayoutInput(value), [value])
   const key = inputKey(input)
@@ -46,7 +49,7 @@ export function PayoutAddressDialog({ onClose, claim }: { onClose: () => void; c
   const onFile = claim ? null : current
   const target = path === 'wallet' ? (linked && !same(linked, onFile) ? linked : null) : saveTarget(input, lookup, onFile)
   const shown = lookup.state === 'resolved' && lookup.key === key ? lookup : null
-  const choose = (p: Path) => { setPath(p); setState('idle'); setMsg(null) }
+  const choose = (p: Path) => { setPicked(true); setPath(p); setState('idle'); setMsg(null) }
   const save = async () => {
     if (!target || !(claim ? c.claimPayout : c.setPayoutAddress)) return
     setState('saving'); setMsg(null)
