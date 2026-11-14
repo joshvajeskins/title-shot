@@ -41,7 +41,7 @@ export function Intro({ fight, beltArt, beltName, onDone }: { fight: Fight; belt
         <div className="intro-vs display print">VS</div>
         <div className="intro-side intro-right">
           <FighterPoster fighter={fight.challenger} corner="chall" size="lg" tilt={3} />
-          {fromBase ? <span className="intro-base">Booked on Base · x402 · {fromBase}</span> : null}
+          {fromBase ? <span className="intro-base">Booked on Base · x402 · <span className="intro-base-payer">{fromBase}</span></span> : null}
         </div>
       </div>
       <div className="intro-rule"><span className="eyebrow">Arena rule</span> <b>{fight.rule.name}</b> · {fight.rule.desc}</div>

@@ -12,6 +12,7 @@
 .intro-side { display: grid; justify-items: center; }
 .intro-side .poster { --w: clamp(140px, 30vw, 340px); }
 .intro-base { margin-top: 14px; padding: 5px 10px; border-radius: 4px; background: var(--blue-deep); box-shadow: 0 0 0 1px var(--blue) inset; color: var(--paper); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; transform: rotate(2deg); white-space: nowrap; max-width: 92vw; overflow: hidden; text-overflow: ellipsis; }
+.intro-base-payer { text-transform: none; }
 .intro-left { animation: intro-left 700ms var(--ease-out) both 150ms; }
 .intro-right { animation: intro-right 700ms var(--ease-out) both 2900ms; }
 @keyframes intro-left { from { opacity: 0; transform: translateX(-60vw) rotate(-8deg); } }
