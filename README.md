@@ -63,7 +63,7 @@ after 10 minutes and anyone can refund it (toll back minus the forge fee).
 | The contract refuses cheats | tampered fighter [Cnmh5urE…](https://testnet.nearblocks.io/txns/Cnmh5urEDPyC7ouKdy4oxcc7P8FomCR9yTxaymqge6Qq), swapped sentence [DQDXgmeD…](https://testnet.nearblocks.io/txns/DQDXgmeDByFuvrzo4ffQFbsKPAvRUhJnesq9bhPFBPBQ), unknown signer [5EZFVkNE…](https://testnet.nearblocks.io/txns/5EZFVkNEDxREDkty5bmNHfLZgrgTujJ1fjoACuvDnmiJ) (all `E_AI_SIG`, toll refunded minus fee and storage), replay [9zxVTFWD…](https://testnet.nearblocks.io/txns/9zxVTFWDUzcdsk1eW3L4VwdRox4d41hk5AUjoejSxYqS) (`E_NOT_FORGING`). See [docs/CHEAT-RESULTS.md](docs/CHEAT-RESULTS.md). |
 | A NEAR account owns a Base name through Chain Signatures | `velvetvance.basetest.eth`: MPC sign [EU8Zyc9c…](https://testnet.nearblocks.io/txns/EU8Zyc9coX2GBXrrotCqkKjUpj1DayDqJwpA1LetpZk7) → Base [0x60181a7b…](https://sepolia.basescan.org/tx/0x60181a7bc1519285d64938791b20f10fa9917ebee4633a346fdc119ad967ef0b) |
 | The allowlisted signer is NEAR AI's attested key | `node scripts/verify-attestation.mjs`: 7/7 PASS live; `--offline` from the recorded report in `vectors/`. See [docs/ATTESTATION.md](docs/ATTESTATION.md). |
-| A NEAR contract signs a Base payout through Chain Signatures and it mines | spike: [NEAR 5YRNw3d1…](https://testnet.nearblocks.io/txns/5YRNw3d1SehmYN4373RYA9pGka8wHMryKKmtwxa3jfBZ) → [Base 0xdcf99b7f…](https://sepolia.basescan.org/tx/0xdcf99b7fcd1b987daca12ccc691b020eb78109b261276f186ea60a7380cfc741). The production contract's first season bells ring at about 12:38 UTC on 14 Nov. |
+| A NEAR contract signs a Base payout through Chain Signatures and it mines | Tide Belt season 3 bell: [close_season ENpMwjn2…](https://testnet.nearblocks.io/txns/ENpMwjn28rh4N5VQv26sFVu12gjwjvKxCywbRL8QcoL2) → [sign_payout 5Rd6vz22…](https://testnet.nearblocks.io/txns/5Rd6vz22Lr2pz56kuNZ7PnE1BGFZZVs3ijK1xm5mEeRf) (payout 7: one defence's share to the bout #10 writer) → [Base 0xb1fff6c2…](https://sepolia.basescan.org/tx/0xb1fff6c2c102349ab3f2935b0d4977720762b1be93e0efbfb5a9b690ed1c5e6d), sent from the season's derived purse to `ringside-agent.basetest.eth`. All 8 payouts of the first three bells mined ([Midnight](https://testnet.nearblocks.io/txns/9XejLYWvj1vYM9X1zqYo7GSfiSaUqB6eQcK8yqBNJC75): 3, Tide: 4, [Wildcard](https://testnet.nearblocks.io/txns/2yiC2K7TcDkmPCNWbjv33H81bkQHaWWcj2uHTnrmXtHU): 1 → [Base 0x749bc902…](https://sepolia.basescan.org/tx/0x749bc90298d05929b7cba2a44bb9fabe500d3a2d082a1a2729810109b268bdc5)). |
 
 ## Which NEAR pieces do what
 
@@ -130,6 +130,9 @@ pure-dice baseline of 0.028: wording matters more than luck.
 - "Exactly once" is not claimed: only the first delivered result per challenge counts, and the first settled compile of a
   sentence is final, so a re-delivery can never change a fighter.
 - The promoter's Base wallet is pre-funded with test ETH; there is no testnet route to swap its NEAR income into purses.
+- One payout needed a hand top-up. The contract signs value + gas × max fee = the purse, but every Base tx also pays an
+  L1 data fee, so the Wildcard Belt's single 100% payout was refused as "insufficient funds" until we sent its purse
+  0.00001 test ETH. Purses now carry that reserve on top of the declared amount (`web/functions/_lib/purse.ts`).
 - Testnet only. Testnet NEAR, Sepolia ETH and test USDC have no value.
 
 ## Tests
