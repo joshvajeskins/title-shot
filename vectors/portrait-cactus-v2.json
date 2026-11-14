@@ -1,0 +1,26 @@
+{
+ "sentence": "a cactus who runs a lemonade stand in a heatwave",
+ "prompt": "Cartoon mascot character, a single non-human character with its own face, eyes and expressive pose; its whole body IS the subject described here: A green barrel cactus wearing a tiny sun-faded apron and paper lemonade hat, holding a sweating pitcher of lemonade, one spine raised like a straw, blazing yell No people, no humans, no human faces. Bust portrait, three-quarter view facing right, chest-up, centered, plain flat vermilion background. Bold vintage fight-poster illustration: confident ink linework, flat colour shapes, coarse halftone dot shading, warm paper grain. Limited palette: ink black, cream, vermilion red, brass gold. No text, no letters, no logos.",
+ "seed": 3156806331,
+ "id": "f60ffa12-71d1-4a02-8a53-64744424355e",
+ "keys": [
+  "id",
+  "created",
+  "data",
+  "usage"
+ ],
+ "usage": null,
+ "usd": 0.012,
+ "latency_ms": 1850,
+ "bytes": 107736,
+ "signature": {
+  "status": 200,
+  "body": {
+   "text": "black-forest-labs/FLUX.2-klein-4B:f46c11bdd1b761a682a8bc14e2f23e6c9c67ae51e9443fcd1496dc8c28ce0a0a:ec7f513a36303ca73385590566690e7bab15820d8ef93a003d074640de78b5bc",
+   "signature": "0x0c6db68f3bfe6c44032ca5fe2d7b3c3e30aca7e1fac1964805b6767eaa2447390335014aaa4ce7d3f92a61b31a5f9b067ba2694f0ed45dd973ee58fd365f85711c",
+   "signing_address": "0x98a43dfc25d22e12e774c218cc2051f2e480a803",
+   "signing_algo": "ecdsa",
+   "signature_kind": "provider_tee"
+  }
+ }
+}

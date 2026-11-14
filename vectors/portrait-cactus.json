@@ -1,0 +1,26 @@
+{
+ "sentence": "a cactus who runs a lemonade stand in a heatwave",
+ "prompt": "A green barrel cactus wearing a tiny sun-faded apron and paper lemonade hat, holding a sweating pitcher of lemonade, one spine raised like a straw, blazing yell Bust portrait, three-quarter view facing right, chest-up, centered, plain flat vermilion background. Bold vintage fight-poster illustration: confident ink linework, flat colour shapes, coarse halftone dot shading, warm paper grain. Limited palette: ink black, cream, vermilion red, brass gold. No text, no letters, no logos.",
+ "seed": 3156806331,
+ "id": "128e0588-3b01-4bc6-8dbc-08f70ed38c4a",
+ "keys": [
+  "id",
+  "created",
+  "data",
+  "usage"
+ ],
+ "usage": null,
+ "usd": 0.012,
+ "latency_ms": 16874,
+ "bytes": 117423,
+ "signature": {
+  "status": 200,
+  "body": {
+   "text": "black-forest-labs/FLUX.2-klein-4B:91df0c9367b08b5397752080b92acf8c217a00cedec82f532316e26dc5e6339c:a837521ef3585b04558bd46d38180f99b3dd25df253af7046f1327f03d1d3672",
+   "signature": "0x480456109b803dd17729608ae812ca24945ef7cc140cf7da6d3af8a2796e790b596fe8166f05e60a108b3f6d8dff17208a90fddd53a7d835c3c61da42a6acdcd1b",
+   "signing_address": "0x98a43dfc25d22e12e774c218cc2051f2e480a803",
+   "signing_algo": "ecdsa",
+   "signature_kind": "provider_tee"
+  }
+ }
+}
