@@ -38,10 +38,14 @@
 .loop p { margin: 0; color: var(--paper-dim); font-size: 13px; line-height: 1.55; }
 .loop-art { height: 180px; display: grid; place-items: center; border-radius: 12px; overflow: hidden; background: radial-gradient(70% 70% at 50% 50%, rgba(232, 64, 44, 0.16), transparent 70%); }
 .loop-art img { max-height: 160px; width: auto; filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.6)); }
-.loop-write { padding: 16px; transform: rotate(-1.5deg); place-items: center start; color: var(--on-paper); font-size: 24px; background-size: 300px; }
+/* The sentence slip: paper texture must beat .loop-art's glow, or dark ink lands on a dark card. */
+.loop-art.loop-write { height: auto; min-height: 120px; margin: 30px 10px; padding: 18px 20px; transform: rotate(-1.5deg); place-items: center start; color: var(--on-paper); font-size: 24px; line-height: 1.2; background: var(--paper) url('/art/paper-texture.webp'); background-size: 300px; box-shadow: var(--shadow-card); }
+.loop-write span::after { content: ''; display: inline-block; width: 2px; height: 0.9em; margin-left: 3px; vertical-align: -0.1em; background: var(--red); animation: write-caret 1s steps(1) infinite; }
+@keyframes write-caret { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .loop-write span::after { animation: none; } }
 .loop-fight { display: flex; justify-content: center; gap: 0; }
 .loop-fight .poster { --w: 104px; margin: 0 -6px; }
-.loop-fight .poster-name { font-size: 13px; }
+.loop-fight .poster-name { font-size: 10.5px; letter-spacing: 0; }
 
 .money-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
 @media (min-width: 900px) { .money-grid { grid-template-columns: 1.2fr 1fr; } }

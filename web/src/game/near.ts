@@ -229,7 +229,7 @@ export class NearClient implements GameClient {
     }
     if (tx) this.challengeTx.set(id, tx)
     onProgress({ stage: 'toll', note: `${formatNear(toll)} NEAR toll paid from your balance`, ...(tx ? { receipt: { label: 'challenge', tx, url: txUrl(tx) } } : {}) })
-    onProgress({ stage: 'tee', note: 'OutLayer TEE worker picked up the forge' })
+    onProgress({ stage: 'tee', note: 'Forge request is on chain' })
     const fightId = await this.awaitForge(id, { toll, balance }, onProgress)
     const fight = await this.fight(String(fightId))
     onProgress({ stage: 'fight', note: fight.verified ? 'Bout resolved on chain and replayed here: hashes match' : 'Bout resolved on chain' })

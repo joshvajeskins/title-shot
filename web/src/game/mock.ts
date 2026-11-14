@@ -113,7 +113,7 @@ export class MockClient implements GameClient {
     const pv = await this.preview(sentence)
     const fake = (n: number) => ({ label: '', tx: `mock${n}${Date.now().toString(36)}`, url: '#' })
     onProgress({ stage: 'toll', note: '0.1 NEAR toll paid from your balance', receipt: { ...fake(1), label: 'challenge' } })
-    await sleep(1200); onProgress({ stage: 'tee', note: 'OutLayer TEE worker picked up the forge' })
+    await sleep(1200); onProgress({ stage: 'tee', note: 'Forge request is on chain' })
     await sleep(2200); onProgress({ stage: 'compile', note: 'NEAR AI compiled your sentence (signed)' })
     await sleep(1600); onProgress({ stage: 'verify', note: 'Contract checked the AI signature and the budget' })
     await sleep(900)

@@ -78,19 +78,19 @@ export function Landing() {
         <p className="sec-sub">No token, no emissions, no faucet. Closed seasons, funded up front. The champion is paid for being the target.</p>
         <div className="money-grid">
           <div className="money-card panel">
-            <span className="eyebrow">Every challenge · {near('100000000000000000000000')} NEAR toll</span>
+            <span className="eyebrow">Every challenge · {near('50000000000000000000000')} NEAR toll</span>
             <div className="split-bar" role="img" aria-label="Toll split">
-              <span style={{ flexGrow: 54 }} className="sb-champ">Champion 54%</span>
-              <span style={{ flexGrow: 22.5 }} className="sb-prom">Promoter</span>
-              <span style={{ flexGrow: 10 }} className="sb-forge">Forge</span>
-              <span style={{ flexGrow: 9 }} className="sb-pot">Pot</span>
-              <span style={{ flexGrow: 4.5 }} className="sb-house">House</span>
+              <span style={{ flexGrow: 48 }} className="sb-champ">Champion 48%</span>
+              <span style={{ flexGrow: 20 }} className="sb-prom">Promoter</span>
+              <span style={{ flexGrow: 20 }} className="sb-forge">Forge</span>
+              <span style={{ flexGrow: 8 }} className="sb-pot">Pot</span>
+              <span style={{ flexGrow: 4 }} className="sb-house">House</span>
             </div>
             <ul className="money-list">
-              <li><b>54%</b> to the champion's holder, win or lose: they are the target.</li>
-              <li><b>22.5%</b> to the promoter who funded the purse and wrote the opener.</li>
-              <li><b>10%</b> forge fee: the enclave run and the AI call, at cost.</li>
-              <li><b>9%</b> into the season side-pot, paid at the bell. <b>4.5%</b> to the house.</li>
+              <li><b>48%</b> to the champion's holder, win or lose: they are the target.</li>
+              <li><b>20%</b> to the promoter who funded the purse and wrote the opener.</li>
+              <li><b>20%</b> forge fee (0.01 NEAR): the AI compile and its delivery, at cost.</li>
+              <li><b>8%</b> into the season side-pot, paid at the bell. <b>4%</b> to the house.</li>
             </ul>
           </div>
           <div className="money-card panel">
@@ -120,7 +120,7 @@ export function Landing() {
           <h3 className="display">What we don't claim</h3>
           <ul>
             <li>The model and rulebook are public, so anyone can search for strong sentences offline, bots included. The season's arena rule stays sealed only until the first bout (a referee on chain can't fight under a secret rule), so it blunts pre-season search; the defence-weighted purse and the per-account cap blunt the rest. None of it stops search outright.</li>
-            <li>The contract checks each AI signature against signer addresses the owner copied from the model's attestation report; it does not verify the hardware quote itself. Changes to that list are timelocked and public.</li>
+            <li>The contract checks each AI signature against an allowlist set by the owner and changed only behind a public timelock. The contract does not verify NEAR AI's hardware quote itself; <code>scripts/verify-attestation.mjs</code> does (Intel TDX quote, GPU evidence, booted code) and confirms the attested signer is the one on the allowlist.</li>
             <li>The promoter's Base wallet is pre-funded with test ETH. Its NEAR income is not converted into purses on testnet; that would need a mainnet swap route.</li>
             <li>This runs on NEAR testnet and Base Sepolia. Testnet tokens have no cash value.</li>
           </ul>
