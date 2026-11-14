@@ -7,7 +7,7 @@ WB_VERSION="0.2.130"   # must equal the pinned `wasm-bindgen = "=..."` in Cargo.
 
 WB="${WASM_BINDGEN:-}"
 if [ -z "$WB" ]; then
-  for c in "$(command -v wasm-bindgen || true)" "$HOME/.cargo/bin/wasm-bindgen" "/private/tmp/claude-501/wbroot/bin/wasm-bindgen"; do
+  for c in "$(command -v wasm-bindgen || true)" "$HOME/.cargo/bin/wasm-bindgen"; do
     if [ -n "$c" ] && [ -x "$c" ] && "$c" --version | grep -q "$WB_VERSION"; then WB="$c"; break; fi
   done
 fi
@@ -17,7 +17,7 @@ if [ -z "$WB" ]; then
   WB="$HOME/.cargo/bin/wasm-bindgen"
 fi
 rustup target add wasm32-unknown-unknown >/dev/null 2>&1 || true
-# Strip this machine's paths from panic messages: no home directory in the wasm, and the same bytes on any machine.
+# Strip this machine's paths from panic messages, so no home directory ships in the wasm.
 REPO_ROOT="$(cd ../.. && pwd)"   # this script already cd-ed into crates/bout-sim/
 export RUSTFLAGS="${RUSTFLAGS:-} --remap-path-prefix=$HOME/.cargo/registry/src=/cargo/registry/src --remap-path-prefix=$HOME/.rustup=/rustup --remap-path-prefix=$REPO_ROOT=/titleshot"
 

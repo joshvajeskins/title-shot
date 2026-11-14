@@ -4,7 +4,7 @@
 # in the environment (they are in .env.local: `set -a; . ./.env.local; set +a`). Not run by the worker lane.
 set -euo pipefail
 cd "$(dirname "$0")/../web"
-export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang
+if [ "$(uname)" = Darwin ]; then export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang; fi   # macOS: pin the system ar/clang
 W="pnpm exec wrangler"
 PROJECT=title-shot
 

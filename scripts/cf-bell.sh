@@ -5,7 +5,7 @@
 # Needs CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID in the environment (`set -a; . ./.env.local; set +a`).
 set -euo pipefail
 cd "$(dirname "$0")/.."
-export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang
+if [ "$(uname)" = Darwin ]; then export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang; fi   # macOS: pin the system ar/clang
 W="$PWD/web/node_modules/.bin/wrangler"   # run inside worker-bell/ so its own wrangler.toml applies
 envv() { sed -n "s/^$1=//p" .env.local 2>/dev/null | head -1 | tr -d '"'; }
 TICK=${TICK_SECRET:-$(envv TICK_SECRET)}

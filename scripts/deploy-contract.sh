@@ -43,8 +43,7 @@ case "$ACCOUNT" in *.titleshot.testnet) ;; *) echo "account must be a sub-accoun
 [[ "$FUND" =~ ^[0-9]+(\.[0-9]+)?$ ]] || { echo "--fund <NEAR> is required and must be a plain number (for example 8)" >&2; exit 2; }
 [ -x "$NEAR" ] || { echo "near-cli-rs not found at $NEAR" >&2; exit 1; }
 [ -f "$WASM" ] || { echo "$WASM missing: run contract/build.sh first" >&2; exit 1; }
-export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang
-
+if [ "$(uname)" = Darwin ]; then export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang; fi   # macOS: pin the system ar/clang
 # Print a command with each argument quoted so it can be pasted; run it unless --dry-run.
 show() { local o="+"; for a in "$@"; do case "$a" in *[!A-Za-z0-9_./:=@,+-]*|"") o+=" '${a//\'/\'\\\'\'}'" ;; *) o+=" $a" ;; esac; done; echo "$o"; }
 run() { if [ "$DRY" = 1 ]; then show "$@"; else show "$@" | cut -c1-400; "$@"; fi; }

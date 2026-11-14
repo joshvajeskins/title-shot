@@ -23,8 +23,8 @@ rings, the NEAR contract pays the purse out on Base Sepolia through Chain Signat
 | Win, or watch someone win | The belt (an NEP-171 token) moves to the winner's account in the same transaction. |
 | Open **Tale of the tape** | The deployed code hash equals `sha256(contract/res/titleshot.wasm)`, the AI signer allowlist, solvency, each season's Base purse address and balance. |
 | Read [docs/CHEAT-RESULTS.md](docs/CHEAT-RESULTS.md) | A tampered fighter, a swapped sentence, an unknown signer and a replay, each refused on testnet with its transaction. |
-| Run `node scripts/verify-attestation.mjs --offline` | The allowlisted signer is NEAR AI's attested enclave key: Intel TDX quote, GPU evidence and booted code checked. |
-| Open bout [#6](https://title-shot.pages.dev/play/bout/6), or run `node scripts/x402-agent.mjs --belt 1 --sentence "…" --dry-run` | An AI agent bought that title shot on Base with USDC over x402: the announcer calls "a challenger… from Base!" and the poster is tagged "Booked on Base". The dry run shows the 402 → signed payment flow without paying. |
+| Run `node scripts/verify-attestation.mjs --offline` (install its two packages first: [docs/ATTESTATION.md](docs/ATTESTATION.md)) | The allowlisted signer is NEAR AI's attested enclave key: Intel TDX quote, GPU evidence and booted code checked against a report recorded on 14 Nov. Expected: `PASS OFFLINE (6/7)`, since nonce freshness needs a live run. "Offline" means no NEAR AI call; it still fetches Intel and NVIDIA collateral and reads the testnet allowlist. |
+| Open bout [#6](https://title-shot.pages.dev/play/bout/6), or run `(cd web && pnpm i)` then `node scripts/x402-agent.mjs --belt 1 --sentence "…" --dry-run` | An AI agent bought that title shot on Base with USDC over x402: the announcer calls "a challenger… from Base!" and the poster is tagged "Booked on Base". The dry run shows quote → 402 → signed EIP-3009 payment → the facilitator's `/verify` verdict without paying. With no key set it signs with a throwaway key, so `/verify` reports that key's empty balance. |
 
 ## How one challenge works
 
@@ -106,9 +106,9 @@ after 10 minutes and anyone can refund it (toll back minus the forge fee).
 
 `cargo run --release --bin sweep` in `crates/bout-sim` runs ~24M fights over 2,040 fighters × 8 arena rules, then an
 adversarial hill-climb that searches for the strongest build and re-measures it on fresh seeds and opponents. All nine gates
-pass (`crates/bout-sim/SWEEP.md`): best fighter in the field 59.4%, best optimizer-found build 61.5% (62.2% in the deepest
-climb), every top build has a counter that beats it ≥55%, draw rate 5.0%, mean |p−0.5| between random builds 0.149 vs a
-pure-dice baseline of 0.028: wording matters more than luck.
+pass (`crates/bout-sim/SWEEP.md`): best fighter in the field 59.4%, best optimizer-found build 61.5%, every top build has a
+counter that beats it ≥55%, draw rate 5.0%, mean |p−0.5| between random builds 0.149 vs a pure-dice baseline of 0.028:
+wording matters more than luck.
 
 ## What we do not claim
 
@@ -121,7 +121,7 @@ pure-dice baseline of 0.028: wording matters more than luck.
   and the fight seed comes from the block, not a VRF. The contract switched modes through its public timelock
   ([6NMKEJNf…](https://testnet.nearblocks.io/txns/6NMKEJNfQsMhYBd2skkkex9haRWeNebGXHWWzZhpWfFt)).
 - The model and rulebook are public, so anyone can search for strong sentences offline, bots included. Our own hill-climb
-  shows how far that gets you (about 62% against the field, and every such build has a counter). The x402 box office makes
+  shows how far that gets you (61.5% against the field, and every such build has a counter). The x402 box office makes
   such bots pay the champion like everyone else.
 - The contract checks AI signatures against an owner-set, timelocked allowlist. It does not verify the hardware quote itself;
   `scripts/verify-attestation.mjs` does that off chain.
@@ -141,36 +141,40 @@ pure-dice baseline of 0.028: wording matters more than luck.
 |---|---|---|
 | Rules + referee (`crates/bout-sim`) | 53 + 9 balance gates | `cargo test --release`, `cargo run --release --bin sweep` |
 | Contract unit | 60 | `cd contract && cargo test --lib` |
-| Contract sandbox (real wasm, mock OutLayer + MPC signer) | 68 (run on the 14 Nov 13:00 build; the only contract change since is a read-only view with a unit test) | `cd contract/it && ./run.sh` |
+| Contract sandbox (real wasm, mock OutLayer + MPC signer) | 68, run on the deployed wasm (about 13 min; the first run downloads the near-sandbox binary) | `cd contract/it && ./run.sh` |
 | Forge (host + inside wasm) | 20 | `cd forge && cargo test --lib` |
-| Web client + Pages Functions | 610 | `cd web && pnpm test` |
+| Web client + Pages Functions | 612 | `cd web && pnpm test` |
 | Recorded NEAR AI signatures | 44/44 | `cd spikes/ecrecover && node scripts/verify-offline.mjs` |
 
 ## Reproduce
 
-Prerequisites: Rust 1.86 (`rust-toolchain.toml` pins it per crate), `cargo-near`, Node 22+, pnpm. All crates share one
-target directory (`.cargo/config.toml`).
+Prerequisites: Rust (the contract and its mocks pin 1.86.0 in `rust-toolchain.toml`; the other crates use stable),
+`cargo-near` 0.17, `wasm-bindgen-cli` 0.2.130 (`build-web.sh` installs it if missing), binaryen's `wasm-opt`, Node 22+,
+pnpm. All crates share one target directory (`.cargo/config.toml`). Every block below starts from the repo root.
 
 ```sh
+# the deployed contract: the committed wasm hashes to the code hash on chain and on the proof page
+shasum -a 256 contract/res/titleshot.wasm             # 843869206ec5c38e…f88333 (check this before build.sh overwrites it)
+
 # shared rules + referee (no network)
-cd crates/bout-sim && cargo test --release && cargo run --release --bin sweep
-./build-web.sh && node scripts/replay-golden.mjs     # wasm replays 20 golden fights with identical hashes
+(cd crates/bout-sim && cargo test --release && cargo run --release --bin sweep)
+(cd crates/bout-sim && ./build-web.sh && node scripts/replay-golden.mjs)   # wasm replays 20 golden fights, identical hashes
 
-# contract: unit + sandbox tests (no network; mock OutLayer and mock MPC signer)
-cd contract && ./build.sh && cargo test --lib && (cd it && ./run.sh)
-shasum -a 256 res/titleshot.wasm                      # equals the deployed code hash on the proof page
+# contract: unit + sandbox tests (mock OutLayer and mock MPC signer; the first sandbox run downloads near-sandbox)
+(cd contract && ./build.sh && cargo test --lib && cd it && ./run.sh)
 
-# AI signatures and attestation, offline
-cd spikes/ecrecover && npm i && node scripts/verify-offline.mjs
-node scripts/verify-attestation.mjs --offline
+# AI signatures (recorded, 44 checks) and attestation (install its two packages first: docs/ATTESTATION.md)
+(cd spikes/ecrecover && npm i && node scripts/verify-offline.mjs)
+node scripts/verify-attestation.mjs --offline           # PASS OFFLINE (6/7): nonce freshness needs a live run
 
 # web + API
-cd web && pnpm i && pnpm test && pnpm build
+(cd web && pnpm i && pnpm test && pnpm build)
 ```
 
-The committed `contract/res/titleshot.wasm` is the deployed contract (sha256 `84386920…f88333`). `build.sh` remaps the home,
-toolchain and repo paths out of the binary, so the same source rebuilds to the same bytes on another machine with the
-same tools: Rust 1.86.0, cargo-near 0.17.0 and wasm-opt 133.
+`build.sh` remaps home and toolchain paths out of the binary, so no machine path ships in it. Rebuilds are not
+byte-identical (cargo hashes build metadata, including the `bout-sim` path dependency's location, into the binary; two
+builds differ in a few hundred bytes), so the committed wasm is the reference: it is the file deployed, and its sha256 is
+the code hash on chain.
 
 ## Deployed accounts (testnet)
 

@@ -15,7 +15,7 @@ import { pathToFileURL } from 'node:url'
 
 const require = createRequire(new URL('../web/package.json', import.meta.url))
 const { createPublicClient, http, getAddress, toHex, parseAbi, formatUnits } = require('viem')
-const { privateKeyToAccount } = require('viem/accounts')
+const { privateKeyToAccount, generatePrivateKey } = require('viem/accounts')
 const { baseSepolia } = require('viem/chains')
 
 export const NETWORK = 'eip155:84532'
@@ -100,7 +100,10 @@ async function nearView(contract, method, a) {
 
 async function main() {
   const o = args(process.argv.slice(2))
-  const account = privateKeyToAccount(readKey(o.keyFile))
+  // --dry-run needs no funded key: with none configured it signs with a throwaway key, so anyone can watch the 402 flow
+  let key
+  try { key = readKey(o.keyFile) } catch (e) { if (!o.dryRun) throw e; key = generatePrivateKey(); say('dry-run', 'no key configured: signing with a throwaway key (it holds no USDC, so /verify will say so)') }
+  const account = privateKeyToAccount(key)
   const base = createPublicClient({ chain: baseSepolia, transport: http() })
 
   const q = await (await fetch(`${o.url}/api/boxoffice/quote?belt=${o.belt}`)).json()
@@ -129,7 +132,11 @@ async function main() {
 
   const bal = await base.readContract({ address: USDC, abi: parseAbi(['function balanceOf(address) view returns (uint256)']), functionName: 'balanceOf', args: [account.address] })
   say('wallet', `${account.address} holds ${formatUnits(bal, 6)} USDC`)
-  if (bal < BigInt(req.amount)) throw new Error(`not enough USDC: get some at https://faucet.circle.com (Base Sepolia) for ${account.address}`)
+  if (bal < BigInt(req.amount)) {
+    const msg = `not enough USDC: get some at https://faucet.circle.com (Base Sepolia) for ${account.address}`
+    if (!o.dryRun) throw new Error(msg)
+    say('dry-run', `${msg}; signing anyway so the facilitator can check the payment`)
+  }
 
   const sign = async () => {
     const p = await buildPayment(account, pr, req)

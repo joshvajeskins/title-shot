@@ -8,7 +8,7 @@
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 # A non-system `ar` on PATH can shadow /usr/bin/ar on this machine and must never run.
-export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang
+if [ "$(uname)" = Darwin ]; then export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang; fi   # macOS: pin the system ar/clang
 "$here/../mocks/build.sh" >/dev/null
 if [ "${REBUILD:-}" = "1" ] || { [ -z "${TITLESHOT_WASM:-}" ] && [ ! -f "$here/../res/titleshot.wasm" ]; }; then
   "$here/../build.sh"

@@ -32,9 +32,8 @@ case "$MODE" in staging|production) ;; *) echo "mode must be staging or producti
 CONTRACT_ID=${CONTRACT_ID:-}
 [[ "$CONTRACT_ID" =~ ^[a-z0-9._-]+\.testnet$ ]] || { echo "set CONTRACT_ID to the deployed contract account (for example staging.titleshot.testnet)" >&2; exit 2; }
 [[ "$BRANCH" =~ ^[A-Za-z0-9._-]+$ ]] || { echo "bad --branch" >&2; exit 2; }
-export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang
-
-envv() { sed -n "s/^$1=//p" .env.local 2>/dev/null | head -1 | tr -d '"'; }
+if [ "$(uname)" = Darwin ]; then export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang; fi   # macOS: pin the system ar/clang
+envv() { [ -f .env.local ] || return 0; sed -n "s/^$1=//p" .env.local | head -1 | tr -d '"'; }
 show() { local o="+"; for a in "$@"; do case "$a" in *[!A-Za-z0-9_./:=@,+-]*|"") o+=" '$a'" ;; *) o+=" $a" ;; esac; done; echo "$o"; }
 run() { show "$@"; [ "$DRY" = 1 ] || "$@"; }
 for v in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID; do

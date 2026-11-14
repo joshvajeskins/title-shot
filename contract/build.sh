@@ -3,8 +3,9 @@
 # AR/CC are pinned because a non-system `ar` on PATH can shadow /usr/bin/ar on this machine and must never run.
 set -euo pipefail
 cd "$(dirname "$0")"
-export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang
-# Strip this machine's paths from panic messages: no home directory in the wasm, and the same bytes on any machine.
+if [ "$(uname)" = Darwin ]; then export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang; fi   # macOS: pin the system ar/clang
+# Strip this machine's paths from panic messages, so no home directory ships in the wasm. Rebuilds are not byte-identical
+# (cargo hashes build metadata into the binary), so contract/res/titleshot.wasm as committed is the deployed reference.
 # cargo-near ignores ambient RUSTFLAGS; its --env override replaces the default `-C link-arg=-s`, so that is repeated here.
 REPO_ROOT="$(cd .. && pwd)"   # this script already cd-ed into contract/
 REMAP="--remap-path-prefix=$HOME/.cargo/registry/src=/cargo/registry/src --remap-path-prefix=$HOME/.rustup=/rustup --remap-path-prefix=$REPO_ROOT=/titleshot"

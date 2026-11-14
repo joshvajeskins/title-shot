@@ -184,7 +184,13 @@ const steps = IDS.map(([id, title]) => {
   const detail = r.length === 1 ? r[0].detail : uniq.length === 1 ? `${r.length}/${r.length} instances: ${r[0].detail}` : r.map((x) => `[${x.i}] ${x.result}: ${x.detail}`).join(' | ');
   return { id, title, result, detail };
 });
-const overall = steps.some((s) => s.result === 'FAIL') ? 'FAIL' : steps.every((s) => s.result === 'PASS') ? 'PASS' : `INCOMPLETE (UNVERIFIED: ${steps.filter((s) => s.result !== 'PASS').map((s) => s.id).join(', ')})`;
+const gaps = steps.filter((s) => s.result !== 'PASS').map((s) => s.id);
+// Offline replays a recorded report, so nonce freshness (d) can never be shown there: every other check passing is the
+// most an offline run can prove, and it says so instead of reading as a failure.
+const overall = steps.some((s) => s.result === 'FAIL') ? 'FAIL'
+  : !gaps.length ? 'PASS'
+  : offline && gaps.length === 1 && gaps[0] === 'd_nonce' ? `PASS OFFLINE (${steps.length - 1}/${steps.length}; nonce freshness needs a live run)`
+  : `INCOMPLETE (UNVERIFIED: ${gaps.join(', ')})`;
 const out = { model, mode: offline ? 'offline' : 'live', source, contract, instances: entries.length, neari_ai_calls: liveCalls, steps: steps.map(({ id, result, detail }) => ({ id, result, detail })), overall };
 
 const w = Math.max(...IDS.map(([, t]) => t.length));
