@@ -93,3 +93,5 @@
 .movelist-n { font-size: 20px; color: var(--red); line-height: 1; }
 .movelist-label { font-family: var(--font-serif); font-style: italic; font-size: 19px; line-height: 1.2; }
 .movelist-lib { grid-column: 2; font-size: 11px; color: var(--paper-faint); letter-spacing: 0.02em; }
+.poster-stock { position: absolute; left: 8px; top: 8px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; background: rgba(14, 13, 18, 0.75); color: var(--paper-dim); }
+.poster-sm .poster-stock { display: none; }

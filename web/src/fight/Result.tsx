@@ -3,6 +3,7 @@ import { sound } from '../audio/sound'
 import { FighterPoster } from '../components/FighterPoster'
 import { Icon } from '../components/Icon'
 import { Link } from '../components/Link'
+import { PayoutAddressDialog } from '../components/PayoutAddress'
 import type { Fight } from '../game/types'
 import { near, shortHex } from '../lib/format'
 import './result.css'
@@ -13,6 +14,7 @@ export function Result({ fight, beltArt, beltName, onRematch, onRewrite, verifie
   const won = fight.winner === 1
   const draw = fight.winner === 2
   const [copied, setCopied] = useState(false)
+  const [payoutOpen, setPayoutOpen] = useState(false)
   useEffect(() => {
     void sound.music(null, 400)
     if (won) { sound.play('victory_sting'); setTimeout(() => sound.play('new_champ'), 600); sound.pick('crowd_roar', 2) }
@@ -47,6 +49,7 @@ export function Result({ fight, beltArt, beltName, onRematch, onRewrite, verifie
             {!won && <button className="btn btn-red btn-lg" onClick={onRematch}>Rematch · same sentence</button>}
             {!won && <button className="btn btn-ghost" onClick={onRewrite}>Rewrite it</button>}
             {won && <Link href="/play" className="btn btn-gold btn-lg">See your belt</Link>}
+            {won && <button className="btn btn-ghost" onClick={() => setPayoutOpen(true)}><Icon name="coin" size={16} /> Where should the purse go?</button>}
             <button className="btn btn-ghost" onClick={share}><Icon name="copy" size={16} /> {copied ? 'Link copied' : 'Share this bout'}</button>
           </div>
         </div>
@@ -64,6 +67,7 @@ export function Result({ fight, beltArt, beltName, onRematch, onRewrite, verifie
           {fight.receipts.filter((r) => r.url !== '#').map((r) => <a key={r.tx + r.label} href={r.url} target="_blank" rel="noreferrer" className="chip">{r.label} <Icon name="external" size={11} /></a>)}
         </div>
       </section>
+      {payoutOpen && <PayoutAddressDialog onClose={() => setPayoutOpen(false)} />}
     </div>
   )
 }

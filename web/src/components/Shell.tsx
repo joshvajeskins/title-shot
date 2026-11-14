@@ -4,6 +4,7 @@ import { useGame } from '../game/context'
 import { near, shortAccount } from '../lib/format'
 import { browserStore, exportKey } from '../game/nearKeys'
 import { useCompilerMode } from '../game/compiler'
+import { PayoutAddressDialog } from './PayoutAddress'
 import { navigate, usePath } from '../lib/router'
 import { Icon } from './Icon'
 import { Link, Wordmark } from './Link'
@@ -87,6 +88,7 @@ export function Shell({ children, bare = false }: { children: ReactNode; bare?: 
 function IdentityBlock({ open, setOpen, onSignOut }: { open: boolean; setOpen: (o: boolean) => void; onSignOut: () => void }) {
   const { account, client } = useGame()
   const [note, setNote] = useState<string | null>(null)
+  const [payoutOpen, setPayoutOpen] = useState(false)
   useEffect(() => { if (!open) setNote(null) }, [open])
   if (!account) {
     return (
@@ -117,12 +119,14 @@ function IdentityBlock({ open, setOpen, onSignOut }: { open: boolean; setOpen: (
         <div className="identity-menu panel" role="menu">
           <Link href="/play/book" className="identity-menu-item" role="menuitem"><Icon name="book" size={16} /> My bouts</Link>
           <Link href="/play/how" className="identity-menu-item" role="menuitem"><Icon name="info" size={16} /> How the money moves</Link>
+          <button className="identity-menu-item" role="menuitem" onClick={() => setPayoutOpen(true)}><Icon name="coin" size={16} /> Purse payout address</button>
           {client.mode === 'testnet' && <button className="identity-menu-item" role="menuitem" onClick={backup}><Icon name="lock" size={16} /> Back up my key</button>}
           {note && <p className="identity-note">{note}</p>}
           <Link href="/" className="identity-menu-item" role="menuitem"><Icon name="ring" size={16} /> Website</Link>
           <button className="identity-menu-item" role="menuitem" onClick={onSignOut}><Icon name="x" size={16} /> Sign out</button>
         </div>
       )}
+      {payoutOpen && <PayoutAddressDialog onClose={() => setPayoutOpen(false)} />}
     </div>
   )
 }

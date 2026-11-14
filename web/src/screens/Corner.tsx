@@ -10,7 +10,7 @@ import { useAsync, useGame } from '../game/context'
 import { near } from '../lib/format'
 import { navigate } from '../lib/router'
 import { moveInfo } from '../game/library'
-import { useCompilerMode } from '../game/compiler'
+import { useDeployInfo } from '../game/compiler'
 import './corner.css'
 
 const IDEAS = ['a pigeon with a law degree', 'a toaster that believes it is a dragon', 'a librarian who bans noise', 'a snail with a rocket backpack', 'a ghost who haunts the DMV', 'the north wind in a bad mood']
@@ -25,7 +25,9 @@ export function Corner({ beltId }: { beltId: string }) {
   const [err, setErr] = useState<string | null>(null)
   const [idea, setIdea] = useState(0)
   const lastKey = useRef(0)
-  const compiler = useCompilerMode(client.mode)
+  const deploy = useDeployInfo(client.mode)
+  const compiler = deploy.compiler
+  const forgeClosed = !deploy.forge.open
   useEffect(() => { void sound.music('lobby_loop') }, [])
   useEffect(() => { const t = setInterval(() => setIdea((i) => (i + 1) % IDEAS.length), 3200); return () => clearInterval(t) }, [])
 
@@ -44,7 +46,11 @@ export function Corner({ beltId }: { beltId: string }) {
     if (sentenceProblem(text)) return
     setBusy(true); setErr(null); sound.play('paper_whoosh')
     try { const p = await client.preview(clean); setPreview(p); setPreviewFor(clean); sound.play('stamp_slam') }
-    catch (e) { setErr(e instanceof Error ? e.message : 'The sparring partner did not show up. Try again.'); sound.play('ui_error') }
+    catch (e) {
+      const code = (e as { code?: string }).code ?? ''
+      setErr(code === 'FORGE_CLOSED' || /FORGE_CLOSED/.test(String(e)) ? 'That sentence has not been forged yet, and the forge is closed for today.' : e instanceof Error ? e.message : 'The sparring partner did not show up. Try again.')
+      sound.play('ui_error')
+    }
     finally { setBusy(false) }
   }
   const challenge = () => {
@@ -52,6 +58,7 @@ export function Corner({ beltId }: { beltId: string }) {
     if (!account) { navigate(`/enter?next=${encodeURIComponent(`/play/belt/${beltId}`)}`); return }
     if (short) { setErr(`You need ${near(belt.tollYocto)} NEAR for the toll.`); return }
     if (cleanSentence(belt.champion.sentence).toLowerCase() === clean.toLowerCase()) { setErr("That's the champion's own sentence. Write a challenger."); return }
+    if (forgeClosed && !(preview?.canonical && previewFor === clean)) { setErr('The forge is closed for today, so only sentences that were already forged can fight. Spar to check yours.'); return }
     sound.play('bell_ding')
     setPending({ beltId, sentence: clean })
     navigate(`/play/bout/${beltId}`)
@@ -85,6 +92,15 @@ export function Corner({ beltId }: { beltId: string }) {
           <span className="eyebrow">Your corner</span>
           <h1 className="display print corner-h">Write a challenger</h1>
           <p className="corner-lede">One sentence. The attested AI turns it into a fighter: stats, three moves, a face. Wordsmith against the champion's weak spots.</p>
+          {forgeClosed && (
+            <div className="forge-closed panel" role="status">
+              <Icon name="lock" size={16} />
+              <div>
+                <b>The forge is closed for today.</b>
+                <span>Today's AI budget is spent{deploy.forge.resetsAt ? `; it reopens ${new Date(deploy.forge.resetsAt).toLocaleString([], { weekday: 'short', hour: '2-digit', minute: '2-digit' })}` : ''}. Sentences that were already forged still fight: spar to check yours, or rematch a fighter from the Book.</span>
+              </div>
+            </div>
+          )}
           <label className="sheet paper">
             <span className="sr-only">Your sentence</span>
             <textarea

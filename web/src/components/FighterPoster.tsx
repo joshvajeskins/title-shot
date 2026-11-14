@@ -41,7 +41,7 @@ export function FighterPoster({ fighter, spec: specIn, sentence: sentenceIn, por
           ) : (
             <div className={`poster-fallback school-${school.toLowerCase()}`}>
               <img src={`/art/emblem-${school.toLowerCase()}.webp`} alt="" draggable={false} />
-              {pending && <div className="poster-ink" aria-hidden="true" />}
+              {pending ? <div className="poster-ink" aria-hidden="true" /> : <span className="poster-stock" title="No generated portrait for this fighter yet: house emblem art">Stock art</span>}
             </div>
           )}
           <span className={`poster-school school-${school.toLowerCase()}`}>{SCHOOL_LABEL[school]}</span>

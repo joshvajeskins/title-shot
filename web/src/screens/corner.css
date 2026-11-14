@@ -108,3 +108,6 @@
   .corner-cry { font-size: 15px; }
   .corner-grid { gap: 18px; }
 }
+.forge-closed { display: grid; grid-template-columns: 18px 1fr; gap: 10px; align-items: start; padding: 12px 14px; border-left: 3px solid var(--gold); font-size: 12.5px; color: var(--paper-dim); line-height: 1.5; }
+.forge-closed svg { color: var(--gold); margin-top: 2px; }
+.forge-closed b { display: block; color: var(--paper); font-weight: 600; margin-bottom: 2px; }

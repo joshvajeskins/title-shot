@@ -1,0 +1,14 @@
+.pa-backdrop { position: fixed; inset: 0; z-index: 95; display: grid; place-items: center; padding: 16px; background: rgba(8, 7, 10, 0.72); backdrop-filter: blur(4px); animation: pa-fade 200ms var(--ease-out) both; }
+@keyframes pa-fade { from { opacity: 0; } }
+.pa { position: relative; width: min(520px, 100%); padding: 22px; display: grid; gap: 12px; animation: pa-up 260ms var(--ease-out) both; }
+@keyframes pa-up { from { opacity: 0; transform: translateY(10px) scale(0.98); } }
+.pa h2 { margin: 0; font-size: 34px; }
+.pa p { margin: 0; font-size: 13px; line-height: 1.6; color: var(--paper-dim); }
+.pa-close { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; color: var(--paper-dim); box-shadow: 0 0 0 1px var(--line); }
+.pa-close:hover { color: var(--paper); }
+.pa-field input { width: 100%; height: 46px; padding: 0 14px; border-radius: 10px; border: 0; outline: 0; background: var(--ink); color: var(--paper); font-family: var(--font-mono); font-size: 14px; box-shadow: 0 0 0 1px var(--line-strong) inset; transition: box-shadow var(--t-fast) ease; }
+.pa-field input:focus { box-shadow: 0 0 0 2px var(--gold) inset; }
+.pa-err { color: #ff8a78 !important; }
+.pa-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.pa-current { font-size: 12px; color: var(--paper-faint); }
+.pa-note { font-size: 11.5px !important; color: var(--paper-faint) !important; }
