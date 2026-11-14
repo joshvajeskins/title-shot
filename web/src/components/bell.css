@@ -18,7 +18,7 @@
 .bellc-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
 .bellc-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .bellc-rows li {
-  display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr) 150px 176px; gap: 14px; align-items: center;
+  display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) 144px auto; gap: 14px; align-items: center;
   padding: 12px 14px; border-radius: 12px; background: var(--ink-2); box-shadow: 0 0 0 1px var(--line);
   animation: bellc-up 420ms var(--ease-out) both; animation-delay: var(--d);
 }
