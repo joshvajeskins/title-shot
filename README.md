@@ -7,7 +7,8 @@ who fights with foghorn screams"* into fighters, pay a small toll to challenge t
 get paid while their own sentence holds the belt. Every challenger pays the champion's writer, win or lose. When the season bell
 rings, the NEAR contract pays the purse out on Base Sepolia through Chain Signatures: no person holds that key.
 
-- **Play:** https://title-shot.pages.dev (a guest account is made for you; no wallet, no popup)
+- **Play:** https://title-shot.pages.dev: connect your NEAR testnet wallet (NEAR Connect: Meteor, Intear, Nightly, Ledger…).
+  One approval, then no popups between fights. No wallet extension? Use the **judge demo** on the same page.
 - **Judge mode:** https://title-shot.pages.dev/play?judge (a 3-minute checklist that follows you through the game)
 - **Proof page:** https://title-shot.pages.dev/play/proof (deployed code hash, AI signer allowlist, solvency, Base purses, read live)
 - **Demo video:** _added with the submission_
@@ -17,7 +18,8 @@ rings, the NEAR contract pays the purse out on Base Sepolia through Chain Signat
 
 | Do this | You should see |
 |---|---|
-| Open https://title-shot.pages.dev/play?judge and press **Get in the ring** | A NEAR testnet account made for you with fight money. No wallet, no popup. |
+| Open https://title-shot.pages.dev/play?judge, press **Get in the ring**, then **Connect my NEAR wallet** | NEAR Connect lists your testnet wallet. One approval in it adds a key that can only call `challenge` and deposits the fight money you pick; after that, fights need no popup. |
+| No wallet extension (or an AI screener)? Press **Open the judge demo** instead | A throwaway testnet demo account with fight money, kept in this browser and labelled as a demo, not a wallet. Every step below works the same; its winnings can later move to a real wallet. |
 | Open a belt, write a sentence, press **Spar first** | Your fighter (name, title, three moves, stats), NEAR AI's signature, and your odds from 200 bouts simulated in your browser with the same Rust referee the contract runs. |
 | Press **Challenge · 0.05 NEAR** | Toll paid → forge request on chain → NEAR AI compiles → the contract checks the signature → best-of-three bout, replayed here with "replayed here" next to the referee hash. |
 | Win, or watch someone win | The belt (an NEP-171 token) moves to the winner's account in the same transaction. |
@@ -55,7 +57,7 @@ after 10 minutes and anyone can refund it (toll back minus the forge fee).
 
 | Claim | Evidence |
 |---|---|
-| A guest challenges with a session key, the contract verifies NEAR AI's compile, runs the bout and moves the belt | challenge [57uSK111…](https://testnet.nearblocks.io/txns/57uSK111FowVFmxt5uYjbP3sBFQH6s2xA3ySpBxD7a2W) → delivery [2NUtsC89…](https://testnet.nearblocks.io/txns/2NUtsC89ocMDBTUFyysBGau5T5aaepxXnrEa7mFPCwdz) (`forged`, `nft_transfer` vance → jolly-mantis-52, `title_change`, bout #5) |
+| A judge-demo account challenges with its session key, the contract verifies NEAR AI's compile, runs the bout and moves the belt | challenge [57uSK111…](https://testnet.nearblocks.io/txns/57uSK111FowVFmxt5uYjbP3sBFQH6s2xA3ySpBxD7a2W) → delivery [2NUtsC89…](https://testnet.nearblocks.io/txns/2NUtsC89ocMDBTUFyysBGau5T5aaepxXnrEa7mFPCwdz) (`forged`, `nft_transfer` vance → jolly-mantis-52, `title_change`, bout #5) |
 | The AI promoter writes each season's opener with NEAR AI and opens the season on chain | `open_season` [A6e2zPxm…](https://testnet.nearblocks.io/txns/A6e2zPxmQQVLdrURHkZ7XngwE31bhndWFqqbSxuLmL4M) ("night-shift florist…") → verified compile [DzBaHG1A…](https://testnet.nearblocks.io/txns/DzBaHG1AJmAn77YztSY6HrAfkFob63BrVnScaWYRiNyr) |
 | The promoter funds each purse from its own Chain Signatures Base address | [0x81abd838…](https://sepolia.basescan.org/tx/0x81abd83885d93240b3b8cd334228bbadf12286b7e93282c5d150fc6a97e48f08), [0x64dece74…](https://sepolia.basescan.org/tx/0x64dece748cdc3c35eed64fd13e4bbc1483cb1cc8599c408be35682d25adaafad), [0x657a4dfd…](https://sepolia.basescan.org/tx/0x657a4dfd402539688c4fd8d500a3b4f65c282b7afafea7ecdc8844cf8518217f) |
 | An AI agent buys a title shot on Base over x402 and the fight happens on NEAR | Base settle [0xbe901c98…](https://sepolia.basescan.org/tx/0xbe901c98f3e376e91b3a30b21231d2ab3807cb30f725dc16e35d42c2f703cb2c) → NEAR challenge [6Xk2S1j5…](https://testnet.nearblocks.io/txns/6Xk2S1j5PWB5FWwULf5n5F4JTztPRM13ATe8j9XDRkHV) (fight #3: the challenger from Base took the Tide Belt) |
@@ -71,9 +73,9 @@ after 10 minutes and anyone can refund it (toll back minus the forge fee).
 |---|---|---|---|
 | NEAR AI Cloud | Compiles a sentence into a fighter under a public rulebook and signs every response from a GPU enclave. Also writes the promoter's openers and the house NPCs' sentences, and paints each fighter's portrait (FLUX, signed). | The compiler becomes our server and could quietly favour a champion. | `crates/bout-sim/src/rulebook.rs`, `contract/src/verify.rs` |
 | NEAR contract | The referee: rebuilds the exact request bytes, `ecrecover`s the AI signature against a timelocked allowlist, enforces the 100-point budget, runs the bout from the same Rust crate the browser runs, splits tolls, runs seasons, refunds. | A server decides winners; nobody can check. | `contract/`, `crates/bout-sim/` |
-| Function-call keys | The browser holds a key that can only call `challenge`. Value-moving methods need 1 yoctoNEAR, which a function-call key cannot attach. | A wallet popup on every challenge. | `web/src/game/near.ts`, `web/functions/_lib/guest.ts` |
+| Function-call keys | Your wallet approves, once, a key in this browser that can only call `challenge`. Value-moving methods need 1 yoctoNEAR, which a function-call key cannot attach, so withdrawals and payout addresses always go back through your wallet. | A wallet popup on every challenge. | `web/src/game/near.ts`, `web/functions/_lib/guest.ts` |
 | Chain Signatures | Each season's purse sits at a Base Sepolia address derived from the contract; only `close_season` → `sign_payout` can move it, only to the winners. The promoter also funds purses and owns a Base name from its own derived address. | The purse becomes our custody. | `contract/src/payout.rs`, `web/functions/_lib/purse.ts` |
-| NEAR Connect + NEP-413 | Beside the no-wallet guest route, **Use my NEAR wallet** (`@hot-labs/near-connect`, testnet: Meteor, Intear, Nightly, Ledger and the others the connector lists) asks for one approval that adds a `challenge`-only session key and deposits fight money; the wallet account then fights with no popups, and withdrawals and payout addresses go through the wallet. A guest can **Move to my wallet**: the wallet proves control with a NEP-413 signed message (server-issued single-use nonce, recipient bound to this site, full-access key checked on chain), then the guest's own key withdraws its balance, transfers its belts and sends its NEAR. | Players are limited to throwaway guest corners. | `web/src/game/wallet/`, `web/functions/api/auth/`, `web/functions/_lib/nep413*.ts` |
+| NEAR Connect + NEP-413 | The main way in: **Connect my NEAR wallet** (`@hot-labs/near-connect`, testnet: Meteor, Intear, Nightly, Ledger and the others the connector lists) asks for one approval that adds a `challenge`-only session key and deposits fight money; the wallet account then fights with no popups, and withdrawals and payout addresses go through the wallet. A judge-demo account can **Move to my wallet**: the wallet proves control with a NEP-413 signed message (server-issued single-use nonce, recipient bound to this site, full-access key checked on chain), then the demo account's own key withdraws its balance, transfers its belts and sends its NEAR. | Players are limited to throwaway demo accounts. | `web/src/game/wallet/`, `web/functions/api/auth/`, `web/functions/_lib/nep413*.ts` |
 | NEP-171 | The belt is a token. Whoever holds it collects the champion's share of every challenge and can hand it over with `nft_transfer`. | No ownable title. | `contract/src/nft.rs` |
 | OutLayer | Built and deployed: `forge.wasm` runs the compile inside Intel TDX with the API key sealed to the game contract and draws the fight seed from OutLayer's VRF (verified on chain in the spike, [DF3eEa9o…](https://testnet.nearblocks.io/txns/DF3eEa9oedQeFbs34dJY9hV3DfkCrsujkQEscjiaQtTx)). On testnet today OutLayer does not return our compile runs, so the live contract runs in relayer mode (see "What we do not claim"). | The API key sits with the relayer. | `forge/`, `contract/src/challenge.rs` |
 
@@ -86,7 +88,7 @@ after 10 minutes and anyone can refund it (toll back minus the forge fee).
 | **Your own EVM wallet for purses** | The payout dialog finds injected wallets with EIP-6963 (MetaMask, Rabby, Coinbase and others, each by its own name), switches to Base Sepolia, and has the wallet sign a message binding your NEAR account, the address, this site and a nonce. The signature is checked before `set_evm_address` (or `claim_payout` from the bell) records where your purse share is paid. Pasting an address or Basename still works, and is the default when the browser has no wallet. | `web/src/game/evm/`, `web/src/components/PayoutWallet.tsx` |
 | **Intel TDX + NVIDIA attestation** | Ties the contract's signer allowlist to NEAR AI's hardware attestation: TDX quote, GPU evidence, booted code, report data binding the signing address. | `scripts/verify-attestation.mjs`, [docs/ATTESTATION.md](docs/ATTESTATION.md) |
 | **ElevenLabs** | Announcer, promoter and crowd voices, fighters' battle cries, music and sound effects. | `web/src/audio/`, `assets/audio/` |
-| **Cloudflare** | Pages Functions (guests, previews, portraits, box office, tick), KV, and a cron Worker that rings the bell every 5 minutes. | `web/functions/`, `worker-bell/` |
+| **Cloudflare** | Pages Functions (judge-demo accounts, previews, portraits, box office, tick), KV, and a cron Worker that rings the bell every 5 minutes. | `web/functions/`, `worker-bell/` |
 
 ## The economy
 
@@ -138,7 +140,7 @@ wording matters more than luck.
 - Wallets: every wallet path ran end to end on testnet with test wallets we control: a debug wallet registered with NEAR
   Connect (session key [BBxYiP6z…](https://testnet.nearblocks.io/txns/BBxYiP6zxQicXVFkWxiRHBpUmdarWpbYDECYRAYoJBEm), deposit
   [CwxCsJyY…](https://testnet.nearblocks.io/txns/CwxCsJyYLViCRS5mDEzqHoPQ67SBvJRdVEzTvLLUwTei), a popup-free challenge
-  [BmoWk4Ah…](https://testnet.nearblocks.io/txns/BmoWk4Ahv6w4E5b9vcQhVpRJr1kbdajiW7sXjKjd6EMn), a guest's move
+  [BmoWk4Ah…](https://testnet.nearblocks.io/txns/BmoWk4Ahv6w4E5b9vcQhVpRJr1kbdajiW7sXjKjd6EMn), a demo account's move
   [GLnuuZrT…](https://testnet.nearblocks.io/txns/GLnuuZrTkg44yd7EyzaWq48ZJP2gwC1Vs114siAkzT8A)) and a scripted EIP-1193 wallet
   ([Hw1Hm7sx…](https://testnet.nearblocks.io/txns/Hw1Hm7sxrV4ktBBv5F1u1e4woYwho67DBTKL4YiLfZzC)). Real wallet apps (Meteor,
   Intear, MetaMask, Rabby…) were not in our automated tests; whether a given wallet accepts the session-key request in a
@@ -204,7 +206,7 @@ the code hash on chain.
 ## Repository
 
 `crates/bout-sim` rules, referee, rulebook prompt · `contract` the game contract · `forge` the OutLayer app · `web` client +
-Cloudflare Pages Functions (guests, previews, portraits, box office, promoter and house tick) · `worker-bell` the cron ·
+Cloudflare Pages Functions (judge-demo accounts, previews, portraits, box office, promoter and house tick) · `worker-bell` the cron ·
 `scripts` deploy, attestation, cheat and agent scripts · `spikes` de-risk proofs · `assets` art prompts and audio pipeline ·
 `docs` architecture and interface contracts.
 
