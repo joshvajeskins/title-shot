@@ -1,7 +1,7 @@
 // KV-aware rate limits (1 write/sec/key, failed KV never a 500), global daily spend caps and the unknown-hash miss cache.
 import { describe, expect, it } from 'vitest'
 import { env, MemKV, recordedExchange, ctx, json, sim, archetypes } from './helpers'
-import { CAPS, consume, enforce, KvUnavailable, resetRateMemory, RULES, spendCap, WRITE_GAP_MS } from '../functions/_lib/ratelimit'
+import { CAPS, consume, dailyLimit, enforce, KvUnavailable, resetRateMemory, RULES, spendCap, WRITE_GAP_MS } from '../functions/_lib/ratelimit'
 import { cryFor, portraitFor } from '../functions/_lib/media'
 import { runPreview } from '../functions/_lib/preview'
 import { missKey, previewKey } from '../functions/_lib/lookup'
@@ -85,6 +85,15 @@ describe('a failing counter store is never a 500', () => {
     kv.put = put
     for (let i = 0; i < 3; i++) await enforce(kv, RULES.guestIp, req(), 'x') // all three of the day's guests are still available
     await expect(enforce(kv, RULES.guestIp, req(), 'x')).rejects.toMatchObject({ code: 'RATE_LIMITED' })
+  })
+  it('the 4th judge demo of the day is GUEST_LIMIT with the reset and the wallet route, not "try again in a moment"', async () => {
+    const kv = new MemKV()
+    for (let i = 0; i < 3; i++) await enforce(kv, RULES.guestIp, req(), 'daily').catch(dailyLimit('Used up.'))
+    const e = await enforce(kv, RULES.guestIp, req(), 'daily').catch(dailyLimit('Used up.')).then(() => null, (x: unknown) => x)
+    expect(e).toMatchObject({ status: 429, code: 'GUEST_LIMIT' })
+    expect((e as Error).message).toMatch(/^Used up\. Connect a NEAR testnet wallet .* about \d+ hours? \(it resets at midnight UTC\)\.$/)
+    // a busy counter store is still a short RATE_LIMITED retry, never a day-long refusal
+    await expect(enforce(down(new MemKV()), RULES.guestIp, req(), 'busy').catch(dailyLimit('Used up.'))).rejects.toMatchObject({ code: 'RATE_LIMITED' })
   })
   it('consume throws KvUnavailable (not a raw error) so callers choose', async () => {
     await expect(consume(down(new MemKV()), RULES.cryGen, 'a', T)).rejects.toBeInstanceOf(KvUnavailable)

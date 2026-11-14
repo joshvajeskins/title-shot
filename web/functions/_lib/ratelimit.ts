@@ -87,6 +87,17 @@ export async function enforce(kv: KVLike, rule: Rule, request: Request, idOverri
   }
 }
 
+/** For `.catch` after `enforce` on a daily rule: over the limit becomes 429 GUEST_LIMIT, saying when it resets and what to do
+ *  instead (a judge-demo limit read as "slow down, try again in a moment" sent people into a retry loop). A busy store
+ *  (retry in seconds) and every other error pass through unchanged. */
+export const dailyLimit = (what: string) => (e: unknown): never => {
+  if (e instanceof ApiError && e.code === 'RATE_LIMITED' && (e.retryAfter ?? 0) > 60) {
+    const hours = Math.max(1, Math.round((e.retryAfter ?? 0) / 3600))
+    throw new ApiError(429, 'GUEST_LIMIT', `${what} Connect a NEAR testnet wallet to play now, or open the demo again in about ${hours} hour${hours > 1 ? 's' : ''} (it resets at midnight UTC).`, e.retryAfter)
+  }
+  throw e
+}
+
 /** Spend one unit of a global daily cap. Over the cap: 429 DAILY_CAP. A broken counter store refuses (spend must not be unmetered). */
 export async function spendCap(kv: KVLike, cap: Rule, now = Date.now()): Promise<void> {
   try {
