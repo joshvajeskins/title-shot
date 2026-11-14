@@ -24,6 +24,7 @@ rings, the NEAR contract pays the purse out on Base Sepolia through Chain Signat
 | Open **Tale of the tape** | The deployed code hash equals `sha256(contract/res/titleshot.wasm)`, the AI signer allowlist, solvency, each season's Base purse address and balance. |
 | Read [docs/CHEAT-RESULTS.md](docs/CHEAT-RESULTS.md) | A tampered fighter, a swapped sentence, an unknown signer and a replay, each refused on testnet with its transaction. |
 | Run `node scripts/verify-attestation.mjs --offline` | The allowlisted signer is NEAR AI's attested enclave key: Intel TDX quote, GPU evidence and booted code checked. |
+| Open bout [#6](https://title-shot.pages.dev/play/bout/6), or run `node scripts/x402-agent.mjs --belt 1 --sentence "…" --dry-run` | An AI agent bought that title shot on Base with USDC over x402: the announcer calls "a challenger… from Base!" and the poster is tagged "Booked on Base". The dry run shows the 402 → signed payment flow without paying. |
 
 ## How one challenge works
 
