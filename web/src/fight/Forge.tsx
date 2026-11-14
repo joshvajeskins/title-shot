@@ -16,6 +16,7 @@ const ORDER: ForgeStage[] = ['toll', 'tee', 'compile', 'verify', 'fight', 'done'
 const STANDIN: Partial<Record<ForgeStage, { title: string; sub: string }>> = {
   tee: { title: 'Forge request posted', sub: 'Staging: the relayer picks up the request (the OutLayer enclave runs in production).' },
   compile: { title: 'Stand-in compiler', sub: 'Staging: a labeled stand-in signs the compile until the NEAR AI key lands.' },
+  fight: { title: 'The referee rules', sub: 'Best of three inside the NEAR contract. Staging seeds it from the block; production uses the OutLayer VRF.' },
 }
 
 export function Forge({ sentence, progress, failed, compiler = 'nearai' }: { sentence: string; progress: ForgeProgress[]; failed: string | null; compiler?: string }) {
