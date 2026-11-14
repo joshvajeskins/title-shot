@@ -61,7 +61,9 @@ try {
     report = await getLive(); source = `live ${BASE}`;
     mkdirSync(DEPS, { recursive: true }); writeFileSync(cachePath, JSON.stringify(report));
   } else {
-    const p = opt('--report', existsSync(cachePath) ? cachePath : null);
+    // A full report recorded on 14 Nov 2026 ships in vectors/, so --offline works from a fresh clone.
+    const fullVector = join(root, 'vectors', `attestation-${slug}-full.json`);
+    const p = opt('--report', existsSync(cachePath) ? cachePath : existsSync(fullVector) ? fullVector : null);
     if (p) { report = JSON.parse(readFileSync(p, 'utf8')); source = `cached full report ${p}`; }
     else {
       report = JSON.parse(readFileSync(join(root, 'vectors', `attestation-${slug}.json`), 'utf8')).summary;
