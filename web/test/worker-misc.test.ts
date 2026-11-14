@@ -232,10 +232,12 @@ describe('GET /api/state builds the whole lobby from the contract', () => {
     expect(s.wallets[0]!.nearYocto).toBe((7n * NEAR).toString())
     const bell = s.belts[0]!.lastBell!
     expect(bell.seasonId).toBe(1)
+    // the next season is open, and the last bell's payouts are still listed (the proof page used to drop them to 0)
+    expect(s.payouts.map((p) => [p.id, p.status])).toEqual([[8, 'mined'], [7, 'unsigned']])
+    expect(s.payouts[0]).toMatchObject({ txHash: '0xfeed', explorer: expect.stringContaining('0xfeed') })
     expect(bell.payouts.map((p) => p.status)).toEqual(['unsigned', 'mined'])
     expect(bell.payouts[1]!.explorer).toContain('0xfeed')
     expect(s.tick).toMatchObject({ at: NOW_MS })
-    expect(s.payouts).toEqual([]) // the current season is open: nothing to pay yet
   })
   it('compiler says which referee compiles: nearai by default, standin only without a NEAR AI key and with COMPILER_MODE=standin', async () => {
     const { e, near, base } = rig()
@@ -267,7 +269,7 @@ describe('GET /api/state builds the whole lobby from the contract', () => {
       }, accounts: {},
     }).fetchFn })
     const s = await buildState(e, sim(), rpc2, base, NOW_MS)
-    expect(s.payouts.map((p) => [p.id, p.status])).toEqual([[7, 'unsigned'], [8, 'claimable']])
+    expect(s.payouts.map((p) => [p.id, p.status])).toEqual([[8, 'claimable'], [7, 'unsigned']]) // newest first
     expect(s.belts[0]!.seasonState).toBe('Closed')
     expect(s.belts[0]!.lastBell!.seasonId).toBe(2)
   })

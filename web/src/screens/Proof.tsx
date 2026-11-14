@@ -55,7 +55,7 @@ export function Proof() {
           <section className="tape-counters">
             <Counter n={belts.length} label="belts on the line" />
             <Counter n={bouts} label="challenges this season" />
-            <Counter n={s?.payouts.length ?? 0} label="purse payouts created" />
+            <Counter n={s?.payouts.length ?? 0} label="Base payouts at the last bells" />
             <Counter n={`${p.caps.used}`} label={`AI compiles paid (cap ${p.caps.total})`} />
           </section>
 

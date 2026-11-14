@@ -60,14 +60,14 @@ async function wallets(env: Env, near: Rpc, base: Rpc): Promise<Wallet[]> {
   }))
 }
 
-/** The latest closed season of a belt: the current one, or the one before the season that is open now. */
-async function lastBellOf(chain: Chain, belt: RawBelt, load: (ids: number[]) => Promise<void>, tracks: Tracks) {
+/** The latest closed season of a belt (the current one, or the one before the season that is open now) and its payouts. */
+async function lastBellOf(chain: Chain, belt: RawBelt, load: (ids: number[]) => Promise<void>) {
   const cur = belt.season
   const closed = cur?.state === 'Closed' ? cur : cur && cur.id > 1 ? await chain.season(belt.id, cur.id - 1) : null
   if (!closed || closed.state !== 'Closed') return null
   const list = await chain.payouts(belt.id, closed.id)
   await load(list.map((p) => p.id))
-  return mapBell(closed, list, tracks, belt.promoter)
+  return { closed, list }
 }
 
 export async function buildState(env: Env, sim: Sim, near: Rpc, base: Rpc, now = Date.now()): Promise<StateResponse> {
@@ -90,24 +90,22 @@ export async function buildState(env: Env, sim: Sim, near: Rpc, base: Rpc, now =
   const load = async (ids: number[]) => {
     for (const id of ids) if (!tracks.has(id)) tracks.set(id, await getJson<PayoutTrack>(env.TS_KV, trackKey(chain.id, id)))
   }
+  // The last bell of each belt: its cinematic on the belt card, and its payouts for the proof page. Read from the last closed
+  // season, not the open one, so the payouts stay listed after the next season opens (they used to drop to 0 at once).
   const payouts: PayoutState[] = []
-  for (const b of rawBelts) {
-    if (b.season?.state !== 'Closed') continue
-    const list = await chain.payouts(b.id, b.season.id)
-    await load(list.map((p) => p.id))
-    for (const p of list) {
-      const txHash = tracks.get(p.id)?.hash
-      payouts.push({
-        id: p.id, beltId: p.belt_id, seasonId: p.season_id, payee: p.payee, amountWei: p.amount_wei, to: p.to, nonce: p.nonce,
-        status: payoutStatus(p, tracks.get(p.id) ?? null), ...(txHash ? { txHash, explorer: baseTxUrl(txHash) } : p.to ? { explorer: baseAddrUrl(p.to) } : {}),
-      })
-    }
-  }
-  // the bell cinematic on each belt card
   await Promise.all(belts.map(async (belt) => {
     const rawBelt = rawBelts.find((r) => r.id === belt.numericId)!
-    belt.lastBell = await lastBellOf(chain, rawBelt, load, tracks)
+    const bell = await lastBellOf(chain, rawBelt, load)
+    belt.lastBell = bell ? mapBell(bell.closed, bell.list, tracks, rawBelt.promoter) : null
+    for (const p of bell?.list ?? []) {
+      const track = tracks.get(p.id) ?? null
+      payouts.push({
+        id: p.id, beltId: p.belt_id, seasonId: p.season_id, payee: p.payee, amountWei: p.amount_wei, to: p.to, nonce: p.nonce,
+        status: payoutStatus(p, track), ...(track?.hash ? { txHash: track.hash, explorer: baseTxUrl(track.hash) } : p.to ? { explorer: baseAddrUrl(p.to) } : {}),
+      })
+    }
   }))
+  payouts.sort((x, y) => y.id - x.id)
 
   return {
     at: now, contract: chain.id, forgeMode: cfg.forge_mode, model: cfg.model_id, compiler: compilerOf(env), rulebookHash: rb.hash, rulebookMatch: requestMatches(sim, cfg),
