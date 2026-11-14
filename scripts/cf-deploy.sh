@@ -77,7 +77,7 @@ run "${W[@]}" pages deploy dist --project-name "$PROJECT" --branch "$BRANCH" --c
 # 4. check the deployed API reports the right compiler and contract
 URL="https://$BRANCH.$PROJECT.pages.dev"; [ "$BRANCH" = main ] && URL="https://$PROJECT.pages.dev"   # the production branch serves the bare domain
 WANT=${COMPILER:-nearai}
-FORGE=relayer; [ "$MODE" = production ] && FORGE=outlayer
+FORGE=relayer; [ "$MODE" = production ] && FORGE=${EXPECT_FORGE_MODE:-relayer}   # production follows the contract: relayer while OutLayer does not return compile runs
 EXPECT="$WANT $CONTRACT_ID $FORGE"
 echo "+ curl -s $URL/api/state   (expect compiler=\"$WANT\", contract=\"$CONTRACT_ID\", forgeMode=\"$FORGE\")"
 if [ "$DRY" != 1 ]; then
