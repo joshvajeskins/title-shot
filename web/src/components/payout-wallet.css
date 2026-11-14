@@ -1,0 +1,44 @@
+/* "Connect a wallet" in the payout dialog (PayoutWallet.tsx): wallet list, the three rounds of the flow, and its outcomes */
+.pw-list ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pw-list { display: grid; gap: 10px; }
+.pw-wallet { width: 100%; min-height: 56px; display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: var(--radius); background: rgba(242, 232, 213, 0.04); box-shadow: 0 0 0 1px var(--line-strong) inset; color: var(--paper); text-align: left; transition: box-shadow var(--t-fast) ease, background-color var(--t-fast) ease, transform var(--t-press) var(--ease-out); -webkit-tap-highlight-color: transparent; }
+.pw-wallet:active { transform: scale(0.985); }
+.pw-wallet:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) { .pw-wallet:hover { background: rgba(233, 185, 73, 0.07); box-shadow: 0 0 0 1px rgba(233, 185, 73, 0.5) inset; } }
+.pw-wallet-name { flex: 1; min-width: 0; font-family: var(--font-display); font-weight: 800; font-size: 21px; letter-spacing: 0.02em; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pw-wallet-go { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+.pw-mark { flex: none; border-radius: 8px; object-fit: contain; background: var(--paper); padding: 3px; box-sizing: border-box; }
+.pw-mark-none { display: inline-grid; place-items: center; padding: 0; font-family: var(--font-display); font-weight: 900; font-size: 15px; color: var(--on-paper); background: var(--gold); }
+
+.pw-card { display: grid; gap: 10px; padding: 14px; border-radius: var(--radius); background: rgba(242, 232, 213, 0.03); box-shadow: 0 0 0 1px var(--line) inset; animation: pa-fade 200ms var(--ease-out) both; }
+.pw-card p { margin: 0; }
+p.pw-card { display: flex; }
+.pw-who { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.pw-who b { min-width: 0; overflow-wrap: anywhere; }
+.pw-name { font-family: var(--font-display); font-weight: 800; font-size: 20px; letter-spacing: 0.02em; text-transform: uppercase; }
+.pw-title { font-size: 24px; line-height: 1; color: var(--paper); }
+.pw-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.pw-link { padding: 4px 0; font-size: 12px; color: var(--paper-dim); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line-strong); }
+.pw-link:hover { color: var(--paper); }
+
+/* the flow as three rounds on a fight card */
+.pw-rounds { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.pw-rounds li { display: grid; gap: 2px; padding: 8px 10px; border-radius: var(--radius-s); box-shadow: 0 0 0 1px var(--line) inset; color: var(--paper-faint); transition: color var(--t-ui) ease, box-shadow var(--t-ui) ease, background-color var(--t-ui) ease; }
+.pw-rd { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; }
+.pw-rd-label { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-display); font-weight: 800; font-size: 16px; line-height: 1.05; letter-spacing: 0.02em; text-transform: uppercase; overflow-wrap: anywhere; }
+.pw-rounds li.is-now { color: var(--gold); background: rgba(233, 185, 73, 0.07); box-shadow: 0 0 0 1px rgba(233, 185, 73, 0.55) inset; }
+.pw-rounds li.is-done { color: var(--paper); box-shadow: 0 0 0 1px var(--line-strong) inset; }
+.pw-rounds li.is-done .pw-rd-label svg { color: var(--ok); }
+
+/* outcomes */
+.pw-error { background: rgba(232, 64, 44, 0.06); box-shadow: 0 0 0 1px rgba(232, 64, 44, 0.38) inset; }
+.pw-error .pw-title { color: #ff8a78; }
+.pw-error > p { color: var(--paper-dim); }
+.pw-none { background: rgba(242, 232, 213, 0.04); box-shadow: 0 0 0 1px var(--line-strong) inset; border: 1px dashed var(--line-strong); }
+.pw-linked { gap: 6px; }
+.pw-linked-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.pw-proof { height: 22px; font-size: 10px; }
+.pw-linked-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
+.pw-wallet-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--paper-dim); min-width: 0; }
+.pw-wallet-tag .pw-mark { border-radius: 5px; padding: 2px; }
+@media (prefers-reduced-motion: reduce) { .pw-card, .pw-wallet, .pw-rounds li { animation: none; transition: none; } }

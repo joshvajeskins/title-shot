@@ -36,3 +36,12 @@ a.bn:hover .bn-name { text-decoration: underline; text-underline-offset: 3px; }
 .bn-name { min-width: 0; }
 .pa-target-name .bn-name { color: inherit; white-space: normal; overflow: visible; overflow-wrap: anywhere; }
 .pa-target-name .bn-tld { display: inline-block; }
+
+/* two ways to give the address: a connected wallet, or a pasted address / Basename */
+.pa { max-height: calc(100dvh - 32px); overflow-y: auto; overscroll-behavior: contain; }
+.pa-paths { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; gap: 4px; border-radius: var(--radius); background: var(--ink); box-shadow: 0 0 0 1px var(--line) inset; }
+.pa-paths button { min-height: 40px; padding: 6px 10px; border-radius: var(--radius-s); font-family: var(--font-display); font-weight: 800; font-size: 15px; line-height: 1.05; letter-spacing: 0.04em; text-transform: uppercase; color: var(--paper-faint); transition: color var(--t-fast) ease, background-color var(--t-fast) ease, box-shadow var(--t-fast) ease; -webkit-tap-highlight-color: transparent; }
+.pa-paths button:hover { color: var(--paper); }
+.pa-paths button.is-on { color: var(--on-paper); background: var(--paper); box-shadow: 2px 2px 0 var(--gold-deep); }
+.pa-paths button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.pa-paste { display: grid; gap: 12px; }
