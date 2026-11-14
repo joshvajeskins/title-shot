@@ -11,7 +11,7 @@ import './proof.css'
 
 const REPO = 'https://github.com/joshvajeskins/title-shot'
 /** sha256 of contract/res/titleshot.wasm at the commit this site was built from. */
-const BUILT_WASM_SHA = 'c45ca939b88235afde91f5e5dd34536b8b568d03889f30df4be19b3f0990d4a7'
+const BUILT_WASM_SHA = '843869206ec5c38ef8f69e2fb2bbf56a76c2f0b71b5cdd8cebdb2908f2f88333'
 const clock = (ms: number) => new Date(ms).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
 
 export function Proof() {

@@ -168,6 +168,10 @@ node scripts/verify-attestation.mjs --offline
 cd web && pnpm i && pnpm test && pnpm build
 ```
 
+The committed `contract/res/titleshot.wasm` is the deployed contract (sha256 `84386920…f88333`). `build.sh` remaps the home,
+toolchain and repo paths out of the binary, so the same source rebuilds to the same bytes on another machine with the
+same tools: Rust 1.86.0, cargo-near 0.17.0 and wasm-opt 133.
+
 ## Deployed accounts (testnet)
 
 | What | Account / address |
