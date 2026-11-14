@@ -2,3 +2,5 @@ allowBuilds:
   esbuild: true
   workerd: true
   secp256k1: false
+patchedDependencies:
+  '@hot-labs/near-connect@0.12.0': patches/@hot-labs__near-connect@0.12.0.patch

@@ -1,0 +1,15 @@
+diff --git a/build/SandboxedWallet/executor.js b/build/SandboxedWallet/executor.js
+index 6e8bdc24a679cecb4ca23f0421ae9d50105b24d6..a6695e72e37884092ec5d446e53465ee327e7d3d 100644
+--- a/build/SandboxedWallet/executor.js
++++ b/build/SandboxedWallet/executor.js
+@@ -227,7 +227,9 @@ class SandboxExecutor {
+                 success(null);
+                 return;
+             }
+-            const panel = window.open(event.data.params.url, "_blank", event.data.params.features);
++            // Title Shot patch: open web wallets (e.g. Meteor web) as a tab in the same window, not a sized popup window.
++            // No "noopener": the wallet answers through window.opener.postMessage, and panel.closed drives the cancel path.
++            const panel = window.open(event.data.params.url, "_blank");
+             const panelId = panel ? (0, uuid_1.uuid4)() : null;
+             const handler = (ev) => {
+                 const url = (0, url_1.parseUrl)(event.data.params.url);

@@ -4,13 +4,16 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@hot-labs/near-connect@0.12.0': 7856434b5ff0f99dd8581b391dc3e55084a76fa8a404c908c7acd40b36a15fbf
+
 importers:
 
   .:
     dependencies:
       '@hot-labs/near-connect':
         specifier: 0.12.0
-        version: 0.12.0
+        version: 0.12.0(patch_hash=7856434b5ff0f99dd8581b391dc3e55084a76fa8a404c908c7acd40b36a15fbf)
       '@noble/curves':
         specifier: ^2.4.0
         version: 2.4.0
@@ -1467,7 +1470,7 @@ snapshots:
   '@esbuild/win32-x64@0.28.2':
     optional: true
 
-  '@hot-labs/near-connect@0.12.0': {}
+  '@hot-labs/near-connect@0.12.0(patch_hash=7856434b5ff0f99dd8581b391dc3e55084a76fa8a404c908c7acd40b36a15fbf)': {}
 
   '@img/colour@1.1.0': {}
 
