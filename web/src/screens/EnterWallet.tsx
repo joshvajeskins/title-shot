@@ -80,10 +80,11 @@ export function EnterWallet({ busyElsewhere, onBusy, onDone }: { busyElsewhere: 
   return (
     <div className="ew">
       <WalletTicket connected={c} amount={amount} onAmount={setAmount} locked={working} onSwitch={disconnect} />
-      <button className="btn btn-red btn-lg enter-cta ew-approve" disabled={working || amount === null} onClick={() => amount !== null && approve(c, amount)}>
+      <button className="btn btn-red btn-lg enter-cta ew-approve" disabled={working || amount === null || amount < 0n} onClick={() => amount !== null && amount >= 0n && approve(c, amount)}>
         {phase.k === 'approving' ? <><span className="ew-dot" aria-hidden="true" /> Approve in {c.walletName}…</>
           : phase.k === 'confirming' ? <><span className="ew-dot" aria-hidden="true" /> Checking the chain…</>
           : amount === null ? 'Checking your wallet…'
+          : amount < 0n ? 'Add testnet NEAR first'
           : amount === 0n ? <>Approve in wallet <Icon name="arrow" /></>
           : <>Approve · {near(amount, 2)} NEAR <Icon name="arrow" /></>}
       </button>
