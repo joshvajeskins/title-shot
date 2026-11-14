@@ -12,6 +12,7 @@ import { computeOdds } from './chain/odds'
 import { assembleFight, mapBelt, mapFighter, mapFightSummary, mapSplit, ruleOf, type ChainBelt, type RawBelt, type RawChallenge, type RawFight, type RawFighter } from './chain/views'
 import { toChainSpec, loadSim, simIfReady, winnerCode, type Sim } from '../sim'
 import { Api, type ApiState } from './nearApi'
+import { within } from './deadline'
 import { evmAddr, readPayoutAddress } from './chain/payout'
 import { ownerCall, ownerSetPayout, sessionSendError, signOutStored } from './nearOwner'
 import { browserStore, clearPending, loadStored, pendingOrNewKeys, saveStoredIfFree, type KeyStore } from './nearKeys'
@@ -27,6 +28,8 @@ export interface NearClientOptions {
   pollMs?: number
   /** how long challenge() waits for the forge before telling the player their toll is safe, default 240 s */
   forgeWaitMs?: number
+  /** per try of /api/state (two tries, then the contract directly), default 8 s; belts() waits for the wasm at most simWaitMs, default 3 s */
+  stateTimeoutMs?: number; simWaitMs?: number
 }
 
 const defaultSleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
@@ -39,6 +42,8 @@ export class NearClient implements GameClient {
   private sleep: (ms: number) => Promise<void>
   private pollMs: number
   private forgeWaitMs: number
+  private stateTimeoutMs: number
+  private simWaitMs: number
   private memo: { at: number; p: Promise<ApiState> } | null = null
   private challengeTx = new Map<number, string>()
   private fighterNames = new Map<string, string>()
@@ -52,11 +57,13 @@ export class NearClient implements GameClient {
     this.sleep = o.sleep ?? defaultSleep
     this.pollMs = o.pollMs ?? 1500
     this.forgeWaitMs = o.forgeWaitMs ?? 240_000
+    this.stateTimeoutMs = o.stateTimeoutMs ?? 8000
+    this.simWaitMs = o.simWaitMs ?? 3000
     void loadSim().catch(() => undefined) // warm the wasm so odds() is ready when the Corner opens
   }
 
-  private async sim(): Promise<Sim> {
-    try { return await loadSim() } catch { throw new GameError('E_SIM', 'The fight engine failed to load. Reload the page.') }
+  private async sim(ms = 20_000): Promise<Sim> {
+    try { return await within(loadSim(), ms, () => new Error('E_SIM')) } catch { throw new GameError('E_SIM', 'The fight engine failed to load. Reload the page.') }
   }
 
   private view<T>(method: string, args: unknown = {}): Promise<T> {
@@ -113,7 +120,7 @@ export class NearClient implements GameClient {
   private getState(): Promise<ApiState> {
     const now = Date.now()
     if (this.memo && now - this.memo.at < 3000) return this.memo.p
-    const p = this.api.state().catch(async (e) => {
+    const p = this.api.stateRetry(this.stateTimeoutMs).catch(async (e) => {
       try { return await this.directState() } catch { throw e }
     })
     this.memo = { at: now, p }
@@ -146,9 +153,10 @@ export class NearClient implements GameClient {
     return name
   }
 
+  /** /api/state is asked at once; the wasm loads beside it and is waited for only briefly (it used to gate the request). */
   async belts(): Promise<Belt[]> {
-    await this.sim().catch(() => undefined)
-    return (await this.getState()).belts
+    const [state] = await Promise.all([this.getState(), this.sim(this.simWaitMs).catch(() => undefined)])
+    return state.belts
   }
 
   async belt(id: string): Promise<Belt> {

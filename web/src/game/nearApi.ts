@@ -2,6 +2,7 @@
 import { GameError } from './client'
 import type { FightSummary } from './client'
 import type { ChainBelt } from './chain/views'
+import { within } from './deadline'
 
 export interface ApiState {
   at: number; contract: string; forgeMode: string; model: string; rulebookHash: string
@@ -62,7 +63,15 @@ export class Api {
     return body as T
   }
 
-  state = () => this.request<ApiState>('/api/state')
+  state = (signal?: AbortSignal) => this.request<ApiState>('/api/state', signal ? { signal } : undefined)
+  /** /api/state with a deadline per try and one retry: a stalled first request cannot hold the belts back. */
+  stateRetry(ms: number): Promise<ApiState> {
+    const once = () => {
+      const ac = new AbortController()
+      return within(this.state(ac.signal), ms, () => { ac.abort(); return new GameError('E_NETWORK', 'The game server took too long to answer.') })
+    }
+    return once().catch(() => once())
+  }
   proof = () => this.request<ApiProof>('/api/proof')
   stateFull = () => this.request<ApiStateFull>('/api/state')
   preview = (sentence: string) => this.request<ApiPreview>('/api/preview', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sentence }) })

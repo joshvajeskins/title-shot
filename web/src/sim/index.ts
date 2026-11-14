@@ -49,7 +49,8 @@ let sync: Sim | null = null
 /** Browser loader: fetches the wasm next to this module (Vite hashes and serves it). */
 export function loadSim(): Promise<Sim> {
   if (sync) return Promise.resolve(sync)
-  ready ??= init({ module_or_path: new URL('./pkg/bout_sim_bg.wasm', import.meta.url) }).then(() => (sync = make()))
+  // a failed load is forgotten so the next call fetches again instead of replaying the failure
+  ready ??= init({ module_or_path: new URL('./pkg/bout_sim_bg.wasm', import.meta.url) }).then(() => (sync = make()), (e: unknown) => { ready = null; throw e })
   return ready
 }
 
