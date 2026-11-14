@@ -112,3 +112,4 @@
 .forge-closed svg { color: var(--gold); margin-top: 2px; }
 .forge-closed b { display: block; color: var(--paper); font-weight: 600; margin-bottom: 2px; }
 .corner-holds { display: grid; gap: 18px; padding: 22px 0 6px; }
+.corner-write .tu { padding: 0; }

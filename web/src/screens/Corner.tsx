@@ -62,7 +62,7 @@ export function Corner({ beltId }: { beltId: string }) {
     if (holds) { setErr('You hold this belt, so you cannot challenge it. Take a shot at another belt.'); return }
     if (short) {
       setErr(account.kind === 'wallet'
-        ? `You need ${near(belt.tollYocto)} NEAR for the toll and have ${near(account.balanceYocto, 3)}. Add fight money below.`
+        ? `You need ${near(belt.tollYocto)} NEAR for the toll and have ${near(account.balanceYocto, 3)} NEAR. Add fight money below.`
         : `This demo account has ${near(account.balanceYocto, 3)} NEAR left, less than the ${near(belt.tollYocto)} NEAR toll. Move what it holds to your wallet from the account menu, or connect your own wallet to keep fighting.`)
       return
     }

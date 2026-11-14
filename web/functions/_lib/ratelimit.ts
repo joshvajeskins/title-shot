@@ -92,8 +92,10 @@ export async function enforce(kv: KVLike, rule: Rule, request: Request, idOverri
  *  (retry in seconds) and every other error pass through unchanged. */
 export const dailyLimit = (what: string) => (e: unknown): never => {
   if (e instanceof ApiError && e.code === 'RATE_LIMITED' && (e.retryAfter ?? 0) > 60) {
-    const hours = Math.max(1, Math.round((e.retryAfter ?? 0) / 3600))
-    throw new ApiError(429, 'GUEST_LIMIT', `${what} Connect a NEAR testnet wallet to play now, or open the demo again in about ${hours} hour${hours > 1 ? 's' : ''} (it resets at midnight UTC).`, e.retryAfter)
+    const sec = e.retryAfter ?? 0
+    const n = sec < 3600 ? Math.max(1, Math.ceil(sec / 60)) : Math.round(sec / 3600)
+    const when = `${n} ${sec < 3600 ? 'minute' : 'hour'}${n > 1 ? 's' : ''}`
+    throw new ApiError(429, 'GUEST_LIMIT', `${what} Connect a NEAR testnet wallet to play now, or open the demo again in about ${when} (it resets at midnight UTC).`, sec)
   }
   throw e
 }

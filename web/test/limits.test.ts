@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { env, MemKV, recordedExchange, ctx, json, sim, archetypes } from './helpers'
 import { CAPS, consume, dailyLimit, enforce, KvUnavailable, resetRateMemory, RULES, spendCap, WRITE_GAP_MS } from '../functions/_lib/ratelimit'
 import { cryFor, portraitFor } from '../functions/_lib/media'
+import { ApiError } from '../functions/_lib/http'
 import { runPreview } from '../functions/_lib/preview'
 import { missKey, previewKey } from '../functions/_lib/lookup'
 import { onRequest as previewApi } from '../functions/api/preview'
@@ -91,7 +92,9 @@ describe('a failing counter store is never a 500', () => {
     for (let i = 0; i < 3; i++) await enforce(kv, RULES.guestIp, req(), 'daily').catch(dailyLimit('Used up.'))
     const e = await enforce(kv, RULES.guestIp, req(), 'daily').catch(dailyLimit('Used up.')).then(() => null, (x: unknown) => x)
     expect(e).toMatchObject({ status: 429, code: 'GUEST_LIMIT' })
-    expect((e as Error).message).toMatch(/^Used up\. Connect a NEAR testnet wallet .* about \d+ hours? \(it resets at midnight UTC\)\.$/)
+    expect((e as Error).message).toMatch(/^Used up\. Connect a NEAR testnet wallet .* about \d+ (hours?|minutes?) \(it resets at midnight UTC\)\.$/)
+    expect(() => dailyLimit('Used up.')(new ApiError(429, 'RATE_LIMITED', 'x', 300))).toThrow('about 5 minutes (it resets at midnight UTC).')
+    expect(() => dailyLimit('Used up.')(new ApiError(429, 'RATE_LIMITED', 'x', 7200))).toThrow('about 2 hours (it resets at midnight UTC).')
     // a busy counter store is still a short RATE_LIMITED retry, never a day-long refusal
     await expect(enforce(down(new MemKV()), RULES.guestIp, req(), 'busy').catch(dailyLimit('Used up.'))).rejects.toMatchObject({ code: 'RATE_LIMITED' })
   })
