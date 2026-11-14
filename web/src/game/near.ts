@@ -56,7 +56,8 @@ export class NearClient implements GameClient {
     this.store = o.store ?? browserStore()
     this.sleep = o.sleep ?? defaultSleep
     this.pollMs = o.pollMs ?? 1500
-    this.forgeWaitMs = o.forgeWaitMs ?? 240_000
+    // relayer delivery rides a 5-min tick: watch until just before the 10-min refund (fight #38 landed after the old 4 min)
+    this.forgeWaitMs = o.forgeWaitMs ?? 570_000
     this.stateTimeoutMs = o.stateTimeoutMs ?? 8000
     this.simWaitMs = o.simWaitMs ?? 3000
     void loadSim().catch(() => undefined) // warm the wasm so odds() is ready when the Corner opens
