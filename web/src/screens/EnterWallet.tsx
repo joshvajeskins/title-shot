@@ -23,10 +23,10 @@ export function EnterWallet({ busyElsewhere, onBusy, onDone }: { busyElsewhere: 
   const [amount, setAmount] = useState<bigint | null>(null)
   useEffect(() => { onBusy(phase.k === 'connecting' || phase.k === 'approving' || phase.k === 'confirming') }, [phase.k, onBusy])
 
-  // A reload in the middle of the setup: NEAR Connect still remembers the wallet, so pick the ticket back up.
+  // A reload after connecting (or mid-approval): NEAR Connect still remembers the wallet, so pick the ticket back up.
   useEffect(() => {
     let pending = false
-    try { pending = !!localStorage.getItem('ts-wallet-pending') && !!localStorage.getItem('selected-wallet') } catch { /* blocked storage */ }
+    try { pending = !!localStorage.getItem('selected-wallet') } catch { /* blocked storage */ }
     if (!pending) return
     let live = true
     void import('../game/wallet/connector').then((m) => m.rememberedWallet()).then((c) => { if (live && c) setPhase({ k: 'setup', c }) }).catch(() => undefined)
