@@ -57,6 +57,20 @@
    "speaker": "announcer"
   },
   {
+   "id": "base_challenger",
+   "file": "audio/vo/base_challenger.mp3",
+   "kind": "vo",
+   "loop": false,
+   "duration_ms": 4640,
+   "lufs": -16.1,
+   "true_peak_dbtp": -1.4,
+   "peak_dbfs": -1.5,
+   "rms_dbfs": -18.0,
+   "text": "And in this corner... a challenger... from Base!",
+   "voice": "RwCBSTvCZrbz0Ee9NhVE",
+   "speaker": "announcer"
+  },
+  {
    "id": "forge_1",
    "file": "audio/vo/forge_1.mp3",
    "kind": "vo",

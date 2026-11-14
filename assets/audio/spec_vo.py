@@ -6,6 +6,7 @@ ANNOUNCER = [
  ("intro_2", "Tonight, one sentence takes the belt.", 1),
  ("corner_champ", "In this corner... the reigning champion!", 1),
  ("corner_challenger", "And in this corner... the challenger!", 1),
+ ("base_challenger", "And in this corner... a challenger... from Base!", 2),  # title shot bought on Base over x402 (eleven_v4)
  ("forge_1", "The forge is lit. Let's see what your words are made of.", 1),
  ("forge_2", "Hot off the press!", 1),
  ("round_1", "Round one!", 1),
@@ -45,7 +46,7 @@ VANCE = [
 # Optional audio-tag prefixes for eleven_v3 (kept small; tags are stripped from QA comparison)
 TAGS = {
  "intro_1": "[booming] ", "intro_2": "[low, dramatic] ", "corner_champ": "[booming] ",
- "corner_challenger": "[booming] ", "forge_1": "[dramatic] ", "forge_2": "[shouting] ",
+ "corner_challenger": "[booming] ", "base_challenger": "[booming] ", "forge_1": "[dramatic] ", "forge_2": "[shouting] ",
  "round_1": "[booming] ", "round_2": "[booming] ", "round_3": "[booming] ", "fight": "[shouting] ",
  "ko": "[shouting] ", "new_champ": "[booming] ", "holds": "[booming] ", "draw": "[booming] ",
  "crit_1": "[excited] ", "crit_2": "[excited] ", "crit_3": "[excited] ", "vo_stun": "[excited] ",

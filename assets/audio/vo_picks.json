@@ -634,5 +634,23 @@
     "dur": 2.32
    }
   ]
+ },
+ "base_challenger": {
+  "text": "And in this corner... a challenger... from Base!",
+  "picked": 0,
+  "takes": [
+   {
+    "take": 0,
+    "heard": "And in this corner a challenger from base",
+    "sim": 1.0,
+    "dur": 4.8
+   },
+   {
+    "take": 1,
+    "heard": "And in this corner a challenger from base",
+    "sim": 1.0,
+    "dur": 4.8
+   }
+  ]
  }
 }

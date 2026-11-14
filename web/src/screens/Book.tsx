@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Icon } from '../components/Icon'
 import { Link } from '../components/Link'
 import { useAsync, useGame } from '../game/context'
-import { ago, near, shortAccount, shortHex } from '../lib/format'
+import { baseBookings } from '../game/baseBookings'
+import { ago, near, shortAccount } from '../lib/format'
 import './pages.css'
 
 export function Book() {
@@ -13,10 +14,7 @@ export function Book() {
   const hist = useAsync(() => client.history(belt === 'all' ? undefined : belt), [client, belt])
   const rows = (hist.data ?? []).filter((r) => !mine || r.challenger === account?.id || r.champion === account?.id)
   // Title shots bought on Base over x402 (functions/api/boxoffice/recent): the corner account → who paid on Base.
-  const base = useAsync(() => (client.mode === 'mock' ? Promise.resolve(new Map<string, string>()) : fetch('/api/boxoffice/recent')
-    .then((r) => (r.ok ? r.json() : { bookings: [] }))
-    .then((j: { bookings?: { guest: string; payer: string; payerName: string | null }[] }) => new Map((j.bookings ?? []).map((b) => [b.guest, b.payerName ?? shortHex(b.payer)] as const)))
-    .catch(() => new Map<string, string>())), [client])
+  const base = useAsync(() => baseBookings(client.mode), [client])
   const counts = { all: hist.data?.length ?? 0, won: (hist.data ?? []).filter((r) => r.winner === 1).length }
   return (
     <div className="page pages">
