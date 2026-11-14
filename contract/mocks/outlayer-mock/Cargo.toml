@@ -1,0 +1,25 @@
+[package]
+name = "outlayer-mock"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.86"
+publish = false
+description = "Test double for outlayer.testnet: stores request_execution calls, resolves them only when a test says so."
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = { version = "=5.17.2", default-features = false }
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true
+strip = true
+
+# Own root on purpose: never part of a parent workspace (it builds with Rust 1.86 like the contract).
+[workspace]

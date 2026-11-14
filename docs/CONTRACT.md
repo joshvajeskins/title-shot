@@ -94,7 +94,11 @@ status: Forging, created_at, need_compile}`; `need_compile = !fighters.contains(
   `chain_id`, calls the signer (1 yocto, path = purse path, domain 0), callback stores the raw tx, verifies the recovered
   address, logs `payout_signed{raw_tx}`. Already signed → returns the stored raw tx (no new signature). A stuck tx may be
   re-signed with the same nonce only with a strictly higher `max_fee_per_gas` (`E_FEE_NOT_HIGHER`). Pending callback lost →
-  `reset_payout_signing(id)` after 10 min.
+  `reset_payout_signing(id)` after 10 min. **Payee vs stranger (review fix):** the payee's parameters are used as given; a caller who
+  is not the payee gets the max fee lowered so the gas burn is at most 1% of the payout; the payee may replace a stranger-signed tx
+  with any parameters, a stranger can never replace a payee-signed tx (`E_NOT_PAYEE`). `open_season` refuses `purse_wei` > 1e24
+  (`E_AMOUNT`). `set_purse_address` is frozen only once a payout of the season is signing or signed. `withdraw_protocol` pays only the
+  protocol share beyond the storage deficit (`get_solvency`); `get_deploy_gates` lists unmet deploy conditions.
 - Anyone broadcasts `raw_tx` (the relayer/worker does it automatically).
 
 ## Belt token (NEP-171)

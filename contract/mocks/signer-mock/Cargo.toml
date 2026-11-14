@@ -1,0 +1,27 @@
+[package]
+name = "signer-mock"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.86"
+publish = false
+description = "Test double for v1.signer-prod.testnet: signs 32-byte ECDSA payloads with a test secp256k1 key derived from (predecessor, path, domain)."
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = { version = "=5.17.2", default-features = false }
+k256 = { version = "0.13", default-features = false, features = ["arithmetic", "ecdsa", "sha256"] }
+bs58 = { version = "0.5", default-features = false, features = ["alloc"] }
+hex = { version = "0.4", default-features = false, features = ["alloc"] }
+
+[profile.release]
+codegen-units = 1
+opt-level = 3
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true
+strip = true
+
+[workspace]

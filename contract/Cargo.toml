@@ -1,0 +1,36 @@
+[package]
+name = "titleshot"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.86"
+publish = false
+license = "MIT"
+description = "TITLE SHOT+ belt contract: attested AI fighter compile, in-contract best-of-3, NEP-171 belts, Chain Signatures purse"
+
+# Standalone crate (no root workspace): contract/it and contract/mocks are their own workspaces.
+[workspace]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = { version = "=5.17.2", default-features = false, features = ["unstable", "legacy"] }
+near-contract-standards = { version = "=5.17.2", default-features = false }
+bout-sim = { path = "../crates/bout-sim" }
+omni-transaction = { version = "0.5.0", default-features = false, features = ["evm"] }
+hex = { version = "0.4", default-features = false, features = ["alloc"] }
+
+[dev-dependencies]
+near-sdk = { version = "=5.17.2", default-features = false, features = ["unstable", "legacy", "unit-testing"] }
+k256 = { version = "0.13", features = ["ecdsa"] }
+sha3 = "0.10"
+sha2 = "0.10"
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true
+strip = true
