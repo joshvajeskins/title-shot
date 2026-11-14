@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Icon } from '../components/Icon'
 import { Link } from '../components/Link'
 import { Counter, Hash, TapeRow } from '../components/Tape'
@@ -8,6 +8,7 @@ import { baseAddrUrl, NEARBLOCKS } from '../game/chain/config'
 import { eth, near, shortHex } from '../lib/format'
 import './pages.css'
 import './proof.css'
+import { ProofFair } from './ProofFair'
 
 const REPO = 'https://github.com/joshvajeskins/title-shot'
 /** sha256 of contract/res/titleshot.wasm at the commit this site was built from. */
@@ -26,6 +27,9 @@ export function Proof() {
   const vance = s?.wallets.find((w) => w.role === 'promoter')
   const loading = proof.loading || state.loading
   const err = proof.error ?? state.error
+  // /play/proof#fair (the landing's "How we keep it fair"): jump once the live tape above has taken its height
+  const settled = !!p || !!err
+  useEffect(() => { if (settled && location.hash === '#fair') document.getElementById('fair')?.scrollIntoView({ block: 'start' }) }, [settled])
 
   return (
     <div className="page pages proof">
@@ -121,6 +125,8 @@ export function Proof() {
           </section>
         </>
       ) : null}
+
+      <ProofFair />
     </div>
   )
 }

@@ -44,11 +44,17 @@
   --t-press: 120ms;
   --t-fast: 180ms;
   --t-ui: 240ms;
+  --t-slam: 380ms;
+  --t-reveal: 560ms;
 
   /* layout */
   --radius-s: 6px;
   --radius: 10px;
   --radius-l: 16px;
+  /* fight-bill system (landing and anything printed on paper): 2-4px corners, a red offset shadow, pills only for tags */
+  --r-bill: 3px;
+  --r-tag: 999px;
+  --offset: 3px 3px 0 var(--red);
   --gutter: 16px;
   --sidebar-w: 248px;
   --tabbar-h: 64px;

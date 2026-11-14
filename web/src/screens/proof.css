@@ -37,3 +37,20 @@
   .tape-verdict { grid-column: 1; grid-row: auto; }
   .tape-counter b { font-size: 32px; }
 }
+
+/* Fair by construction + what we don't claim (moved from the landing): the same tape, the role stamped where a verdict goes. */
+.fair { gap: 8px; scroll-margin-top: 76px; }
+.fair-sub { margin: 0 0 10px; max-width: 62ch; font-family: var(--font-serif); font-style: italic; font-size: 19px; line-height: 1.3; color: var(--paper-dim); }
+.fair-d { margin: 0; font-family: var(--font-serif); font-size: 18px; line-height: 1.4; color: var(--paper-dim); max-width: 68ch; }
+.fair-tape .tape-row { grid-template-columns: 200px minmax(0, 1fr) 150px; }
+.fair-tape .tape-verdict { color: var(--gold); white-space: normal; text-align: center; }
+.fair-h3 { margin: 18px 0 4px; font-size: 24px; color: var(--gold); }
+.fair-limits li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: baseline; padding: 14px 4px; border-bottom: 1px solid var(--line); }
+.fair-limits p { margin: 0; font-family: var(--font-serif); font-size: 18px; line-height: 1.4; color: var(--paper-dim); max-width: 74ch; }
+.fair-limits code { font-size: 14px; color: var(--paper); overflow-wrap: anywhere; }
+.fair-n { font-size: 22px; color: var(--red); }
+@media (max-width: 860px) {
+  .fair-tape .tape-row { grid-template-columns: 140px minmax(0, 1fr); }
+  .fair-tape .tape-verdict { text-align: left; }
+}
+@media (max-width: 520px) { .fair-tape .tape-row { grid-template-columns: minmax(0, 1fr); } .fair-limits li { grid-template-columns: 32px minmax(0, 1fr); } }
