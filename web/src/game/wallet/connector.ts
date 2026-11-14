@@ -12,10 +12,15 @@ export function rpcUrls(): string[] {
   return list.length ? list : DEFAULT_RPC_URLS
 }
 
+/** RPCs handed to wallet executors (window.selector.providers inside each wallet's sandbox): drpc only. FastNEAR's public
+ *  testnet RPC rate-limits busy IPs with a 429 that carries no CORS header, which a wallet sees as "Failed to fetch", and a
+ *  wallet may not try our list in order. The game's own client keeps FastNEAR as a fallback (see chain/rpc.ts). */
+export const WALLET_RPC_URLS = ['https://near-testnet.drpc.org']
+
 /** The page's NearConnector (testnet only), created on first use. */
 export function connector(): Promise<NearConnector> {
   connectorP ??= import('@hot-labs/near-connect').then(async ({ NearConnector }) => {
-    const c = new NearConnector({ network: 'testnet', providers: { testnet: rpcUrls() } })
+    const c = new NearConnector({ network: 'testnet', providers: { testnet: WALLET_RPC_URLS } })
     await c.whenManifestLoaded
     return c
   }).catch((e: unknown) => { connectorP = null; throw e })
