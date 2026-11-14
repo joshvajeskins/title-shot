@@ -151,7 +151,7 @@ wording matters more than luck.
   ([EQ1eN7EZ…](https://testnet.nearblocks.io/txns/EQ1eN7EZahVMTv3QDjePonzmE1CNTYGB5kQPLUU3m7ws)). Every wallet tap reaches the
   wallet with no network wait first, because web wallets open their sign tab with `window.open`, which browsers block a few
   seconds after a tap. Intear, Nightly, Ledger, MetaMask and Rabby were not tried with their real apps; whether a given
-  wallet accepts the session-key request in a batch, or NEP-413 message signing, is up to that wallet. Moving a belt with `nft_transfer` is unit-tested, not run live.
+  wallet accepts the session-key request in a batch, or NEP-413 message signing, is up to that wallet. A demo account's belt moved to a wallet with `nft_transfer` in **Move to my wallet** on testnet ([CBe45QJ2…](https://testnet.nearblocks.io/txns/CBe45QJ2QNstCtk6fDNWtqs8ibiASLdBNC1GDukSMYyU), the Midnight Belt).
   Smart-contract EVM wallets cannot sign the ownership message, so they use the paste path. Not integrated: FastAuth social
   login (on 14 Nov the shared testnet Auth0 client accepted only `http://localhost:3000` as a callback and answered 403
   "Callback URL mismatch" for this site, and testnet has no public FastAuth relayer), HOT Kit and WalletConnect (they need
@@ -166,7 +166,7 @@ wording matters more than luck.
 | Contract unit | 60 | `cd contract && cargo test --lib` |
 | Contract sandbox (real wasm, mock OutLayer + MPC signer) | 68, run on the deployed wasm (about 13 min; the first run downloads the near-sandbox binary) | `cd contract/it && ./run.sh` |
 | Forge (host + inside wasm) | 20 | `cd forge && cargo test --lib` |
-| Web client + Pages Functions | 612 | `cd web && pnpm test` |
+| Web client + Pages Functions | 713 | `cd web && pnpm test` |
 | Recorded NEAR AI signatures | 44/44 | `cd spikes/ecrecover && node scripts/verify-offline.mjs` |
 
 ## Reproduce
