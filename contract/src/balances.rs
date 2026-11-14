@@ -5,7 +5,7 @@ use crate::util::*;
 use crate::verify;
 use crate::{Contract, ContractExt};
 use near_sdk::json_types::U128;
-use near_sdk::serde_json::json;
+use crate::json::json;
 use near_sdk::{assert_one_yocto, env, near, AccountId, Gas, NearToken, Promise, PromiseError};
 
 const WITHDRAW_CALLBACK_GAS: Gas = Gas::from_tgas(10);

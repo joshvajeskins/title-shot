@@ -32,11 +32,13 @@ pub struct Opts {
     /// What the mock OutLayer keeps per run (the rest of the deposit is refunded to the contract).
     pub charge: u128,
     pub purse_chain_id: u64,
+    /// Pin the OutLayer VRF key at deploy (a real deploy must: outlayer mode refuses `challenge` otherwise).
+    pub pin_vrf: bool,
 }
 
 impl Default for Opts {
     fn default() -> Self {
-        Self { forge_mode: "outlayer", kind: "provider_tee", delay_sec: 120, toll: 100 * MILLI, forge_fee: 10 * MILLI, charge: 4 * MILLI, purse_chain_id: 84532 }
+        Self { forge_mode: "outlayer", kind: "provider_tee", delay_sec: 120, toll: 100 * MILLI, forge_fee: 10 * MILLI, charge: 4 * MILLI, purse_chain_id: 84532, pin_vrf: true }
     }
 }
 
@@ -107,6 +109,10 @@ impl World {
             .transact()
             .await?
             .into_result()?;
+        if opts.pin_vrf {
+            let pin = owner.call(ts.id(), "set_vrf_pubkey").args_json(json!({"pubkey_hex": crate::simx::vrf_pubkey_hex()}));
+            pin.deposit(NearToken::from_yoctonear(1)).transact().await?.into_result()?;
+        }
         Ok(World { w, root, ts, ol, sg, owner, promoter, alice, bob, carol, relayer, ai, opts })
     }
 

@@ -1,5 +1,5 @@
 //! Independent EIP-1559 helpers (own RLP, own recovery): what the contract's `sign_payout` must produce.
-//! Nothing here shares code with the contract (which uses omni-transaction), so agreement is evidence.
+//! Nothing here shares code with the contract (which hand-writes its RLP), so agreement is evidence.
 use crate::fixtures::keccak;
 use k256::ecdsa::{RecoveryId, Signature, VerifyingKey};
 

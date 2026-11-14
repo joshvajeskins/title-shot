@@ -57,7 +57,7 @@ pub fn request_bytes(prefix: &[u8], suffix: &[u8], sentence: &str) -> Vec<u8> {
 ///  provider_tee: "{model_id}:{hex sha256 req}:{hex sha256 resp}"
 ///  gateway:      "{hex sha256 req}:{hex sha256 resp}"
 pub fn signed_text(kind: Kind, model_id: &str, req_hash: &[u8; 32], resp_hash: &[u8; 32]) -> String {
-    let (rq, rs) = (hex::encode(req_hash), hex::encode(resp_hash));
+    let (rq, rs) = (crate::hex::encode(req_hash), crate::hex::encode(resp_hash));
     match kind {
         Kind::ProviderTee => format!("{model_id}:{rq}:{rs}"),
         Kind::Gateway => format!("{rq}:{rs}"),
@@ -74,7 +74,7 @@ pub fn eip191_digest(text: &str) -> [u8; 32] {
 /// 65-byte r||s||v signature (optional 0x prefix) -> (r||s, recovery id 0/1).
 pub fn decode_sig(sig_hex: &str) -> Result<([u8; 64], u8), &'static str> {
     let h = sig_hex.strip_prefix("0x").unwrap_or(sig_hex);
-    let raw = hex::decode(h).map_err(|_| code::SIG_HEX)?;
+    let raw = crate::hex::decode(h).map_err(|_| code::SIG_HEX)?;
     if raw.len() != 65 {
         return Err(code::SIG_LEN);
     }
@@ -102,12 +102,12 @@ pub fn parse_address(s: &str) -> Option<[u8; 20]> {
         return None;
     }
     let mut a = [0u8; 20];
-    hex::decode_to_slice(h, &mut a).ok()?;
+    crate::hex::decode_to_slice(h, &mut a).ok()?;
     Some(a)
 }
 
 pub fn addr_hex(a: &[u8; 20]) -> String {
-    format!("0x{}", hex::encode(a))
+    format!("0x{}", crate::hex::encode(a))
 }
 
 #[derive(near_sdk::serde::Deserialize)]

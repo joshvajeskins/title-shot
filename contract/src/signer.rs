@@ -44,7 +44,7 @@ pub struct Scalar {
 
 /// Decode a 32-byte value; for a compressed point (33 bytes) return the x coordinate (bytes 1..33).
 pub fn hex32(s: &str, compressed_point: bool) -> Option<[u8; 32]> {
-    let b = hex::decode(s).ok()?;
+    let b = crate::hex::decode(s).ok()?;
     let slice = if compressed_point {
         if b.len() != 33 || (b[0] != 2 && b[0] != 3) {
             return None;

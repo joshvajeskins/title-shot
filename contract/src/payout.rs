@@ -10,14 +10,15 @@ use crate::util::*;
 use crate::verify::addr_hex;
 use crate::{Contract, ContractExt};
 use near_sdk::json_types::U128;
-use near_sdk::serde_json::{self, json};
+use crate::json::json;
+use near_sdk::serde_json;
 use near_sdk::{env, near, Gas, NearToken, PromiseOrValue, PromiseResult};
 
 const SIGN_GAS: Gas = Gas::from_tgas(40);
 const CALLBACK_GAS: Gas = Gas::from_tgas(30);
 
 pub fn to_hex(b: &[u8]) -> String {
-    format!("0x{}", hex::encode(b))
+    format!("0x{}", crate::hex::encode(b))
 }
 
 /// Why a signature response was not usable (becomes the `reason` of `payout_sign_failed`).
@@ -51,7 +52,7 @@ impl Contract {
         max_priority_fee_per_gas: U128,
         gas_limit: u64,
     ) -> PromiseOrValue<Option<String>> {
-        let mut p = self.payouts.get(&payout_id).cloned().unwrap_or_else(|| fail(E_NO_PAYOUT));
+        let mut p = self.payouts.get(&payout_id).unwrap_or_else(|| fail(E_NO_PAYOUT));
         let to = p.to.unwrap_or_else(|| fail(E_NO_ADDRESS));
         let belt = self.belt(p.belt_id);
         let mut season = self.season_of(p.belt_id, p.season_id).unwrap_or_else(|| fail(E_NO_SEASON));
@@ -93,7 +94,7 @@ impl Contract {
         self.seasons.insert((belt_id, season_id), season);
         let request = SignRequest {
             path: purse_path(belt_id, season_id),
-            payload_v2: Payload::Ecdsa(hex::encode(digest)),
+            payload_v2: Payload::Ecdsa(crate::hex::encode(digest)),
             domain_id: 0,
         };
         PromiseOrValue::Promise(
@@ -108,7 +109,7 @@ impl Contract {
     /// Soft: any failure clears the signing flag (the payout can be retried) and logs `payout_sign_failed`.
     #[private]
     pub fn on_signed(&mut self, payout_id: u64, by_payee: bool) -> Option<String> {
-        let mut p = self.payouts.get(&payout_id).cloned()?;
+        let mut p = self.payouts.get(&payout_id)?;
         let (params, _) = p.signing.take()?;
         let (r, s, rec) = match decode_signature(env::promise_result(0)) {
             Ok(x) => x,
@@ -142,7 +143,7 @@ impl Contract {
     /// Anyone, 10 minutes after a signing request that never answered.
     pub fn reset_payout_signing(&mut self, id: u64) {
         let payout_id = id;
-        let mut p = self.payouts.get(&payout_id).cloned().unwrap_or_else(|| fail(E_NO_PAYOUT));
+        let mut p = self.payouts.get(&payout_id).unwrap_or_else(|| fail(E_NO_PAYOUT));
         let (_, at) = p.signing.clone().unwrap_or_else(|| fail(E_NOT_SIGNING));
         check(now() >= at + SIGN_TIMEOUT_NS, E_TOO_EARLY);
         p.signing = None;

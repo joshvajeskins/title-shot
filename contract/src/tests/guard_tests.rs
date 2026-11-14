@@ -207,7 +207,7 @@ fn outlayer_mode_requests_one_execution_with_the_fee_and_the_callback_resolves_i
     e.deposit("alice.testnet", 1);
     let s = "alice through the vrf";
     let id = e.challenge("alice.testnet", s);
-    let out = e.output(s, &raw_for(s), true, 42);
+    let out = e.proved(&e.output(s, &raw_for(s), true, 42), id);
     near_sdk::test_utils::testing_env_with_promise_results(
         VMContextBuilder::new().current_account_id(acct("titleshot.testnet")).predecessor_account_id(acct("titleshot.testnet")).block_timestamp(e.t * 1_000_000_000).build(),
         near_sdk::PromiseResult::Successful(out.into_bytes()),
@@ -235,14 +235,21 @@ fn outlayer_callback_without_a_vrf_refunds_and_a_pinned_key_rejects_a_forged_pro
     assert_eq!(e.c.settle(id, crate::forge_out::parse_str(&o.to_string()), false), "Refunded");
     assert_eq!(e.c.get_challenge(id).unwrap()["code"], "E_VRF");
     assert_eq!(e.bal("alice.testnet"), before - FEE);
-    // Pin a key: the fake proof in the helper output no longer verifies.
-    e.at("titleshot.testnet", 1);
-    e.c.set_vrf_pubkey(hex::encode([5u8; 32]));
+    // The key is pinned: the helper's fake proof, and a genuine proof made for another challenge, are refused.
     let s2 = "alice with a fake proof";
     let id2 = e.challenge("alice.testnet", s2);
     let out2 = e.output(s2, &raw_for(s2), true, 1);
     assert_eq!(e.c.settle(id2, crate::forge_out::parse_str(&out2), false), "Refunded");
     assert_eq!(e.c.get_challenge(id2).unwrap()["code"], "E_VRF");
+    let s3 = "alice with a proof for someone else";
+    let id3 = e.challenge("alice.testnet", s3);
+    let out3 = e.proved(&e.output(s3, &raw_for(s3), true, 1), id3 + 1);
+    assert_eq!(e.c.settle(id3, crate::forge_out::parse_str(&out3), false), "Refunded");
+    assert_eq!(e.c.get_challenge(id3).unwrap()["code"], "E_VRF");
+    let s4 = "alice with a genuine proof";
+    let id4 = e.challenge("alice.testnet", s4);
+    let out4 = e.proved(&e.output(s4, &raw_for(s4), true, 1), id4);
+    assert_eq!(e.c.settle(id4, crate::forge_out::parse_str(&out4), false), "Resolved");
 }
 
 #[test]
@@ -250,13 +257,15 @@ fn belt_nft_holder_transfer_pays_the_new_holder_and_blocks_their_own_challenge()
     let mut e = opened();
     // vance (holder) gifts the belt to bob.
     e.at("vance.testnet", 1);
-    near_contract_standards::non_fungible_token::core::NonFungibleTokenCore::nft_transfer(&mut e.c, acct("bob.testnet"), "belt-1".into(), None, None);
+    e.c.nft_transfer(acct("bob.testnet"), "belt-1".into(), None, None);
     assert_eq!(e.holder(), "bob.testnet");
     let bob_before = e.bal("bob.testnet");
     let s = "alice challenges the new holder";
     let id = e.challenge("alice.testnet", s);
     e.deliver(id, s);
-    let split = crate::economy::split_toll(TOLL, FEE).unwrap();
+    let fid = e.c.get_challenge(id).unwrap()["fight_id"].as_u64().unwrap();
+    let storage: u128 = e.c.get_fight(fid).unwrap()["storage"].as_str().unwrap().parse().unwrap();
+    let split = crate::economy::split_toll(TOLL, FEE + storage).unwrap();
     assert_eq!(e.bal("bob.testnet") - bob_before, split.champion, "the new holder is paid");
     // Bob cannot challenge his own belt.
     e.at("bob.testnet", 0);
@@ -269,7 +278,7 @@ fn challenger_who_becomes_holder_before_resolution_is_refunded_not_paid() {
     let s = "alice wins the belt as a gift mid forge";
     let id = e.challenge("alice.testnet", s);
     e.at("vance.testnet", 1);
-    near_contract_standards::non_fungible_token::core::NonFungibleTokenCore::nft_transfer(&mut e.c, acct("alice.testnet"), "belt-1".into(), None, None);
+    e.c.nft_transfer(acct("alice.testnet"), "belt-1".into(), None, None);
     let before = e.bal("alice.testnet");
     assert_eq!(e.deliver(id, s), "Refunded");
     assert_eq!(e.c.get_challenge(id).unwrap()["code"], "E_SELF");

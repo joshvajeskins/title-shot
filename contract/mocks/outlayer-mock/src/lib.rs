@@ -1,61 +1,37 @@
-//! outlayer-mock: a test double for `outlayer.testnet`.
+//! outlayer-mock: a test double for `outlayer.testnet` that follows the real contract's source line by line
+//! (github.com/out-layer/outlayer, `contract/src/execution.rs`, commit 2d50bfa; see contract/README.md "Large outputs").
 //!
-//! Models how the real contract talks to a caller (https://app.outlayer.ai/docs/near-integration and
-//! Stand-in's `contracts/blocklist`): `request_execution` is payable, needs `source`, `resource_limits`,
-//! and returns a *yielded* promise, so the caller's `.then(callback)` runs only when the worker answers.
-//! Here the "worker" is the test: it calls `resolve(request_id, output_json)` (success), `fail(request_id)`
-//! (execution failed: the callback sees a failed promise) or does nothing (the yield times out after 200
-//! blocks and the callback sees a failed promise, exactly like an OutLayer timeout).
-//! Settlement mirrors OutLayer: `charge` yoctoNEAR is kept for the run, the rest of the deposit is
-//! refunded to `payer_account_id` (default: the caller) when the request is settled.
+//! * `request_execution` is payable and returns a *yielded* promise whose callback is `on_execution_response`
+//!   (real: execution.rs:323), so the caller's `.then(on_forged)` runs only when the worker answers.
+//! * The worker (here: the test) answers in one of two ways, as the real operator does:
+//!   - small output (<= 1024 bytes of resume payload): `resolve_execution(request_id, response)` with the output
+//!     inside the response (execution.rs:434);
+//!   - large output: `submit_execution_output_and_resolve` (execution.rs:393): the output is stored in the request's
+//!     state first, then the yield is resumed with metadata only (execution.rs:1073-1077: "avoids the 1024 byte limit
+//!     of promise_yield_resume"). `submit_execution_output` + `resolve_execution` is the same in two transactions.
+//! * `on_execution_response` (execution.rs:455) takes the output from state when it was submitted separately, refunds
+//!   the unused deposit to the payer, and hands the output to the caller with `env::value_return` of the stored JSON
+//!   bytes (execution.rs:702, 893): the caller receives them as an ordinary promise result, of any size. A failed run
+//!   and a timed-out yield both end in `value_return("null")` (execution.rs:761, 792): the caller never sees a failed promise.
+//! * `Json` outputs are stored re-serialized through `serde_json::Value` (execution.rs:323 `From<ExecutionOutput>`):
+//!   keys come back sorted, exactly as the real contract returns them.
+//!
+//! Test helpers on top: `resolve` (picks the right path by size, like the worker), `resolve_direct` (inline whatever the
+//! size: reproduces nearcore's 1024-byte limit), `fail` (worker reports a failed run), `fail_hard` (the callback itself
+//! dies, e.g. out of gas: the caller sees a failed promise), `set_hold` (a stuck run that never times out).
 use near_sdk::json_types::U128;
 use near_sdk::serde_json::{self, Value};
 use near_sdk::store::LookupMap;
-use near_sdk::{
-    env, near, require, AccountId, BorshStorageKey, Gas, GasWeight, NearToken, PanicOnDefault,
-    Promise, PromiseResult,
-};
+use near_sdk::{env, near, require, AccountId, BorshStorageKey, Gas, GasWeight, NearToken, PanicOnDefault, Promise, PromiseError};
 
-const FAIL_SENTINEL: &[u8] = b"__outlayer_mock_execution_failed__";
-/// nearcore refuses to resume a yield with more than 1024 payload bytes ("Yield resume payload is N bytes which
-/// exceeds the 1024 byte limit", seen in the sandbox). A real AI result is 2.5-3.5 KB, so by default the mock keeps
-/// the output in its own state, resumes the yield with this small handle and returns the stored output from
-/// `on_resume` (callback return values may be large). `resolve_direct` resumes with the raw payload instead, which
-/// reproduces the limit exactly.
-const STORED_HANDLE: &[u8] = b"__outlayer_mock_stored_output__";
-const RESUME_GAS: Gas = Gas::from_tgas(10);
+mod types;
+use types::*;
+
+/// What the real contract reserves for the settlement callback (lib.rs:28 `MIN_RESPONSE_GAS`); unused gas adds by weight.
+const RESPONSE_GAS: Gas = Gas::from_tgas(50);
 const MAX_INPUT_BYTES: usize = 1_000_000;
-
-#[near(serializers = [borsh, json])]
-#[derive(Clone, PartialEq, Eq, Debug)]
-pub enum Status {
-    Pending,
-    Resolved,
-    Failed,
-    /// Answered after the yield had already timed out: nothing was delivered to the caller.
-    TooLate,
-}
-
-#[near(serializers = [borsh, json])]
-#[derive(Clone)]
-pub struct Request {
-    pub id: u64,
-    pub caller: AccountId,
-    pub payer: AccountId,
-    pub deposit: U128,
-    pub prepaid_gas: u64,
-    /// The `source` argument as JSON text.
-    pub source: String,
-    pub resource_limits: String,
-    pub input_data: Option<String>,
-    pub secrets_ref: Option<String>,
-    pub response_format: Option<String>,
-    pub created_block: u64,
-    pub status: Status,
-    pub output: Option<String>,
-    pub refunded: U128,
-    pub yield_id: Vec<u8>,
-}
+/// Largest resume payload nearcore accepts for `promise_yield_resume`.
+const YIELD_PAYLOAD_LIMIT: usize = 1024;
 
 #[derive(BorshStorageKey)]
 #[near(serializers = [borsh])]
@@ -69,7 +45,7 @@ pub struct OutlayerMock {
     charge: u128,
     min_deposit: u128,
     next_id: u64,
-    /// "Worker is down": on a yield timeout, wait again instead of failing the caller's promise (a stuck request).
+    /// "Worker is down": on a yield timeout, wait again instead of answering `null` (a stuck request).
     hold: bool,
     requests: LookupMap<u64, Request>,
 }
@@ -85,7 +61,7 @@ impl OutlayerMock {
         self.charge = charge.0;
     }
 
-    /// While `hold` is on, a request that nobody answers never fails: it re-yields every 200 blocks (a stuck run).
+    /// While `hold` is on, a request that nobody answers never times out: it re-yields every 200 blocks (a stuck run).
     pub fn set_hold(&mut self, hold: bool) {
         self.hold = hold;
     }
@@ -125,10 +101,7 @@ impl OutlayerMock {
         self.next_id += 1;
         let caller = env::predecessor_account_id();
         let payer = payer_account_id.unwrap_or_else(|| caller.clone());
-
-        let args = serde_json::json!({ "request_id": id }).to_string().into_bytes();
-        let promise = env::promise_yield_create("on_resume", &args, RESUME_GAS, GasWeight(1), 0);
-        let yield_id = env::read_register(0).unwrap_or_else(|| env::panic_str("outlayer-mock: no yield id"));
+        let yield_id = self.yield_for(id);
         self.requests.insert(
             id,
             Request {
@@ -146,53 +119,104 @@ impl OutlayerMock {
                 status: Status::Pending,
                 output: None,
                 refunded: U128(0),
-                yield_id,
+                yield_id: yield_id.0,
+                output_submitted: false,
+                pending_output: None,
+                resume_bytes: 0,
+                output_path: "none".into(),
+                hard_fail: false,
             },
         );
         env::log_str(&format!("outlayer-mock: request {id} queued"));
-        env::promise_return(promise);
+        env::promise_return(yield_id.1);
     }
 
-    // ----- the "worker": driven by tests -----
+    // ----- the real operator API (execution.rs) -----
 
-    /// Answer with a successful run whose stdout (parsed per response_format) is `output_json`.
-    /// Returns false when the yield already timed out (a late answer: nothing is delivered).
+    /// Real `submit_execution_output` (execution.rs:372): store a large output in the request's state.
+    pub fn submit_execution_output(&mut self, request_id: u64, output: ExecutionOutput) {
+        let mut r = self.pending(request_id);
+        require!(!r.output_submitted, "Output already submitted for this request");
+        r.pending_output = Some(stored(&output));
+        r.output_submitted = true;
+        self.requests.insert(request_id, r);
+    }
+
+    /// Real `resolve_execution` (execution.rs:434): resume the yield with `response` as the payload. A late answer
+    /// (the yield already timed out) returns false instead of panicking, so tests can observe it.
+    pub fn resolve_execution(&mut self, request_id: u64, response: ExecutionResponse) -> bool {
+        self.resume(request_id, response)
+    }
+
+    /// Real `submit_execution_output_and_resolve` (execution.rs:393): store the output, then resume with metadata only.
+    pub fn submit_execution_output_and_resolve(&mut self, request_id: u64, output: ExecutionOutput, success: bool, error: Option<String>) -> bool {
+        self.submit_execution_output(request_id, output);
+        self.resume(request_id, response(success, None, error))
+    }
+
+    // ----- test helpers: the "worker" -----
+
+    /// A successful run printing `output_json`. Like the worker: inline when the resume payload fits the 1024-byte
+    /// limit, otherwise through the stored-output path. Returns false when the yield already timed out.
     pub fn resolve(&mut self, request_id: u64, output_json: String) -> bool {
-        self.settle(request_id, Status::Resolved, output_json.into_bytes(), true)
+        let output = ExecutionOutput::Json(serde_json::from_str(&output_json).unwrap_or(Value::String(output_json)));
+        let inline = response(true, Some(output.clone()), None);
+        if serde_json::to_vec(&inline).map_or(0, |v| v.len()) <= YIELD_PAYLOAD_LIMIT {
+            self.resume(request_id, inline)
+        } else {
+            self.submit_execution_output_and_resolve(request_id, output, true, None)
+        }
     }
 
-    /// Like `resolve`, but the payload goes through `promise_yield_resume` as is (fails over 1024 bytes).
+    /// Like `resolve`, but the output always rides in the resume payload (fails over 1024 bytes: nearcore's limit).
     pub fn resolve_direct(&mut self, request_id: u64, output_json: String) -> bool {
-        self.settle(request_id, Status::Resolved, output_json.into_bytes(), false)
+        let output = ExecutionOutput::Json(serde_json::from_str(&output_json).unwrap_or(Value::String(output_json)));
+        self.resume(request_id, response(true, Some(output), None))
     }
 
-    /// Answer with an execution failure: the caller's callback sees a failed promise.
+    /// The run failed on the worker: the caller is handed `null` (execution.rs:761).
     pub fn fail(&mut self, request_id: u64) -> bool {
-        self.settle(request_id, Status::Failed, FAIL_SENTINEL.to_vec(), false)
+        self.resume(request_id, response(false, None, Some("execution failed".into())))
     }
 
+    /// The settlement callback itself dies (for example out of gas): the caller's promise fails.
+    pub fn fail_hard(&mut self, request_id: u64) -> bool {
+        let mut r = self.pending(request_id);
+        r.hard_fail = true;
+        self.requests.insert(request_id, r);
+        self.resume(request_id, response(false, None, Some("callback failure".into())))
+    }
+
+    /// Real `on_execution_response` (execution.rs:455).
     #[private]
-    pub fn on_resume(&mut self, request_id: u64) {
-        match env::promise_result(0) {
-            PromiseResult::Successful(data) => {
-                if data == FAIL_SENTINEL {
-                    env::panic_str("outlayer-mock: execution failed");
-                }
-                if data == STORED_HANDLE {
-                    let out = self.requests.get(&request_id).and_then(|r| r.output.clone());
-                    env::value_return(out.unwrap_or_default().as_bytes());
-                } else {
-                    env::value_return(&data);
-                }
-            }
-            PromiseResult::Failed => {
-                let held = self.requests.get(&request_id).cloned().filter(|r| self.hold && r.status == Status::Pending);
-                let Some(mut r) = held else { env::panic_str("outlayer-mock: execution timed out") };
-                let args = serde_json::json!({ "request_id": request_id }).to_string().into_bytes();
-                let promise = env::promise_yield_create("on_resume", &args, RESUME_GAS, GasWeight(1), 0);
-                r.yield_id = env::read_register(0).unwrap_or_else(|| env::panic_str("outlayer-mock: no yield id"));
+    pub fn on_execution_response(&mut self, request_id: u64, #[callback_result] resp: Result<ExecutionResponse, PromiseError>) {
+        let Some(mut r) = self.requests.get(&request_id).cloned() else {
+            env::value_return(b"null");
+            return;
+        };
+        match resp {
+            Ok(resp) => {
+                require!(!r.hard_fail, "outlayer-mock: settlement callback failed");
+                let out = if r.output_submitted && resp.success { r.pending_output.take() } else { resp.output.as_ref().map(stored) };
+                let refund = r.deposit.0.saturating_sub(self.charge);
+                self.pay(&mut r, refund);
+                r.output = if resp.success { out.clone() } else { None };
                 self.requests.insert(request_id, r);
-                env::promise_return(promise);
+                env::value_return(&output_bytes(if resp.success { out.as_deref() } else { None }));
+            }
+            Err(_) => {
+                // Yield timed out. A held (stuck) run waits another round; otherwise refund minus the base fee, hand `null`.
+                if self.hold && r.status == Status::Pending {
+                    let (id, promise) = self.yield_for(request_id);
+                    r.yield_id = id;
+                    self.requests.insert(request_id, r);
+                    env::promise_return(promise);
+                    return;
+                }
+                let refund = r.deposit.0.saturating_sub(self.charge);
+                self.pay(&mut r, refund);
+                self.requests.insert(request_id, r);
+                env::value_return(b"null");
             }
         }
     }
@@ -214,31 +238,47 @@ impl OutlayerMock {
 }
 
 impl OutlayerMock {
-    fn settle(&mut self, request_id: u64, status: Status, payload: Vec<u8>, store: bool) -> bool {
-        let mut r = self.requests.get(&request_id).cloned().unwrap_or_else(|| env::panic_str("outlayer-mock: unknown request"));
+    fn yield_for(&self, request_id: u64) -> (Vec<u8>, near_sdk::PromiseIndex) {
+        let args = serde_json::json!({ "request_id": request_id }).to_string().into_bytes();
+        let promise = env::promise_yield_create("on_execution_response", &args, RESPONSE_GAS, GasWeight(1), 0);
+        let id = env::read_register(0).unwrap_or_else(|| env::panic_str("outlayer-mock: no yield id"));
+        (id, promise)
+    }
+
+    fn pending(&self, request_id: u64) -> Request {
+        let r = self.requests.get(&request_id).cloned().unwrap_or_else(|| env::panic_str("Execution request not found"));
         require!(r.status == Status::Pending, "outlayer-mock: request already settled");
+        r
+    }
+
+    /// Real `resolve_execution_internal` (execution.rs:1047): `promise_yield_resume` with the response JSON.
+    fn resume(&mut self, request_id: u64, resp: ExecutionResponse) -> bool {
+        let mut r = self.pending(request_id);
         let yield_id: [u8; 32] = r.yield_id.clone().try_into().unwrap_or_else(|_| env::panic_str("outlayer-mock: bad yield id"));
-        if store {
-            r.output = Some(String::from_utf8_lossy(&payload).into_owned());
-            self.requests.insert(request_id, r.clone());
-        }
-        let wire: &[u8] = if store { STORED_HANDLE } else { &payload };
-        let delivered = env::promise_yield_resume(&yield_id, wire);
+        let payload = serde_json::to_vec(&resp).unwrap_or_default();
+        let delivered = env::promise_yield_resume(&yield_id, &payload);
         if !delivered && self.hold {
-            // The held request is between two yields (a timeout is in flight): nothing changed, try again shortly.
+            // Held request between two yields (a timeout is in flight): nothing changed, try again shortly.
             return false;
         }
-        let status = if delivered { status } else { Status::TooLate };
-        let refund = r.deposit.0.saturating_sub(self.charge);
-        if refund > 0 {
-            Promise::new(r.payer.clone()).transfer(NearToken::from_yoctonear(refund));
-            r.refunded = U128(refund);
-        }
-        r.status = status;
-        if delivered && r.status == Status::Resolved {
-            r.output = Some(String::from_utf8_lossy(&payload).into_owned());
+        if delivered {
+            r.status = if resp.success { Status::Resolved } else { Status::Failed };
+            r.resume_bytes = payload.len() as u64;
+            r.output_path = if r.output_submitted { "stored" } else if resp.output.is_some() { "inline" } else { "none" }.into();
+        } else {
+            r.status = Status::TooLate;
+            r.output_submitted = false;
+            r.pending_output = None;
         }
         self.requests.insert(request_id, r);
         delivered
+    }
+
+    /// Refund `amount` of the deposit to the payer (OutLayer keeps `charge` for the run).
+    fn pay(&self, r: &mut Request, amount: u128) {
+        if amount > 0 && r.refunded.0 == 0 {
+            Promise::new(r.payer.clone()).transfer(NearToken::from_yoctonear(amount));
+            r.refunded = U128(amount);
+        }
     }
 }

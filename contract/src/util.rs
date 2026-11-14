@@ -14,8 +14,6 @@ pub const MIN_FORGE_FEE: u128 = 10_000_000_000_000_000_000_000;
 pub const FORGE_TIMEOUT_NS: u64 = 600 * ONE_SEC_NS;
 /// A signing request that has not answered in 10 minutes can be reset by anyone.
 pub const SIGN_TIMEOUT_NS: u64 = 600 * ONE_SEC_NS;
-/// Protocol-level price of one stored byte (1e19 yocto).
-pub const STORAGE_BYTE_COST: u128 = 10_000_000_000_000_000_000;
 pub const MAX_DEFENDERS: usize = 64;
 
 pub fn token_id(belt_id: u32) -> String {
@@ -36,7 +34,7 @@ pub fn parse_addr(s: &str) -> Addr {
 
 pub fn parse_hash(s: &str) -> Option<Hash> {
     let mut out = [0u8; 32];
-    hex::decode_to_slice(s.strip_prefix("0x").unwrap_or(s), &mut out).ok()?;
+    crate::hex::decode_to_slice(s.strip_prefix("0x").unwrap_or(s), &mut out).ok()?;
     Some(out)
 }
 
@@ -46,20 +44,20 @@ impl Contract {
     }
 
     pub fn belt(&self, id: u32) -> Belt {
-        self.belts.get(&id).cloned().unwrap_or_else(|| fail(E_NO_BELT))
+        self.belts.get(&id).unwrap_or_else(|| fail(E_NO_BELT))
     }
 
     pub fn season_of(&self, belt_id: u32, season_id: u32) -> Option<Season> {
-        self.seasons.get(&(belt_id, season_id)).cloned()
+        self.seasons.get(&(belt_id, season_id))
     }
 
     /// Current NFT holder of a belt.
     pub fn holder(&self, belt_id: u32) -> AccountId {
-        self.tokens.owner_by_id.get(&token_id(belt_id)).unwrap_or_else(|| fail(E_NO_BELT))
+        self.holders.get(&belt_id).unwrap_or_else(|| fail(E_NO_BELT))
     }
 
     pub fn balance(&self, who: &AccountId) -> u128 {
-        self.balances.get(who).copied().unwrap_or(0)
+        self.balances.get(who).unwrap_or(0)
     }
 
     /// Credit a balance (creating the entry; the contract absorbs the tiny storage of a first entry).
@@ -80,13 +78,17 @@ impl Contract {
     /// it only adds to the endowment.)
     pub fn owed(&self) -> u128 {
         let s = &self.stats;
-        s.deposits.saturating_sub(s.withdrawn).saturating_sub(s.fees_spent).saturating_sub(s.protocol_withdrawn)
+        s.deposits
+            .saturating_sub(s.withdrawn)
+            .saturating_sub(s.fees_spent)
+            .saturating_sub(s.protocol_withdrawn)
+            .saturating_sub(s.storage_charged)
     }
 
     /// NEAR the endowment (balance beyond what is owed) is short of paying the permanent storage; 0 when it is not short.
     /// The owner's protocol share must absorb this shortfall before it can leave.
     pub fn storage_deficit(&self) -> u128 {
-        let need = env::storage_usage() as u128 * STORAGE_BYTE_COST + self.owed();
+        let need = env::storage_usage() as u128 * env::storage_byte_cost().as_yoctonear() + self.owed();
         need.saturating_sub(env::account_balance().as_yoctonear())
     }
 
@@ -110,5 +112,43 @@ impl Contract {
             kind: self.kind(),
             allowlist: &self.allowlist,
         }
+    }
+}
+
+/// One unmet deploy condition (see `get_deploy_gates`).
+pub struct Gate {
+    pub name: &'static str,
+    pub why: &'static str,
+    /// A blocking gate makes `challenge` refuse with `E_NOT_READY`.
+    pub blocking: bool,
+}
+
+impl Contract {
+    /// Unmet deploy conditions. Blocking: a misconfigured deploy must not run a bout, because its seed or its AI
+    /// signature check would not be what the README promises.
+    pub fn deploy_gates(&self) -> Vec<Gate> {
+        let mut out = vec![];
+        let outlayer = self.forge_mode == ForgeMode::Outlayer;
+        if outlayer && self.vrf_pubkey.is_none() {
+            out.push(Gate { name: "vrf_pubkey", blocking: true, why: "no pinned VRF key (set_vrf_pubkey)" });
+        }
+        if self.allowlist.is_empty() {
+            out.push(Gate { name: "allowlist", blocking: true, why: "no AI signer allowlisted (propose_allowlist)" });
+        }
+        if self.req_prefix.is_empty() || self.req_suffix.is_empty() || self.model_id.is_empty() {
+            out.push(Gate { name: "request", blocking: true, why: "compile request not set (set_request)" });
+        }
+        if outlayer && self.secrets.is_none() {
+            out.push(Gate { name: "forge_secrets", blocking: false, why: "no forge secrets profile (set_forge_secrets)" });
+        }
+        if self.forge_mode == ForgeMode::Relayer {
+            out.push(Gate { name: "forge_mode", blocking: false, why: "relayer mode: block seed, weaker than the VRF" });
+        }
+        out
+    }
+
+    /// Storage bytes used since `before` (a `env::storage_usage()` reading). May be negative.
+    pub fn bytes_since(&self, before: u64) -> i64 {
+        env::storage_usage() as i64 - before as i64
     }
 }

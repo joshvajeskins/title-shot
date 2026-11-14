@@ -48,9 +48,11 @@ async fn worst_case_challenge_and_callback_gas_stay_inside_the_budget() -> Resul
     let vrf = vrf_from(5);
     let run = w.run_challenge(&w.bob, belt, &z_s, |_| Hostile::tampered_response(&w.ai, &z_s, &z_raw, &vrf)).await?;
     row("challenge: tampered response -> refund", &run);
-    // draw bout
-    let (d_s, d_raw) = archetype("golden retriever");
-    let _ = (d_s, d_raw);
+    // a real-size (3.4 KB) forge output: delivered through OutLayer's stored-output path, parsed and verified in full
+    let (g_s, g_raw) = archetype("world's angriest goose");
+    let run = w.run_challenge(&w.bob, belt, &g_s, |_| w.ai.good_padded(&g_s, &g_raw, &vrf_from(9), 2_300)).await?;
+    assert!(w.request(run.req).await?["output"].as_str().unwrap().len() > 3_000);
+    row("challenge: 3 KB forge output (stored-output path)", &run);
     let report = json!({"note": "gas burnt over the whole receipt tree (challenge tx incl. mock OutLayer + callback), sandbox, debug test binary, real wasm", "rows": rows,
         "callback_target_tgas": CALLBACK_TARGET_TGAS, "tx_budget_tgas": TX_BUDGET_TGAS});
     std::fs::write(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("gas-report.json"), serde_json::to_string_pretty(&report)? + "\n")?;

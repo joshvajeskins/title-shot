@@ -14,6 +14,7 @@ pub struct Snap {
     pub fees_spent: u128,
     pub tolls: u128,
     pub refunded: u128,
+    pub storage_charged: u128,
 }
 
 pub async fn snap(w: &World, belt: u32, accts: &[&Account]) -> Result<Snap> {
@@ -28,6 +29,7 @@ pub async fn snap(w: &World, belt: u32, accts: &[&Account]) -> Result<Snap> {
     s.fees_spent = u(&st["fees_spent"]);
     s.tolls = u(&st["tolls"]);
     s.refunded = u(&st["refunded"]);
+    s.storage_charged = u(&st["storage_charged"]);
     Ok(s)
 }
 
@@ -39,7 +41,7 @@ impl Snap {
 
 /// A resolved bout moves exactly `toll` out of the challenger and `fee` out of the ledger; the rest is the split.
 #[allow(clippy::too_many_arguments)]
-pub fn assert_bout_money(before: &Snap, after: &Snap, sp: &Split, toll: u128, fee: u128, challenger: &Account, holder: &Account, promoter: &Account) {
+pub fn assert_bout_money(before: &Snap, after: &Snap, sp: &Split, toll: u128, fee: u128, storage: u128, challenger: &Account, holder: &Account, promoter: &Account) {
     let mut exp = before.bal.clone();
     *exp.get_mut(challenger.id().as_str()).unwrap() -= toll;
     *exp.get_mut(holder.id().as_str()).unwrap() += sp.champion;
@@ -49,8 +51,9 @@ pub fn assert_bout_money(before: &Snap, after: &Snap, sp: &Split, toll: u128, fe
     assert_eq!(after.protocol, before.protocol + sp.protocol, "protocol share");
     assert_eq!(after.fees_spent, before.fees_spent + fee, "forge fee spent");
     assert_eq!(after.tolls, before.tolls + toll, "tolls collected");
-    // conservation: toll = champion + promoter + side-pot + protocol + fee
-    assert_eq!(sp.champion + sp.promoter + sp.side_pot + sp.protocol + fee, toll, "split + fee must equal the toll");
+    assert_eq!(after.storage_charged, before.storage_charged + storage, "storage component taken from the toll");
+    // conservation: toll = champion + promoter + side-pot + protocol + fee + storage
+    assert_eq!(sp.champion + sp.promoter + sp.side_pot + sp.protocol + fee + storage, toll, "split + fee + storage must equal the toll");
 }
 
 /// Relayer mode: the forge fee is not paid to OutLayer, it is credited to the protocol at request time, so a refund

@@ -3,29 +3,34 @@
   "note": "gas burnt over the whole receipt tree (challenge tx incl. mock OutLayer + callback), sandbox, debug test binary, real wasm",
   "rows": [
     {
-      "callback_tgas": 5.9,
+      "callback_tgas": 5.3,
       "path": "open_season (opener compile, no fight)",
-      "tx_tree_tgas": 15.4
+      "tx_tree_tgas": 15.5
     },
     {
-      "callback_tgas": 7.6,
+      "callback_tgas": 8.5,
       "path": "challenge: compile + bout, champion wins",
-      "tx_tree_tgas": 17.5
+      "tx_tree_tgas": 19.2
     },
     {
-      "callback_tgas": 6.0,
+      "callback_tgas": 6.8,
       "path": "challenge: cached fighter + bout",
-      "tx_tree_tgas": 15.8
+      "tx_tree_tgas": 17.3
     },
     {
       "callback_tgas": 8.9,
       "path": "challenge: compile + bout, title change",
-      "tx_tree_tgas": 18.7
+      "tx_tree_tgas": 19.7
     },
     {
-      "callback_tgas": 4.9,
+      "callback_tgas": 4.5,
       "path": "challenge: tampered response -> refund",
-      "tx_tree_tgas": 14.7
+      "tx_tree_tgas": 15.3
+    },
+    {
+      "callback_tgas": 8.8,
+      "path": "challenge: 3 KB forge output (stored-output path)",
+      "tx_tree_tgas": 19.9
     }
   ],
   "tx_budget_tgas": 300.0

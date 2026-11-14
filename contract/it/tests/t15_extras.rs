@@ -110,7 +110,11 @@ async fn pinned_vrf_key_every_proof_is_verified_wrong_challenge_forged_proof_and
     }
     {
         let (ai, xs, xr) = (ai.clone(), x_s.clone(), x_raw.clone());
-        tries.push(("VRF output without any proof (attacker picks the seed)", Box::new(move |_, _| ai.good(&xs, &xr, &vrf_from(5)))));
+        tries.push(("VRF output without any proof (attacker picks the seed)", Box::new(move |_, _| {
+            let mut o = ai.good(&xs, &xr, &vrf_from(5));
+            o["vrf"]["signature_hex"] = json!(hex::encode([8u8; 64])); // not the fake marker: the harness must not "repair" it
+            o
+        })));
     }
     for (name, make) in tries {
         let before = w.bal(&w.bob).await?;
@@ -185,8 +189,9 @@ async fn protocol_share_is_withdrawable_by_the_owner_only_and_never_more_than_ac
     let (o_s, o_raw) = archetype("hedgehog in samurai armor");
     let (x_s, x_raw) = archetype("raccoon running a casino");
     let mut arena = Arena::open(&w, (&o_s, &o_raw), 3600, 10u128.pow(16)).await?;
-    arena.fight(&w.bob, (&x_s, &x_raw), Winner::Champion).await?.assert_as_asked();
-    let accrued = split(w.opts.toll, w.opts.forge_fee).protocol;
+    let b = arena.fight(&w.bob, (&x_s, &x_raw), Winner::Champion).await?;
+    b.assert_as_asked();
+    let accrued = b.split(w.opts.toll, w.opts.forge_fee).protocol;
     assert_eq!(u(&w.stats().await?["protocol_balance"]), accrued);
     assert_code(&w.call(&w.bob, "withdraw_protocol", json!({"to": w.bob.id(), "amount": null}), 1).await?, "E_NOT_OWNER", "non-owner");
     assert!(w.call(&w.owner, "withdraw_protocol", json!({"to": w.owner.id(), "amount": null}), 0).await?.is_failure(), "1 yocto required");

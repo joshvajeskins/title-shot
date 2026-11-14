@@ -54,8 +54,7 @@ fn opener_forge_opens_the_season_and_gives_the_belt_to_the_promoter() {
 fn bout_conserves_every_yocto_and_the_belt_follows_the_winner() {
     let mut e = Env::new("relayer");
     e.open_season("The reigning toaster", 86_400, 0);
-    let split = split_toll(TOLL, FEE).unwrap();
-    let (mut champ_wins, mut chall_wins, mut draws) = (0, 0, 0);
+    let (mut champ_wins, mut chall_wins, mut draws, mut storage_total) = (0, 0, 0, 0u128);
     for i in 0..24u32 {
         let who = format!("fan{i}.testnet");
         e.deposit(&who, 1);
@@ -69,6 +68,11 @@ fn bout_conserves_every_yocto_and_the_belt_follows_the_winner() {
         assert_eq!(e.deliver(id, &sentence), "Resolved", "challenge {i}");
         let f = e.c.get_challenge(id).unwrap()["fight_id"].as_u64().unwrap();
         let fight = e.c.get_fight(f).unwrap();
+        // The bout's measured storage comes out of the toll before the split (docs/CONTRACT.md "Storage").
+        let storage: u128 = fight["storage"].as_str().unwrap().parse().unwrap();
+        assert!(storage > 0 && storage <= (TOLL - FEE) / 2, "storage component {storage} is measured and capped");
+        let split = split_toll(TOLL, FEE + storage).unwrap();
+        storage_total += storage;
         // Money: champion share to the holder at resolution, promoter share, side-pot, protocol; nothing else moves.
         let holder_gain = e.bal(&holder) - hb + if holder == "vance.testnet" { 0 } else { 0 };
         let promoter_gain = e.bal("vance.testnet") - pb;
@@ -81,7 +85,7 @@ fn bout_conserves_every_yocto_and_the_belt_follows_the_winner() {
         let side1 = e.season()["side_pot"].as_str().unwrap().parse::<u128>().unwrap();
         assert_eq!(side1 - side0, split.side_pot);
         assert_eq!(e.c.protocol_balance - prot0, split.protocol);
-        assert_eq!(split.champion + split.promoter + split.side_pot + split.protocol + FEE, TOLL);
+        assert_eq!(split.champion + split.promoter + split.side_pot + split.protocol + FEE + storage, TOLL);
         // Belt: the NFT owner is the challenger iff they won.
         match fight["winner"].as_str().unwrap() {
             "challenger" => {
@@ -106,9 +110,10 @@ fn bout_conserves_every_yocto_and_the_belt_follows_the_winner() {
     assert!(chall_wins > 0 && champ_wins > 0, "both outcomes must occur over 24 bouts");
     let st = e.c.stats();
     assert_eq!(st["bouts"], 24);
-    assert_eq!(e.c.get_fights(1, 0, 50).len(), 24);
+    assert_eq!(st["storage_charged"], storage_total.to_string(), "stats carry the storage components");
+    assert_eq!(e.c.get_fights(1, 0, 50).as_array().unwrap().len(), 24);
     assert_eq!(e.c.get_fights(1, 0, 3)[0]["id"], 24, "newest first");
-    assert_eq!(e.c.get_fights(1, 22, 5).len(), 2, "offset skips the newest");
+    assert_eq!(e.c.get_fights(1, 22, 5).as_array().unwrap().len(), 2, "offset skips the newest");
 }
 
 #[test]

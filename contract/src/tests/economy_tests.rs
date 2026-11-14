@@ -186,3 +186,20 @@ fn gas_parameter_bounds() {
     assert!(!gas_params_ok(0, 0, 60_000), "zero fee");
     assert!(!gas_params_ok(GWEI, GWEI + 1, 60_000), "priority above max fee");
 }
+
+#[test]
+fn base64_matches_rfc4648_vectors_and_refuses_malformed_input() {
+    use crate::b64::decode;
+    for (enc, dec) in [("", ""), ("Zg==", "f"), ("Zm8=", "fo"), ("Zm9v", "foo"), ("Zm9vYg==", "foob"), ("Zm9vYmE=", "fooba"), ("Zm9vYmFy", "foobar")] {
+        assert_eq!(decode(enc).unwrap(), dec.as_bytes(), "{enc}");
+    }
+    assert_eq!(decode("+/+/").unwrap(), vec![0xfb, 0xff, 0xbf]);
+    for bad in ["Z", "Zg=", "Zg=a", "Z===", "====", "Zm9v Zg==", "Zm=v", "Zg==Zm9v", "Zm9-", "Zm9_", "Zm9v\n"] {
+        assert!(decode(bad).is_none(), "{bad:?} must be refused");
+    }
+    // Every length up to 7 round-trips through the encoder.
+    for len in 0..8usize {
+        let v: Vec<u8> = (0..len).map(|i| (i * 37 + 11) as u8).collect();
+        assert_eq!(decode(&crate::b64::encode(&v)).unwrap(), v);
+    }
+}

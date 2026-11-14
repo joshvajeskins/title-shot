@@ -34,7 +34,8 @@ new(owner, outlayer: AccountId /*outlayer.testnet*/, forge_project: String, mpc_
 
 ## Challenge lifecycle (the core)
 `challenge(belt_id, sentence) -> u64` — **non-payable** (function-call keys cannot attach deposits). Checks in this order:
-`E_NO_BELT`, `E_NO_SEASON` (no open season or `now >= closes_at`), `E_NO_CHAMPION` (opener not forged yet),
+`E_NOT_READY` (**deploy gate**: any blocking gate of `get_deploy_gates` is unmet — in outlayer mode no pinned VRF key, in every mode an empty
+signer allowlist or unset request parts — so a misconfigured deploy never runs an unverified seed), `E_NO_BELT`, `E_NO_SEASON` (no open season or `now >= closes_at`), `E_NO_CHAMPION` (opener not forged yet),
 `E_SENTENCE` (after trim + whitespace collapse: 3..=120 chars, no control chars), `E_SELF` (caller is the belt holder),
 `E_SAME_SENTENCE` (sentence hash equals the champion's), `E_PENDING` (caller already has a pending challenge anywhere),
 `E_BALANCE` (balance < toll). Then: debit toll, create `Challenge{id, belt_id, season_id, challenger, sentence, hash,
@@ -42,6 +43,9 @@ status: Forging, created_at, need_compile}`; `need_compile = !fighters.contains(
 - forge_mode `outlayer`: `outlayer.request_execution(...)` with the forge_fee as deposit (shape from `spikes/forge-callback`,
   or Stand-in's `contracts/blocklist`), input `{op:"forge", sentence, need_compile, challenge_id, model_id}`, then
   `.then(on_forged(challenge_id))` with enough gas for the fight (measure; budget ≤ 300 Tgas total for the tx).
+  **Large outputs:** nearcore refuses `promise_yield_resume` payloads over 1024 bytes and the forge output is 2-4 KB. OutLayer keeps such an
+  output in its own state and resumes with metadata only; its callback returns the stored JSON bytes as the result of the promise, so
+  `on_forged` reads the whole output with `env::promise_result(0)` (any size up to the contract's 16 KB cap). See `contract/README.md`.
 - forge_mode `relayer`: log event `forge_requested{challenge_id, sentence, need_compile}`; a listed relayer later calls
   `submit_forge(challenge_id, output_json)` (same parsing as the callback, VRF replaced by
   `sha256(env::random_seed() ‖ challenge_id)`, flagged `seed_source:"block"` in the event). `E_NOT_RELAYER`, `E_NOT_FORGING`.
@@ -56,8 +60,14 @@ status: Forging, created_at, need_compile}`; `need_compile = !fighters.contains(
   4. seed = `sha256("titleshot:seed:" ‖ vrf_output ‖ challenge_id_le)`. If the season's rule is unset (sealed), set
      `rule = seed[0] % 8` now and log `rule_revealed`.
   5. `bout_sim::simulate(champion_spec, challenger_spec, seed, rule)` → winner, state_hash.
-  6. Split the toll `T` with fee `F`: `R = T − F`; champion holder `R*60/100`, promoter `R*25/100`, season side-pot
-     `R*10/100`, protocol `R − the three` (exact integer remainder, so the sum is exactly `T`). Credit balances (holder,
+  6. **Storage component (review fix).** Every byte a bout leaves behind (challenge record and pending flag, fighter, fight, indexes) is
+     measured with `env::storage_usage()` and billed to its toll: `S = min(bytes × env::storage_byte_cost(), 50% of (T − F))`, taken out of
+     the toll before the split and no longer owed to anyone (`stats.storage_charged`; the cap's shortfall, if any, is `stats.storage_debt`).
+     A refunded or rejected challenge is not charged: its record is paid by the forge-fee surplus OutLayer returns to the contract (relayer
+     mode: by the fee, which is protocol share, held back against the storage deficit). So `get_solvency.equity` (balance − storage staking −
+     owed) does not fall with play. The fight record and `bout` event carry `storage`.
+     Split the toll `T` with fee `F` and storage `S`: `R = T − F − S`; champion holder `R*60/100`, promoter `R*25/100`, season side-pot
+     `R*10/100`, protocol `R − the three` (exact integer remainder, so the sum is exactly `T`: `F + S + shares = T`). Credit balances (holder,
      promoter), add to side-pot, add to protocol. The champion share goes to **whoever held the belt when the bout resolved,
      win or lose** (they are paid for being the target).
   7. winner challenger → internal NFT transfer of token `belt-{id}` to the challenger, `champion = hash`, `reign_since = now`,
@@ -102,7 +112,9 @@ status: Forging, created_at, need_compile}`; `need_compile = !fighters.contains(
 - Anyone broadcasts `raw_tx` (the relayer/worker does it automatically).
 
 ## Belt token (NEP-171)
-Standard `near-contract-standards` NonFungibleToken. One token per belt, `belt-{id}`, metadata title = belt name, media =
+Minimal hand-written NEP-171 core (no approvals, no `nft_transfer_call`; the `near-contract-standards` NFT cost ~45 KB of wasm):
+`nft_transfer` (holder only, 1 yocto), `nft_token`, `nft_tokens_for_owner`, `nft_total_supply`, `nft_metadata`, NEP-297 `nft_mint` /
+`nft_transfer` events (standard `nep171`). One token per belt, `belt-{id}`, metadata title = belt name, media =
 belt art URL. `nft_transfer` by the holder is allowed (a title can be gifted/sold); the new owner becomes the holder
 (earns the champion share and defence credit from then on). Fighter cards (one NFT per forged sentence) are **optional**
 (cut order); if built, mint to the writer on first forge.
@@ -111,7 +123,9 @@ belt art URL. `nft_transfer` by the holder is allowed (a title can be gifted/sol
 `get_config`, `get_belts`, `get_belt(id)` (incl. current season, holder, champion fighter, defences, reign_since,
 defence_count top list), `get_fighter(hash_hex)`, `get_fighter_by_sentence(sentence)`, `get_challenge(id)`,
 `get_pending(account)`, `get_fight(id)`, `get_fights(belt_id, from, limit)` (newest first), `balance_of`, `get_payouts(belt,
-season)`, `get_allowlist` (+pending, activates_at), `preview_split(belt_id)`, `stats` (totals: tolls, protocol, challenges).
+season)`, `get_allowlist` (+pending, activates_at), `preview_split(belt_id)` (after the storage component, with `storage_estimate`), `stats` (totals:
+tolls, protocol, challenges, storage_charged), `get_solvency` (equity, storage_debt, protocol_withdrawable), `get_deploy_gates` (`ok`, `ready`,
+failing gates with `blocking`). Views return JSON written by `contract/src/json.rs` (key order is insertion order, not alphabetical).
 
 ## Events (NEP-297, `standard:"titleshot"`, `version:"1.0.0"`)
 `challenge`, `forge_requested`, `forged`, `rejected`, `refunded`, `rule_revealed`, `bout`, `title_change`, `season_opened`,

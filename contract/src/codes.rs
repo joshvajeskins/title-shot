@@ -36,6 +36,8 @@ pub const E_NOT_SIGNING: &str = "E_NOT_SIGNING";
 pub const E_ALREADY: &str = "E_ALREADY";
 pub const E_CONFIG: &str = "E_CONFIG";
 pub const E_AMOUNT: &str = "E_AMOUNT";
+pub const E_NOT_HOLDER: &str = "E_NOT_HOLDER";
+pub const E_NOT_READY: &str = "E_NOT_READY";
 
 /// Codes stored in a challenge status (soft paths).
 pub const E_AI_SIG: &str = "E_AI_SIG";

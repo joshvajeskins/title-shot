@@ -1,9 +1,9 @@
 #![allow(unused_must_use)]
-//! Adversarial review measurement (MEDIUM, passes): who pays for the permanent storage that every challenge,
+//! Adversarial review measurement (MEDIUM, fixed): who pays for the permanent storage that every challenge,
 //! fight and fighter leaves behind? Equity = contract balance - storage staking - everything it owes
-//! (balances + protocol balance + season side-pot). Prints the equity change per resolved bout. A negative
-//! number means the operator's endowment slowly pays for players' storage; the test only fails if the
-//! contract becomes insolvent for what it owes (equity below -1 NEAR over 5 bouts).
+//! (balances + protocol balance + season side-pot), computed here from the public views, independently of the
+//! contract's own `get_solvency`. Before the fix the equity fell with every bout (the endowment paid for players'
+//! storage); now the toll's storage component pays for it, so the equity must not fall at all.
 use anyhow::Result;
 use bout_sim::types::Winner;
 use serde_json::json;
@@ -28,7 +28,7 @@ async fn equity(w: &World, belt: u32) -> Result<(i128, u64)> {
 }
 
 #[tokio::test]
-async fn equity_change_per_bout_storage_is_paid_by_the_forge_fee_refund_or_by_the_operator() -> Result<()> {
+async fn equity_never_falls_per_bout_because_the_toll_pays_the_storage_it_creates() -> Result<()> {
     let w = World::new().await?;
     for a in [&w.alice, &w.bob, &w.carol] {
         w.deposit(a, 3 * NEAR).await?;
@@ -55,6 +55,6 @@ async fn equity_change_per_bout_storage_is_paid_by_the_forge_fee_refund_or_by_th
         w.opts.forge_fee as f64 / 1e24
     );
     let _ = json!({});
-    assert!(e1 - e0 > -(NEAR as i128), "contract equity fell by more than 1 NEAR over 5 bouts: {}", e1 - e0);
+    assert!(e1 - e0 >= 0, "contract equity fell over 5 bouts: {} yocto (the endowment is paying for players' storage)", e1 - e0);
     Ok(())
 }

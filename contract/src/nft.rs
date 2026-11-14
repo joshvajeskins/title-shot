@@ -1,71 +1,98 @@
-//! Belt token (NEP-171 + metadata + enumeration). One token per belt, `belt-{id}`. The NFT owner IS the
-//! belt holder: `nft_transfer` (1 yocto, holder only) gifts or sells a title.
+//! Belt token: a minimal NEP-171 core (no approvals, no `nft_transfer_call`) with metadata and enumeration, hand
+//! written because `near-contract-standards` cost about 45 KB of wasm (one NEAR of storage per 100 KB).
+//! One token per belt, `belt-{id}`. The NFT owner IS the belt holder: `nft_transfer` (1 yocto, holder only)
+//! gifts or sells a title. Metadata is derived from the belt (name, media) so there is nothing extra to store.
+use crate::codes::*;
+use crate::json::{arr, json, Null, Raw};
 use crate::util::token_id;
 use crate::{Contract, ContractExt};
-use near_contract_standards::non_fungible_token::events::{NftMint, NftTransfer};
-use near_contract_standards::non_fungible_token::metadata::{
-    NFTContractMetadata, NonFungibleTokenMetadataProvider, TokenMetadata, NFT_METADATA_SPEC,
-};
-use near_contract_standards::non_fungible_token::{Token, TokenId};
-use near_contract_standards::{impl_non_fungible_token_core, impl_non_fungible_token_enumeration};
-use near_sdk::{near, AccountId, PromiseOrValue};
+use near_sdk::json_types::U128;
+use near_sdk::{assert_one_yocto, env, near, AccountId};
 
-impl_non_fungible_token_core!(Contract, tokens);
-impl_non_fungible_token_enumeration!(Contract, tokens);
+const NEP171: &str = "nep171";
+const NEP171_VERSION: &str = "1.2.0";
+const DESCRIPTION: &str = "A TITLE SHOT+ championship belt. Whoever holds it is paid every time the belt is challenged.";
 
-#[near]
-impl NonFungibleTokenMetadataProvider for Contract {
-    fn nft_metadata(&self) -> NFTContractMetadata {
-        NFTContractMetadata {
-            spec: NFT_METADATA_SPEC.to_string(),
-            name: "TITLE SHOT+ belts".to_string(),
-            symbol: "BELT".to_string(),
-            icon: None,
-            base_uri: None,
-            reference: None,
-            reference_hash: None,
-        }
-    }
+fn emit171(event: &str, data: Raw) {
+    let body = json!({ "standard": NEP171, "version": NEP171_VERSION, "event": event, "data": arr([data]) });
+    env::log_str(&format!("EVENT_JSON:{}", body.0));
 }
 
-fn belt_metadata(name: &str, media: &str) -> TokenMetadata {
-    TokenMetadata {
-        title: Some(name.to_string()),
-        description: Some("A TITLE SHOT+ championship belt. Whoever holds it is paid every time the belt is challenged.".into()),
-        media: if media.is_empty() { None } else { Some(media.to_string()) },
-        ..Default::default()
-    }
+/// `belt-{id}` -> id.
+fn belt_of(token: &str) -> Option<u32> {
+    token.strip_prefix("belt-")?.parse().ok().filter(|id| token_id(*id) == token)
 }
 
 impl Contract {
-    /// Mint `belt-{id}` to `to` (contract pays the storage; no refund bookkeeping).
-    pub fn mint_belt(&mut self, belt_id: u32, name: &str, media: &str, to: &AccountId) {
-        let id = token_id(belt_id);
-        self.tokens.internal_mint_with_refund(id.clone(), to.clone(), Some(belt_metadata(name, media)), None);
-        NftMint { owner_id: to, token_ids: &[&id], memo: None }.emit();
+    fn token_view(&self, belt_id: u32) -> Option<Raw> {
+        let owner = self.holders.get(&belt_id)?;
+        let belt = self.belts.get(&belt_id)?;
+        let media = if belt.media.is_empty() { None } else { Some(belt.media.clone()) };
+        let meta = json!({ "title": belt.name, "description": DESCRIPTION, "media": media });
+        Some(json!({ "token_id": token_id(belt_id), "owner_id": owner, "metadata": meta, "approved_account_ids": Null }))
     }
 
-    /// Internal transfer of the belt token (no approval check; callers decide).
+    /// Mint `belt-{id}` to `to` (the contract pays the storage).
+    pub fn mint_belt(&mut self, belt_id: u32, to: &AccountId) {
+        self.holders.insert(belt_id, to.clone());
+        emit171("nft_mint", json!({ "owner_id": to, "token_ids": arr([token_id(belt_id)]) }));
+    }
+
+    /// Internal transfer of the belt token (callers decide who may).
     pub fn move_belt(&mut self, belt_id: u32, from: &AccountId, to: &AccountId) {
         if from == to {
             return;
         }
-        let id: TokenId = token_id(belt_id);
-        self.tokens.internal_transfer_unguarded(&id, from, to);
-        NftTransfer {
-            old_owner_id: from,
-            new_owner_id: to,
-            token_ids: &[&id],
-            authorized_id: None,
-            memo: Some("titleshot"),
-        }
-        .emit();
+        self.holders.insert(belt_id, to.clone());
+        emit171(
+            "nft_transfer",
+            json!({ "old_owner_id": from, "new_owner_id": to, "token_ids": arr([token_id(belt_id)]), "memo": "titleshot" }),
+        );
+    }
+}
+
+#[near]
+impl Contract {
+    /// NEP-171 transfer by the holder, 1 yocto (a function-call key can never call it). Approvals are not supported.
+    #[payable]
+    pub fn nft_transfer(&mut self, receiver_id: AccountId, token_id: String, approval_id: Option<u64>, memo: Option<String>) {
+        assert_one_yocto();
+        check(approval_id.is_none(), E_CONFIG);
+        let belt_id = belt_of(&token_id).unwrap_or_else(|| fail(E_NO_BELT));
+        let from = self.holder(belt_id);
+        check(from == env::predecessor_account_id(), E_NOT_HOLDER);
+        check(from != receiver_id, E_SELF);
+        self.holders.insert(belt_id, receiver_id.clone());
+        emit171(
+            "nft_transfer",
+            json!({ "old_owner_id": from, "new_owner_id": receiver_id, "token_ids": arr([token_id]), "memo": memo }),
+        );
     }
 
-    pub fn set_belt_token_media(&mut self, belt_id: u32, name: &str, media: &str) {
-        let id = token_id(belt_id);
-        if let Some(m) = self.tokens.token_metadata_by_id.as_mut() {
-            m.insert(&id, &belt_metadata(name, media));
-        }
+    pub fn nft_token(&self, token_id: String) -> Option<Raw> {
+        self.token_view(belt_of(&token_id)?)
+    }
+
+    pub fn nft_total_supply(&self) -> U128 {
+        U128(self.belt_count as u128)
+    }
+
+    pub fn nft_tokens_for_owner(&self, account_id: AccountId, from_index: Option<U128>, limit: Option<u64>) -> Raw {
+        let skip = from_index.map(|i| i.0 as usize).unwrap_or(0);
+        let take = limit.unwrap_or(50).min(50) as usize;
+        let tokens: Vec<Raw> = (1..=self.belt_count)
+            .filter(|id| self.holders.get(id).as_ref() == Some(&account_id))
+            .skip(skip)
+            .take(take)
+            .filter_map(|id| self.token_view(id))
+            .collect();
+        arr(tokens)
+    }
+
+    pub fn nft_metadata(&self) -> Raw {
+        json!({
+            "spec": "nft-1.0.0", "name": "TITLE SHOT+ belts", "symbol": "BELT", "icon": Null, "base_uri": Null,
+            "reference": Null, "reference_hash": Null,
+        })
     }
 }

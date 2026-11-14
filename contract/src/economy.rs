@@ -132,3 +132,14 @@ pub fn take_nonce(payout_nonce: &mut Option<u64>, next: &mut u64) -> u64 {
     *payout_nonce = Some(n);
     n
 }
+
+/// Bytes a typical new-fighter bout stores (challenge, fight, fighter, indexes): only the `preview_split` estimate.
+pub const ESTIMATE_BOUT_BYTES: u64 = 1_200;
+/// The storage component of a bout never exceeds this share of the toll left after the forge fee.
+pub const STORAGE_CAP_PCT: u128 = 50;
+
+/// Storage component of a bout: `bytes * byte_cost`, capped at `STORAGE_CAP_PCT` of `r = toll - forge_fee`. It is
+/// taken out of the toll before the 60/25/10/5 split, so the permanent storage of a bout is paid by the bout.
+pub fn storage_charge(r: u128, bytes: u64, byte_cost: u128) -> u128 {
+    (bytes as u128).saturating_mul(byte_cost).min(r / 100 * STORAGE_CAP_PCT)
+}

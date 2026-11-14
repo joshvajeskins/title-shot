@@ -53,7 +53,7 @@ fn bell_refusals_too_early_pending_twice_and_the_zero_challenge_refund() {
     assert_eq!(e.season()["state"], "Closed");
     e.at("anyone.testnet", 0);
     assert!(msg(|| e.c.close_season(1)).contains("E_CLOSED"), "second close is refused: no second payout plan");
-    assert_eq!(e.c.get_payouts(1, 1).len(), 1);
+    assert_eq!(e.c.get_payouts(1, 1).as_array().unwrap().len(), 1);
     // A closed season cannot be challenged; a new one can be opened.
     e.at("alice.testnet", 0);
     assert!(msg(|| e.c.challenge(1, "after the bell has rung".into())).contains("E_NO_SEASON"));
@@ -74,7 +74,7 @@ fn purse_split_conserves_wei_pays_the_side_pot_and_keeps_the_belt_with_the_holde
     let ids = e.c.close_season(1);
     assert_eq!(e.holder(), holder, "belt NFT stays with the holder");
     assert_eq!(e.bal(&holder) - holder_bal, side_pot, "side-pot credited to the final holder");
-    let payouts = e.c.get_payouts(1, 1);
+    let payouts = e.c.get_payouts(1, 1).as_array().unwrap().clone();
     assert_eq!(payouts.len(), ids.len());
     let total: u128 = payouts.iter().map(|p| p["amount_wei"].as_str().unwrap().parse::<u128>().unwrap()).sum();
     assert_eq!(total, PURSE, "purse conserved to the wei");

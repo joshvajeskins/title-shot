@@ -7,7 +7,7 @@ use crate::util::*;
 use crate::verify::addr_hex;
 use crate::{Contract, ContractExt};
 use near_sdk::json_types::U128;
-use near_sdk::serde_json::json;
+use crate::json::json;
 use near_sdk::{assert_one_yocto, env, near, AccountId, NearToken, Promise};
 
 const MIN_DURATION_SEC: u64 = 60;
@@ -84,7 +84,7 @@ impl Contract {
         for (payee, amount) in plan {
             let id = self.next_payout;
             self.next_payout += 1;
-            let to = self.evm_addrs.get(&payee).copied();
+            let to = self.evm_addrs.get(&payee);
             emit(
                 "payout_created",
                 json!({ "payout_id": id, "belt_id": belt_id, "season_id": season_id, "payee": payee, "amount_wei": U128(amount),
@@ -136,7 +136,7 @@ impl Contract {
         if forge_needed {
             let c = Challenge {
                 id: 0, belt_id, season_id, challenger: who.clone(), sentence, hash, status: Status::Forging,
-                created_at: now(), need_compile: true, kind: ChallengeKind::Opener, toll: 0, fee: belt.forge_fee, relayer: false,
+                created_at: now(), need_compile: true, kind: ChallengeKind::Opener, toll: 0, fee: belt.forge_fee, relayer: false, storage_bytes: 0,
             };
             self.start_forge(c);
         } else {
@@ -191,18 +191,18 @@ impl Contract {
         check(!used, E_ALREADY);
         s.purse_address = Some(parse_addr(&addr));
         self.seasons.insert((belt, season), s);
-        emit("purse_address", json!({ "belt_id": belt, "season_id": season, "address": addr.to_lowercase() }));
+        emit("purse_address", json!({ "belt_id": belt, "season_id": season, "address": addr.to_ascii_lowercase() }));
     }
 
     /// The payee registers the EVM address of a payout that was created without one.
     #[payable]
     pub fn claim_payout(&mut self, payout_id: u64, addr: String) {
         assert_one_yocto();
-        let mut p = self.payouts.get(&payout_id).cloned().unwrap_or_else(|| fail(E_NO_PAYOUT));
+        let mut p = self.payouts.get(&payout_id).unwrap_or_else(|| fail(E_NO_PAYOUT));
         check(p.payee == env::predecessor_account_id(), E_NOT_PAYEE);
         check(p.to.is_none(), E_ALREADY);
         p.to = Some(parse_addr(&addr));
         self.payouts.insert(payout_id, p);
-        emit("payout_claimed", json!({ "payout_id": payout_id, "address": addr.to_lowercase() }));
+        emit("payout_claimed", json!({ "payout_id": payout_id, "address": addr.to_ascii_lowercase() }));
     }
 }

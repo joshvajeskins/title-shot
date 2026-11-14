@@ -5,6 +5,11 @@ set -euo pipefail
 cd "$(dirname "$0")"
 export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang
 cargo near build non-reproducible-wasm --no-abi --locked --out-dir res 2>&1 | tail -15
-mv -f res/titleshot.wasm res/titleshot.wasm.tmp 2>/dev/null && mv -f res/titleshot.wasm.tmp res/titleshot.wasm || true
+# Final size pass (cargo-near already ran wasm-opt -Oz; --converge and --low-memory-unused, valid for lld-linked
+# Rust wasm whose lowest 1 KB is never used, save another ~2%). Skipped when wasm-opt is not installed.
+if command -v wasm-opt >/dev/null 2>&1; then
+  wasm-opt -Oz --converge --low-memory-unused --signext-lowering --strip-debug --strip-producers res/titleshot.wasm -o res/titleshot.wasm.tmp
+  mv -f res/titleshot.wasm.tmp res/titleshot.wasm
+fi
 ls -l res/titleshot.wasm
 shasum -a 256 res/titleshot.wasm

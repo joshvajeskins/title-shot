@@ -136,6 +136,8 @@ pub struct Challenge {
     pub fee: u128,
     /// Created while forge_mode was `relayer` (resolved by `submit_forge`).
     pub relayer: bool,
+    /// Bytes this challenge stored when it was created (record, pending flag); billed to its bout.
+    pub storage_bytes: u32,
 }
 
 #[near(serializers = [borsh])]
@@ -166,6 +168,9 @@ pub struct Fight {
     pub winner: u8,
     pub state_hash: Hash,
     pub split: SplitRec,
+    /// Storage component taken from the toll for this bout, and the bytes it was measured on.
+    pub storage: u128,
+    pub storage_bytes: u32,
     pub at: u64,
 }
 
@@ -212,6 +217,10 @@ pub struct Stats {
     pub protocol: u128,
     /// Protocol share the owner has already paid out (`withdraw_protocol`).
     pub protocol_withdrawn: u128,
+    /// Storage components taken from tolls (no longer owed to anyone: they pay the contract's storage staking).
+    pub storage_charged: u128,
+    /// Storage that bouts stored beyond what the cap let them charge.
+    pub storage_debt: u128,
     pub challenges: u64,
     pub bouts: u64,
     pub forged: u64,

@@ -61,6 +61,15 @@ impl Ai {
             "usage":{"prompt_tokens":1500,"completion_tokens":120,"total_tokens":1620}}))
         .unwrap()
     }
+    /// Like `good`, but the (signed) chat-completion envelope carries `pad` extra bytes (an unknown `system_fingerprint`
+    /// field, which the contract ignores): a forge output of any wanted size, still honestly signed.
+    pub fn good_padded(&self, sentence: &str, raw: &Value, vrf: &[u8; 32], pad: usize) -> Value {
+        let mut env: Value = serde_json::from_str(&self.envelope(&raw.to_string())).unwrap();
+        env["system_fingerprint"] = json!("f".repeat(pad));
+        let response = serde_json::to_string(&env).unwrap();
+        let sig = self.sign_with(&self.signer, sentence, &response);
+        self.output_for(&response, &sig, vrf)
+    }
     pub fn text(&self, kind: &str, request: &[u8], response: &str) -> String {
         let (rq, rs) = (sha_hex(request), sha_hex(response.as_bytes()));
         if kind == "gateway" {
@@ -76,7 +85,7 @@ impl Ai {
     pub fn output_for(&self, response: &str, signature: &str, vrf: &[u8; 32]) -> Value {
         json!({"ok":true,"response":response,"signature":signature,"signing_algo":"ecdsa","signature_kind":self.kind,
                "signing_address":address(&self.signer),
-               "vrf":{"output_hex":hex::encode(vrf),"alpha":"vrf:1:contract:titleshot-challenge","signature_hex":hex::encode([7u8;64])}})
+               "vrf":crate::simx::vrf_json(vrf)})
     }
     /// Honest compile of `raw` for `sentence`.
     pub fn good(&self, sentence: &str, raw: &Value, vrf: &[u8; 32]) -> Value {
@@ -86,7 +95,7 @@ impl Ai {
     }
     /// Output without a compile (the fighter is already stored): VRF only.
     pub fn vrf_only(&self, vrf: &[u8; 32]) -> Value {
-        json!({"ok":true,"vrf":{"output_hex":hex::encode(vrf),"alpha":"vrf:1:contract:titleshot-challenge","signature_hex":hex::encode([7u8;64])}})
+        json!({"ok":true,"vrf":crate::simx::vrf_json(vrf)})
     }
 }
 

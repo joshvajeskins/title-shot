@@ -122,7 +122,8 @@ async fn purse_split_is_half_to_final_holder_half_pro_rata_capped_25_percent_rem
     let dc: BTreeMap<String, u64> = season["defence_count"].as_array().unwrap().iter().map(|d| (d["account"].as_str().unwrap().to_string(), d["defences"].as_u64().unwrap())).collect();
     assert_eq!(dc, BTreeMap::from([(w.promoter.id().to_string(), 2), (w.alice.id().to_string(), 1)]), "successful defences per holder");
     let side_pot = u(&season["side_pot"]);
-    assert_eq!(side_pot, 5 * expect::split(w.opts.toll, w.opts.forge_fee).side_pot, "side-pot = 10% of each net toll");
+    let want_pot: u128 = arena.bouts.iter().map(|b| b.split(w.opts.toll, w.opts.forge_fee).side_pot).sum();
+    assert_eq!(side_pot, want_pot, "side-pot = 10% of each toll after the forge fee and the storage component");
     w.advance_secs(900).await?;
     let carol_before = w.bal(&w.carol).await?;
     let r = w.ok(&w.bob, "close_season", json!({"belt_id": arena.belt}), 0).await?;

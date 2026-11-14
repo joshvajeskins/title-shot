@@ -7,7 +7,7 @@ use crate::types::*;
 use crate::util::*;
 use crate::{Contract, ContractExt};
 use near_sdk::json_types::U128;
-use near_sdk::serde_json::{json, Value};
+use crate::json::{json, Null, Raw};
 use near_sdk::{env, near, Gas, NearToken, Promise, PromiseResult};
 
 /// Gas reserved for the OutLayer request and for `on_forged` (verify + normalize + bout + split).
@@ -23,17 +23,19 @@ impl Contract {
         });
         let secrets = match &self.secrets {
             Some((profile, owner)) => json!({ "profile": profile, "account_id": owner }),
-            None => Value::Null,
+            None => Raw("null".into()),
         };
+        let source = json!({ "Project": json!({ "project_id": self.forge_project, "version_key": Null }) });
+        let limits = json!({ "max_instructions": 2_000_000_000u64, "max_memory_mb": 128u32, "max_execution_seconds": 60u32 });
         let args = json!({
-            "source": { "Project": { "project_id": self.forge_project, "version_key": null } },
-            "input_data": input.to_string(),
-            "resource_limits": { "max_instructions": 2_000_000_000u64, "max_memory_mb": 128, "max_execution_seconds": 60 },
+            "source": source,
+            "input_data": input.0,
+            "resource_limits": limits,
             "response_format": "Json",
             "secrets_ref": secrets,
         });
         Promise::new(self.outlayer.clone())
-            .function_call("request_execution".into(), args.to_string().into_bytes(), NearToken::from_yoctonear(fee), REQUEST_GAS)
+            .function_call("request_execution".into(), args.0.into_bytes(), NearToken::from_yoctonear(fee), REQUEST_GAS)
             .then(Self::ext(env::current_account_id()).with_static_gas(CALLBACK_GAS).on_forged(c.id));
     }
 
@@ -70,7 +72,7 @@ impl Contract {
     pub fn finish_challenge(&mut self, c: &mut Challenge, status: Status) {
         c.status = status;
         if c.kind == ChallengeKind::Challenge {
-            if self.pending.get(&c.challenger) == Some(&c.id) {
+            if self.pending.get(&c.challenger) == Some(c.id) {
                 self.pending.remove(&c.challenger);
             }
             if let Some(mut s) = self.season_of(c.belt_id, c.season_id) {
@@ -130,8 +132,10 @@ impl Contract {
     /// Pay the toll from the in-contract balance and challenge the champion. Non-payable (so a
     /// function-call key can call it). Returns the challenge id; poll `get_challenge`.
     pub fn challenge(&mut self, belt_id: u32, sentence: String) -> u64 {
+        check(!self.deploy_gates().iter().any(|g| g.blocking), E_NOT_READY);
+        let storage_before = env::storage_usage();
         let who = env::predecessor_account_id();
-        let belt = self.belts.get(&belt_id).cloned().unwrap_or_else(|| fail(E_NO_BELT));
+        let belt = self.belts.get(&belt_id).unwrap_or_else(|| fail(E_NO_BELT));
         let season = self.season_of(belt_id, belt.season).unwrap_or_else(|| fail(E_NO_SEASON));
         match season.state {
             SeasonState::Opening => fail(E_NO_CHAMPION),
@@ -165,9 +169,16 @@ impl Contract {
             toll: belt.toll,
             fee: belt.forge_fee,
             relayer: false,
+            storage_bytes: 0,
         };
         let id = self.start_forge(c);
         self.pending.insert(who, id);
+        // The challenge record and the pending flag are permanent storage: their bytes are billed to this bout.
+        let bytes = self.bytes_since(storage_before).max(0) as u32;
+        if let Some(mut c) = self.challenges.get(&id) {
+            c.storage_bytes = bytes;
+            self.challenges.insert(id, c);
+        }
         id
     }
 
@@ -184,7 +195,7 @@ impl Contract {
     /// Relayer mode: a listed relayer delivers the forge output for a pending challenge.
     pub fn submit_forge(&mut self, challenge_id: u64, output_json: String) -> String {
         check(self.is_relayer(&env::predecessor_account_id()), E_NOT_RELAYER);
-        let c = self.challenges.get(&challenge_id).cloned().unwrap_or_else(|| fail(E_NO_CHALLENGE));
+        let c = self.challenges.get(&challenge_id).unwrap_or_else(|| fail(E_NO_CHALLENGE));
         check(c.status == Status::Forging, E_NOT_FORGING);
         check(c.relayer, E_MODE);
         self.settle(challenge_id, forge_out::parse_str(&output_json), true)
@@ -192,7 +203,7 @@ impl Contract {
 
     /// Anyone, 10 minutes after the challenge: still `Forging` -> refund minus fee. A resolved one is a no-op.
     pub fn expire_challenge(&mut self, id: u64) -> bool {
-        let c = self.challenges.get(&id).cloned().unwrap_or_else(|| fail(E_NO_CHALLENGE));
+        let c = self.challenges.get(&id).unwrap_or_else(|| fail(E_NO_CHALLENGE));
         if c.status != Status::Forging {
             return false;
         }

@@ -2,17 +2,19 @@
 //! blockchain in relayer mode (and outlayer mode where noted) with a throwaway signer that plays NEAR AI.
 mod economy_tests;
 mod flow_tests;
+mod gate_tests;
 mod guard_tests;
 mod review_tests;
 mod season_tests;
+mod storage_tests;
 
 use crate::economy::clean_sentence;
-use crate::types::*;
 use crate::Contract;
 use bout_sim::rng::Rng;
 use bout_sim::testgen::random_raw;
 use k256::ecdsa::SigningKey;
-use near_sdk::json_types::{Base64VecU8, U128};
+use crate::b64::B64;
+use near_sdk::json_types::U128;
 use near_sdk::serde_json::{json, Value};
 use near_sdk::test_utils::VMContextBuilder;
 use near_sdk::{testing_env, AccountId, NearToken};
@@ -64,6 +66,19 @@ pub struct Env {
     pub seed: u8,
 }
 
+/// The OutLayer VRF key of the native tests (pinned by `Env::new("outlayer")`).
+pub fn vrf_key() -> ed25519_dalek::SigningKey {
+    ed25519_dalek::SigningKey::from_bytes(&sha(b"titleshot-unit-vrf-key"))
+}
+
+/// A genuine proof for `challenge_id`: alpha is `vrf:{request}:{sender}:titleshot-challenge-{id}`, output = sha256(signature).
+pub fn vrf_proof(challenge_id: u64) -> Value {
+    use ed25519_dalek::Signer;
+    let alpha = format!("vrf:7:titleshot.testnet:titleshot-challenge-{challenge_id}");
+    let sig = vrf_key().sign(alpha.as_bytes()).to_bytes();
+    json!({ "output_hex": hex::encode(sha(&sig)), "alpha": alpha, "signature_hex": hex::encode(sig) })
+}
+
 pub fn signing_key(n: u8) -> SigningKey {
     SigningKey::from_slice(&[n; 32]).unwrap()
 }
@@ -80,8 +95,8 @@ impl Env {
             "titleshot-forge".into(),
             acct("v1.signer-prod.testnet"),
             MODEL.into(),
-            Base64VecU8(prefix),
-            Base64VecU8(suffix),
+            B64(prefix),
+            B64(suffix),
             "provider_tee".into(),
             vec![format!("0x{}", hex::encode(eth_addr(&sk)))],
             mode.into(),
@@ -91,6 +106,9 @@ impl Env {
         e.at("titleshot.testnet", 1);
         e.c.add_relayer(acct("relayer.testnet"));
         e.c.create_belt("Heavy Metal Belt".into(), acct("vance.testnet"), U128(TOLL), U128(FEE), 84532);
+        if mode == "outlayer" {
+            e.c.set_vrf_pubkey(hex::encode(vrf_key().verifying_key().to_bytes()));
+        }
         e
     }
 
@@ -136,6 +154,13 @@ impl Env {
             o["signature_kind"] = "provider_tee".into();
             o["signing_address"] = format!("0x{}", hex::encode(eth_addr(&self.sk))).into();
         }
+        o.to_string()
+    }
+
+    /// `out` (a forge output) carrying a genuine VRF proof for challenge `id`.
+    pub fn proved(&self, out: &str, id: u64) -> String {
+        let mut o: Value = near_sdk::serde_json::from_str(out).unwrap();
+        o["vrf"] = vrf_proof(id);
         o.to_string()
     }
 

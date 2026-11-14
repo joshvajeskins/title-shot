@@ -94,7 +94,7 @@ impl<'a> Arena<'a> {
             champ_sentence: self.champ_sentence.clone(),
             sentence: sentence.clone(),
         };
-        self.rule.get_or_insert(self.bouts.last().map(|b| b.rule).unwrap_or(0));
+        self.rule.get_or_insert(b.rule); // the season rule is fixed by the first bout (a sealed rule is revealed there)
         if winner == Winner::Challenger {
             self.champ = simx::spec(challenger.1);
             self.champ_sentence = sentence;
@@ -110,6 +110,18 @@ impl Bout {
     /// bout-sim than the one this test binary links (rebuild contract/res/titleshot.wasm after sim changes).
     pub fn assert_as_asked(&self) {
         assert_eq!(self.winner, self.want, "bout {} ended {:?}, test asked for {:?}: stale wasm vs bout-sim?", self.run.id, self.winner, self.want);
+    }
+
+    /// The storage component the contract took out of this bout's toll (measured bytes x price, capped).
+    pub fn storage(&self) -> u128 {
+        crate::util::u(&self.fight["storage"])
+    }
+
+    /// The toll split of this bout: `split(toll, fee + storage)`; the storage must be real (`> 0`, within the 50% cap).
+    pub fn split(&self, toll: u128, fee: u128) -> crate::expect::Split {
+        let st = self.storage();
+        assert!(st > 0 && st <= (toll - fee) / 2, "storage component {st} must be measured and capped: {}", self.fight);
+        crate::expect::split(toll, fee + st)
     }
 
     /// The native replay of the same fighters/seed/rule gives the contract's winner, rule and state hash.

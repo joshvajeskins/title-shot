@@ -105,7 +105,9 @@ async fn relayer_mode_only_listed_relayers_resolve_once_and_the_event_flags_the_
     // the money is the same as in OutLayer mode
     let after = snap(&w, belt, &[&w.bob, &w.promoter]).await?;
     // same split as OutLayer mode; the forge fee is protocol revenue here (nothing is paid to OutLayer)
-    let sp = split(toll, fee);
+    let storage = u(&fight["storage"]);
+    assert!(storage > 0, "the relayer-mode bout is charged its storage too: {fight}");
+    let sp = split(toll, fee + storage);
     let mut exp = before.bal.clone();
     *exp.get_mut(w.bob.id().as_str()).unwrap() -= toll;
     *exp.get_mut(w.promoter.id().as_str()).unwrap() += sp.champion + sp.promoter;
@@ -182,12 +184,12 @@ async fn belt_nft_holder_transfer_makes_the_new_owner_the_champion_who_is_paid_a
     // a challenge now pays CAROL the champion share, the promoter keeps only the promoter share
     arena.holder = w.carol.id().to_string();
     let (toll, fee) = (w.opts.toll, w.opts.forge_fee);
-    let sp = split(toll, fee);
     let before = snap(&w, arena.belt, &[&w.bob, &w.carol, &w.promoter]).await?;
     let b = arena.fight(&w.bob, (&x_s, &x_raw), Winner::Champion).await?;
     b.assert_as_asked();
+    let sp = b.split(toll, fee);
     let after = snap(&w, arena.belt, &[&w.bob, &w.carol, &w.promoter]).await?;
-    assert_bout_money(&before, &after, &sp, toll, fee, &w.bob, &w.carol, &w.promoter);
+    assert_bout_money(&before, &after, &sp, toll, fee, b.storage(), &w.bob, &w.carol, &w.promoter);
     assert_eq!(after.b(&w.carol), before.b(&w.carol) + sp.champion, "the new holder earns the champion share");
     assert_eq!(after.b(&w.promoter), before.b(&w.promoter) + sp.promoter, "the promoter only the promoter share");
     assert_eq!(b.fight["holder"], w.carol.id().to_string());

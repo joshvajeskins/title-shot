@@ -2,10 +2,17 @@
 //! wanted result (win, lose, draw) and to predict what the contract must store. The seed rule is the one in
 //! docs/CONTRACT.md: seed = sha256("titleshot:seed:" ++ vrf_output ++ challenge_id_le); a sealed rule is
 //! `seed[0] % 8` at the first bout of a season.
+//!
+//! Every `World` pins the OutLayer VRF key, as a real deploy must (outlayer mode refuses `challenge` without one), so
+//! every VRF block the contract sees is verified: `find_vrf` grinds genuine ed25519 proofs, and `World::answer`
+//! replaces the fake marker of `vrf_from` outputs with a genuine proof for the challenge being answered.
 use bout_sim::types::Winner;
 use bout_sim::Spec;
-use serde_json::Value;
+use ed25519_dalek::{Signer, SigningKey};
+use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
+use std::collections::HashMap;
+use std::sync::{Mutex, OnceLock};
 
 pub fn seed(vrf: &[u8; 32], challenge_id: u64) -> [u8; 32] {
     let mut h = Sha256::new();
@@ -13,6 +20,40 @@ pub fn seed(vrf: &[u8; 32], challenge_id: u64) -> [u8; 32] {
     h.update(vrf);
     h.update(challenge_id.to_le_bytes());
     h.finalize().into()
+}
+
+/// The OutLayer VRF key every `World` pins with `set_vrf_pubkey`.
+pub fn vrf_key() -> SigningKey {
+    SigningKey::from_bytes(&Sha256::digest(b"titleshot-it-vrf-key").into())
+}
+
+pub fn vrf_pubkey_hex() -> String {
+    hex::encode(vrf_key().verifying_key().to_bytes())
+}
+
+/// What OutLayer returns for the VRF seed `titleshot-challenge-{id}`: alpha = `vrf:{request}:{sender}:{seed}`, the
+/// proof is the ed25519 signature over alpha and the output is sha256(proof).
+pub fn proof_json(request: u64, sender: &str, challenge_id: u64) -> (Value, [u8; 32]) {
+    let alpha = format!("vrf:{request}:{sender}:titleshot-challenge-{challenge_id}");
+    let sig = vrf_key().sign(alpha.as_bytes()).to_bytes();
+    let output: [u8; 32] = Sha256::digest(sig).into();
+    (json!({"alpha": alpha, "signature_hex": hex::encode(sig), "output_hex": hex::encode(output)}), output)
+}
+
+/// Marker signature of a VRF block that has no proof yet (see the module doc).
+pub const FAKE_SIG: [u8; 64] = [7u8; 64];
+
+fn registry() -> &'static Mutex<HashMap<[u8; 32], Value>> {
+    static R: OnceLock<Mutex<HashMap<[u8; 32], Value>>> = OnceLock::new();
+    R.get_or_init(Default::default)
+}
+
+/// The `vrf` object for an output: the genuine proof when `find_vrf` made it, else the fake marker.
+pub fn vrf_json(output: &[u8; 32]) -> Value {
+    if let Some(p) = registry().lock().unwrap().get(output) {
+        return p.clone();
+    }
+    json!({"output_hex": hex::encode(output), "alpha": "vrf:1:contract:titleshot-challenge", "signature_hex": hex::encode(FAKE_SIG)})
 }
 
 pub fn vrf_from(counter: u64) -> [u8; 32] {
@@ -43,12 +84,14 @@ pub fn winner_name(w: Winner) -> &'static str {
     }
 }
 
-/// First VRF output (searching deterministically) whose bout ends as `want`.
+/// First genuine VRF proof (searching over the request id inside alpha) whose bout ends as `want`. Returns the output;
+/// the proof is remembered so `Ai::output_for` can attach it.
 pub fn find_vrf(champ: &Spec, chall: &Spec, id: u64, rule: Option<u8>, want: Winner) -> [u8; 32] {
     for c in 0..20_000u64 {
-        let vrf = vrf_from(c);
-        if outcome(champ, chall, &vrf, id, rule).0 == want {
-            return vrf;
+        let (proof, output) = proof_json(1_000_000 + c, "ts.test.near", id);
+        if outcome(champ, chall, &output, id, rule).0 == want {
+            registry().lock().unwrap().insert(output, proof);
+            return output;
         }
     }
     panic!("no VRF output gives {want:?} for these fighters (rule {rule:?}); pick other fixtures");

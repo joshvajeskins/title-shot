@@ -2,7 +2,7 @@
 //! Every failure is soft (refund or reject); the only panics are impossible-state bugs, never inputs.
 use crate::challenge::label;
 use crate::codes::*;
-use crate::economy::split_toll;
+use crate::economy::{split_toll, storage_charge};
 use crate::events::{emit, hex32};
 use crate::forge_out::{ForgeOutput, ParseError};
 use crate::seed::{block_entropy, derive_seed, source_name, vrf_entropy};
@@ -13,7 +13,8 @@ use crate::Contract;
 use bout_sim::spec::Spec;
 use bout_sim::types::Winner;
 use near_sdk::json_types::U128;
-use near_sdk::serde_json::{self, json};
+use crate::json::{json, Raw};
+use near_sdk::{env, serde_json};
 
 enum Fail {
     Refund(&'static str, String),
@@ -23,20 +24,21 @@ enum Fail {
 impl Contract {
     /// Shared by the OutLayer callback and `submit_forge`. No-op unless the challenge is still `Forging`.
     pub fn settle(&mut self, id: u64, input: Result<ForgeOutput, ParseError>, _direct: bool) -> String {
-        let Some(c) = self.challenges.get(&id).cloned() else {
+        let Some(c) = self.challenges.get(&id) else {
             return "Unknown".to_string();
         };
         if c.status != Status::Forging {
             return label(&c.status).to_string();
         }
+        let storage_before = env::storage_usage();
         let status = match input {
-            Ok(out) => self.settle_output(c, out),
+            Ok(out) => self.settle_output(c, out, storage_before),
             Err(e) => self.refund(c, e.code, &e.detail),
         };
         label(&status).to_string()
     }
 
-    fn settle_output(&mut self, c: Challenge, out: ForgeOutput) -> Status {
+    fn settle_output(&mut self, c: Challenge, out: ForgeOutput, storage_before: u64) -> Status {
         if !self.fighters.contains_key(&c.hash) {
             if let Err(f) = self.compile_fighter(&c, &out) {
                 return match f {
@@ -48,7 +50,7 @@ impl Contract {
         if c.kind == ChallengeKind::Opener {
             return self.finish_opener(c);
         }
-        self.bout(c, out)
+        self.bout(c, out, storage_before)
     }
 
     /// Verify the AI signature and store the canonical fighter. `Err` says how to record the failure.
@@ -76,7 +78,7 @@ impl Contract {
         emit(
             "forged",
             json!({ "challenge_id": c.id, "hash": hex32(&c.hash), "writer": writer, "signer": addr_hex(&v.signer),
-                    "sentence": c.sentence, "spec": serde_json::from_str::<serde_json::Value>(&spec_json).unwrap_or_default() }),
+                    "sentence": c.sentence, "spec": Raw(spec_json.clone()) }),
         );
         self.fighters.insert(
             c.hash,
@@ -91,7 +93,7 @@ impl Contract {
         Spec::from_json(&f.spec_json).ok()
     }
 
-    fn bout(&mut self, c: Challenge, out: ForgeOutput) -> Status {
+    fn bout(&mut self, c: Challenge, out: ForgeOutput, storage_before: u64) -> Status {
         let belt = self.belt(c.belt_id);
         let Some(mut season) = self.season_of(c.belt_id, c.season_id) else {
             return self.refund(c, E_CLOSED, "season missing");
@@ -120,9 +122,9 @@ impl Contract {
         let (Some(champ), Some(chall)) = (self.load_spec(&champ_hash), self.load_spec(&c.hash)) else {
             return self.refund(c, E_STATE, "stored spec failed validation");
         };
-        let Some(split) = split_toll(c.toll, c.fee) else {
+        if split_toll(c.toll, c.fee).is_none() {
             return self.refund(c, E_STATE, "toll below fee");
-        };
+        }
         let seed = derive_seed(&entropy, c.id);
         let rule = match season.rule {
             Some(r) => r,
@@ -135,11 +137,8 @@ impl Contract {
         };
         let (winner, state_hash) = bout_sim::simulate_lite(&champ, &chall, seed, rule);
 
-        self.credit(&holder, split.champion);
-        self.credit(&belt.promoter, split.promoter);
-        season.side_pot += split.side_pot;
-        self.protocol_balance += split.protocol;
-        self.stats.protocol += split.protocol;
+        // Structure first, money second: every permanent record is written (with a zero split) so the bytes this bout
+        // stored can be measured, and the storage component can come out of the toll before it is shared.
         self.stats.bouts += 1;
         season.bouts += 1;
         let mut belt = belt;
@@ -160,35 +159,61 @@ impl Contract {
                 bump_defender(&mut season, &holder);
             }
         }
+        let promoter = belt.promoter.clone();
         self.belts.insert(c.belt_id, belt);
-        self.seasons.insert((c.belt_id, c.season_id), season);
+        self.seasons.insert((c.belt_id, c.season_id), season.clone());
         self.record_result(&champ_hash, &c.hash, winner);
-
-        let split_rec = SplitRec { champion: split.champion, promoter: split.promoter, side_pot: split.side_pot, protocol: split.protocol };
+        let zero = SplitRec { champion: 0, promoter: 0, side_pot: 0, protocol: 0 };
         let fight = Fight {
             id: fight_id, challenge_id: c.id, belt_id: c.belt_id, season_id: c.season_id, champion_hash: champ_hash,
             challenger_hash: c.hash, holder: holder.clone(), challenger: c.challenger.clone(), seed, seed_source: src, rule,
-            winner: winner.code(), state_hash, split: split_rec, at: now(),
+            winner: winner.code(), state_hash, split: zero, storage: 0, storage_bytes: 0, at: now(),
         };
+        self.fights.insert(fight_id, fight);
+        let mut c = c;
+        let status = Status::Resolved { fight_id: Some(fight_id) };
+        self.finish_challenge(&mut c, status.clone());
+        self.challenges.insert(c.id, c.clone());
+        self.credit(&holder, 0);
+        self.credit(&promoter, 0);
+        let measured = (self.bytes_since(storage_before) + c.storage_bytes as i64).max(0) as u64;
+
+        let cost = env::storage_byte_cost().as_yoctonear();
+        let r = c.toll.saturating_sub(c.fee);
+        let charge = storage_charge(r, measured, cost);
+        self.stats.storage_charged += charge;
+        self.stats.storage_debt += (measured as u128).saturating_mul(cost).saturating_sub(charge);
+        let split = split_toll(c.toll, c.fee + charge).unwrap_or_else(|| fail(E_STATE));
+        self.credit(&holder, split.champion);
+        self.credit(&promoter, split.promoter);
+        // finish_challenge already lowered the season's pending count: re-read it before adding the side-pot.
+        if let Some(mut s) = self.seasons.get(&(c.belt_id, c.season_id)) {
+            s.side_pot += split.side_pot;
+            self.seasons.insert((c.belt_id, c.season_id), s);
+        }
+        self.protocol_balance += split.protocol;
+        self.stats.protocol += split.protocol;
+        let split_rec = SplitRec { champion: split.champion, promoter: split.promoter, side_pot: split.side_pot, protocol: split.protocol };
+        if let Some(mut f) = self.fights.get(&fight_id) {
+            f.split = split_rec;
+            f.storage = charge;
+            f.storage_bytes = measured as u32;
+            self.fights.insert(fight_id, f);
+        }
         emit(
             "bout",
             json!({ "fight_id": fight_id, "challenge_id": c.id, "belt_id": c.belt_id, "season_id": c.season_id,
                     "champion": hex32(&champ_hash), "challenger_fighter": hex32(&c.hash), "holder": holder, "challenger": c.challenger,
                     "winner": winner_name(winner.code()), "seed": hex32(&seed), "seed_source": source_name(src), "rule": rule,
-                    "state_hash": hex32(&state_hash),
-                    "split": { "champion": U128(split.champion), "promoter": U128(split.promoter), "side_pot": U128(split.side_pot), "protocol": U128(split.protocol) } }),
+                    "state_hash": hex32(&state_hash), "storage": U128(charge),
+                    "split": json!({ "champion": U128(split.champion), "promoter": U128(split.promoter), "side_pot": U128(split.side_pot), "protocol": U128(split.protocol) }) }),
         );
-        self.fights.insert(fight_id, fight);
-        let mut c = c;
-        let status = Status::Resolved { fight_id: Some(fight_id) };
-        self.finish_challenge(&mut c, status.clone());
-        self.challenges.insert(c.id, c);
         status
     }
 
     fn record_result(&mut self, champ: &Hash, chall: &Hash, winner: Winner) {
         for (h, outcome) in [(champ, 0u8), (chall, 1u8)] {
-            if let Some(mut f) = self.fighters.get(h).cloned() {
+            if let Some(mut f) = self.fighters.get(h) {
                 match (winner, outcome) {
                     (Winner::Draw, _) => f.record.draws += 1,
                     (Winner::Champion, 0) | (Winner::Challenger, 1) => f.record.wins += 1,

@@ -69,6 +69,7 @@ impl World {
     }
 
     pub async fn answer_raw(&self, req: u64, output: &str) -> Result<bool> {
+        let output = &self.with_proof(req, output).await?;
         for _ in 0..40 {
             let r = self.ol.call("resolve").args_json(json!({"request_id":req,"output_json":output})).transact().await?;
             if r.is_failure() {
@@ -83,6 +84,19 @@ impl World {
             tokio::time::sleep(Duration::from_millis(500)).await;
         }
         Err(anyhow!("request {req} never became resolvable"))
+    }
+
+    /// A VRF block carrying the fake marker signature gets a genuine proof for the challenge `req` was made for (the
+    /// contract pins the OutLayer key, so an unproven seed is refused). Anything else, hostile proofs included, goes as is.
+    async fn with_proof(&self, req: u64, output: &str) -> Result<String> {
+        let Ok(mut v) = serde_json::from_str::<Value>(output) else { return Ok(output.to_string()) };
+        if v["vrf"]["signature_hex"] != hex::encode(crate::simx::FAKE_SIG) {
+            return Ok(output.to_string());
+        }
+        let input = self.request_input(req).await?;
+        let id = input["challenge_id"].as_u64().ok_or_else(|| anyhow!("request {req} has no challenge_id"))?;
+        v["vrf"] = crate::simx::proof_json(req, self.ts.id().as_str(), id).0;
+        Ok(v.to_string())
     }
 
     /// Execution failure on the worker side: the callback sees a failed promise.

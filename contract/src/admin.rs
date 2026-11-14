@@ -6,10 +6,10 @@ use crate::types::*;
 use crate::util::*;
 use crate::verify::{self, Kind};
 use crate::{Contract, ContractExt, Key};
-use near_contract_standards::non_fungible_token::NonFungibleToken;
-use near_sdk::json_types::{Base64VecU8, U128};
-use near_sdk::serde_json::json;
-use near_sdk::store::LookupMap;
+use crate::b64::B64;
+use near_sdk::json_types::U128;
+use crate::json::json;
+use crate::store::Map;
 use near_sdk::{assert_one_yocto, env, near, AccountId, NearToken, Promise};
 
 const MAX_DELAY_SEC: u64 = 30 * 24 * 3600;
@@ -35,8 +35,8 @@ impl Contract {
         forge_project: String,
         mpc_signer: AccountId,
         model_id: String,
-        req_prefix: Base64VecU8,
-        req_suffix: Base64VecU8,
+        req_prefix: B64,
+        req_suffix: B64,
         signature_kind: String,
         signer_allowlist: Vec<String>,
         forge_mode: String,
@@ -47,13 +47,7 @@ impl Contract {
         let mode = ForgeMode::parse(&forge_mode).unwrap_or_else(|| fail(E_CONFIG));
         let allowlist = parse_list(&signer_allowlist);
         Self {
-            tokens: NonFungibleToken::new(
-                Key::NftOwner,
-                owner.clone(),
-                Some(Key::NftMeta),
-                Some(Key::NftEnum),
-                None::<Key>,
-            ),
+            holders: Map::new(Key::NftOwner),
             owner,
             outlayer,
             forge_project,
@@ -69,21 +63,21 @@ impl Contract {
             relayers: vec![],
             vrf_pubkey: None,
             secrets: None,
-            balances: LookupMap::new(Key::Balances),
+            balances: Map::new(Key::Balances),
             protocol_balance: 0,
-            belts: LookupMap::new(Key::Belts),
+            belts: Map::new(Key::Belts),
             belt_count: 0,
-            seasons: LookupMap::new(Key::Seasons),
-            fighters: LookupMap::new(Key::Fighters),
-            challenges: LookupMap::new(Key::Challenges),
+            seasons: Map::new(Key::Seasons),
+            fighters: Map::new(Key::Fighters),
+            challenges: Map::new(Key::Challenges),
             next_challenge: 1,
-            pending: LookupMap::new(Key::Pending),
-            fights: LookupMap::new(Key::Fights),
+            pending: Map::new(Key::Pending),
+            fights: Map::new(Key::Fights),
             next_fight: 1,
-            belt_fights: LookupMap::new(Key::BeltFights),
-            payouts: LookupMap::new(Key::Payouts),
+            belt_fights: Map::new(Key::BeltFights),
+            payouts: Map::new(Key::Payouts),
             next_payout: 1,
-            evm_addrs: LookupMap::new(Key::EvmAddrs),
+            evm_addrs: Map::new(Key::EvmAddrs),
             stats: Stats::default(),
         }
     }
@@ -143,7 +137,7 @@ impl Contract {
             None
         } else {
             let mut k = [0u8; 32];
-            hex::decode_to_slice(pubkey_hex.trim_start_matches("0x"), &mut k).unwrap_or_else(|_| fail(E_CONFIG));
+            crate::hex::decode_to_slice(pubkey_hex.trim_start_matches("0x"), &mut k).unwrap_or_else(|_| fail(E_CONFIG));
             Some(k)
         };
     }
@@ -159,7 +153,7 @@ impl Contract {
     /// Change the compile request (model, prefix/suffix bytes, signature kind). Existing fighters keep
     /// their stored specs. Emits the new hashes so the change is visible.
     #[payable]
-    pub fn set_request(&mut self, model_id: String, req_prefix: Base64VecU8, req_suffix: Base64VecU8, signature_kind: String) {
+    pub fn set_request(&mut self, model_id: String, req_prefix: B64, req_suffix: B64, signature_kind: String) {
         assert_one_yocto();
         self.assert_owner();
         check_request(&model_id, &req_prefix.0, &req_suffix.0, &signature_kind);
@@ -171,8 +165,8 @@ impl Contract {
             "request_changed",
             json!({
                 "model_id": self.model_id,
-                "prefix_sha256": hex::encode(env::sha256_array(&self.req_prefix)),
-                "suffix_sha256": hex::encode(env::sha256_array(&self.req_suffix)),
+                "prefix_sha256": crate::hex::encode(env::sha256_array(&self.req_prefix)),
+                "suffix_sha256": crate::hex::encode(env::sha256_array(&self.req_suffix)),
                 "signature_kind": signature_kind,
             }),
         );
@@ -211,7 +205,7 @@ impl Contract {
                 media: String::new(),
             },
         );
-        self.mint_belt(id, &name, "", &promoter);
+        self.mint_belt(id, &promoter);
         emit("belt_created", json!({ "belt_id": id, "name": name, "promoter": promoter, "toll": toll, "forge_fee": forge_fee }));
         id
     }
@@ -223,7 +217,6 @@ impl Contract {
         check(media.len() <= 512, E_CONFIG);
         let mut belt = self.belt(belt_id);
         belt.media = media.clone();
-        self.set_belt_token_media(belt_id, &belt.name, &media);
         self.belts.insert(belt_id, belt);
     }
 
