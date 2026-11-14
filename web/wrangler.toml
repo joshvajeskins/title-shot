@@ -24,7 +24,7 @@ NEARAI_MODEL = "z-ai/glm-5.3-flash"
 # NEARAI_BUDGET_USD / NEARAI_PUBLIC_DAILY_USD / NEARAI_PUBLIC_TOTAL_USD are NOT set here: scripts/rotate-nearai-key.sh pushes
 # them as Pages secrets with each key (a [vars] entry of the same name would clash). Unset = 2.5 / 0.05 / 0.25.
 PURSE_WEI = "2000000000000000"
-SEASON_SEC = "21600"
+SEASON_SEC = "10800"
 SPONSOR_FLOOR_NEAR = "0.8"
 GUEST_DEPOSIT_NEAR = "0.3"
 GUEST_GAS_NEAR = "0.1"
