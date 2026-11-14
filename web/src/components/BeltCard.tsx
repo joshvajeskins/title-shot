@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { BellCinematic } from './BellCinematic'
 import { sound } from '../audio/sound'
 import type { Belt } from '../game/types'
-import { countdown, eth, near, shortHex } from '../lib/format'
+import { countdown, eth, near, plural, shortHex } from '../lib/format'
 import { FighterPoster } from './FighterPoster'
 import { Icon } from './Icon'
 import { Link } from './Link'
@@ -58,7 +58,7 @@ export function BeltCard({ belt, index = 0 }: { belt: Belt; index?: number }) {
       </footer>
       {belt.lastBell && (
         <button className="beltcard-lastbell" onClick={() => setBellOpen(true)}>
-          <Icon name="bell" size={14} /> Season {belt.lastBell.seasonId} bell: {eth(belt.lastBell.purseWei)} ETH paid to {belt.lastBell.payouts.length} corners on Base <span>Watch</span>
+          <Icon name="bell" size={14} /> Season {belt.lastBell.seasonId} bell: {eth(belt.lastBell.purseWei)} ETH paid to {plural(belt.lastBell.payouts.length, 'corner')} on Base <span>Watch</span>
         </button>
       )}
       {bellOpen && belt.lastBell && <BellCinematic bell={belt.lastBell} beltName={belt.name} onClose={() => setBellOpen(false)} />}

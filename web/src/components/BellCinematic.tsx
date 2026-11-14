@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { sound } from '../audio/sound'
 import { useGame } from '../game/context'
 import type { Bell } from '../game/types'
-import { eth, near, shortAccount, shortHex } from '../lib/format'
+import { eth, near, plural, shortAccount, shortHex } from '../lib/format'
 import { BaseName } from './BaseName'
 import { PayoutAddressDialog } from './PayoutAddress'
 import { Icon } from './Icon'
@@ -52,7 +52,7 @@ export function BellCinematic({ bell, beltName, onClose }: { bell: Bell; beltNam
                 <li key={p.payee + i} style={{ ['--d' as string]: `${i * 140}ms` }}>
                   <div className="bellc-who">
                     <b>{p.name}</b>
-                    <small>{shortAccount(p.payee) === p.name ? p.payee : shortAccount(p.payee)} <BaseName address={p.to} /> · {p.share === 'holder' ? 'final holder' : p.share === 'refund' ? 'no challengers: refund' : `${p.defences} defences`}</small>
+                    <small>{shortAccount(p.payee) === p.name ? p.payee : shortAccount(p.payee)} <BaseName address={p.to} /> · {p.share === 'holder' ? 'final holder' : p.share === 'refund' ? 'no challengers: refund' : plural(p.defences ?? 0, 'defence')}</small>
                   </div>
                   <div className="bellc-bar"><span style={{ transform: step >= 3 ? `scaleX(${pct / 100})` : 'scaleX(0)' }} /></div>
                   <div className="bellc-amt num">{eth(p.amountWei, 5)} ETH <small>{pct}%</small></div>

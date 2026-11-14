@@ -34,6 +34,9 @@ const PERSONAS: Record<string, string> = {
   'house-a.titleshot.testnet': 'Mother Ruckus',
   'house-b.titleshot.testnet': 'Professor Quill',
 }
+/** "1 defence", "3 defences". */
+export const plural = (n: number, word: string): string => `${n} ${word}${n === 1 ? '' : 's'}`
+
 export const personaOf = (id: string): string | null => PERSONAS[id] ?? null
 
 export function shortAccount(id: string): string {

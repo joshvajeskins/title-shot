@@ -7,7 +7,7 @@ import { OddsMeter } from '../components/OddsMeter'
 import { TollBreakdown } from '../components/TollBreakdown'
 import { cleanSentence, sentenceProblem, type PreviewResult } from '../game/client'
 import { useAsync, useGame } from '../game/context'
-import { near } from '../lib/format'
+import { near, plural } from '../lib/format'
 import { navigate } from '../lib/router'
 import { moveInfo } from '../game/library'
 import { useDeployInfo } from '../game/compiler'
@@ -76,7 +76,7 @@ export function Corner({ beltId }: { beltId: string }) {
       </div>
       <div className="corner-grid">
         <section className="corner-champ" aria-label="The champion">
-          <span className="eyebrow">The champion · {belt.defences} defences</span>
+          <span className="eyebrow">The champion · {plural(belt.defences, 'defence')}</span>
           <div className="corner-champ-row">
             <FighterPoster fighter={champ} corner="champ" size="md" tilt={-2} />
             <div className="corner-champ-detail panel">

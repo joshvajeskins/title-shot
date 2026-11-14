@@ -4,7 +4,7 @@ import { FighterPoster } from '../components/FighterPoster'
 import { Icon } from '../components/Icon'
 import { Link, Wordmark } from '../components/Link'
 import { useAsync, useGame } from '../game/context'
-import { eth, near } from '../lib/format'
+import { eth, near, plural } from '../lib/format'
 import { useCompilerMode } from '../game/compiler'
 import './landing.css'
 
@@ -60,7 +60,7 @@ export function Landing() {
               {belts.map((b) => (
                 <Link key={b.id} href={`/play/belt/${b.id}`} className="ticker-item">
                   <img src={b.art} alt="" />
-                  <span><b>{b.champion.spec.name}</b> holds the {b.name.replace('The ', '')} · {b.defences} defences · purse {eth(b.season.purse.amountWei)} ETH</span>
+                  <span><b>{b.champion.spec.name}</b> holds the {b.name.replace('The ', '')} · {plural(b.defences, 'defence')} · purse {eth(b.season.purse.amountWei)} ETH</span>
                 </Link>
               ))}
             </div>
