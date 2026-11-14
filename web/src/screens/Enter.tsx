@@ -34,20 +34,22 @@ export function Enter() {
           <Link href="/" className="enter-back"><Icon name="back" size={14} /> Back to site</Link>
         </div>
         <div className="enter-body">
-          <span className="eyebrow">Fighter account</span>
+          <span className="eyebrow">Your corner</span>
           <h1 className="display print enter-h">Get in the ring</h1>
-          <p className="enter-p">One tap opens a NEAR testnet account for you, loads it with free test NEAR and keeps a session key in this browser. No email, no seed phrase, no wallet popups between fights.</p>
-          <div className="enter-route">
-            <span className="enter-route-tag"><Icon name="bolt" size={12} /> No wallet needed: best for judges</span>
-            <button className="btn btn-red btn-lg enter-cta" onClick={create} disabled={busy || walletBusy}>
-              {busy ? 'Opening your account…' : <>Create my fighter account <Icon name="arrow" /></>}
+          <p className="enter-p">Connect your NEAR testnet wallet. It approves once: a key that can only call <i>challenge</i>, and the fight money you choose. After that, no popups between fights. Withdrawals go back through your wallet; purse payouts go to the Base address you pick.</p>
+          {client.mode === 'testnet' && <EnterWallet busyElsewhere={busy} onBusy={onWalletBusy} onDone={walletDone} />}
+          <div className="enter-demo">
+            <div className="ew-or" aria-hidden="true"><span>or</span></div>
+            <span className="enter-route-tag"><Icon name="bolt" size={12} /> Judge demo: no wallet</span>
+            <p className="ew-sub">For judges and AI screeners who can't run a wallet extension. We open a throwaway testnet demo account in this browser, funded with test NEAR. It is not your wallet; its winnings can be moved to your wallet later.</p>
+            <button className="btn btn-ghost enter-demo-btn" onClick={create} disabled={busy || walletBusy}>
+              {busy ? 'Opening the demo account…' : <>Open the judge demo <Icon name="arrow" /></>}
             </button>
           </div>
           {err && <p className="enter-err" role="alert"><Icon name="x" size={14} /> {err}</p>}
-          {client.mode === 'testnet' && <EnterWallet busyElsewhere={busy} onBusy={onWalletBusy} onDone={walletDone} />}
           <ul className="enter-facts">
-            <li><Icon name="check" size={14} /><span>A real NEAR account on testnet, yours to keep</span></li>
-            <li><Icon name="lock" size={14} /><span>The session key can only call <i>challenge</i>: it cannot withdraw or move your belt</span></li>
+            <li><Icon name="lock" size={14} /><span>The session key can only call <i>challenge</i>: it cannot withdraw, move your belt or touch your wallet</span></li>
+            <li><Icon name="check" size={14} /><span>Winnings, belts and purse payouts land in your own NEAR and Base wallets</span></li>
             <li><Icon name="coin" size={14} /><span>Testnet NEAR has no cash value. This is a demo economy on testnet.</span></li>
           </ul>
           <p className="enter-terms">By entering you agree to the <Link href="/terms">terms</Link> and the <Link href="/privacy">privacy note</Link>.</p>

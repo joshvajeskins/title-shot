@@ -30,7 +30,7 @@ export function Landing() {
   const compiler = useCompilerMode(client.mode)
   useEffect(() => { document.title = 'TITLE SHOT — one sentence, one belt' }, [])
   const start = () => { if (!started) { setStarted(true); void sound.music('lobby_loop'); sound.play('intro_1') } }
-  const cta = account ? { href: '/play', label: 'Open the belts' } : { href: '/enter', label: 'Enter the ring' }
+  const cta = account ? { href: '/play', label: 'Open the belts' } : { href: '/enter', label: 'Connect wallet and play' }
   return (
     <div className="landing" onPointerDown={start}>
       <header className="land-nav">

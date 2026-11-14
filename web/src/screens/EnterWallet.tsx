@@ -67,11 +67,10 @@ export function EnterWallet({ busyElsewhere, onBusy, onDone }: { busyElsewhere: 
   if (phase.k === 'idle' || phase.k === 'connecting') {
     return (
       <div className="ew">
-        <div className="ew-or" aria-hidden="true"><span>or bring your own</span></div>
-        <button className="btn btn-ghost ew-connect" onClick={connect} disabled={phase.k === 'connecting' || busyElsewhere}>
-          <NearMark size={18} /> {phase.k === 'connecting' ? 'Opening NEAR Connect…' : 'Use my NEAR wallet'}
+        <button className="btn btn-red btn-lg enter-cta ew-connect" onClick={connect} disabled={phase.k === 'connecting' || busyElsewhere}>
+          <NearMark size={18} /> {phase.k === 'connecting' ? 'Opening NEAR Connect…' : 'Connect my NEAR wallet'}
         </button>
-        <p className="ew-sub">Meteor, Intear, Nightly, Ledger and more, on testnet. One approval, then no popups between fights.</p>
+        <p className="ew-sub">Meteor, Intear, Nightly, Ledger and the other testnet wallets NEAR Connect lists. One approval in your wallet, then no popups between fights.</p>
         {err && <p className="enter-err" role="alert"><Icon name="x" size={14} /> {err}</p>}
       </div>
     )

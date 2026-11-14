@@ -191,7 +191,7 @@ describe('stored wallet account and the client', () => {
   })
   it('session-key errors give wallet accounts wallet advice and guests the old guest advice', () => {
     expect(sessionSendError(new Error('NotEnoughAllowance'), true).message).toMatch(/connect your wallet again/)
-    expect(sessionSendError(new Error('NotEnoughAllowance'), false).message).toBe('This guest corner has used up its gas allowance. Create a new guest corner to keep fighting.')
+    expect(sessionSendError(new Error('NotEnoughAllowance'), false).message).toBe('This demo account has used up its gas allowance. Connect your wallet to keep fighting.')
   })
 })
 

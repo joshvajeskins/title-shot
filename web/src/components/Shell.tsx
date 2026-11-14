@@ -68,7 +68,7 @@ export function Shell({ children, bare = false }: { children: ReactNode; bare?: 
         )}
         {!account && !bare && (
           <div className="guest-nudge">
-            <span><b>You're spectating.</b><span className="hide-sm"> Get a free testnet fighter account to take a shot.</span></span>
+            <span><b>You're spectating.</b><span className="hide-sm"> Connect your NEAR wallet to take a shot.</span></span>
             <Link href={`/enter?next=${encodeURIComponent(path)}`} className="btn btn-red btn-sm">Get in the ring</Link>
           </div>
         )}
@@ -107,7 +107,7 @@ function IdentityBlock({ open, setOpen, onSignOut, down = false }: { open: boole
     return (
       <Link href="/enter" className="identity identity-empty">
         <span className="identity-avatar"><Icon name="user" /></span>
-        <span className="identity-text"><strong>Spectator</strong><small>Get a fighter account</small></span>
+        <span className="identity-text"><strong>Spectator</strong><small>Connect a wallet</small></span>
       </Link>
     )
   }
@@ -136,7 +136,7 @@ function IdentityBlock({ open, setOpen, onSignOut, down = false }: { open: boole
         <span className="identity-avatar display">{initials}</span>
         <span className="identity-text">
           <strong title={account.id}>{shortAccount(account.id)}</strong>
-          <small className="num">{near(account.balanceYocto, 3)} NEAR · {account.kind === 'guest' ? 'guest key' : 'wallet'}{client.mode === 'mock' ? ' · demo' : ''}</small>
+          <small className="num">{near(account.balanceYocto, 3)} NEAR · {account.kind === 'guest' ? 'judge demo, not a wallet' : 'NEAR wallet'}{client.mode === 'mock' ? ' · demo' : ''}</small>
         </span>
         <Icon name="dots" />
       </button>

@@ -89,7 +89,7 @@ export function MoveDialog({ onClose }: { onClose: () => void }) {
     <div className="wm-backdrop" onClick={(e) => { if (e.target === e.currentTarget && !busy) onClose() }}>
       <div className="wm panel" role="dialog" aria-modal="true" aria-labelledby="wm-title">
         <button className="wm-close" onClick={onClose} disabled={busy} aria-label="Close"><Icon name="x" size={16} /></button>
-        <span className="eyebrow">Guest corner · {guest.accountId}</span>
+        <span className="eyebrow">Judge demo account · {guest.accountId}</span>
         <h2 id="wm-title" className="display print">{phase === 'done' ? 'Moved' : 'Move to my wallet'}</h2>
         {(phase === 'connect' || phase === 'connecting') && (
           <>

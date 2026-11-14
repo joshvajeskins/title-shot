@@ -3,7 +3,7 @@ import './pages.css'
 
 const TERMS = [
   ['A game on test networks', 'TITLE SHOT runs on NEAR testnet and Base Sepolia. Test NEAR and test ETH have no cash value and cannot be redeemed for anything.'],
-  ['Your account', 'A fighter account is a NEAR testnet account whose keys live in your browser. If you clear your browser storage without exporting the key, the account is gone. We cannot recover it.'],
+  ['Your account', 'With a wallet, your NEAR testnet account stays in your wallet; this browser only keeps a key that can call challenge, which your wallet approved and can remove. The judge demo is a throwaway testnet account whose keys live only in this browser: clear your browser storage without moving its winnings to a wallet and it is gone. We cannot recover it.'],
   ['Sentences', 'Sentences you forge are public and permanent on chain. Do not write personal data. The compiler refuses hateful, sexual or real-person content; refused sentences are refunded minus the forge fee.'],
   ['No guarantees', 'The game is a hackathon prototype provided as is. Contracts, enclaves and networks can fail; the refund paths are described in How it works.'],
 ]

@@ -48,7 +48,7 @@ export const verifyBody = z.object({
 })
 
 export function signInMessage(accountId: string, guestId?: string): string {
-  return `Title Shot: I control ${accountId}` + (guestId ? ` and want guest corner ${guestId} moved here.` : '.')
+  return `Title Shot: I control ${accountId}` + (guestId ? ` and want demo account ${guestId} moved here.` : '.')
 }
 
 export async function issueNonce(deps: AuthDeps, input: { accountId: string; guestId?: string }, recipient: string) {

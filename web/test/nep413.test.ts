@@ -79,7 +79,7 @@ describe('issueNonce / verifyAuth', () => {
     expect(a.message).toBe('Title Shot: I control alice.testnet.')
     expect(a.expiresAt).toBe(1_000_000 + 300_000)
     const b = await issueNonce(deps, { accountId: ACCOUNT, guestId: 'g_42' }, HOST)
-    expect(b.message).toBe('Title Shot: I control alice.testnet and want guest corner g_42 moved here.')
+    expect(b.message).toBe('Title Shot: I control alice.testnet and want demo account g_42 moved here.')
     expect([...(deps.kv as MemKV).store.keys()].every((k) => k.startsWith('auth-nonce:'))).toBe(true)
   })
 
@@ -198,7 +198,7 @@ describe('/api/auth endpoints', () => {
     expect(r.status).toBe(200)
     const n = (await r.json()) as { nonce: string; message: string; recipient: string; expiresAt: number }
     expect(n.recipient).toBe(HOST)
-    expect(n.message).toBe(`Title Shot: I control ${ACCOUNT} and want guest corner g1 moved here.`)
+    expect(n.message).toBe(`Title Shot: I control ${ACCOUNT} and want demo account g1 moved here.`)
     const signature = signNep413(kp, { message: n.message, nonce: fromB64(n.nonce), recipient: n.recipient, callbackUrl: null })
     const body = { accountId: ACCOUNT, publicKey: pk, signature, nonce: n.nonce, recipient: n.recipient, message: n.message }
     const ok = await verifyApi(ctx(post('/api/auth/verify', body), e))

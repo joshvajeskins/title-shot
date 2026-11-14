@@ -205,7 +205,7 @@ export class NearClient implements GameClient {
 
   async challenge(beltId: string, sentence: string, onProgress: (p: ForgeProgress) => void): Promise<Fight> {
     const st = this.stored()
-    if (!st) throw new GameError('E_NO_ACCOUNT', 'Create your guest corner first.')
+    if (!st) throw new GameError('E_NO_ACCOUNT', 'Connect your wallet first, or open the judge demo.')
     const clean = cleanSentence(sentence)
     const problem = sentenceProblem(clean)
     if (problem) throw new GameError('E_SENTENCE', problem)

@@ -27,7 +27,7 @@ export function MoveReview({ plan, walletName }: { plan: MovePlan; walletName: s
       </ul>
       {plan.pending
         ? <p className="wm-err" role="alert"><Icon name="lock" size={14} /> A fight of yours is still being forged, so its toll is locked. Move once it has finished.</p>
-        : isEmpty(plan) ? <p className="wm-err" role="status"><Icon name="info" size={14} /> Nothing to move: this guest corner holds no balance, no belt and no spare NEAR.</p>
+        : isEmpty(plan) ? <p className="wm-err" role="status"><Icon name="info" size={14} /> Nothing to move: this demo account holds no balance, no belt and no spare NEAR.</p>
         : <p className="wm-note">Signed here by the guest's own full-access key: up to three transactions, no wallet popup. The wallet is never asked to sign anything to receive.</p>}
     </div>
   )

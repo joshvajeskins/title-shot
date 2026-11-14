@@ -7,7 +7,7 @@ import { archiveStored, loadStored, type KeyStore, type StoredAccount } from './
 import { networkError } from './chain/errors'
 
 const need = (st: StoredAccount | null): StoredAccount => {
-  if (!st) throw new GameError('E_NO_ACCOUNT', 'Create your guest corner first.')
+  if (!st) throw new GameError('E_NO_ACCOUNT', 'Connect your wallet first, or open the judge demo.')
   return st
 }
 
@@ -43,10 +43,10 @@ export function sessionSendError(e: unknown, wallet: boolean): GameError {
   if (/NotEnoughAllowance|allowance/i.test(m)) {
     return new GameError('E_ALLOWANCE', wallet
       ? 'This browser\'s session key has used up its gas allowance. Disconnect and connect your wallet again to get a fresh one.'
-      : 'This guest corner has used up its gas allowance. Create a new guest corner to keep fighting.')
+      : 'This demo account has used up its gas allowance. Connect your wallet to keep fighting.')
   }
   if (/NotEnoughBalance|LackBalanceForState/i.test(m)) {
-    return new GameError('E_GAS_BALANCE', wallet ? 'Your wallet account is out of NEAR for gas. Top it up from a testnet faucet.' : 'This guest corner is out of gas money. Create a new guest corner.')
+    return new GameError('E_GAS_BALANCE', wallet ? 'Your wallet account is out of NEAR for gas. Top it up from a testnet faucet.' : 'This demo account is out of gas money. Connect your wallet to keep fighting.')
   }
   if (/MethodNameMismatch|ReceiverMismatch|DepositWithFunctionCall/i.test(m)) return new GameError('E_KEY', 'This corner\'s key cannot sign that action.')
   return networkError(e)

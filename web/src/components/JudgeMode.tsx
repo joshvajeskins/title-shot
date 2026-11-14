@@ -13,7 +13,7 @@ const REPO = 'https://github.com/joshvajeskins/title-shot'
 
 interface Step { id: string; doThis: string; see: string; href?: string; external?: boolean; auto?: (path: string, hasAccount: boolean) => boolean }
 const STEPS: Step[] = [
-  { id: 'guest', doThis: 'Enter as a guest', see: 'A testnet account with fight money, made for you. No wallet, no popup.', href: '/enter', auto: (_p, acct) => acct },
+  { id: 'guest', doThis: 'Open the judge demo (no wallet)', see: 'A throwaway testnet demo account with fight money, for judges without a wallet extension.', href: '/enter', auto: (_p, acct) => acct },
   { id: 'belt', doThis: 'Open a belt', see: 'The reigning champion sentence, its toll and your odds.', href: '/play', auto: (p) => p.startsWith('/play/belt/') },
   { id: 'preview', doThis: 'Write a sentence and preview it', see: 'Your fighter, the NEAR AI signature and the signer address the contract will check.' },
   { id: 'bout', doThis: 'Pay the toll and fight', see: 'The bout replayed from the contract, and "state hash matches chain".', auto: (p) => p.startsWith('/play/bout/') },

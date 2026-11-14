@@ -6,6 +6,9 @@
 .ew-or { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; margin-top: 2px; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-faint); }
 .ew-or::before, .ew-or::after { content: ''; height: 1px; background: var(--line); }
 .ew-connect { width: 100%; }
+.enter-demo { display: grid; gap: 8px; }
+.enter-demo .ew-or { margin-bottom: 2px; }
+.enter-demo-btn { width: 100%; }
 .ew-connect svg { flex: none; }
 .ew-sub { margin: 0; font-size: 12px; line-height: 1.55; color: var(--paper-faint); }
 .ew-approve { animation: ew-in 260ms var(--ease-out) both; }
