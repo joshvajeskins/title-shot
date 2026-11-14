@@ -4,7 +4,7 @@
 
 A game for the NEAR HACKATHON (Games With Real Economies). Players turn sentences like *"a sleep-deprived lighthouse keeper
 who fights with foghorn screams"* into fighters, pay a small toll to challenge the reigning champion sentence of a belt, and
-get paid while their own sentence holds the belt. Every failed challenger pays the champion's writer. When the season bell
+get paid while their own sentence holds the belt. Every challenger pays the champion's writer, win or lose. When the season bell
 rings, the NEAR contract pays the purse out on Base Sepolia through Chain Signatures: no person holds that key.
 
 - **Play:** https://title-shot.pages.dev (a guest account is made for you; no wallet, no popup)

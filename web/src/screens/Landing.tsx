@@ -50,7 +50,7 @@ export function Landing() {
           {compiler === 'standin' && <span className="chip chip-gold hero-mode">Staging contract: fighters compiled by a labeled stand-in until the NEAR AI key lands</span>}
           {compiler === 'mock' && <span className="chip hero-mode">Offline demo: simulated chain</span>}
           <h1 className="display hero-title"><span className="print">Title</span> <span className="hero-shot">Shot</span></h1>
-          <p className="hero-sub">Write one sentence. An attested AI forges it into a fighter. Pay the toll, fight the champion, take the belt. Lose, and your toll pays the champ.</p>
+          <p className="hero-sub">Write one sentence. An attested AI forges it into a fighter. Pay the toll, fight the champion, take the belt. Win or lose, your toll pays the champ.</p>
           <div className="hero-cta">
             <Link href={cta.href} className="btn btn-red btn-lg">{cta.label} <Icon name="arrow" /></Link>
             <a href="#loop" className="btn btn-ghost btn-lg">How it plays</a>
@@ -75,7 +75,7 @@ export function Landing() {
           <li><span className="loop-n display">01</span><div className="loop-art loop-write paper"><span className="serif-i">a pigeon with a law degree</span></div><h3 className="display">Write</h3><p>Type up to 120 characters. Spar for free and see your odds against the champion before you pay a thing.</p></li>
           <li><span className="loop-n display">02</span><div className="loop-art"><img src="/art/forge-press.webp" alt="" /></div><h3 className="display">Forge</h3><p>An AI running in a sealed enclave reads it and prints a fighter: a face, four stats, three moves named after your words. The first forge of a sentence is final.</p></li>
           <li><span className="loop-n display">03</span><div className="loop-art loop-fight"><FighterPoster spec={{ name: 'Counselor Coo', title: '', look: '', cry: '', school: 'MIND', style: 'TACTICIAN', moves: [], stats: { power: 14, guard: 18, speed: 25, grit: 13 } }} portrait="/art/fighter-pigeon.webp" size="sm" tilt={-4} showSentence={false} /><FighterPoster spec={{ name: 'Granny Purl', title: '', look: '', cry: '', school: 'IRON', style: 'COUNTERPUNCHER', moves: [], stats: { power: 10, guard: 25, speed: 10, grit: 25 } }} portrait="/art/fighter-grandma.webp" size="sm" tilt={4} showSentence={false} /></div><h3 className="display">Fight</h3><p>Best of three, refereed by the contract. A draw keeps the champion. Rematch in one tap.</p></li>
-          <li><span className="loop-n display">04</span><div className="loop-art"><img src="/art/belt-midnight.webp" alt="" /></div><h3 className="display">Hold the belt</h3><p>Win and every failed challenger pays you. Hold it when the bell rings and you take the purse.</p></li>
+          <li><span className="loop-n display">04</span><div className="loop-art"><img src="/art/belt-midnight.webp" alt="" /></div><h3 className="display">Hold the belt</h3><p>Win and every challenger pays you, even the one who beats you. Hold it when the bell rings and you take the purse.</p></li>
         </ol>
       </section>
 

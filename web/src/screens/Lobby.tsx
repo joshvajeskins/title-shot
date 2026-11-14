@@ -18,7 +18,7 @@ export function Lobby() {
         <div>
           <span className="eyebrow">Fight night · live on NEAR testnet</span>
           <h1 className="display print page-title">The belts</h1>
-          <p className="page-sub">Every failed challenger pays the champion's writer. Whoever holds a belt when the bell rings takes the purse.</p>
+          <p className="page-sub">Every challenger pays the champion's writer, win or lose. Whoever holds a belt when the bell rings takes the purse.</p>
         </div>
         <Link href="/play/promoter" className="lobby-vance">
           <img src="/art/promoter-vance.webp" alt="" />

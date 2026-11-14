@@ -37,7 +37,7 @@ export function Result({ fight, beltArt, beltName, onRematch, onRewrite, verifie
         <div className="result-copy">
           <span className="eyebrow">{beltName}</span>
           <h1 className="display print result-h">{won ? 'The belt is yours' : draw ? 'The belt stays' : 'The champion holds'}</h1>
-          {won && <p className="result-p">Your sentence now holds the belt. From the next challenge on, every failed challenger pays <b>your</b> corner, and if you still hold it when the bell rings you take the purse.</p>}
+          {won && <p className="result-p">Your sentence now holds the belt. From the next challenge on, every challenger pays <b>your</b> corner, even the one who takes it off you, and if you still hold it when the bell rings you take the purse.</p>}
           {!won && !draw && (
             <div className="result-money">
               <span className="result-coin"><Icon name="coin" size={22} /></span>

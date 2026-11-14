@@ -9,7 +9,7 @@ public rulebook into a fighter spec (name, title, look, cry, school, stats, 3 mo
 (from an in-contract balance, via a function-call key: no popup) to challenge the reigning champion of a belt.
 OutLayer runs `forge.wasm` exactly once per paid challenge (secret API key, VRF seed) and calls back the contract.
 The contract verifies the AI signature with `ecrecover`, normalizes/validates the spec with the shared
-`bout-sim` crate, and runs a best-of-3 fight in-contract. Lose → toll split pays the champion's writer. Win →
+`bout-sim` crate, and runs a best-of-3 fight in-contract. Win or lose → the toll split pays the champion's writer. Win →
 belt (NEP-171) transfers. Season bell → purse paid on Base Sepolia by Chain Signatures (no key holder).
 
 ## Layout and ownership (never edit another lane's paths)

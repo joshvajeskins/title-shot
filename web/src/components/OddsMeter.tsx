@@ -43,7 +43,7 @@ export function TollBreakdown({ tollYocto, champName, rule }: { tollYocto: strin
   const rows: [string, string][] = [
     ['Forge (NEAR AI compile and delivery)', near(fee, 4)],
     ['Storage for what this bout keeps on chain', `up to ${near(rest / 2n, 4)}`],
-    [`${champName}'s writer (if you lose)`, '60% of the rest'],
+    [`${champName}'s writer (win or lose)`, '60% of the rest'],
     ['Promoter (funds purses and openers)', '25% of the rest'],
     ['Season side-pot (paid at the bell)', '10% of the rest'],
     ['House', '5% of the rest'],
@@ -58,7 +58,7 @@ export function TollBreakdown({ tollYocto, champName, rule }: { tollYocto: strin
       {open && (
         <div className="toll-body">
           <ul>{rows.map(([k, v]) => <li key={k}><span>{k}</span><b className="num">{v}</b></li>)}</ul>
-          <p>Win and the belt is yours: from then on every failed challenger's split pays <i>you</i>. A draw keeps the champion. If the forge times out or the AI refuses your sentence, the toll comes back minus the forge fee.</p>
+          <p>Win and the belt is yours: from then on every challenger's split pays <i>you</i>, even the one who takes it. A draw keeps the champion. If the forge times out or the AI refuses your sentence, the toll comes back minus the forge fee.</p>
           <p className="toll-rule"><Icon name="lock" size={13} /> Arena rule: {rule ? <><b>{rule.name}</b> · {rule.desc}</> : <>sealed until the first bout of the season. Nobody, the promoter included, knew it when tonight's opener was written.</>}</p>
         </div>
       )}
