@@ -40,6 +40,8 @@ export interface GameClient {
   setPayoutAddress?(addr: string): Promise<void>
   /** Name the Base address for a purse payout created while the payee had none (claim_payout). Returns the tx hash. */
   claimPayout?(payoutId: number, addr: string): Promise<string>
+  /** Withdraw the whole game balance to the account (a wallet account approves it in its wallet). Returns the tx hash. */
+  withdraw?(): Promise<string>
 }
 
 export class GameError extends Error {

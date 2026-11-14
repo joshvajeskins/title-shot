@@ -13,6 +13,7 @@
     "typecheck:tests": "tsc -p test/tsconfig.json"
   },
   "dependencies": {
+    "@hot-labs/near-connect": "0.12.0",
     "@noble/curves": "^2.4.0",
     "@noble/hashes": "^2.4.0",
     "howler": "^2.2.4",

@@ -2,7 +2,7 @@
 // replays every fight in the bout-sim wasm and checks it against the contract's state hash.
 import { cleanSentence, GameError, sentenceProblem, type FightSummary, type GameClient, type PreviewResult } from './client'
 import type { Account, Belt, Fight, Fighter, ForgeProgress, Odds, Spec } from './types'
-import { Rpc, RpcError, RpcUnavailable, contractCode, parseOutcome } from './chain/rpc'
+import { Rpc, RpcError, contractCode, parseOutcome } from './chain/rpc'
 import { Signer } from './chain/signer'
 import { parseSecretKey } from './chain/keys'
 import { fn } from './chain/tx'
@@ -12,8 +12,9 @@ import { computeOdds } from './chain/odds'
 import { assembleFight, mapBelt, mapFighter, mapFightSummary, mapSplit, ruleOf, type ChainBelt, type RawBelt, type RawChallenge, type RawFight, type RawFighter } from './chain/views'
 import { toChainSpec, loadSim, simIfReady, winnerCode, type Sim } from '../sim'
 import { Api, type ApiState } from './nearApi'
-import { evmAddr, fullKeyCall, readPayoutAddress, writePayoutAddress } from './chain/payout'
-import { archiveStored, browserStore, clearPending, loadStored, pendingOrNewKeys, saveStoredIfFree, type KeyStore } from './nearKeys'
+import { evmAddr, readPayoutAddress } from './chain/payout'
+import { ownerCall, ownerSetPayout, sessionSendError, signOutStored } from './nearOwner'
+import { browserStore, clearPending, loadStored, pendingOrNewKeys, saveStoredIfFree, type KeyStore } from './nearKeys'
 
 export interface NearClientOptions {
   contractId: string
@@ -70,7 +71,7 @@ export class NearClient implements GameClient {
     if (!st) return null
     let balance = '0'
     try { balance = String(await this.rpc.view<string>(this.contract, 'balance_of', { account: st.accountId })) } catch { /* show 0 rather than sign the player out */ }
-    return { id: st.accountId, kind: 'guest', balanceYocto: balance, claimableYocto: '0' }
+    return { id: st.accountId, kind: st.kind === 'wallet' ? 'wallet' : 'guest', balanceYocto: balance, claimableYocto: '0' }
   }
 
   /** One shared in-flight request: a double click, two components or a re-render cannot create (and pay for) two guests. */
@@ -93,24 +94,20 @@ export class NearClient implements GameClient {
     return (await this.account())!
   }
 
-  async signOut(): Promise<void> { archiveStored(this.store) }
+  async signOut(): Promise<void> { await signOutStored(this.store) }
 
-  // ---- bell payouts (Base Sepolia): the full-access key signs, since these need 1 yocto and the session key cannot ----
+  // ---- owner calls (1 yocto, the session key cannot): a guest's full-access key signs, a wallet account's wallet approves ----
   /** The Base address registered for this account's purse payouts (lowercase), or null (none yet, or no guest corner). */
   async payoutAddress(): Promise<string | null> {
     const st = this.stored()
     return st ? readPayoutAddress(this.rpc, this.contract, st.accountId) : null
   }
   /** Register the Base address that receives this account's future purse payouts (set_evm_address, full-access key, 1 yocto). */
-  async setPayoutAddress(addr: string): Promise<void> { const a = evmAddr(addr); await writePayoutAddress(this.rpc, this.contract, ...this.fullKey(), a) }
+  async setPayoutAddress(addr: string): Promise<void> { const a = evmAddr(addr); await ownerSetPayout(this.rpc, this.contract, this.stored(), a) }
   /** Give a payout that was created without an address (claimable) the address it is paid to. Returns the tx hash. */
-  async claimPayout(payoutId: number, addr: string): Promise<string> { const a = evmAddr(addr); return fullKeyCall(this.rpc, this.contract, ...this.fullKey(), 'claim_payout', { payout_id: payoutId, addr: a }) }
-
-  private fullKey(): [string, string] {
-    const st = this.stored()
-    if (!st) throw new GameError('E_NO_ACCOUNT', 'Create your guest corner first.')
-    return [st.accountId, st.fullKey]
-  }
+  async claimPayout(payoutId: number, addr: string): Promise<string> { const a = evmAddr(addr); return ownerCall(this.rpc, this.contract, this.stored(), 'claim_payout', { payout_id: payoutId, addr: a }) }
+  /** Withdraw the whole game balance to the account itself. Returns the tx hash. */
+  async withdraw(): Promise<string> { return ownerCall(this.rpc, this.contract, this.stored(), 'withdraw', { amount: null }) }
 
   // ---- reads ----
   private getState(): Promise<ApiState> {
@@ -269,14 +266,7 @@ export class NearClient implements GameClient {
     throw new GameError('E_SLOW', 'The network is slow. Your challenge may still land: check the Fight Book in a minute.')
   }
 
-  private sendError(e: unknown): GameError {
-    const m = e instanceof Error ? e.message : String(e)
-    if (/NotEnoughAllowance|allowance/i.test(m)) return new GameError('E_ALLOWANCE', 'This guest corner has used up its gas allowance. Create a new guest corner to keep fighting.')
-    if (/NotEnoughBalance|LackBalanceForState/i.test(m)) return new GameError('E_GAS_BALANCE', 'This guest corner is out of gas money. Create a new guest corner.')
-    if (/MethodNameMismatch|ReceiverMismatch|DepositWithFunctionCall/i.test(m)) return new GameError('E_KEY', 'This corner\'s key cannot sign that action.')
-    if (e instanceof RpcUnavailable || e instanceof RpcError) return networkError(e)
-    return networkError(e)
-  }
+  private sendError(e: unknown): GameError { return sessionSendError(e, this.stored()?.kind === 'wallet') }
 
   /** Poll get_challenge until it leaves Forging; stream compile/verify progress; return the fight id. */
   private async awaitForge(id: number, ctx: { toll: bigint; balance: bigint }, onProgress: (p: ForgeProgress) => void): Promise<number> {

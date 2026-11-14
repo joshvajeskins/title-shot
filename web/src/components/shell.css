@@ -119,3 +119,8 @@
 .mode-banner { display: flex; align-items: center; gap: 10px; padding: 8px var(--gutter); font-size: 12px; color: var(--paper-dim); background: rgba(233, 185, 73, 0.08); border-bottom: 1px solid rgba(233, 185, 73, 0.22); }
 .mode-banner svg { color: var(--gold); flex-shrink: 0; }
 .mode-banner b { color: var(--gold); font-weight: 600; }
+.identity-wallet { margin: 4px 10px 8px; display: grid; grid-template-columns: 8px 1fr; align-items: center; gap: 2px 8px; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--paper-faint); }
+.identity-wallet b { grid-column: 2; font-size: 12.5px; letter-spacing: 0; text-transform: none; font-weight: 600; color: var(--paper); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.identity-wallet-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127, 191, 106, 0.18); }
+.identity-note-link { display: inline-flex; align-items: center; gap: 3px; color: var(--paper); text-decoration: underline; text-underline-offset: 3px; }
+.identity-menu-item:disabled { opacity: 0.5; cursor: wait; }

@@ -13,6 +13,10 @@ export interface StoredAccount {
   /** function-call key (receiver = the contract, method `challenge` only): signs every fight */
   sessionKey: string
   createdAt: number
+  /** 'wallet': an account the player brought through NEAR Connect. The browser holds only its session key (fullKey is ''):
+   *  anything that moves money goes through the wallet. Absent on guests stored before wallets existed. */
+  kind?: 'guest' | 'wallet'
+  walletId?: string
 }
 
 export interface KeyStore { get(k: string): string | null; set(k: string, v: string): void; remove(k: string): void }
@@ -52,7 +56,8 @@ export function clearPending(store: KeyStore): void { store.remove(PENDING_KEY) 
 
 export function isStoredAccount(x: unknown): x is StoredAccount {
   const o = x as StoredAccount
-  return !!o && typeof o.accountId === 'string' && typeof o.fullKey === 'string' && typeof o.sessionKey === 'string' && o.fullKey.startsWith('ed25519:') && o.sessionKey.startsWith('ed25519:')
+  if (!o || typeof o.accountId !== 'string' || typeof o.fullKey !== 'string' || typeof o.sessionKey !== 'string' || !o.sessionKey.startsWith('ed25519:')) return false
+  return o.kind === 'wallet' ? o.fullKey === '' : o.fullKey.startsWith('ed25519:')
 }
 
 export function loadStored(store: KeyStore): StoredAccount | null {
@@ -89,15 +94,23 @@ export function archiveAccount(store: KeyStore, a: StoredAccount): void {
   store.set(ARCHIVE_KEY, JSON.stringify([...list.filter((x) => x.accountId !== a.accountId), a].slice(-5)))
 }
 
-/** Sign out without losing money: the account moves to an archive the player can still export from. */
+/** Sign out without losing money: a guest moves to an archive the player can still export from (a wallet account's keys live in its wallet). */
 export function archiveStored(store: KeyStore): void {
   const cur = loadStored(store)
-  if (cur) archiveAccount(store, cur)
+  if (cur && cur.kind !== 'wallet') archiveAccount(store, cur)
   store.remove(ACCOUNT_KEY)
+}
+
+/** Make a wallet account the active one (the guest it replaces, if any, goes to the archive first). */
+export function activateWallet(store: KeyStore, w: { accountId: string; sessionKey: string; walletId: string }): StoredAccount {
+  archiveStored(store)
+  const a: StoredAccount = { accountId: w.accountId, fullKey: '', sessionKey: w.sessionKey, createdAt: Date.now(), kind: 'wallet', walletId: w.walletId }
+  store.set(ACCOUNT_KEY, JSON.stringify(a))
+  return a
 }
 
 /** The recovery payload for the "export key" menu item (the full-access key; guard it like a wallet). */
 export function exportKey(store: KeyStore): { accountId: string; privateKey: string } | null {
   const a = loadStored(store)
-  return a ? { accountId: a.accountId, privateKey: a.fullKey } : null
+  return a && a.kind !== 'wallet' ? { accountId: a.accountId, privateKey: a.fullKey } : null
 }

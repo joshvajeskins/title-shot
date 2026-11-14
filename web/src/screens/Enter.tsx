@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { sound } from '../audio/sound'
 import { Icon } from '../components/Icon'
 import { Link, Wordmark } from '../components/Link'
 import { useGame } from '../game/context'
 import { navigate } from '../lib/router'
+import { EnterWallet } from './EnterWallet'
 import './enter.css'
 
 function nextPath(): string {
@@ -14,6 +15,9 @@ function nextPath(): string {
 export function Enter() {
   const { client, account, ready, setAccount } = useGame()
   const [busy, setBusy] = useState(false)
+  const [walletBusy, setWalletBusy] = useState(false)
+  const onWalletBusy = useCallback((b: boolean) => setWalletBusy(b), [])
+  const walletDone = useCallback(async () => { const a = await client.account(); setAccount(a); navigate(nextPath(), { replace: true }) }, [client, setAccount])
   const [err, setErr] = useState<string | null>(null)
   useEffect(() => { if (ready && account) navigate(nextPath(), { replace: true }) }, [ready, account])
   const create = async () => {
@@ -33,10 +37,14 @@ export function Enter() {
           <span className="eyebrow">Fighter account</span>
           <h1 className="display print enter-h">Get in the ring</h1>
           <p className="enter-p">One tap opens a NEAR testnet account for you, loads it with free test NEAR and keeps a session key in this browser. No email, no seed phrase, no wallet popups between fights.</p>
-          <button className="btn btn-red btn-lg enter-cta" onClick={create} disabled={busy}>
-            {busy ? 'Opening your account…' : <>Create my fighter account <Icon name="arrow" /></>}
-          </button>
+          <div className="enter-route">
+            <span className="enter-route-tag"><Icon name="bolt" size={12} /> No wallet needed: best for judges</span>
+            <button className="btn btn-red btn-lg enter-cta" onClick={create} disabled={busy || walletBusy}>
+              {busy ? 'Opening your account…' : <>Create my fighter account <Icon name="arrow" /></>}
+            </button>
+          </div>
           {err && <p className="enter-err" role="alert"><Icon name="x" size={14} /> {err}</p>}
+          {client.mode === 'testnet' && <EnterWallet busyElsewhere={busy} onBusy={onWalletBusy} onDone={walletDone} />}
           <ul className="enter-facts">
             <li><Icon name="check" size={14} /><span>A real NEAR account on testnet, yours to keep</span></li>
             <li><Icon name="lock" size={14} /><span>The session key can only call <i>challenge</i>: it cannot withdraw or move your belt</span></li>

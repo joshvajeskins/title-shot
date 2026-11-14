@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react'
 import { sound } from '../audio/sound'
 import { useGame } from '../game/context'
 import { near, shortAccount } from '../lib/format'
@@ -9,6 +9,8 @@ import { navigate, usePath } from '../lib/router'
 import { Icon } from './Icon'
 import { Link, Wordmark } from './Link'
 import './shell.css'
+
+const MoveDialog = lazy(() => import('./wallet/MoveDialog').then((m) => ({ default: m.MoveDialog })))
 
 const NAV: { group: string; items: { href: string; label: string; icon: string; match: (p: string) => boolean }[] }[] = [
   { group: 'Fight night', items: [
@@ -87,10 +89,13 @@ export function Shell({ children, bare = false }: { children: ReactNode; bare?: 
 }
 
 function IdentityBlock({ open, setOpen, onSignOut }: { open: boolean; setOpen: (o: boolean) => void; onSignOut: () => void }) {
-  const { account, client } = useGame()
+  const { account, client, refreshAccount } = useGame()
   const [note, setNote] = useState<string | null>(null)
+  const [link, setLink] = useState<string | null>(null)
   const [payoutOpen, setPayoutOpen] = useState(false)
-  useEffect(() => { if (!open) setNote(null) }, [open])
+  const [moveOpen, setMoveOpen] = useState(false)
+  const [working, setWorking] = useState(false)
+  useEffect(() => { if (!open) { setNote(null); setLink(null) } }, [open])
   if (!account) {
     return (
       <Link href="/enter" className="identity identity-empty">
@@ -100,6 +105,19 @@ function IdentityBlock({ open, setOpen, onSignOut }: { open: boolean; setOpen: (
     )
   }
   const initials = account.id.replace(/[^a-z]/gi, '').slice(0, 2).toUpperCase()
+  const wallet = account.kind === 'wallet'
+  const live = client.mode === 'testnet'
+  const withdraw = async () => {
+    if (!client.withdraw || working) return
+    setWorking(true); setLink(null); setNote('Approve the withdrawal in your wallet.')
+    try {
+      const tx = await client.withdraw()
+      const { txUrl } = await import('../game/chain/config')
+      setNote(`Withdrawn to ${account.id}.`); setLink(txUrl(tx)); sound.play('kaching')
+      await refreshAccount()
+    } catch (e) { setNote(e instanceof Error ? e.message : 'The withdrawal did not go through.'); sound.play('ui_error') }
+    finally { setWorking(false) }
+  }
   const backup = async () => {
     const k = client.mode === 'testnet' ? exportKey(browserStore()) : null
     if (!k) return
@@ -118,16 +136,20 @@ function IdentityBlock({ open, setOpen, onSignOut }: { open: boolean; setOpen: (
       </button>
       {open && (
         <div className="identity-menu panel" role="menu">
+          {wallet && <p className="identity-wallet"><span className="identity-wallet-dot" aria-hidden="true" /> NEAR wallet connected<b title={account.id}>{account.id}</b></p>}
           <Link href="/play/book" className="identity-menu-item" role="menuitem"><Icon name="book" size={16} /> My bouts</Link>
           <Link href="/play/how" className="identity-menu-item" role="menuitem"><Icon name="info" size={16} /> How the money moves</Link>
           <button className="identity-menu-item" role="menuitem" onClick={() => setPayoutOpen(true)}><Icon name="coin" size={16} /> Purse payout address</button>
-          {client.mode === 'testnet' && <button className="identity-menu-item" role="menuitem" onClick={backup}><Icon name="lock" size={16} /> Back up my key</button>}
-          {note && <p className="identity-note">{note}</p>}
+          {live && wallet && BigInt(account.balanceYocto) > 0n && <button className="identity-menu-item" role="menuitem" onClick={withdraw} disabled={working}><Icon name="coin" size={16} /> Withdraw {near(account.balanceYocto, 3)} NEAR to my wallet</button>}
+          {live && !wallet && <button className="identity-menu-item" role="menuitem" onClick={() => { setMoveOpen(true); setOpen(false) }}><Icon name="arrow" size={16} /> Move to my wallet</button>}
+          {live && !wallet && <button className="identity-menu-item" role="menuitem" onClick={backup}><Icon name="lock" size={16} /> Back up my key</button>}
+          {note && <p className="identity-note">{note}{link && <> <a href={link} target="_blank" rel="noreferrer" className="identity-note-link">View tx <Icon name="external" size={10} /></a></>}</p>}
           <Link href="/" className="identity-menu-item" role="menuitem"><Icon name="ring" size={16} /> Website</Link>
-          <button className="identity-menu-item" role="menuitem" onClick={onSignOut}><Icon name="x" size={16} /> Sign out</button>
+          <button className="identity-menu-item" role="menuitem" onClick={onSignOut}><Icon name="x" size={16} /> {wallet ? 'Disconnect wallet' : 'Sign out'}</button>
         </div>
       )}
       {payoutOpen && <PayoutAddressDialog onClose={() => setPayoutOpen(false)} />}
+      {moveOpen && <Suspense fallback={null}><MoveDialog onClose={() => setMoveOpen(false)} /></Suspense>}
     </div>
   )
 }
