@@ -10,6 +10,7 @@ import { requestMatches } from '../_lib/state'
 import type { ContractConfig } from '../_lib/chain'
 import { b58decode } from '../../src/game/chain/base58'
 
+interface Allowlist { active: string[]; pending: string[] | null; activates_at: string | null; delay_sec: number }
 interface Gates { ok: boolean; ready: boolean; failing: { gate: string; why: string; blocking: boolean }[] }
 interface Solvency { balance: string; storage_cost: string; owed: string; endowment: string; deficit: string; players_covered: boolean }
 interface Caps { daily: number; total: number; today: number; used: number; open: boolean }
@@ -23,7 +24,7 @@ export interface ProofResponse {
   at: number; contract: string; codeHash: { hex: string; b58: string } | null
   model: string; signatureKind: string; forgeMode: string; forgeProject: string; mpcSigner: string; owner: string
   pending: { forgeMode: string | null; requestChange: boolean; activatesAt: number } | null
-  allowlist: string[]; allowlistDelaySec: number; relayers: string[]; vrfPinned: boolean
+  allowlist: string[]; allowlistPending: string[] | null; allowlistDelaySec: number; relayers: string[]; vrfPinned: boolean
   request: { prefixSha256: string; suffixSha256: string; matchesSite: boolean }
   gates: Gates; solvency: Solvency; caps: Caps
 }
@@ -40,7 +41,7 @@ async function codeHash(env: Parameters<typeof rpcFor>[0], contract: string): Pr
 async function build(env: Parameters<typeof rpcFor>[0], contract: string): Promise<ProofResponse> {
   const chain = new Chain(env)
   const [cfg, allowlist, gates, solvency, caps, code] = await Promise.all([
-    chain.view<Cfg>('get_config'), chain.view<string[]>('get_allowlist'), chain.view<Gates>('get_deploy_gates'),
+    chain.view<Cfg>('get_config'), chain.view<Allowlist>('get_allowlist'), chain.view<Gates>('get_deploy_gates'),
     chain.view<Solvency>('get_solvency'), chain.view<Caps>('get_compile_caps'), codeHash(env, contract),
   ])
   const p = cfg.pending_config
@@ -49,7 +50,7 @@ async function build(env: Parameters<typeof rpcFor>[0], contract: string): Promi
     model: cfg.model_id, signatureKind: cfg.signature_kind, forgeMode: cfg.forge_mode, forgeProject: cfg.forge_project,
     mpcSigner: cfg.mpc_signer, owner: cfg.owner,
     pending: p ? { forgeMode: p.forge_mode, requestChange: p.request != null, activatesAt: Math.floor(Number(BigInt(p.activates_at) / 1_000_000n)) } : null,
-    allowlist, allowlistDelaySec: cfg.allowlist_delay_sec, relayers: cfg.relayers, vrfPinned: !!cfg.vrf_pubkey,
+    allowlist: allowlist.active ?? [], allowlistPending: allowlist.pending ?? null, allowlistDelaySec: cfg.allowlist_delay_sec, relayers: cfg.relayers, vrfPinned: !!cfg.vrf_pubkey,
     request: { prefixSha256: cfg.prefix_sha256, suffixSha256: cfg.suffix_sha256, matchesSite: requestMatches(sim(), cfg) },
     gates, solvency: { balance: solvency.balance, storage_cost: solvency.storage_cost, owed: solvency.owed, endowment: solvency.endowment, deficit: solvency.deficit, players_covered: solvency.players_covered },
     caps: { daily: caps.daily, total: caps.total, today: caps.today, used: caps.used, open: caps.open },

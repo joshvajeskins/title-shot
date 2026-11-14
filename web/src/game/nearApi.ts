@@ -21,7 +21,7 @@ export interface ApiProof {
   at: number; contract: string; codeHash: { hex: string; b58: string } | null
   model: string; signatureKind: string; forgeMode: string; forgeProject: string; mpcSigner: string; owner: string
   pending: { forgeMode: string | null; requestChange: boolean; activatesAt: number } | null
-  allowlist: string[]; allowlistDelaySec: number; relayers: string[]; vrfPinned: boolean
+  allowlist: string[]; allowlistPending: string[] | null; allowlistDelaySec: number; relayers: string[]; vrfPinned: boolean
   request: { prefixSha256: string; suffixSha256: string; matchesSite: boolean }
   gates: { ok: boolean; ready: boolean; failing: { gate: string; why: string; blocking: boolean }[] }
   solvency: { balance: string; storage_cost: string; owed: string; endowment: string; deficit: string; players_covered: boolean }
