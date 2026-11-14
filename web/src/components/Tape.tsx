@@ -10,7 +10,7 @@ export function TapeRow({ label, verdict, children, note }: { label: string; ver
   return (
     <li className={`tape-row v-${verdict}`}>
       <span className="tape-label">{label}</span>
-      <div className="tape-value">{children}{note ? <p className="tape-note">{note}</p> : null}</div>
+      <div className="tape-value"><div className="tape-main">{children}</div>{note ? <p className="tape-note">{note}</p> : null}</div>
       <span className="tape-verdict" aria-label={LABEL[verdict]}>{LABEL[verdict]}</span>
     </li>
   )

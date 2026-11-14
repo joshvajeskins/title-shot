@@ -29,7 +29,8 @@ export function JudgeMode() {
   const path = usePath()
   const { account } = useGame()
   const [on, setOn] = useState(false)
-  const [open, setOpen] = useState(true)
+  // Open by default only where it fits beside the page; on phones it starts as a small pill.
+  const [open, setOpen] = useState(() => typeof window === 'undefined' || window.innerWidth >= 1100)
   const [done, setDone] = useState<string[]>(() => { try { return JSON.parse(read(DONE) ?? '[]') as string[] } catch { return [] } })
 
   useEffect(() => {
@@ -44,6 +45,11 @@ export function JudgeMode() {
     const hit = STEPS.filter((s) => s.auto?.(path, !!account) && !done.includes(s.id)).map((s) => s.id)
     if (hit.length) setDone((d) => { const n = [...d, ...hit]; write(DONE, JSON.stringify(n)); return n })
   }, [on, path, account, done])
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('judge-open', on && open)
+    return () => document.documentElement.classList.remove('judge-open')
+  }, [on, open])
 
   if (!on) return null
   const toggle = (id: string) => setDone((d) => { const n = d.includes(id) ? d.filter((x) => x !== id) : [...d, id]; write(DONE, JSON.stringify(n)); return n })
