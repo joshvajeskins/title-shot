@@ -73,6 +73,7 @@ after 10 minutes and anyone can refund it (toll back minus the forge fee).
 | NEAR contract | The referee: rebuilds the exact request bytes, `ecrecover`s the AI signature against a timelocked allowlist, enforces the 100-point budget, runs the bout from the same Rust crate the browser runs, splits tolls, runs seasons, refunds. | A server decides winners; nobody can check. | `contract/`, `crates/bout-sim/` |
 | Function-call keys | The browser holds a key that can only call `challenge`. Value-moving methods need 1 yoctoNEAR, which a function-call key cannot attach. | A wallet popup on every challenge. | `web/src/game/near.ts`, `web/functions/_lib/guest.ts` |
 | Chain Signatures | Each season's purse sits at a Base Sepolia address derived from the contract; only `close_season` → `sign_payout` can move it, only to the winners. The promoter also funds purses and owns a Base name from its own derived address. | The purse becomes our custody. | `contract/src/payout.rs`, `web/functions/_lib/purse.ts` |
+| NEAR Connect + NEP-413 | Beside the no-wallet guest route, **Use my NEAR wallet** (`@hot-labs/near-connect`, testnet: Meteor, Intear, Nightly, Ledger and the others the connector lists) asks for one approval that adds a `challenge`-only session key and deposits fight money; the wallet account then fights with no popups, and withdrawals and payout addresses go through the wallet. A guest can **Move to my wallet**: the wallet proves control with a NEP-413 signed message (server-issued single-use nonce, recipient bound to this site, full-access key checked on chain), then the guest's own key withdraws its balance, transfers its belts and sends its NEAR. | Players are limited to throwaway guest corners. | `web/src/game/wallet/`, `web/functions/api/auth/`, `web/functions/_lib/nep413*.ts` |
 | NEP-171 | The belt is a token. Whoever holds it collects the champion's share of every challenge and can hand it over with `nft_transfer`. | No ownable title. | `contract/src/nft.rs` |
 | OutLayer | Built and deployed: `forge.wasm` runs the compile inside Intel TDX with the API key sealed to the game contract and draws the fight seed from OutLayer's VRF (verified on chain in the spike, [DF3eEa9o…](https://testnet.nearblocks.io/txns/DF3eEa9oedQeFbs34dJY9hV3DfkCrsujkQEscjiaQtTx)). On testnet today OutLayer does not return our compile runs, so the live contract runs in relayer mode (see "What we do not claim"). | The API key sits with the relayer. | `forge/`, `contract/src/challenge.rs` |
 
@@ -82,6 +83,7 @@ after 10 minutes and anyone can refund it (toll back minus the forge fee).
 |---|---|---|
 | **x402 on Base** | AI agents (or anyone on Base) buy a title shot with test USDC. The payment lands at the promoter's Chain Signatures address; the backend settles it through the public x402 facilitator and books the challenge on NEAR for the payer. Bots that search for strong sentences become paying challengers: the champion's writer gets the same share of their toll. | `web/functions/_lib/x402.ts`, `boxoffice*.ts`, `scripts/x402-agent.mjs`, [docs/BOXOFFICE.md](docs/BOXOFFICE.md) |
 | **Basenames** | Purses pay to `you.basetest.eth` as well as `0x…`; names shown are checked forward and in reverse. The promoter owns `velvetvance.basetest.eth`, registered by an MPC signature; the x402 demo agent's wallet owns `ringside-agent.basetest.eth` ([0x7ad56024…](https://sepolia.basescan.org/tx/0x7ad560247983f945a0f4628c4d20f056be443635b92784a48f417f85fb1b9fcb)). | `web/src/game/chain/basenames.ts`, `scripts/vance-basename.mts`, `scripts/agent-basename.mts`, [docs/BASENAMES.md](docs/BASENAMES.md) |
+| **Your own EVM wallet for purses** | The payout dialog finds injected wallets with EIP-6963 (MetaMask, Rabby, Coinbase and others, each by its own name), switches to Base Sepolia, and has the wallet sign a message binding your NEAR account, the address, this site and a nonce. The signature is checked before `set_evm_address` (or `claim_payout` from the bell) records where your purse share is paid. Pasting an address or Basename still works, and is the default when the browser has no wallet. | `web/src/game/evm/`, `web/src/components/PayoutWallet.tsx` |
 | **Intel TDX + NVIDIA attestation** | Ties the contract's signer allowlist to NEAR AI's hardware attestation: TDX quote, GPU evidence, booted code, report data binding the signing address. | `scripts/verify-attestation.mjs`, [docs/ATTESTATION.md](docs/ATTESTATION.md) |
 | **ElevenLabs** | Announcer, promoter and crowd voices, fighters' battle cries, music and sound effects. | `web/src/audio/`, `assets/audio/` |
 | **Cloudflare** | Pages Functions (guests, previews, portraits, box office, tick), KV, and a cron Worker that rings the bell every 5 minutes. | `web/functions/`, `worker-bell/` |
@@ -133,6 +135,17 @@ wording matters more than luck.
 - One payout needed a hand top-up. The contract signs value + gas × max fee = the purse, but every Base tx also pays an
   L1 data fee, so the Wildcard Belt's single 100% payout was refused as "insufficient funds" until we sent its purse
   0.00001 test ETH. Purses now carry that reserve on top of the declared amount (`web/functions/_lib/purse.ts`).
+- Wallets: every wallet path ran end to end on testnet with test wallets we control: a debug wallet registered with NEAR
+  Connect (session key [BBxYiP6z…](https://testnet.nearblocks.io/txns/BBxYiP6zxQicXVFkWxiRHBpUmdarWpbYDECYRAYoJBEm), deposit
+  [CwxCsJyY…](https://testnet.nearblocks.io/txns/CwxCsJyYLViCRS5mDEzqHoPQ67SBvJRdVEzTvLLUwTei), a popup-free challenge
+  [BmoWk4Ah…](https://testnet.nearblocks.io/txns/BmoWk4Ahv6w4E5b9vcQhVpRJr1kbdajiW7sXjKjd6EMn), a guest's move
+  [GLnuuZrT…](https://testnet.nearblocks.io/txns/GLnuuZrTkg44yd7EyzaWq48ZJP2gwC1Vs114siAkzT8A)) and a scripted EIP-1193 wallet
+  ([Hw1Hm7sx…](https://testnet.nearblocks.io/txns/Hw1Hm7sxrV4ktBBv5F1u1e4woYwho67DBTKL4YiLfZzC)). Real wallet apps (Meteor,
+  Intear, MetaMask, Rabby…) were not in our automated tests; whether a given wallet accepts the session-key request in a
+  batch, or NEP-413 message signing, is up to that wallet. Moving a belt with `nft_transfer` is unit-tested, not run live.
+  Smart-contract EVM wallets cannot sign the ownership message, so they use the paste path. Not integrated: FastAuth social
+  login, HOT Kit and WalletConnect (they need keys this build does not have), and passkey or EVM-controlled NEAR accounts
+  (mainnet-only today).
 - Testnet only. Testnet NEAR, Sepolia ETH and test USDC have no value.
 
 ## Tests
