@@ -29,7 +29,7 @@ export function mapBell(season: RawSeason, payouts: RawPayout[], tracks: Map<num
     const share: PayoutRow['share'] = p.payee === season.final_holder ? 'holder' : season.bouts === 0 && p.payee === promoter ? 'refund' : 'defences'
     return {
       payee: p.payee, name: displayName(p.payee), share, ...(share === 'defences' ? { defences: defences.get(p.payee) ?? 0 } : {}),
-      amountWei: p.amount_wei, status: UI_STATUS[st], ...(tx ? { tx, explorer: baseTxUrl(tx) } : {}),
+      amountWei: p.amount_wei, status: UI_STATUS[st], ...(tx ? { tx, explorer: baseTxUrl(tx) } : {}), ...(p.to ? { to: p.to } : {}),
     }
   })
   return {

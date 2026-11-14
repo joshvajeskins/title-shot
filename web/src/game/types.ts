@@ -51,6 +51,8 @@ export interface PayoutRow {
   name: string
   share: 'holder' | 'defences' | 'refund'
   defences?: number
+  /** Base address the payout is signed to (null until the payee registers one). */
+  to?: string | null
   amountWei: string
   status: 'unsigned' | 'signed' | 'mined' | 'unclaimed'
   tx?: string

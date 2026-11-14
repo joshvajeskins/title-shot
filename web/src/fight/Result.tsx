@@ -59,7 +59,7 @@ export function Result({ fight, beltArt, beltName, onRematch, onRewrite, verifie
         <dl>
           <div><dt>Bout</dt><dd className="num">#{fight.id}</dd></div>
           <div><dt>Referee hash</dt><dd className="num">{shortHex(fight.stateHash, 6)} {verified === true && <span className="ok"><Icon name="check" size={12} /> replayed here, matches</span>}{verified === false && <span className="bad">replay mismatch</span>}</dd></div>
-          <div><dt>VRF seed</dt><dd className="num">{shortHex(fight.seed, 6)}</dd></div>
+          <div><dt>Fight seed</dt><dd className="num">{shortHex(fight.seed, 6)}</dd></div>
           <div><dt>Arena rule</dt><dd>{fight.rule.name}</dd></div>
           <div><dt>Toll split</dt><dd className="num">{near(fight.split.champion)} champ · {near(fight.split.promoter)} promoter · {near(fight.split.sidePot)} pot · {near(fight.split.protocol)} house · {near(fight.split.forgeFee)} forge</dd></div>
         </dl>

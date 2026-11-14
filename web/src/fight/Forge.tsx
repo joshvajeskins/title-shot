@@ -19,8 +19,15 @@ const STANDIN: Partial<Record<ForgeStage, { title: string; sub: string }>> = {
   fight: { title: 'The referee rules', sub: 'Best of three inside the NEAR contract. Staging seeds it from the block; production uses the OutLayer VRF.' },
 }
 
-export function Forge({ sentence, progress, failed, compiler = 'nearai' }: { sentence: string; progress: ForgeProgress[]; failed: string | null; compiler?: string }) {
-  const steps = compiler === 'standin' ? STEPS.map((s) => ({ ...s, ...(STANDIN[s.stage] ?? {}) })) : STEPS
+// Relayer mode (live on testnet while OutLayer does not return compile runs): same checks in the contract, block seed.
+const RELAYER: Partial<Record<ForgeStage, { title: string; sub: string }>> = {
+  tee: { title: 'Forge request posted', sub: 'A listed relayer asks NEAR AI to compile. It can deliver the signed answer, never change it.' },
+  fight: { title: 'The referee rules', sub: 'Best of three inside the NEAR contract, seeded from the block.' },
+}
+
+export function Forge({ sentence, progress, failed, compiler = 'nearai', forgeMode = 'outlayer' }: { sentence: string; progress: ForgeProgress[]; failed: string | null; compiler?: string; forgeMode?: string }) {
+  const over = compiler === 'standin' ? STANDIN : forgeMode === 'relayer' ? RELAYER : null
+  const steps = over ? STEPS.map((s) => ({ ...s, ...(over[s.stage] ?? {}) })) : STEPS
   const [typed, setTyped] = useState(0)
   const [start] = useState(Date.now())
   const [now, setNow] = useState(Date.now())

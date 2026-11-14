@@ -12,3 +12,27 @@
 .pa-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .pa-current { font-size: 12px; color: var(--paper-faint); }
 .pa-note { font-size: 11.5px !important; color: var(--paper-faint) !important; }
+.pa-current { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.pa-resolve { display: grid; gap: 8px; min-height: 0; }
+.pa-resolve:empty { display: none; }
+.pa-looking { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px !important; color: var(--paper-faint) !important; }
+.pa-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pa-pulse 900ms var(--ease-in-out) infinite alternate; }
+@keyframes pa-pulse { from { opacity: 0.25; transform: scale(0.8); } }
+.pa-target { display: grid; gap: 4px; padding: 12px 14px; border-radius: var(--radius); background: rgba(233, 185, 73, 0.06); box-shadow: 0 0 0 1px rgba(233, 185, 73, 0.28) inset; animation: pa-fade 200ms var(--ease-out) both; }
+.pa-target-name { font-family: var(--font-display); font-size: 24px; line-height: 1.05; text-transform: uppercase; letter-spacing: 0.01em; color: var(--gold); overflow-wrap: anywhere; }
+.pa-target-name .bn-tld { color: rgba(233, 185, 73, 0.55); }
+.pa-target-none { font-size: 12px; color: var(--paper-faint); font-style: italic; font-family: var(--font-serif); }
+.pa-target-addr { font-family: var(--font-mono); font-size: 12px; color: var(--paper); word-break: break-all; line-height: 1.5; }
+
+/* Basenames shown in place of hex (BaseName.tsx) */
+.bn { display: inline-flex; align-items: center; gap: 4px; min-width: 0; max-width: 100%; color: inherit; }
+.bn-name { font-family: var(--font-mono); color: var(--gold); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bn-tld { color: var(--paper-faint); }
+a.bn:hover .bn-name { text-decoration: underline; text-underline-offset: 3px; }
+.bn-wallet { display: grid; gap: 4px; padding: 10px 14px; border-radius: var(--radius); box-shadow: 0 0 0 1px var(--line) inset; background: rgba(242, 232, 213, 0.03); max-width: 100%; }
+.bn-wallet .bn { font-size: 15px; }
+.bn-note { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--paper-faint); overflow-wrap: anywhere; }
+.pa > * { min-width: 0; }
+.bn-name { min-width: 0; }
+.pa-target-name .bn-name { color: inherit; white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+.pa-target-name .bn-tld { display: inline-block; }

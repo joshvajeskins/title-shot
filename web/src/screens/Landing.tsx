@@ -10,7 +10,7 @@ import './landing.css'
 
 const STACK = [
   { k: 'NEAR AI Cloud', role: 'The compiler', d: 'A model running inside a TEE turns your sentence into stats and moves under a public rulebook, and signs its answer. The contract checks that signature with ecrecover.' },
-  { k: 'OutLayer', role: 'The sealed forge', d: 'Each paid challenge runs forge.wasm inside Intel TDX, with the API key as a secret opened only for calls through the game contract, and draws the fight seed from a VRF. Only the first result the contract accepts ever counts.' },
+  { k: 'OutLayer', role: 'The sealed forge', d: 'forge.wasm is built for OutLayer’s Intel TDX workers, with the API key sealed to the game contract and the fight seed from a VRF. On testnet OutLayer does not return our compile runs yet, so a listed relayer delivers NEAR AI’s signed answer instead. The contract checks it the same way, and the tale of the tape shows which mode is live.' },
   { k: 'NEAR contract', role: 'The referee', d: 'The fight runs inside the contract from a shared Rust crate. Your browser runs the same crate, so the replay you watch hashes to the same result.' },
   { k: 'Function-call keys', role: 'No popups', d: 'A session key that can only call challenge. It cannot withdraw, move the belt or touch your balance outside the toll.' },
   { k: 'Chain Signatures', role: 'The purse', d: 'Each season’s purse sits at a Base address derived from the contract. Only the bell can sign it out, only to the winners. Nobody holds that key.' },

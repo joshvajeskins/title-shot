@@ -1,5 +1,6 @@
 import { Icon } from '../components/Icon'
 import { Link } from '../components/Link'
+import { useDeployInfo } from '../game/compiler'
 import { useGame } from '../game/context'
 import './pages.css'
 
@@ -13,8 +14,17 @@ const FLOW: { who: string; what: string; detail: string }[] = [
   { who: 'Anyone', what: 'close_season → Chain Signatures', detail: 'At the bell the contract asks the MPC network to sign Base Sepolia transfers from the purse address it controls, to the winners only.' },
 ]
 
+// Relayer mode (live on testnet today): steps 2-3 and 5 differ; the contract's checks are the same.
+const RELAYER_STEPS: Record<number, { who: string; what: string; detail: string }> = {
+  1: { who: 'Contract', what: 'challenge pending', detail: 'Holds your toll and waits for the forge. If nothing arrives within 10 minutes, anyone can expire it and you get the toll back minus the forge fee.' },
+  2: { who: 'Relayer', what: 'NEAR AI Cloud → submit_forge', detail: "A listed relayer sends one non-streamed compile to the model running in a GPU TEE and hands the signed answer to the contract. It can deliver the answer, never change it. OutLayer's sealed forge is built (forge/), but on testnet OutLayer does not return our compile runs yet." },
+  4: { who: 'Contract', what: 'submit_forge: verify, normalize, fight', detail: 'Rebuilds the request bytes from the public rulebook and your sentence, ecrecovers the AI signer against the allowlist, enforces the 100-point budget, runs best-of-three seeded from the block, splits the toll.' },
+}
+
 export function How() {
   const { client } = useGame()
+  const { forgeMode } = useDeployInfo(client.mode)
+  const flow = forgeMode === 'relayer' ? FLOW.map((f, i) => RELAYER_STEPS[i] ?? f) : FLOW
   return (
     <div className="page pages">
       <header className="page-head">
@@ -25,7 +35,7 @@ export function How() {
         </div>
       </header>
       <ol className="flow">
-        {FLOW.map((f, i) => (
+        {flow.map((f, i) => (
           <li key={i} className="flow-step panel">
             <span className="flow-n display">{String(i + 1).padStart(2, '0')}</span>
             <div><span className="eyebrow">{f.who}</span><code>{f.what}</code><p>{f.detail}</p></div>
@@ -39,7 +49,7 @@ export function How() {
         </article>
         <article className="panel how-card">
           <h2 className="display">The sealed rule</h2>
-          <p>Each season has an arena rule (for example "Padded Ring: stun chances halved"). It is drawn from the first bout's VRF seed, so nobody, the promoter included, knows it when the opening champion is written. After the first bout it is public.</p>
+          <p>Each season has an arena rule (for example "Padded Ring: stun chances halved"). It is drawn from the first bout's fight seed, so nobody, the promoter included, knows it when the opening champion is written. After the first bout it is public.</p>
         </article>
         <article className="panel how-card">
           <h2 className="display">One sentence, one fighter</h2>
@@ -47,8 +57,8 @@ export function How() {
         </article>
         <article className="panel how-card">
           <h2 className="display">Check it yourself</h2>
-          <p>Every bout page lists the VRF seed, the referee hash and the transactions. {client.mode === 'mock' ? 'This build is running in demo mode with a simulated chain.' : 'The contract, the OutLayer project and the purse addresses are linked from the Book.'}</p>
-          <Link href="/play/book" className="btn btn-ghost btn-sm">Open the Book <Icon name="arrow" size={14} /></Link>
+          <p>Every bout page lists the fight seed, the referee hash and the transactions. {client.mode === 'mock' ? 'This build is running in demo mode with a simulated chain.' : 'The deployed code, the AI signer allowlist, solvency and the purse addresses are read live on the tale of the tape.'}</p>
+          <Link href="/play/proof" className="btn btn-ghost btn-sm">Read the tale of the tape <Icon name="arrow" size={14} /></Link>
         </article>
       </section>
     </div>

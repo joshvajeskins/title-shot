@@ -1,14 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { sound } from '../audio/sound'
 import type { Bell } from '../game/types'
 import { eth, near, shortAccount, shortHex } from '../lib/format'
+import { BaseName } from './BaseName'
 import { Icon } from './Icon'
 import './bell.css'
 
 /** The season bell: purse split into Base Sepolia payouts signed by the contract through Chain Signatures. */
 export function BellCinematic({ bell, beltName, onClose }: { bell: Bell; beltName: string; onClose: () => void }) {
   const [step, setStep] = useState(0)
+  // The parent passes a fresh onClose every render (it re-renders each second); keep the sequence from restarting.
+  const close = useRef(onClose)
+  close.current = onClose
   useEffect(() => {
     void sound.music('bell_cinematic', 200)
     sound.play('bell_triple')
@@ -17,10 +21,10 @@ export function BellCinematic({ bell, beltName, onClose }: { bell: Bell; beltNam
       setTimeout(() => { sound.play('purse'); setStep(2) }, 3200),
       setTimeout(() => { sound.play('coins_pour'); setStep(3) }, 4600),
     ]
-    const k = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    const k = (e: KeyboardEvent) => { if (e.key === 'Escape') close.current() }
     window.addEventListener('keydown', k)
     return () => { t.forEach(clearTimeout); window.removeEventListener('keydown', k); void sound.music('lobby_loop') }
-  }, [onClose])
+  }, [])
   const total = BigInt(bell.purseWei || '0') || 1n
   return createPortal(
     <div className="bellc" role="dialog" aria-modal="true" aria-label={`${beltName} season ${bell.seasonId} bell`}>
@@ -43,7 +47,7 @@ export function BellCinematic({ bell, beltName, onClose }: { bell: Bell; beltNam
                 <li key={p.payee + i} style={{ ['--d' as string]: `${i * 140}ms` }}>
                   <div className="bellc-who">
                     <b>{p.name}</b>
-                    <small>{shortAccount(p.payee)} · {p.share === 'holder' ? 'final holder' : p.share === 'refund' ? 'no challengers: refund' : `${p.defences} defences`}</small>
+                    <small>{shortAccount(p.payee)} <BaseName address={p.to} /> · {p.share === 'holder' ? 'final holder' : p.share === 'refund' ? 'no challengers: refund' : `${p.defences} defences`}</small>
                   </div>
                   <div className="bellc-bar"><span style={{ transform: step >= 3 ? `scaleX(${pct / 100})` : 'scaleX(0)' }} /></div>
                   <div className="bellc-amt num">{eth(p.amountWei, 5)} ETH <small>{pct}%</small></div>

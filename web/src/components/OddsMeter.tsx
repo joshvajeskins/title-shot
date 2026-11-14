@@ -43,7 +43,7 @@ export function TollBreakdown({ tollYocto, champName, rule }: { tollYocto: strin
     ['Promoter (funds purses and openers)', (rest * 25n) / 100n],
     ['Season side-pot (paid at the bell)', (rest * 10n) / 100n],
     ['House', rest - (rest * 60n) / 100n - (rest * 25n) / 100n - (rest * 10n) / 100n],
-    ['Forge (OutLayer TEE + NEAR AI)', fee],
+    ['Forge (NEAR AI compile and delivery)', fee],
   ]
   return (
     <div className="toll panel">

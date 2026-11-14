@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { sound } from '../audio/sound'
+import { VanceBaseWallet } from '../components/BaseName'
 import { Icon } from '../components/Icon'
 import { useAsync, useGame } from '../game/context'
 import { eth, near, shortHex } from '../lib/format'
@@ -19,6 +20,7 @@ export function Promoter() {
           <span className="eyebrow">The house · an AI agent with its own wallets</span>
           <h1 className="display print page-title">Velvet Vance</h1>
           <p className="page-sub">The promoter is a program, not a person. It writes each season's opening champion with NEAR AI, opens the season on chain, and funds the purse from a Base wallet that is itself a Chain Signatures address of its NEAR account. Its income is the promoter share of every toll, paid in NEAR; on testnet the Base wallet is pre-funded with test ETH because there is no route to swap that income into purses.</p>
+          <VanceBaseWallet />
           <button className="btn btn-ghost btn-sm" onClick={() => sound.play(`vance_${1 + Math.floor(Math.random() * 5)}`)}><Icon name="mic" size={16} /> Hear him out</button>
         </div>
       </section>

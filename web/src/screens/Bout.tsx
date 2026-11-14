@@ -10,7 +10,7 @@ import { GameError } from '../game/client'
 import { useGame } from '../game/context'
 import type { Belt, Fight, ForgeProgress } from '../game/types'
 import { navigate } from '../lib/router'
-import { useCompilerMode } from '../game/compiler'
+import { useDeployInfo } from '../game/compiler'
 
 type Phase = 'forge' | 'intro' | 'fight' | 'result' | 'error' | 'loading'
 
@@ -24,7 +24,7 @@ export function Bout({ beltId: id }: { beltId: string }) {
   const [failed, setFailed] = useState<string | null>(null)
   const [sentence, setSentence] = useState('')
   const started = useRef(false)
-  const compiler = useCompilerMode(client.mode)
+  const { compiler, forgeMode } = useDeployInfo(client.mode)
 
   const run = useCallback(async (beltId: string, s: string) => {
     setPhase('forge'); setProgress([]); setFailed(null); setSentence(s)
@@ -68,7 +68,7 @@ export function Bout({ beltId: id }: { beltId: string }) {
       {phase !== 'fight' && <Link href="/play" className="bout-exit" aria-label="Leave the bout"><Icon name="x" size={18} /></Link>}
       {phase === 'forge' && (
         <>
-          <Forge sentence={sentence} progress={progress} failed={failed} compiler={compiler} />
+          <Forge sentence={sentence} progress={progress} failed={failed} compiler={compiler} forgeMode={forgeMode} />
           {failed && (
             <div className="bout-retry">
               <button className="btn btn-red" onClick={() => { if (belt) void run(belt.id, sentence) }}>Try again</button>
