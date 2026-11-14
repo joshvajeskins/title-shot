@@ -8,6 +8,7 @@ import { browserStore, loadStored } from '../../game/nearKeys'
 import type { Connected } from '../../game/wallet/connector'
 import type { MovePlan, MoveStep, MoveStepId } from '../../game/wallet/move'
 import type { Receipt } from '../../game/wallet/setup'
+import type { NonceRes } from '../../game/wallet/prove'
 import { near } from '../../lib/format'
 import { Icon } from '../Icon'
 import { NearMark } from './WalletTicket'
@@ -18,7 +19,7 @@ import './wallet.css'
 const DEFAULT_BACK = 10n ** 24n / 5n
 const fightMoneyBack = (p: MovePlan): bigint => (p.balance >= DEFAULT_BACK ? p.balance : DEFAULT_BACK)
 
-type Phase ='connect' | 'connecting' | 'proving' | 'planning' | 'review' | 'moving' | 'done' | 'playing'
+type Phase = 'connect' | 'connecting' | 'sign' | 'proving' | 'planning' | 'review' | 'moving' | 'done' | 'playing'
 
 const mods = () => Promise.all([import('../../game/wallet/connector'), import('../../game/wallet/prove'), import('../../game/wallet/move'), import('../../game/chain/rpc')])
 
@@ -31,6 +32,26 @@ export function MoveDialog({ onClose }: { onClose: () => void }) {
   const [plan, setPlan] = useState<MovePlan | null>(null)
   const [steps, setSteps] = useState<Partial<Record<MoveStepId, MoveStep>>>({})
   const [receipts, setReceipts] = useState<Receipt[]>([])
+  // Prepared before each tap that reaches the wallet: a web wallet's sign tab opens with window.open, which the browser
+  // blocks unless it runs within ~5 s of the tap, so no network round trip may sit between the tap and the wallet.
+  const [nonce, setNonce] = useState<NonceRes | null>(null)
+  const [playPrep, setPlayPrep] = useState<{ keyOnChain: boolean } | null>(null)
+  const signFor = phase === 'sign' && conn && guest && !nonce ? conn.accountId : null
+  useEffect(() => {
+    if (!signFor || !guest) return
+    let live = true
+    void import('../../game/wallet/prove').then((m) => m.fetchNonce(signFor, guest.accountId)).then((n) => { if (live) setNonce(n) }).catch((e: unknown) => { if (live) setErr(e instanceof Error ? e.message : String(e)) })
+    return () => { live = false }
+  }, [signFor, guest?.accountId])
+  const playFor = phase === 'done' && conn && !playPrep ? conn.accountId : null
+  useEffect(() => {
+    if (!playFor) return
+    let live = true
+    void Promise.all([import('../../game/wallet/connector'), import('../../game/wallet/setup')])
+      .then(([{ contractId }, { prepareSetup }]) => prepareSetup(playFor, contractId()))
+      .then((p) => { if (live) setPlayPrep(p) }).catch(() => { if (live) setPlayPrep({ keyOnChain: false }) })
+    return () => { live = false }
+  }, [playFor])
   const busy = phase === 'connecting' || phase === 'proving' || phase === 'planning' || phase === 'moving' || phase === 'playing'
   useEffect(() => {
     const k = (e: KeyboardEvent) => { if (e.key === 'Escape' && !busy) onClose() }
@@ -48,20 +69,21 @@ export function MoveDialog({ onClose }: { onClose: () => void }) {
       const [{ connectWallet }] = await mods()
       c = await connectWallet()
       if (c.accountId === guest.accountId) throw new Error('That wallet is this guest account. Connect a different NEAR account.')
-      setConn(c)
-    } catch (e) { fail(e, 'connect'); return }
-    await prove(c)
+      setConn(c); setNonce(null); setPhase('sign'); sound.play('ui_tick')
+    } catch (e) { fail(e, 'connect') }
   }
 
-  const prove = async (c: Connected) => {
+  const prove = async () => {
+    const c = conn
+    if (!c || !nonce) return
     setErr(null); setPhase('proving')
     try {
       const [{ contractId, rpcUrls }, { proveControl }, { planMove }, { Rpc }] = await mods()
-      await proveControl(c.wallet, c.accountId, guest.accountId)
+      await proveControl(c.wallet, c.accountId, guest.accountId, undefined, undefined, nonce)
       setPhase('planning')
       setPlan(await planMove(new Rpc({ urls: rpcUrls() }), contractId(), guest.accountId, c.accountId))
       setPhase('review'); sound.play('ui_tick')
-    } catch (e) { fail(e, 'connect') }
+    } catch (e) { setNonce(null); fail(e, 'sign') }
   }
 
   const move = async () => {
@@ -80,9 +102,9 @@ export function MoveDialog({ onClose }: { onClose: () => void }) {
     setErr(null); setPhase('playing')
     try {
       const [[{ contractId }], { setupWallet }] = await Promise.all([mods(), import('../../game/wallet/setup')])
-      await setupWallet({ wallet: conn.wallet, accountId: conn.accountId, walletId: conn.walletId, contract: contractId(), deposit: plan ? fightMoneyBack(plan) : DEFAULT_BACK })
+      await setupWallet({ wallet: conn.wallet, accountId: conn.accountId, walletId: conn.walletId, contract: contractId(), deposit: plan ? fightMoneyBack(plan) : DEFAULT_BACK, keyOnChain: playPrep?.keyOnChain })
       await refreshAccount(); sound.play('bell_ding'); onClose()
-    } catch (e) { fail(e, 'done') }
+    } catch (e) { setPlayPrep(null); fail(e, 'done') }
   }
 
   return createPortal(
@@ -95,6 +117,12 @@ export function MoveDialog({ onClose }: { onClose: () => void }) {
           <>
             <p>Everything this guest owns goes to a NEAR wallet you control: the game balance, any belt, and the account's own NEAR. First your wallet signs a short message to prove the account is yours (no transaction, no gas).</p>
             <button className="btn btn-ghost wm-wide" onClick={connect} disabled={busy}><NearMark size={18} /> {phase === 'connecting' ? 'Opening NEAR Connect…' : 'Connect a NEAR wallet'}</button>
+          </>
+        )}
+        {phase === 'sign' && conn && (
+          <>
+            <p>Prove <b>{conn.accountId}</b> is yours: {conn.walletName} signs a short message (no transaction, no gas).</p>
+            <button className="btn btn-red wm-wide" onClick={prove} disabled={!nonce}>{nonce ? <>Sign in {conn.walletName} <Icon name="arrow" /></> : 'Preparing the message…'}</button>
           </>
         )}
         {(phase === 'proving' || phase === 'planning') && conn && (
@@ -112,7 +140,7 @@ export function MoveDialog({ onClose }: { onClose: () => void }) {
           )}
           {(phase === 'done' || phase === 'playing') && !err && receipts.length > 0 && conn && (
             <>
-              <button className="btn btn-red" onClick={play} disabled={busy}>{phase === 'playing' ? `Approve in ${conn.walletName}…` : <>Play from {conn.accountId.length > 22 ? 'my wallet' : conn.accountId} <Icon name="arrow" /></>}</button>
+              <button className="btn btn-red" onClick={play} disabled={busy || !playPrep}>{phase === 'playing' ? `Approve in ${conn.walletName}…` : <>Play from {conn.accountId.length > 22 ? 'my wallet' : conn.accountId} <Icon name="arrow" /></>}</button>
               <button className="btn btn-ghost btn-sm" onClick={onClose} disabled={busy}>Close</button>
             </>
           )}

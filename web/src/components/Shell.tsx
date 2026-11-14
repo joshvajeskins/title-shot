@@ -103,6 +103,14 @@ function IdentityBlock({ open, setOpen, onSignOut, down = false }: { open: boole
   const [moveOpen, setMoveOpen] = useState(false)
   const [working, setWorking] = useState(false)
   useEffect(() => { if (!open) { setNote(null); setLink(null) } }, [open])
+  // A wallet account's withdraw / payout / claim taps must reach the wallet with no loading in between (web wallets open their
+  // sign tab with window.open, which needs a recent tap): load NEAR Connect, the wallet and the call module up front.
+  const walletId = account?.kind === 'wallet' && client.mode === 'testnet' ? account.id : null
+  useEffect(() => {
+    if (!walletId) return
+    void import('../game/wallet/connector').then((m) => m.prewarmWallet(walletId)).catch(() => undefined)
+    void import('../game/wallet/calls').catch(() => undefined)
+  }, [walletId])
   if (!account) {
     return (
       <Link href="/enter" className="identity identity-empty">

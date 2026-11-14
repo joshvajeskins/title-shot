@@ -66,6 +66,15 @@ export interface SetupInput {
   rpc?: Rpc
   onStage?: (s: SetupStage) => void
   sleep?: (ms: number) => Promise<void>
+  /** From prepareSetup, read before the tap. Web wallets (Meteor Web, MyNearWallet) open their sign tab with window.open,
+   *  which browsers block unless it runs within ~5 s of the tap, so the tap must reach the wallet with no network wait. */
+  keyOnChain?: boolean
+}
+
+/** Read, before the user taps Approve, whether this browser's session key is already on the account (one RPC call). */
+export async function prepareSetup(accountId: string, contract: string, store: KeyStore = browserStore(), rpc = new Rpc({ urls: rpcUrls() })): Promise<{ keyOnChain: boolean }> {
+  const sessionPublic = formatPublicKey(parseSecretKey(sessionKeyFor(store, accountId)).publicKey)
+  return { keyOnChain: (await hasSessionKey(rpc, accountId, sessionPublic, contract)) === true }
 }
 
 /** The batch the wallet is asked to approve: AddKey on the account itself, then `deposit` on the contract. */
@@ -89,7 +98,7 @@ export async function setupWallet(i: SetupInput): Promise<{ accountId: string; r
   if (i.deposit > 0n && i.deposit < FIRST_DEPOSIT_MIN) throw new GameError('E_AMOUNT', 'Deposit at least 0.005 NEAR (the contract keeps that much for your storage).')
   const sessionKey = sessionKeyFor(store, i.accountId)
   const sessionPublic = formatPublicKey(parseSecretKey(sessionKey).publicKey)
-  const keyOnChain = (await hasSessionKey(rpc, i.accountId, sessionPublic, i.contract)) === true
+  const keyOnChain = i.keyOnChain ?? (await hasSessionKey(rpc, i.accountId, sessionPublic, i.contract)) === true
   const txs = setupTransactions(i.accountId, sessionPublic, i.contract, i.deposit, keyOnChain)
   const receipts: Receipt[] = []
   if (txs.length) {

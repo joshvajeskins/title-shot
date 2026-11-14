@@ -91,7 +91,24 @@ export async function connectWallet(needs: { signMessage?: boolean } = {}): Prom
 }
 
 /** The wallet this page is signed in to, checked against the account the game expects. */
+/** The signed-in wallet, loaded ahead of any tap. Loading it means fetching the manifest and the wallet's executor code;
+ *  done inside a tap, that delay makes the browser block a web wallet's sign tab (window.open needs a recent tap). */
+let warm: { accountId: string; p: Promise<NearWalletBase> } | null = null
+export function prewarmWallet(accountId: string): void {
+  if (warm?.accountId === accountId) return
+  const p = loadWalletFor(accountId)
+  warm = { accountId, p }
+  p.catch(() => { if (warm?.p === p) warm = null })
+}
+
 export async function walletFor(accountId: string): Promise<NearWalletBase> {
+  if (warm?.accountId === accountId) {
+    try { return await warm.p } catch { warm = null }
+  }
+  return loadWalletFor(accountId)
+}
+
+async function loadWalletFor(accountId: string): Promise<NearWalletBase> {
   const c = await connector()
   let wallet: NearWalletBase
   try {
@@ -106,6 +123,7 @@ export async function walletFor(accountId: string): Promise<NearWalletBase> {
 
 /** Sign out of the wallet (best effort: the game's own session is cleared by the caller either way). */
 export async function disconnectWallet(): Promise<void> {
+  warm = null
   if (!connectorP) {
     // nothing loaded on this page: only touch NEAR Connect when it remembers a wallet
     let remembered: string | null = null

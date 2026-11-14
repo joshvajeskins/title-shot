@@ -2,7 +2,7 @@
 // this browser; a wallet account asks its own wallet through NEAR Connect (loaded on demand, so guests never download it).
 import { GameError } from './client'
 import type { Rpc } from './chain/rpc'
-import { fullKeyCall, readPayoutAddress, sameAddress, writePayoutAddress } from './chain/payout'
+import { fullKeyCall, writePayoutAddress } from './chain/payout'
 import { archiveStored, loadStored, type KeyStore, type StoredAccount } from './nearKeys'
 import { networkError } from './chain/errors'
 
@@ -25,8 +25,8 @@ export async function ownerCall(rpc: Rpc, contract: string, stored: StoredAccoun
 export async function ownerSetPayout(rpc: Rpc, contract: string, stored: StoredAccount | null, addr: string): Promise<string | null> {
   const st = need(stored)
   if (st.kind !== 'wallet') return writePayoutAddress(rpc, contract, st.accountId, st.fullKey, addr)
-  const current = await readPayoutAddress(rpc, contract, st.accountId).catch(() => null)
-  if (sameAddress(current, addr)) return null
+  // No read before the wallet call: the payout dialog only offers Save for a changed address, and a web wallet's sign tab is
+  // blocked by the browser if a network round trip sits between the tap and the wallet.
   return ownerCall(rpc, contract, st, 'set_evm_address', { addr })
 }
 

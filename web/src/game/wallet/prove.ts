@@ -9,7 +9,7 @@ import { isRejection, messageOf } from './connector'
 import { evmProviderFor, isEvmAccount, personalSign } from './proveEvm'
 import type { WalletHost } from '../evm/discover'
 
-interface NonceRes { nonce: string; message: string; recipient: string; expiresAt: number }
+export interface NonceRes { nonce: string; message: string; recipient: string; expiresAt: number }
 
 async function post<T>(path: string, body: unknown, fetchFn: typeof fetch): Promise<T> {
   let r: Response
@@ -31,9 +31,16 @@ export function signatureB64(sig: string): string {
   return s
 }
 
-/** Ask the wallet to sign the server's nonce and have the server verify it. Resolves with the verified account. */
-export async function proveControl(wallet: NearWalletBase, accountId: string, guestId: string, fetchFn: typeof fetch = (...a) => fetch(...a), host?: WalletHost): Promise<{ accountId: string; publicKey: string }> {
-  const n = await post<NonceRes>('/api/auth/nonce', { accountId, guestId }, fetchFn)
+/** The server's single-use nonce, fetched BEFORE the user taps Sign: a web wallet's sign tab opens with window.open, which
+ *  the browser blocks unless it runs within ~5 s of the tap, so no network round trip may sit between the tap and the wallet. */
+export function fetchNonce(accountId: string, guestId: string, fetchFn: typeof fetch = (...a) => fetch(...a)): Promise<NonceRes> {
+  return post<NonceRes>('/api/auth/nonce', { accountId, guestId }, fetchFn)
+}
+
+/** Ask the wallet to sign the server's nonce and have the server verify it. Resolves with the verified account.
+ *  `pre`: a nonce from fetchNonce, so the wallet is asked immediately (it is still single use and expires in 5 minutes). */
+export async function proveControl(wallet: NearWalletBase, accountId: string, guestId: string, fetchFn: typeof fetch = (...a) => fetch(...a), host?: WalletHost, pre?: NonceRes): Promise<{ accountId: string; publicKey: string }> {
+  const n = pre && pre.expiresAt > Date.now() + 15_000 ? pre : await fetchNonce(accountId, guestId, fetchFn)
   if (isEvmAccount(accountId)) {
     // an Ethereum-address account: the same EVM key signs the nonce (EIP-191), found through EIP-6963 in this page
     const signature = await personalSign(await evmProviderFor(accountId, host), accountId, n.message)

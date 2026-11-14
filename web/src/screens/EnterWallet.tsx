@@ -21,7 +21,18 @@ export function EnterWallet({ busyElsewhere, onBusy, onDone }: { busyElsewhere: 
   const [phase, setPhase] = useState<Phase>({ k: 'idle' })
   const [err, setErr] = useState<string | null>(null)
   const [amount, setAmount] = useState<bigint | null>(null)
+  // Read before the tap: web wallets open their sign tab with window.open, which the browser blocks unless the tap reaches the
+  // wallet within ~5 s, so Approve must not wait on the network (setup module and session-key check are ready beforehand).
+  const [prep, setPrep] = useState<{ accountId: string; keyOnChain: boolean } | null>(null)
   useEffect(() => { onBusy(phase.k === 'connecting' || phase.k === 'approving' || phase.k === 'confirming') }, [phase.k, onBusy])
+  const setupFor = phase.k === 'setup' ? phase.c.accountId : null
+  const unprepared = prep === null || prep.accountId !== setupFor
+  useEffect(() => {
+    if (!setupFor || !unprepared) return
+    let live = true
+    void lazyWallet().then(([{ contractId }, { prepareSetup }]) => prepareSetup(setupFor, contractId())).then((p) => { if (live) setPrep({ accountId: setupFor, ...p }) }).catch(() => { if (live) setPrep({ accountId: setupFor, keyOnChain: false }) })
+    return () => { live = false }
+  }, [setupFor, unprepared])
 
   // A reload after connecting (or mid-approval): NEAR Connect still remembers the wallet, so pick the ticket back up.
   useEffect(() => {
@@ -56,11 +67,11 @@ export function EnterWallet({ busyElsewhere, onBusy, onDone }: { busyElsewhere: 
     setErr(null); setPhase({ k: 'approving', c }); sound.play('ui_confirm')
     try {
       const [{ contractId }, { setupWallet }] = await lazyWallet()
-      await setupWallet({ wallet: c.wallet, accountId: c.accountId, walletId: c.walletId, contract: contractId(), deposit, onStage: (s) => setPhase({ k: s === 'approve' ? 'approving' : 'confirming', c }) })
+      await setupWallet({ wallet: c.wallet, accountId: c.accountId, walletId: c.walletId, contract: contractId(), deposit, keyOnChain: prep?.accountId === c.accountId ? prep.keyOnChain : undefined, onStage: (s) => setPhase({ k: s === 'approve' ? 'approving' : 'confirming', c }) })
       sound.play('bell_ding')
       await onDone()
     } catch (e) {
-      setErr(e instanceof Error ? e.message : 'The wallet setup did not finish.'); setPhase({ k: 'setup', c }); sound.play('ui_error')
+      setErr(e instanceof Error ? e.message : 'The wallet setup did not finish.'); setPrep(null); setPhase({ k: 'setup', c }); sound.play('ui_error')
     }
   }
 
@@ -80,10 +91,10 @@ export function EnterWallet({ busyElsewhere, onBusy, onDone }: { busyElsewhere: 
   return (
     <div className="ew">
       <WalletTicket connected={c} amount={amount} onAmount={setAmount} locked={working} onSwitch={disconnect} />
-      <button className="btn btn-red btn-lg enter-cta ew-approve" disabled={working || amount === null || amount < 0n} onClick={() => amount !== null && amount >= 0n && approve(c, amount)}>
+      <button className="btn btn-red btn-lg enter-cta ew-approve" disabled={working || amount === null || amount < 0n || prep?.accountId !== c.accountId} onClick={() => amount !== null && amount >= 0n && approve(c, amount)}>
         {phase.k === 'approving' ? <><span className="ew-dot" aria-hidden="true" /> Approve in {c.walletName}…</>
           : phase.k === 'confirming' ? <><span className="ew-dot" aria-hidden="true" /> Checking the chain…</>
-          : amount === null ? 'Checking your wallet…'
+          : amount === null || prep?.accountId !== c.accountId ? 'Checking your wallet…'
           : amount < 0n ? 'Add testnet NEAR first'
           : amount === 0n ? <>Approve in wallet <Icon name="arrow" /></>
           : <>Approve · {near(amount, 2)} NEAR <Icon name="arrow" /></>}
