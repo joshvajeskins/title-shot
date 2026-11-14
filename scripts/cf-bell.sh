@@ -6,7 +6,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang
-W="pnpm --dir web exec wrangler"
+W="$PWD/web/node_modules/.bin/wrangler"   # run inside worker-bell/ so its own wrangler.toml applies
 envv() { sed -n "s/^$1=//p" .env.local 2>/dev/null | head -1 | tr -d '"'; }
 TICK=${TICK_SECRET:-$(envv TICK_SECRET)}
 [ -n "$TICK" ] || { echo "no TICK_SECRET in the environment or .env.local: run scripts/cf-setup.sh first so Pages and the bell share one token" >&2; exit 1; }
