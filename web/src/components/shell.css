@@ -116,3 +116,6 @@
 .bout-exit:hover { color: var(--paper); }
 .bout-retry { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); display: flex; gap: 10px; z-index: 30; }
 .identity-note { margin: 2px 10px 6px; font-size: 11px; line-height: 1.5; color: var(--gold); }
+.mode-banner { display: flex; align-items: center; gap: 10px; padding: 8px var(--gutter); font-size: 12px; color: var(--paper-dim); background: rgba(233, 185, 73, 0.08); border-bottom: 1px solid rgba(233, 185, 73, 0.22); }
+.mode-banner svg { color: var(--gold); flex-shrink: 0; }
+.mode-banner b { color: var(--gold); font-weight: 600; }

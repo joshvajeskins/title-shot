@@ -13,7 +13,13 @@ const STEPS: { stage: ForgeStage; title: string; sub: string }[] = [
 ]
 const ORDER: ForgeStage[] = ['toll', 'tee', 'compile', 'verify', 'fight', 'done']
 
-export function Forge({ sentence, progress, failed }: { sentence: string; progress: ForgeProgress[]; failed: string | null }) {
+const STANDIN: Partial<Record<ForgeStage, { title: string; sub: string }>> = {
+  tee: { title: 'Forge request posted', sub: 'Staging: the relayer picks up the request (the OutLayer enclave runs in production).' },
+  compile: { title: 'Stand-in compiler', sub: 'Staging: a labeled stand-in signs the compile until the NEAR AI key lands.' },
+}
+
+export function Forge({ sentence, progress, failed, compiler = 'nearai' }: { sentence: string; progress: ForgeProgress[]; failed: string | null; compiler?: string }) {
+  const steps = compiler === 'standin' ? STEPS.map((s) => ({ ...s, ...(STANDIN[s.stage] ?? {}) })) : STEPS
   const [typed, setTyped] = useState(0)
   const [start] = useState(Date.now())
   const [now, setNow] = useState(Date.now())
@@ -43,7 +49,7 @@ export function Forge({ sentence, progress, failed }: { sentence: string; progre
         <span className="eyebrow">Forging · {secs}s</span>
         <h1 className="display print forge-h">The forge is lit</h1>
         <ol>
-          {STEPS.map((s, i) => {
+          {steps.map((s, i) => {
             const state = failed && i === Math.max(0, idx) ? 'fail' : i < idx || current === 'done' ? 'done' : i === idx ? 'live' : 'wait'
             const rec = progress.find((p) => p.stage === s.stage)
             return (

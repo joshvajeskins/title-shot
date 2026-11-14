@@ -3,6 +3,7 @@ import { sound } from '../audio/sound'
 import { useGame } from '../game/context'
 import { near, shortAccount } from '../lib/format'
 import { browserStore, exportKey } from '../game/nearKeys'
+import { useCompilerMode } from '../game/compiler'
 import { navigate, usePath } from '../lib/router'
 import { Icon } from './Icon'
 import { Link, Wordmark } from './Link'
@@ -24,6 +25,7 @@ export function Shell({ children, bare = false }: { children: ReactNode; bare?: 
   const { account, client } = useGame()
   const [muted, setMuted] = useState(sound.isMuted())
   const [menu, setMenu] = useState(false)
+  const compiler = useCompilerMode(client.mode)
   useEffect(() => { setMenu(false) }, [path])
   const toggleSound = () => { const m = !muted; setMuted(m); sound.setMuted(m); if (!m) sound.play('ui_tick') }
   return (
@@ -50,6 +52,14 @@ export function Shell({ children, bare = false }: { children: ReactNode; bare?: 
         </div>
       </aside>
       <main className="shell-main">
+        {!bare && (compiler === 'standin' || compiler === 'mock') && (
+          <div className="mode-banner" role="note">
+            <Icon name="info" size={14} />
+            {compiler === 'mock'
+              ? <span><b>Offline demo.</b> This build simulates the chain in your browser; no transactions are sent.</span>
+              : <span><b>Staging contract.</b> The NEAR AI compiler key is pending, so fighters are compiled by a labeled stand-in signer. Tolls, fights, the belt and payouts are real testnet transactions.</span>}
+          </div>
+        )}
         {!account && !bare && (
           <div className="guest-nudge">
             <span><b>You're spectating.</b><span className="hide-sm"> Get a free testnet fighter account to take a shot.</span></span>
