@@ -62,4 +62,4 @@ export async function walletContractCall(contract: string, accountId: string, me
 }
 
 const describe = (method: string): string =>
-  method === 'withdraw' ? 'the withdrawal' : method === 'set_evm_address' ? 'the payout address' : method === 'claim_payout' ? 'the payout claim' : 'the call'
+  method === 'withdraw' ? 'the withdrawal' : method === 'deposit' ? 'the deposit' : method === 'set_evm_address' ? 'the payout address' : method === 'claim_payout' ? 'the payout claim' : 'the call'

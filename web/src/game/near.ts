@@ -14,7 +14,7 @@ import { toChainSpec, loadSim, simIfReady, winnerCode, type Sim } from '../sim'
 import { Api, type ApiState } from './nearApi'
 import { within } from './deadline'
 import { evmAddr, readPayoutAddress } from './chain/payout'
-import { ownerCall, ownerSetPayout, sessionSendError, signOutStored } from './nearOwner'
+import { ownerCall, ownerDeposit, ownerSetPayout, sessionSendError, signOutStored } from './nearOwner'
 import { browserStore, clearPending, loadStored, pendingOrNewKeys, saveStoredIfFree, type KeyStore } from './nearKeys'
 
 export interface NearClientOptions {
@@ -66,14 +66,12 @@ export class NearClient implements GameClient {
   private async sim(ms = 20_000): Promise<Sim> {
     try { return await within(loadSim(), ms, () => new Error('E_SIM')) } catch { throw new GameError('E_SIM', 'The fight engine failed to load. Reload the page.') }
   }
-
   private view<T>(method: string, args: unknown = {}): Promise<T> {
     return this.rpc.view<T>(this.contract, method, args).catch((e) => { throw networkError(e) })
   }
 
   // ---- account ----
   private stored() { return loadStored(this.store) }
-
   async account(): Promise<Account | null> {
     const st = this.stored()
     if (!st) return null
@@ -116,6 +114,7 @@ export class NearClient implements GameClient {
   async claimPayout(payoutId: number, addr: string): Promise<string> { const a = evmAddr(addr); return ownerCall(this.rpc, this.contract, this.stored(), 'claim_payout', { payout_id: payoutId, addr: a }) }
   /** Withdraw the whole game balance to the account itself. Returns the tx hash. */
   async withdraw(): Promise<string> { return ownerCall(this.rpc, this.contract, this.stored(), 'withdraw', { amount: null }) }
+  async deposit(yocto: bigint): Promise<string> { return ownerDeposit(this.contract, this.stored(), yocto) }
 
   // ---- reads ----
   private getState(): Promise<ApiState> {
@@ -219,6 +218,7 @@ export class NearClient implements GameClient {
     const problem = sentenceProblem(clean)
     if (problem) throw new GameError('E_SENTENCE', problem)
     const belt = await this.belt(beltId)
+    if (belt.holder === st.accountId) throw gameErrorFor('E_SELF') // the contract refuses it; do not spend the key's gas on it
     const toll = BigInt(belt.tollYocto)
     const balance = BigInt(String(await this.view<string>('balance_of', { account: st.accountId })))
     const pending = await this.view<RawChallenge | null>('get_pending', { account: st.accountId })

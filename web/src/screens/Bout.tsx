@@ -14,6 +14,9 @@ import { useDeployInfo } from '../game/compiler'
 
 type Phase = 'forge' | 'intro' | 'fight' | 'result' | 'error' | 'loading'
 
+/** Refusals that the same sentence on the same belt would only hit again: no "Try again" for these. */
+const FINAL = new Set(['E_SELF', 'E_BALANCE', 'E_SAME_SENTENCE', 'E_SENTENCE', 'E_BAD_SENTENCE', 'E_NO_ACCOUNT', 'E_ALLOWANCE', 'E_GAS_BALANCE'])
+
 /** /play/bout/:id — id is a belt id while a challenge is pending, else a fight id (replay). */
 export function Bout({ beltId: id }: { beltId: string }) {
   const { client, pending, setPending, refreshAccount } = useGame()
@@ -22,12 +25,13 @@ export function Bout({ beltId: id }: { beltId: string }) {
   const [belt, setBelt] = useState<Belt | null>(null)
   const [progress, setProgress] = useState<ForgeProgress[]>([])
   const [failed, setFailed] = useState<string | null>(null)
+  const [retryable, setRetryable] = useState(true)
   const [sentence, setSentence] = useState('')
   const started = useRef(false)
   const { compiler, forgeMode } = useDeployInfo(client.mode)
 
   const run = useCallback(async (beltId: string, s: string) => {
-    setPhase('forge'); setProgress([]); setFailed(null); setSentence(s)
+    setPhase('forge'); setProgress([]); setFailed(null); setRetryable(true); setSentence(s)
     try {
       setBelt(await client.belt(beltId))
       const f = await client.challenge(beltId, s, (p) => setProgress((list) => [...list, p]))
@@ -38,7 +42,7 @@ export function Bout({ beltId: id }: { beltId: string }) {
       setTimeout(() => setPhase('intro'), 900)
     } catch (e) {
       const msg = e instanceof GameError ? e.message : e instanceof Error ? e.message : 'The forge failed.'
-      setFailed(msg); sound.play('ui_error')
+      setFailed(msg); setRetryable(!(e instanceof GameError && FINAL.has(e.code))); sound.play('ui_error')
       void refreshAccount()
     }
   }, [client, refreshAccount])
@@ -71,8 +75,8 @@ export function Bout({ beltId: id }: { beltId: string }) {
           <Forge sentence={sentence} progress={progress} failed={failed} compiler={compiler} forgeMode={forgeMode} />
           {failed && (
             <div className="bout-retry">
-              <button className="btn btn-red" onClick={() => { if (belt) void run(belt.id, sentence) }}>Try again</button>
-              <button className="btn btn-ghost" onClick={() => navigate(`/play/belt/${belt?.id ?? ''}`)}>Back to my corner</button>
+              {retryable && <button className="btn btn-red" onClick={() => { if (belt) void run(belt.id, sentence) }}>Try again</button>}
+              <button className={`btn ${retryable ? 'btn-ghost' : 'btn-red'}`} onClick={() => navigate(`/play/belt/${belt?.id ?? ''}`)}>Back to my corner</button>
             </div>
           )}
         </>

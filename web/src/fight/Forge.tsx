@@ -37,9 +37,11 @@ export function Forge({ sentence, progress, failed, compiler = 'nearai', forgeMo
   const [typed, setTyped] = useState(0)
   const [start] = useState(Date.now())
   const [now, setNow] = useState(Date.now())
+  const [stoppedAt, setStoppedAt] = useState<number | null>(null)
   const current = progress.length ? progress[progress.length - 1].stage : 'toll'
   const idx = ORDER.indexOf(current)
   useEffect(() => { const t = setInterval(() => setNow(Date.now()), 250); return () => clearInterval(t) }, [])
+  useEffect(() => { setStoppedAt(failed ? Date.now() : null) }, [failed]) // the clock stops when the forge does
   useEffect(() => {
     if (typed >= sentence.length) return
     const t = setTimeout(() => { setTyped((n) => n + 1); if (typed % 2 === 0) sound.pick('type_key', 4, { volume: 0.45 }) }, 38)
@@ -47,7 +49,9 @@ export function Forge({ sentence, progress, failed, compiler = 'nearai', forgeMo
   }, [typed, sentence])
   useEffect(() => { void sound.music('forge_loop', 500); sound.play('forge_1') }, [])
   useEffect(() => { if (current !== 'toll') sound.play(current === 'fight' ? 'stamp_slam' : 'ui_confirm', { volume: 0.6 }) }, [current])
-  const secs = Math.floor((now - start) / 1000)
+  const secs = Math.floor(((stoppedAt ?? now) - start) / 1000)
+  // A refusal before any forge started (the challenge tx itself, or a check before it) took no toll: never show "Toll paid".
+  const notCharged = !!failed && !progress.some((p) => p.stage === 'toll')
   return (
     <div className="forge">
       <div className="forge-stage">
@@ -60,8 +64,8 @@ export function Forge({ sentence, progress, failed, compiler = 'nearai', forgeMo
         </div>
       </div>
       <section className="forge-steps" aria-live="polite">
-        <span className="eyebrow">Forging · {secs}s</span>
-        <h1 className="display print forge-h">The forge is lit</h1>
+        <span className="eyebrow">{failed ? 'Stopped' : 'Forging'} · {secs}s</span>
+        <h1 className="display print forge-h">{failed ? 'No fight this time' : 'The forge is lit'}</h1>
         <ol>
           {steps.map((s, i) => {
             const state = failed && i === Math.max(0, idx) ? 'fail' : i < idx || current === 'done' ? 'done' : i === idx ? 'live' : 'wait'
@@ -70,8 +74,8 @@ export function Forge({ sentence, progress, failed, compiler = 'nearai', forgeMo
               <li key={s.stage} className={`step step-${state}`}>
                 <span className="step-dot">{state === 'done' ? <Icon name="check" size={14} stroke={2.6} /> : state === 'fail' ? <Icon name="x" size={14} stroke={2.6} /> : i + 1}</span>
                 <div>
-                  <b>{s.title}</b>
-                  <small>{rec?.note ?? s.sub}</small>
+                  <b>{state === 'fail' && s.stage === 'toll' && notCharged ? 'Toll not taken' : s.title}</b>
+                  <small>{state === 'fail' && s.stage === 'toll' && notCharged ? 'The challenge never reached the forge, so no toll left your balance.' : rec?.note ?? s.sub}</small>
                   {rec?.receipt && rec.receipt.url !== '#' && <a href={rec.receipt.url} target="_blank" rel="noreferrer" className="step-link">receipt <Icon name="external" size={11} /></a>}
                 </div>
               </li>
@@ -79,7 +83,9 @@ export function Forge({ sentence, progress, failed, compiler = 'nearai', forgeMo
           })}
         </ol>
         {failed && <p className="forge-fail" role="alert">{failed}</p>}
-        {!failed && secs > 40 && <p className="forge-slow">The enclave is slow tonight. If the forge times out, your toll comes back minus the forge fee.</p>}
+        {!failed && secs > 40 && <p className="forge-slow">{forgeMode === 'relayer'
+          ? 'The relayer delivers forges on its next round, every 5 minutes, so this can take up to 5 minutes. If none arrives within 10 minutes, your toll comes back minus the forge fee.'
+          : 'The enclave is slow tonight. If the forge times out, your toll comes back minus the forge fee.'}</p>}
       </section>
     </div>
   )

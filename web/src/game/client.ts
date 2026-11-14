@@ -42,6 +42,8 @@ export interface GameClient {
   claimPayout?(payoutId: number, addr: string): Promise<string>
   /** Withdraw the whole game balance to the account (a wallet account approves it in its wallet). Returns the tx hash. */
   withdraw?(): Promise<string>
+  /** Add fight money to a wallet account's game balance (approved in the wallet). Returns the tx hash. */
+  deposit?(yocto: bigint): Promise<string>
 }
 
 export class GameError extends Error {

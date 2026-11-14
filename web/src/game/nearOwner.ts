@@ -21,6 +21,16 @@ export async function ownerCall(rpc: Rpc, contract: string, stored: StoredAccoun
   return fullKeyCall(rpc, contract, st.accountId, st.fullKey, method, args)
 }
 
+/** Fight money from the wallet into the game balance (`deposit`). Only a wallet account can: a judge demo account is
+ *  funded once by the sponsor, and its own NEAR is gas money. Returns the tx hash. */
+export async function ownerDeposit(contract: string, stored: StoredAccount | null, yocto: bigint): Promise<string> {
+  const st = need(stored)
+  if (st.kind !== 'wallet') throw new GameError('E_DEMO_TOPUP', 'A judge demo account cannot add money. Move it to your wallet from the account menu, or connect a wallet.')
+  if (yocto <= 0n) throw new GameError('E_AMOUNT', 'Pick an amount to add.')
+  const { walletContractCall } = await import('./wallet/calls')
+  return walletContractCall(contract, st.accountId, 'deposit', {}, yocto)
+}
+
 /** Register `addr` (already validated) for purse payouts; an address already registered sends nothing. */
 export async function ownerSetPayout(rpc: Rpc, contract: string, stored: StoredAccount | null, addr: string): Promise<string | null> {
   const st = need(stored)

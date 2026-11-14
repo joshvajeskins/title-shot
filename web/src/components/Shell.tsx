@@ -8,6 +8,7 @@ import { PayoutAddressDialog } from './PayoutAddress'
 import { navigate, usePath } from '../lib/router'
 import { txUrl } from '../game/chain/config'
 import { Icon } from './Icon'
+import { TopUp } from './wallet/TopUp'
 import { Link, Wordmark } from './Link'
 import './shell.css'
 
@@ -154,6 +155,7 @@ function IdentityBlock({ open, setOpen, onSignOut, down = false }: { open: boole
           <Link href="/play/book" className="identity-menu-item" role="menuitem"><Icon name="book" size={16} /> My bouts</Link>
           <Link href="/play/how" className="identity-menu-item" role="menuitem"><Icon name="info" size={16} /> How the money moves</Link>
           <button className="identity-menu-item" role="menuitem" onClick={() => setPayoutOpen(true)}><Icon name="coin" size={16} /> Purse payout address</button>
+          {live && wallet && <TopUp />}
           {live && wallet && BigInt(account.balanceYocto) > 0n && <button className="identity-menu-item" role="menuitem" onClick={withdraw} disabled={working}><Icon name="coin" size={16} /> Withdraw {near(account.balanceYocto, 3)} NEAR</button>}
           {live && !wallet && <button className="identity-menu-item" role="menuitem" onClick={() => { setMoveOpen(true); setOpen(false) }}><Icon name="arrow" size={16} /> Move to my wallet</button>}
           {live && !wallet && <button className="identity-menu-item" role="menuitem" onClick={backup}><Icon name="lock" size={16} /> Back up my key</button>}

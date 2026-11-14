@@ -11,6 +11,7 @@ import { near, plural } from '../lib/format'
 import { navigate } from '../lib/router'
 import { moveInfo } from '../game/library'
 import { useDeployInfo } from '../game/compiler'
+import { TopUp } from '../components/wallet/TopUp'
 import './corner.css'
 
 const IDEAS = ['a pigeon with a law degree', 'a toaster that believes it is a dragon', 'a librarian who bans noise', 'a snail with a rocket backpack', 'a ghost who haunts the DMV', 'the north wind in a bad mood']
@@ -37,6 +38,8 @@ export function Corner({ beltId }: { beltId: string }) {
   const odds = useMemo(() => (belt && preview ? client.odds(belt.champion.spec, preview.spec, belt.season.rule?.id ?? 255, 200) : null), [belt, preview, client])
   const toll = belt ? BigInt(belt.tollYocto) : 0n
   const short = account ? BigInt(account.balanceYocto) < toll : false
+  // the contract refuses a challenge from the belt's own holder (E_SELF): say so here instead of offering a doomed fight
+  const holds = !!account && !!belt?.holder && belt.holder === account.id
 
   const onKey = () => {
     const now = performance.now()
@@ -56,7 +59,13 @@ export function Corner({ beltId }: { beltId: string }) {
   const challenge = () => {
     if (!belt || sentenceProblem(text)) return
     if (!account) { navigate(`/enter?next=${encodeURIComponent(`/play/belt/${beltId}`)}`); return }
-    if (short) { setErr(`You need ${near(belt.tollYocto)} NEAR for the toll.`); return }
+    if (holds) { setErr('You hold this belt, so you cannot challenge it. Take a shot at another belt.'); return }
+    if (short) {
+      setErr(account.kind === 'wallet'
+        ? `You need ${near(belt.tollYocto)} NEAR for the toll and have ${near(account.balanceYocto, 3)}. Add fight money below.`
+        : `This demo account has ${near(account.balanceYocto, 3)} NEAR left, less than the ${near(belt.tollYocto)} NEAR toll. Move what it holds to your wallet from the account menu, or connect your own wallet to keep fighting.`)
+      return
+    }
     if (cleanSentence(belt.champion.sentence).toLowerCase() === clean.toLowerCase()) { setErr("That's the champion's own sentence. Write a challenger."); return }
     if (forgeClosed && !(preview?.canonical && previewFor === clean)) { setErr('The forge is closed for today, so only sentences that were already forged can fight. Spar to check yours.'); return }
     sound.play('bell_ding')
@@ -90,6 +99,16 @@ export function Corner({ beltId }: { beltId: string }) {
         </section>
         <section className="corner-write" aria-label="Your corner">
           <span className="eyebrow">Your corner</span>
+          {holds ? (
+            <div className="corner-holds">
+              <h1 className="display print corner-h">You hold this belt</h1>
+              <p className="corner-lede">Every challenger pays your corner, win or lose, and if your sentence still holds it when the bell rings you take the purse. The contract will not let you challenge your own belt.</p>
+              <div className="corner-actions">
+                <Link href="/play" className="btn btn-red btn-lg">Take a shot at another belt <Icon name="arrow" /></Link>
+                <Link href="/play/book" className="btn btn-ghost">Watch the challengers</Link>
+              </div>
+            </div>
+          ) : <>
           <h1 className="display print corner-h">Write a challenger</h1>
           <p className="corner-lede">One sentence. The attested AI turns it into a fighter: stats, three moves, a face. Wordsmith against the champion's weak spots.</p>
           {forgeClosed && (
@@ -146,6 +165,8 @@ export function Corner({ beltId }: { beltId: string }) {
               </div>
             </div>
           )}
+          {short && account?.kind === 'wallet' && <TopUp label={`Add fight money · the toll is ${near(belt.tollYocto)} NEAR`} onDone={() => setErr(null)} />}
+          </>}
           <TollBreakdown tollYocto={belt.tollYocto} champName={champ.spec.name} rule={belt.season.rule} />
         </section>
       </div>

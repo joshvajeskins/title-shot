@@ -84,6 +84,8 @@ export interface Belt {
   tollYocto: string
   season: Season
   lastBell?: Bell | null
+  /** who holds the belt token now (NEP-171 owner; it can differ from the champion's writer after a transfer). Live chain only. */
+  holder?: string | null
 }
 
 export type Outcome = 'hit' | 'crit' | 'miss' | 'blocked' | 'countered' | 'used'

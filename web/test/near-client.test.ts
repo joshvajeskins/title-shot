@@ -31,7 +31,7 @@ interface Rig {
   keys: ReturnType<typeof newGuestKeys>
 }
 
-function rig(opts: { account?: boolean; forgeWaitMs?: number; balance?: string } = {}): Rig {
+function rig(opts: { account?: boolean; forgeWaitMs?: number; balance?: string; holder?: string } = {}): Rig {
   sim() // pre-load the wasm for loadSim()
   const store = new MemStore()
   const keys = newGuestKeys()
@@ -40,7 +40,7 @@ function rig(opts: { account?: boolean; forgeWaitMs?: number; balance?: string }
   const apiCalls: Rig['apiCalls'] = []
   const state: Rig['state'] = { challenge: null, pending: 'none', sentOnce: false, seq: [], balance: opts.balance ?? (NEAR / 2n).toString(), fight: fightRow(9, 0, 1), txFailure: null, apiFail: {} }
   const rb = sim().rulebook()
-  const beltRaw = belt()
+  const beltRaw = opts.holder ? { ...belt(), holder: opts.holder } : belt()
   const fighters = new Map([fighter(0), B].map((f) => [f.hash, f]))
   const script: ChainScript = {
     views: {
@@ -253,6 +253,14 @@ describe('challenge: the paid forge from the browser', () => {
       expect(e.code).toBe(code)
       expect(e.message).toMatch(/refunded|Refused|refused/i)
     }
+  })
+  it('the belt holder is refused before any transaction (the contract would only burn the session key gas)', async () => {
+    r = rig({ holder: ME })
+    const stages: string[] = []
+    const e = await run(r, (p) => stages.push(p.stage)).catch((x) => x)
+    expect(e).toMatchObject({ code: 'E_SELF', message: expect.stringContaining('hold this belt') })
+    expect(r.sent.length).toBe(0)
+    expect(stages).toEqual([]) // no "toll paid" step was ever reported
   })
   it('a challenge tx that fails on chain (E_SELF) surfaces the contract code as a sentence', async () => {
     r.state.txFailure = 'E_SELF'

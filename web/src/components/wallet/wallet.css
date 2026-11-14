@@ -76,3 +76,17 @@
 .wm-step-err { color: #ff8a78 !important; }
 .wm-step-text a { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 420px) { .wm-lines li { grid-template-columns: 1fr; } .wm-lines em { grid-column: 1; } }
+
+/* "Add fight money" (TopUp): dark chips that sit in the account menu and under the corner's toll error */
+.tu { display: grid; gap: 8px; padding: 8px 10px; }
+.tu-label { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--paper-dim); }
+.tu-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.tu-chip { height: 34px; min-width: 56px; padding: 0 12px; border-radius: 8px; font-family: var(--font-display); font-weight: 800; font-size: 17px; color: var(--paper); background: var(--ink-3); box-shadow: 0 0 0 1px var(--line-strong) inset; transition: background-color var(--t-fast) ease, box-shadow var(--t-fast) ease, transform var(--t-press) var(--ease-out); }
+.tu-chip:hover:not(:disabled) { box-shadow: 0 0 0 1px var(--gold) inset; }
+.tu-chip:active:not(:disabled) { transform: scale(0.96); }
+.tu-chip:disabled { opacity: 0.45; cursor: wait; }
+.tu-chip.is-busy { opacity: 1; background: var(--gold); color: var(--on-paper); box-shadow: 2px 2px 0 var(--red); }
+.tu-unit { font-size: 11px; letter-spacing: 0.14em; color: var(--paper-faint); }
+.tu-note { margin: 0; font-size: 11.5px; line-height: 1.5; color: var(--gold); overflow-wrap: anywhere; }
+.tu-note.is-bad { color: var(--red); }
+.tu-note a { display: inline-flex; align-items: center; gap: 3px; color: var(--paper); text-decoration: underline; text-underline-offset: 3px; }
