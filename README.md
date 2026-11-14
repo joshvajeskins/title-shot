@@ -144,8 +144,9 @@ wording matters more than luck.
   Intear, MetaMask, Rabby…) were not in our automated tests; whether a given wallet accepts the session-key request in a
   batch, or NEP-413 message signing, is up to that wallet. Moving a belt with `nft_transfer` is unit-tested, not run live.
   Smart-contract EVM wallets cannot sign the ownership message, so they use the paste path. Not integrated: FastAuth social
-  login, HOT Kit and WalletConnect (they need keys this build does not have), and passkey or EVM-controlled NEAR accounts
-  (mainnet-only today).
+  login (on 14 Nov the shared testnet Auth0 client accepted only `http://localhost:3000` as a callback and answered 403
+  "Callback URL mismatch" for this site, and testnet has no public FastAuth relayer), HOT Kit and WalletConnect (they need
+  keys this build does not have), and passkey or EVM-controlled NEAR accounts (mainnet-only today).
 - Testnet only. Testnet NEAR, Sepolia ETH and test USDC have no value.
 
 ## Tests
