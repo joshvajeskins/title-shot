@@ -17,9 +17,12 @@ if [ -z "$WB" ]; then
   WB="$HOME/.cargo/bin/wasm-bindgen"
 fi
 rustup target add wasm32-unknown-unknown >/dev/null 2>&1 || true
+# Strip this machine's paths from panic messages: no home directory in the wasm, and the same bytes on any machine.
+REPO_ROOT="$(cd ../.. && pwd)"   # this script already cd-ed into crates/bout-sim/
+export RUSTFLAGS="${RUSTFLAGS:-} --remap-path-prefix=$HOME/.cargo/registry/src=/cargo/registry/src --remap-path-prefix=$HOME/.rustup=/rustup --remap-path-prefix=$REPO_ROOT=/titleshot"
 
 # the cdylib crate type is requested here so the crate stays a plain rlib for the contract and tests
 cargo rustc --release --lib --target wasm32-unknown-unknown --features wasm --crate-type cdylib
 rm -rf pkg
-"$WB" --target web --out-dir pkg --out-name bout_sim "$(cd "$(dirname "$0")/../.." && pwd)/target/wasm32-unknown-unknown/release/bout_sim.wasm"
+"$WB" --target web --out-dir pkg --out-name bout_sim "$REPO_ROOT/target/wasm32-unknown-unknown/release/bout_sim.wasm"
 ls -l pkg
