@@ -47,7 +47,9 @@ describe('a wallet tap reaches the wallet before any network request', () => {
       }),
     } as unknown as NearWalletBase
     await setupWallet({ wallet, accountId: ME, walletId: 'meteor-wallet', contract: CONTRACT, deposit: NEAR / 5n, store, rpc: c.rpc, sleep: async () => undefined, keyOnChain: prep.keyOnChain })
-    expect(events[0]).toBe('wallet')
+    // the wallet's successful AddKey outcome proves the key is on chain: no polling afterwards either (a slow RPC once held
+    // the page on "Checking the chain…" for ~3 minutes after both transactions had landed)
+    expect(events).toEqual(['wallet'])
   })
 
   it('setup without a prepared read still works (it reads the chain first, as before)', async () => {

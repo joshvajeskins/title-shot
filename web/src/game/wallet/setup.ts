@@ -116,10 +116,14 @@ export async function setupWallet(i: SetupInput): Promise<{ accountId: string; r
     })
   }
   i.onStage?.('confirm')
-  // the wallet answered; wait until an RPC node sees the key before the first challenge relies on it
-  let seen = keyOnChain
-  for (let n = 0; n < 12 && !seen; n++) {
-    seen = (await hasSessionKey(rpc, i.accountId, sessionPublic, i.contract)) === true
+  // The wallet's own outcome for the AddKey tx is proof the key is on chain: no polling needed. Otherwise (a wallet that
+  // returns no outcome) poll briefly with short per-call timeouts, so a slow or rate-limited RPC cannot hold the page on
+  // "Checking the chain…" for minutes (seen live on 15 Nov: ~3 min after both txs had landed).
+  let seen = keyOnChain || receipts.some((r) => r.label === 'session key added')
+  const poll = i.rpc ?? new Rpc({ urls: rpcUrls(), timeoutMs: 4000 })
+  const until = Date.now() + 20_000
+  for (let n = 0; n < 12 && !seen && Date.now() < until; n++) {
+    seen = (await hasSessionKey(poll, i.accountId, sessionPublic, i.contract)) === true
     if (!seen) await sleep(1200)
   }
   if (!seen) throw new GameError('E_SLOW', 'The wallet approved, but the network has not shown the session key yet. Try again in a minute: the same key is reused.')
