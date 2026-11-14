@@ -18,7 +18,7 @@ def stt(path):
     return ""
 
 
-def tts(voice, text, stab, sim, out, model="eleven_v4"):  # newest model for any new line (Gabriel, 14 Nov); existing raw takes are reused
+def tts(voice, text, stab, sim, out, model="eleven_v4"):  # newest model for any new line; existing raw takes are reused
     r = requests.post(f"{API}/v1/text-to-speech/{voice}?output_format=mp3_44100_128", headers=H,
                       json={"text": text, "model_id": model, "voice_settings": {"stability": stab, "similarity_boost": sim}}, timeout=300)
     if r.status_code != 200:

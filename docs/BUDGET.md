@@ -7,9 +7,9 @@ $0.00064. Portraits `black-forest-labs/FLUX.2-klein-4B` $0.012 each, signed (pro
 
 ## Budgets
 - `NEARAI_BUDGET_USD` (config, per key): the lifetime hard stop for that key. Current key: 2.50 (build, tests, demo).
-  Launch key (fresh account, ~$10 funded by Gabriel): ~9.00 via the rotate script.
-- `NEARAI_PUBLIC_DAILY_USD` (config): what public (non-owner) traffic may spend per UTC day. Current key: 0.05.
-  `NEARAI_PUBLIC_TOTAL_USD`: lifetime public share on this key. Current key: 0.25. Launch key: e.g. 1.00/day, 8.50 total.
+  Launch key (fresh account, ~$10 funded by the team): ~9.00 via the rotate script.
+- `NEARAI_PUBLIC_DAILY_USD` (config): what public (non-owner) traffic may spend per UTC day. Current key: 0.40.
+  `NEARAI_PUBLIC_TOTAL_USD`: lifetime public share on this key. Current key: 1.00. Launch key: e.g. 1.00/day, 8.50 total.
 - The ledger is keyed by `fp = sha256(key)[0..16]` hex (never the key). A new key → a fresh ledger automatically.
 
 ## Worker ledger (web/functions/_lib/ledger.ts, KV)

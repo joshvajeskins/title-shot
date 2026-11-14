@@ -84,7 +84,7 @@ Explorer: `https://explorer.testnet.near.org/transactions/<tx>`.
    Worked: a local fallback proxy (query on drpc, broadcast on `test.rpc.fastnear.com`, strips intea's non-standard
    `note` field which breaks `near-jsonrpc-client`), exported as `OUTLAYER_RPC_URL` (`python3 -I scripts/rpcproxy.py 8911`; for `near` use a private config dir with `rpc_url = http://127.0.0.1:8911/` under `HOME=<dir>` so the shared near-cli config is untouched). `outlayer run` always blocks
    about 2 minutes regardless of the real round trip.
-6. **Local toolchain traps.** `~/Documents/agents/bin/ar` shadows `/usr/bin/ar` and breaks `secp256k1-sys`/`zstd-sys`
+6. **Local toolchain traps.** A non-system `ar` on PATH shadows `/usr/bin/ar` and breaks `secp256k1-sys`/`zstd-sys`
    host builds of the contract tests: `AR=/usr/bin/ar CC=/usr/bin/clang cargo test`. The contract needs the pinned
    `Cargo.lock` copied from Stand-in's blocklist and `rust-toolchain.toml` 1.86.0 (newer near-sdk deps need rustc 1.88+).
 7. **NEAR AI signature facts used** (from docs.near.ai, not yet seen live): `signature_kind` must be stated by the API

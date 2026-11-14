@@ -7,7 +7,7 @@
 # TITLESHOT_WASM=/path/to/titleshot.wasm overrides the wasm under test.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
-# A fleet script named `ar` can shadow /usr/bin/ar on this machine and must never run.
+# A non-system `ar` on PATH can shadow /usr/bin/ar on this machine and must never run.
 export PATH=/usr/bin:$PATH AR=/usr/bin/ar CC=/usr/bin/clang
 "$here/../mocks/build.sh" >/dev/null
 if [ "${REBUILD:-}" = "1" ] || { [ -z "${TITLESHOT_WASM:-}" ] && [ ! -f "$here/../res/titleshot.wasm" ]; }; then

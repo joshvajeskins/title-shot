@@ -1,5 +1,4 @@
-# ~/Documents/agents/bin held fleet scripts named ar/as that shadow system tools (ar is now renamed fleet-ar).
-# Pin the archiver so cc-based build scripts never execute it.
+# A non-system `ar`/`as` on PATH can shadow the system tools: pin them so cc-based build scripts never run another binary.
 [env]
 AS = "/usr/bin/as"
 AR = "/usr/bin/ar"
