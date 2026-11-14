@@ -5,7 +5,7 @@ import { belt, CONTRACT, fighter, fightRow, payout, season, NOW_MS, ns, TOLL } f
 import { createGuest, floorOf, guestBody, guestName } from '../functions/_lib/guest'
 import { buildState } from '../functions/_lib/state'
 import { clearFighterCache } from '../functions/_lib/chain'
-import { clearMemoryCache, putJson } from '../functions/_lib/cache'
+import { clearMemoryCache, putJson, scoped } from '../functions/_lib/cache'
 import { trackKey } from '../functions/_lib/tickPayouts'
 import { Rpc } from '../src/game/chain/rpc'
 import { Signer } from '../src/game/chain/signer'
@@ -77,7 +77,7 @@ describe('guest accounts', () => {
     const fc = acts[3]!.addKey!.accessKey.permission.functionCall!
     expect(fc.receiverId).toBe(CONTRACT)
     expect(fc.methodNames).toEqual(['challenge'])
-    expect(fc.allowance).toBe(100_000_000_000_000_000_000_000n)
+    expect(fc.allowance).toBe(270_000_000_000_000_000_000_000n) // 6 tolls of 0.05 x 0.03 NEAR prepaid gas x 1.5: the allowance never gets unused gas back
     const keyBytes = (a: number) => Uint8Array.from((acts[a]!.addKey!.publicKey as any).ed25519Key.data as ArrayLike<number>)
     expect(equalBytes(keyBytes(2), parsePublicKey(b.publicKey))).toBe(true)
     expect(equalBytes(keyBytes(3), parsePublicKey(b.sessionKey))).toBe(true)
@@ -216,8 +216,8 @@ describe('GET /api/state builds the whole lobby from the contract', () => {
   }
   it('maps belts (hiding a belt with no champion), fights with names, wallets and the last bell', async () => {
     const { e, near, base, kv } = rig()
-    await putJson(kv, trackKey(8), { hash: '0xfeed', status: 'mined', at: NOW_MS })
-    await putJson(kv, 'tick:last', { at: NOW_MS, ms: 5, steps: [] })
+    await putJson(kv, trackKey(CONTRACT, 8), { hash: '0xfeed', status: 'mined', at: NOW_MS })
+    await putJson(kv, scoped(CONTRACT, 'tick:last'), { at: NOW_MS, ms: 5, steps: [] })
     const s = await buildState(e, sim(), near, base, NOW_MS)
     expect(s.contract).toBe(CONTRACT)
     expect(s.forgeMode).toBe('outlayer')

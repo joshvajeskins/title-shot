@@ -74,7 +74,21 @@ export async function parseBody<T>(request: Request, schema: ZodType<T>): Promis
   return r.data
 }
 
-export const clientIp = (request: Request): string => (request.headers.get('cf-connecting-ip') ?? request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'local').slice(0, 64)
+/**
+ * The rate-limit identity of a request: the IPv4 address, or the /64 prefix of an IPv6 one (one subscriber usually holds a
+ * whole /64, so per-address limits would be free to rotate around).
+ */
+export const clientIp = (request: Request): string => ipBucket((request.headers.get('cf-connecting-ip') ?? request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'local').slice(0, 64))
+
+export function ipBucket(ip: string): string {
+  if (!ip.includes(':') || /^::ffff:\d+\.\d+\.\d+\.\d+$/i.test(ip)) return ip.replace(/^::ffff:/i, '')
+  const [head = '', tail = ''] = ip.toLowerCase().split('%')[0]!.split('::')
+  const h = head ? head.split(':') : []
+  const t = ip.includes('::') && tail ? tail.split(':') : []
+  const groups = ip.includes('::') ? [...h, ...Array(Math.max(0, 8 - h.length - t.length)).fill('0'), ...t] : h
+  if (groups.length !== 8 || !groups.every((g) => /^[0-9a-f]{1,4}$/.test(g))) return ip // not a plain IPv6 address: keep it whole
+  return groups.slice(0, 4).map((g) => g.replace(/^0+(?=.)/, '')).join(':') + '::/64'
+}
 
 /** 64 lowercase/uppercase hex chars -> lowercase, else 400. */
 export const hashParam = z.string().regex(/^[0-9a-fA-F]{64}$/, 'expected a 64-character hex hash').transform((s) => s.toLowerCase())

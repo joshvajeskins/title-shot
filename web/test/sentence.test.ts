@@ -114,9 +114,20 @@ describe('a refund after forging reads as a refund', () => {
     expect(messageFor('E_SELF')).toBe('You hold this belt. You cannot challenge yourself.')
     expect(messageFor('E_CLOSED')).toBe('This season is already closed.')
   })
-  it('other codes keep their messages; unknown codes still get the generic text', () => {
+  it('other codes keep their messages; every refund says the toll came back, unknown codes included', () => {
     expect(refundMessageFor('E_TIMEOUT')).toBe(messageFor('E_TIMEOUT'))
-    expect(refundMessageFor('E_WHAT')).toBe('The contract refused: E_WHAT.')
-    expect(refundMessageFor(null)).toBe('Something went wrong. Try again.')
+    expect(refundMessageFor('E_WHAT')).toBe('The forge was refused (E_WHAT). Your toll was refunded minus the forge fee.')
+    expect(refundMessageFor(null)).toMatch(/refunded minus the forge fee/)
+    expect(refundMessageFor('E_EMPTY_FIELD')).toBe('The AI left part of the fighter blank, so it was rejected. Your toll was refunded minus the forge fee.')
+  })
+  it('E_SAME_SENTENCE and E_NO_CHAMPION stored at bout time are refunds, not "write a different one" alone', () => {
+    for (const code of ['E_SAME_SENTENCE', 'E_NO_CHAMPION']) {
+      const d = describeChallenge(challenge({ status: 'Refunded', code })) as { message: string }
+      expect(d.message).toMatch(/toll came back minus the forge fee/)
+    }
+    expect(messageFor('E_SAME_SENTENCE')).toBe('That is the champion\'s own sentence. Write a different one.')
+  })
+  it('E_NOT_READY (deploy gates unmet) reads as "not open yet", not a raw code', () => {
+    expect(messageFor('E_NOT_READY')).toMatch(/not open yet/)
   })
 })

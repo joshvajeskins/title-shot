@@ -22,6 +22,8 @@ export interface ContractConfig {
   prefix_sha256: string; suffix_sha256: string
 }
 
+export interface DeployGates { ok: boolean; ready: boolean; failing: { gate: string; why: string; blocking: boolean }[] }
+
 export class Chain {
   readonly rpc: Rpc
   readonly id: string
@@ -52,6 +54,8 @@ export class Chain {
   allowlist = () => this.view<{ active: string[]; pending: string[] | null }>('get_allowlist')
   stats = () => this.view<{ next_challenge_id: number; challenges: number }>('stats')
   fighterBySentence = (sentence: string) => this.view<RawFighter | null>('get_fighter_by_sentence', { sentence })
+  /** Unmet deploy conditions; `ready: false` means `challenge` refuses every call with E_NOT_READY. */
+  deployGates = () => this.view<DeployGates>('get_deploy_gates')
 
   /** Immutable per hash (only the record changes), so a 5 minute memory cache is plenty. */
   async fighter(hash: string, now = Date.now()): Promise<RawFighter | null> {

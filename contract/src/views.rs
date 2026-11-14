@@ -84,7 +84,7 @@ impl Contract {
             "hash": hex32(&c.hash), "status": label(&c.status), "code": code, "detail": detail, "fight_id": fight_id,
             "created_at": U64(c.created_at), "need_compile": c.need_compile,
             "kind": if c.kind == ChallengeKind::Opener { "Opener" } else { "Challenge" },
-            "toll": U128(c.toll), "fee": U128(c.fee), "relayer": c.relayer,
+            "toll": U128(c.toll), "fee": U128(c.fee), "relayer": c.relayer, "storage_charge": U128(c.storage_charge),
         })
     }
 
@@ -120,6 +120,10 @@ impl Contract {
 impl Contract {
     pub fn get_config(&self) -> Raw {
         let secrets = self.secrets.as_ref().map(|(p, o)| json!({ "profile": p, "owner": o }));
+        let pending = self.pending_config.as_ref().map(|p| {
+            let req = p.request.as_ref().map(|r| self.request_json(&r.model_id, &r.prefix, &r.suffix, r.gateway));
+            json!({ "request": req, "forge_mode": p.mode.map(|m| m.name()), "activates_at": U64(p.activates_at) })
+        });
         json!({
             "owner": self.owner, "outlayer": self.outlayer, "forge_project": self.forge_project, "mpc_signer": self.mpc_signer,
             "model_id": self.model_id, "signature_kind": if self.gateway_kind { "gateway" } else { "provider_tee" },
@@ -130,7 +134,7 @@ impl Contract {
             "allowlist_delay_sec": self.allowlist_delay_ns / ONE_SEC_NS,
             "vrf_pubkey": self.vrf_pubkey.map(crate::hex::encode), "forge_secrets": secrets,
             "belt_count": self.belt_count, "account_storage": U128(ACCOUNT_STORAGE), "min_forge_fee": U128(MIN_FORGE_FEE),
-            "forge_timeout_sec": FORGE_TIMEOUT_NS / ONE_SEC_NS,
+            "forge_timeout_sec": FORGE_TIMEOUT_NS / ONE_SEC_NS, "pending_config": pending,
         })
     }
 
@@ -249,6 +253,7 @@ impl Contract {
             "tolls": U128(s.tolls), "deposits": U128(s.deposits), "withdrawn": U128(s.withdrawn), "fees_spent": U128(s.fees_spent),
             "refunded": U128(s.refunded), "protocol_total": U128(s.protocol), "protocol_balance": U128(self.protocol_balance),
             "protocol_withdrawn": U128(s.protocol_withdrawn), "storage_charged": U128(s.storage_charged),
+            "opener_fees": U128(s.opener_fees), "forging": s.forging,
             "challenges": s.challenges, "bouts": s.bouts, "forged": s.forged, "rejected": s.rejected, "refunds": s.refunds,
             "belts": self.belt_count, "next_challenge_id": self.next_challenge, "next_fight_id": self.next_fight,
         })

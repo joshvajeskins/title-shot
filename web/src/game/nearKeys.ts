@@ -1,8 +1,10 @@
 // Guest account keys live in this browser only (`ts-account`). Never sent anywhere except as public keys to /api/guest.
-import { formatPublicKey, formatSecretKey, generateKeyPair, type KeyPair } from './chain/keys'
+import { formatPublicKey, formatSecretKey, generateKeyPair, parseSecretKey, type KeyPair } from './chain/keys'
 
 export const ACCOUNT_KEY = 'ts-account'
 const ARCHIVE_KEY = 'ts-account-archive'
+/** Keys of a guest whose /api/guest request has not succeeded yet: kept so a retry resumes the same account (and its key is never lost). */
+export const PENDING_KEY = 'ts-account-pending'
 
 export interface StoredAccount {
   accountId: string
@@ -32,6 +34,21 @@ export function newGuestKeys(): NewKeys {
   const session = generateKeyPair()
   return { full, session, fullPublic: formatPublicKey(full.publicKey), sessionPublic: formatPublicKey(session.publicKey) }
 }
+
+const keysFrom = (full: KeyPair, session: KeyPair): NewKeys => ({ full, session, fullPublic: formatPublicKey(full.publicKey), sessionPublic: formatPublicKey(session.publicKey) })
+
+/** The keys of an unfinished guest creation, or fresh ones (saved before the request is sent). */
+export function pendingOrNewKeys(store: KeyStore): NewKeys {
+  try {
+    const p = JSON.parse(store.get(PENDING_KEY) ?? 'null') as { fullKey?: string; sessionKey?: string } | null
+    if (p?.fullKey && p.sessionKey) return keysFrom(parseSecretKey(p.fullKey), parseSecretKey(p.sessionKey))
+  } catch { /* unreadable: start over */ }
+  const keys = newGuestKeys()
+  store.set(PENDING_KEY, JSON.stringify({ fullKey: formatSecretKey(keys.full), sessionKey: formatSecretKey(keys.session), createdAt: Date.now() }))
+  return keys
+}
+
+export function clearPending(store: KeyStore): void { store.remove(PENDING_KEY) }
 
 export function isStoredAccount(x: unknown): x is StoredAccount {
   const o = x as StoredAccount

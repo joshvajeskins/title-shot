@@ -15,7 +15,11 @@ export class Signer {
   private get lastNonce(): bigint { return lastNonces.get(this.nonceKey) ?? 0n }
   private set lastNonce(n: bigint) { lastNonces.set(this.nonceKey, n) }
   private get nonceKey(): string { return `${this.accountId}|${this.publicKey}` }
-  constructor(readonly accountId: string, readonly key: KeyPair, readonly rpc: Rpc) {}
+  /**
+   * `confirmPolls` x `confirmGapMs`: how long an ambiguous send is looked up before it counts as "not landed". RPC providers
+   * spread requests over nodes, so one lagging node's UNKNOWN_TRANSACTION right after another node took the nonce is not proof.
+   */
+  constructor(readonly accountId: string, readonly key: KeyPair, readonly rpc: Rpc, private opts: { confirmPolls?: number; confirmGapMs?: number } = {}) {}
 
   get publicKey(): string { return formatPublicKey(this.key.publicKey) }
 
@@ -50,7 +54,7 @@ export class Signer {
         if (msg.includes('InvalidNonce')) {
           // our own tx may be what took the nonce (an earlier send that "failed", or one node timing out while another got it)
           for (const h of [...new Set([...ambiguous, tx.hash])]) {
-            const landed = await this.landed(h)
+            const landed = await this.landed(h, ambiguous.includes(h) ? this.opts.confirmPolls ?? 4 : 1)
             if (landed === true) return h
             if (landed === null) throw e // cannot tell whether our earlier send landed: never sign a second tx on a guess
           }
@@ -63,8 +67,17 @@ export class Signer {
     }
   }
 
-  /** Does the chain know this tx (any status)? null when that cannot be determined. */
-  private async landed(hash: string): Promise<boolean | null> {
+  /** Does the chain know this tx (any status)? Asked `polls` times before answering false; null when it cannot be determined. */
+  private async landed(hash: string, polls: number): Promise<boolean | null> {
+    for (let i = 0; i < polls; i++) {
+      if (i > 0) await sleep(this.opts.confirmGapMs ?? 1500)
+      const r = await this.landedOnce(hash)
+      if (r !== false) return r
+    }
+    return false
+  }
+
+  private async landedOnce(hash: string): Promise<boolean | null> {
     try {
       const r = await this.rpc.txStatus(hash, this.accountId, 'NONE')
       return !!r && (!!r.transaction || !!r.final_execution_status || !!r.status)

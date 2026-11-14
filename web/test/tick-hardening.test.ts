@@ -1,10 +1,10 @@
 // Payout signing back-off after soft failures, and the purse funding record (save before broadcast, never broadcast unsaved).
 import { describe, expect, it } from 'vitest'
-import { belt, season, payout, ns, NOW_MS } from './fixtures'
+import { belt, season, payout, ns, NOW_MS, CONTRACT } from './fixtures'
 import { run, setup, world, methods, type World } from './tick-rig'
 import { MAX_SIGN_ATTEMPTS, signBackoffMs, signFailKey } from '../functions/_lib/tickPayouts'
 import { fundPurse } from '../functions/_lib/purse'
-import { getJson } from '../functions/_lib/cache'
+import { getJson, scoped } from '../functions/_lib/cache'
 import type { MemKV } from './helpers'
 
 const MIN = 60_000
@@ -45,7 +45,7 @@ describe('sign_payout soft failures back off 1, 2, 4, 8 minutes and stop after 6
       await run(d)
     }
     expect(signCalls(calls)).toBe(6)
-    expect(await getJson(kv, signFailKey(1))).toMatchObject({ n: 6 })
+    expect(await getJson(kv, signFailKey(CONTRACT, 1))).toMatchObject({ n: 6 })
     w.now = NOW_MS + 24 * 60 * MIN
     const log = await run(d)
     expect(signCalls(calls)).toBe(6)
@@ -57,7 +57,7 @@ describe('sign_payout soft failures back off 1, 2, 4, 8 minutes and stop after 6
   it('the sixth failure itself already reports SIGN_GAVE_UP', async () => {
     const w = unsigned()
     const { d, kv } = setup(w, NO_VANCE)
-    await (kv as MemKV).put(signFailKey(1), JSON.stringify({ n: 5, next: 0 }))
+    await (kv as MemKV).put(signFailKey(CONTRACT, 1), JSON.stringify({ n: 5, next: 0 }))
     const log = await run(d)
     expect(log.steps.find((s) => s.action === 'sign_payout#1' && s.detail?.startsWith('SIGN_GAVE_UP'))).toBeTruthy()
   })
@@ -65,10 +65,10 @@ describe('sign_payout soft failures back off 1, 2, 4, 8 minutes and stop after 6
   it('SIGN_GAVE_UP is a stable code the public state shows; clearing the KV key (scripts/reset-sign-payout.sh) resumes signing', async () => {
     const w = unsigned({ softSign: false })
     const { d, calls, kv } = setup(w, NO_VANCE)
-    await (kv as MemKV).put(signFailKey(1), JSON.stringify({ n: 6, next: 0 }))
+    await (kv as MemKV).put(signFailKey(CONTRACT, 1), JSON.stringify({ n: 6, next: 0 }))
     await run(d)
     expect(signCalls(calls)).toBe(0)
-    await kv.delete(signFailKey(1))
+    await kv.delete(signFailKey(CONTRACT, 1))
     await run(d)
     expect(signCalls(calls)).toBe(1)
   })
@@ -77,13 +77,13 @@ describe('sign_payout soft failures back off 1, 2, 4, 8 minutes and stop after 6
     const w = unsigned()
     const { d, calls, kv } = setup(w, NO_VANCE)
     await run(d)
-    expect(await getJson(kv, signFailKey(1))).toMatchObject({ n: 1 })
+    expect(await getJson(kv, signFailKey(CONTRACT, 1))).toMatchObject({ n: 1 })
     w.softSign = false
     w.now = NOW_MS + MIN
     const log = await run(d)
     expect(signCalls(calls)).toBe(2)
     expect(log.steps.find((s) => s.action === 'sign_payout#1')).toMatchObject({ ok: true })
-    expect(await getJson(kv, signFailKey(1))).toBeNull()
+    expect(await getJson(kv, signFailKey(CONTRACT, 1))).toBeNull()
   })
 
   it('each payout backs off on its own', async () => {
@@ -91,7 +91,7 @@ describe('sign_payout soft failures back off 1, 2, 4, 8 minutes and stop after 6
     const { d, calls, kv } = setup(w, NO_VANCE)
     await run(d)
     expect(signCalls(calls)).toBe(2)
-    await (kv as MemKV).put(signFailKey(1), JSON.stringify({ n: 6, next: 0 })) // payout 1 gave up, payout 2 did not
+    await (kv as MemKV).put(signFailKey(CONTRACT, 1), JSON.stringify({ n: 6, next: 0 })) // payout 1 gave up, payout 2 did not
     w.now = NOW_MS + MIN
     await run(d)
     expect(calls.filter((c) => c.method === 'sign_payout').map((c) => c.args.payout_id)).toEqual([1, 2, 2])
@@ -103,7 +103,7 @@ describe('sign_payout soft failures back off 1, 2, 4, 8 minutes and stop after 6
     await run(d)
     await run(d)
     expect(signCalls(calls)).toBe(2)
-    expect(await getJson(kv, signFailKey(1))).toBeNull()
+    expect(await getJson(kv, signFailKey(CONTRACT, 1))).toBeNull()
   })
 })
 
@@ -123,7 +123,7 @@ describe('the funding record is saved before the broadcast, and a failed save bl
     const { d, sent, calls, kv } = setup(w)
     const put = (kv as MemKV).put.bind(kv)
     let broken = true
-    ;(kv as MemKV).put = async (k: string, v: string | ArrayBuffer, o?: { expirationTtl?: number }) => { if (broken && k.startsWith('fund:')) throw new Error('KV PUT failed: 429'); return put(k, v) }
+    ;(kv as MemKV).put = async (k: string, v: string | ArrayBuffer, o?: { expirationTtl?: number }) => { if (broken && k.startsWith(scoped(CONTRACT, 'fund:'))) throw new Error('KV PUT failed: 429'); return put(k, v) }
     const first = await run(d)
     expect(first.steps.find((s) => s.action === 'fund_purse')).toMatchObject({ ok: false })
     expect(first.steps.find((s) => s.action === 'fund_purse')!.detail).toMatch(/^FUND_SAVE_FAILED/)

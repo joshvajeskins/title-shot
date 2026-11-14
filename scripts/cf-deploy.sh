@@ -43,6 +43,8 @@ for v in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID; do
 done
 
 echo "== $MODE deploy of $PROJECT (branch $BRANCH) for contract $CONTRACT_ID$([ "$DRY" = 1 ] && echo '  [DRY RUN: nothing is executed]')"
+# Tick state in KV is scoped by contract id, but the preview environment (and its secrets) is still shared with staging.
+[ "$MODE" = production ] && [ "$BRANCH" != main ] && echo "WARNING: production on branch '$BRANCH' shares the preview environment with staging; use --branch main for a separate one" >&2
 
 # 1. vars: patch web/wrangler.toml for this deploy, restore it afterwards
 TOML=web/wrangler.toml
@@ -75,16 +77,18 @@ run "${W[@]}" pages deploy dist --project-name "$PROJECT" --branch "$BRANCH" --c
 # 4. check the deployed API reports the right compiler and contract
 URL="https://$BRANCH.$PROJECT.pages.dev"
 WANT=${COMPILER:-nearai}
-echo "+ curl -s $URL/api/state   (expect compiler=\"$WANT\", contract=\"$CONTRACT_ID\")"
+FORGE=relayer; [ "$MODE" = production ] && FORGE=outlayer
+EXPECT="$WANT $CONTRACT_ID $FORGE"
+echo "+ curl -s $URL/api/state   (expect compiler=\"$WANT\", contract=\"$CONTRACT_ID\", forgeMode=\"$FORGE\")"
 if [ "$DRY" != 1 ]; then
   OK=0
   for i in 1 2 3 4 5 6; do
     GOT=$(curl -s -m 20 "$URL/api/state" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const j=JSON.parse(s);console.log((j.compiler||j.code||"?")+" "+(j.contract||"")+" "+(j.forgeMode||""))}catch{console.log("unreadable")}})')
     echo "  try $i: $GOT"
-    [ "$GOT" = "$WANT $CONTRACT_ID relayer" ] || [ "$MODE" = production -a "${GOT%% *}" = "$WANT" ] && { OK=1; break; }
+    [ "$GOT" = "$EXPECT" ] && { OK=1; break; }
     sleep 5
   done
-  [ "$OK" = 1 ] || { echo "the deployed /api/state does not report compiler=$WANT contract=$CONTRACT_ID" >&2; exit 1; }
+  [ "$OK" = 1 ] || { echo "the deployed /api/state does not report \"$EXPECT\" (compiler contract forgeMode)" >&2; exit 1; }
 fi
 echo "+ node scripts/smoke.mjs $URL"
 echo "== done: $URL"

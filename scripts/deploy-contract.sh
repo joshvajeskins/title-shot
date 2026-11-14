@@ -117,6 +117,11 @@ done
 
 # 6. what is still open before this contract may be called a deployment
 echo "== get_deploy_gates"
-run "$NEAR" contract call-function as-read-only "$ACCOUNT" get_deploy_gates json-args '{}' network-config "$NET" now
 [ "$MODE" = staging ] && echo "(staging: the only expected gate is forge_mode=relayer; the stand-in signer is $(tsx address))"
+if [ "$DRY" = 1 ]; then run "$NEAR" contract call-function as-read-only "$ACCOUNT" get_deploy_gates json-args '{}' network-config "$NET" now; else
+  show "$NEAR" contract call-function as-read-only "$ACCOUNT" get_deploy_gates json-args '{}' network-config "$NET" now
+  GATES=$(view contract call-function as-read-only "$ACCOUNT" get_deploy_gates json-args '{}' network-config "$NET" now)
+  # exits non-zero (and so does this script) when challenge() would refuse every call, or staging has an unexpected gate
+  printf '%s' "$GATES" | node "$ROOT/scripts/check-gates.mjs" "$MODE"
+fi
 echo "== next: CONTRACT_ID=$ACCOUNT scripts/cf-deploy.sh $MODE   (and fund $ACCOUNT's endowment if get_solvency reports a deficit)"

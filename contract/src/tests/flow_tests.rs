@@ -194,14 +194,14 @@ fn double_delivery_and_late_delivery_after_expiry_are_no_ops() {
     e.at("carol.testnet", 0);
     let before = e.bal("bob.testnet");
     assert!(e.c.expire_challenge(b));
-    assert_eq!(e.bal("bob.testnet"), before + TOLL - FEE, "refund minus the forge fee");
+    assert_eq!(e.bal("bob.testnet"), before + TOLL - FEE - e.charged(b), "refund minus the forge fee and its storage");
     assert_eq!(e.status(b), "Refunded");
     assert_eq!(e.c.get_challenge(b).unwrap()["code"], "E_TIMEOUT");
     assert!(e.c.get_pending(acct("bob.testnet")).is_none());
     // Late callback after expiry: no-op, nobody is paid twice.
     let late = e.output(s2, &raw_for(s2), true, 5);
     assert_eq!(e.c.settle(b, crate::forge_out::parse_str(&late), false), "Refunded");
-    assert_eq!(e.bal("bob.testnet"), before + TOLL - FEE);
+    assert_eq!(e.bal("bob.testnet"), before + TOLL - FEE - e.charged(b));
     // Expiring a resolved challenge is a soft no-op.
     assert!(!e.c.expire_challenge(id));
 }
@@ -231,7 +231,7 @@ fn promise_failure_null_and_garbage_all_refund_minus_the_fee() {
             near_sdk::PromiseResult::Successful(bytes.as_bytes().to_vec()),
         );
         assert_eq!(e.c.on_forged(id), "Refunded", "{bytes}");
-        assert_eq!(e.bal("alice.testnet"), before - FEE, "refund = toll - fee");
+        assert_eq!(e.bal("alice.testnet"), before - FEE - e.charged(id), "refund = toll - fee - storage");
         assert!(e.c.get_pending(acct("alice.testnet")).is_none());
     }
     let mut e = Env::new("relayer");

@@ -14,6 +14,9 @@ pub const MIN_FORGE_FEE: u128 = 10_000_000_000_000_000_000_000;
 pub const FORGE_TIMEOUT_NS: u64 = 600 * ONE_SEC_NS;
 /// A signing request that has not answered in 10 minutes can be reset by anyone.
 pub const SIGN_TIMEOUT_NS: u64 = 600 * ONE_SEC_NS;
+/// A payee-signed payout tx that is still the stored one this long after signing may be replaced by anyone, at a strictly
+/// higher (still 1%-clamped) fee: a payee can never hold the later nonces of the purse hostage.
+pub const PAYEE_GRACE_NS: u64 = 1800 * ONE_SEC_NS;
 pub const MAX_DEFENDERS: usize = 64;
 
 pub fn token_id(belt_id: u32) -> String {
@@ -73,12 +76,12 @@ impl Contract {
     }
 
     /// Everything the contract owes in NEAR: all player balances, the protocol share, side-pots and tolls in
-    /// flight. Every NEAR that entered through `deposit` and has neither been withdrawn, spent on a forge fee
+    /// flight. Every NEAR that entered through `deposit` (or as an opener fee the promoter attached) and has neither been withdrawn, spent on a forge fee
     /// nor paid out as protocol share is still owed to someone. (OutLayer's refund of an unused fee is not counted:
     /// it only adds to the endowment.)
     pub fn owed(&self) -> u128 {
         let s = &self.stats;
-        s.deposits
+        (s.deposits + s.opener_fees)
             .saturating_sub(s.withdrawn)
             .saturating_sub(s.fees_spent)
             .saturating_sub(s.protocol_withdrawn)

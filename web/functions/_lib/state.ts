@@ -7,7 +7,7 @@ import type { Sim } from '../../src/sim'
 import { baseAddrUrl, baseTxUrl } from '../../src/game/chain/config'
 import { utf8 } from '../../src/game/chain/bytes'
 import { sha256Hex } from '../../src/game/chain/signature'
-import { cachedJson, getJson } from './cache'
+import { cachedJson, getJson, scoped } from './cache'
 import { Chain, type ContractConfig } from './chain'
 import { deriveEvmAddress, getBalance } from './evm'
 import { DEFAULTS, type Env } from './env'
@@ -85,7 +85,7 @@ export async function buildState(env: Env, sim: Sim, near: Rpc, base: Rpc, now =
 
   const tracks: Tracks = new Map()
   const load = async (ids: number[]) => {
-    for (const id of ids) if (!tracks.has(id)) tracks.set(id, await getJson<PayoutTrack>(env.TS_KV, trackKey(id)))
+    for (const id of ids) if (!tracks.has(id)) tracks.set(id, await getJson<PayoutTrack>(env.TS_KV, trackKey(chain.id, id)))
   }
   const payouts: PayoutState[] = []
   for (const b of rawBelts) {
@@ -108,6 +108,6 @@ export async function buildState(env: Env, sim: Sim, near: Rpc, base: Rpc, now =
 
   return {
     at: now, contract: chain.id, forgeMode: cfg.forge_mode, model: cfg.model_id, compiler: compilerOf(env), rulebookHash: rb.hash, rulebookMatch: requestMatches(sim, cfg),
-    belts, fights, payouts, wallets: await cachedJson(env.TS_KV, 'wallets', 20, () => wallets(env, near, base), 40), tick: publicTick(await getJson<TickLog>(env.TS_KV, 'tick:last')),
+    belts, fights, payouts, wallets: await cachedJson(env.TS_KV, scoped(chain.id, 'wallets'), 20, () => wallets(env, near, base), 40), tick: publicTick(await getJson<TickLog>(env.TS_KV, scoped(chain.id, 'tick:last'))),
   }
 }

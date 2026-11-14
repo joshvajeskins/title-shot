@@ -4,7 +4,7 @@ import { run, setup, world, methods, later } from './tick-rig'
 import { runTick, THROTTLE_MS } from '../functions/_lib/tick'
 import { trackKey } from '../functions/_lib/tickPayouts'
 import { txHashOf } from '../functions/_lib/evm'
-import { getJson, putJson } from '../functions/_lib/cache'
+import { getJson, putJson, scoped } from '../functions/_lib/cache'
 import type { PayoutTrack } from '../functions/_lib/tickTypes'
 import type { RawPayout, RawSeason } from '../src/game/chain/views'
 
@@ -21,9 +21,9 @@ describe('the tick is throttled, locked and never throws', () => {
   it('an unexpired lock means another tick is running', async () => {
     const w = world({ belts: [] })
     const { d, kv } = setup(w)
-    await putJson(kv, 'tick:lock', NOW_MS - 5000)
+    await putJson(kv, scoped(CONTRACT, 'tick:lock'), NOW_MS - 5000)
     expect((await runTick(d, { force: true })).skipped).toBe('running')
-    await putJson(kv, 'tick:lock', NOW_MS - 120_000)
+    await putJson(kv, scoped(CONTRACT, 'tick:lock'), NOW_MS - 120_000)
     expect((await runTick(d, { force: true })).skipped).toBeUndefined()
   })
   it('a failing chain is logged, the lock is released and the run is recorded', async () => {
@@ -32,8 +32,8 @@ describe('the tick is throttled, locked and never throws', () => {
     ;(d.chain as any).belts = async () => { throw new Error('rpc down') }
     const log = await run(d)
     expect(log.steps[0]).toMatchObject({ action: 'tick', ok: false })
-    expect(await getJson(kv, 'tick:lock')).toBe(0)
-    expect(await getJson(kv, 'tick:last')).toMatchObject({ at: NOW_MS })
+    expect(await getJson(kv, scoped(CONTRACT, 'tick:lock'))).toBe(0)
+    expect(await getJson(kv, scoped(CONTRACT, 'tick:last'))).toMatchObject({ at: NOW_MS })
   })
   it('a step that throws does not stop the other belts', async () => {
     const w = world({ belts: [belt({ id: 1, season: later(season(), 1000) }), belt({ id: 2, season: later(season(), 1000) })] })
@@ -101,11 +101,11 @@ describe('payouts: sign with estimated fees, broadcast, track, bump', () => {
     const { d, sent, kv } = setup(w)
     await run(d)
     expect(sent).toEqual([raw])
-    const tracked = await getJson<PayoutTrack>(kv, trackKey(1))
+    const tracked = await getJson<PayoutTrack>(kv, trackKey(CONTRACT, 1))
     expect(tracked).toMatchObject({ hash: txHashOf(raw), status: 'sent' })
     w.receipts[txHashOf(raw)] = { status: '0x1' }
     await run(d)
-    expect(await getJson<PayoutTrack>(kv, trackKey(1))).toMatchObject({ status: 'mined' })
+    expect(await getJson<PayoutTrack>(kv, trackKey(CONTRACT, 1))).toMatchObject({ status: 'mined' })
     const n = sent.length
     await run(d)
     expect(sent.length).toBe(n) // terminal: no more broadcasts
@@ -116,32 +116,32 @@ describe('payouts: sign with estimated fees, broadcast, track, bump', () => {
     w.receipts[txHashOf(raw)] = { status: '0x0' }
     const { d, kv } = setup(w)
     await run(d)
-    expect(await getJson<PayoutTrack>(kv, trackKey(1))).toMatchObject({ status: 'reverted' })
+    expect(await getJson<PayoutTrack>(kv, trackKey(CONTRACT, 1))).toMatchObject({ status: 'reverted' })
   })
   it('"already known" and "nonce too low" mean an earlier broadcast landed: not an error', async () => {
     const { d, kv } = setup(Object.assign(withPayouts([payout(1, { raw_tx: '0x02f8ab', nonce: 0 })]), { broadcastError: 'already known' }))
     const log = await run(d)
     expect(log.steps.find((s) => s.action === 'broadcast#1')).toMatchObject({ ok: true, detail: 'already-known' })
-    expect(await getJson<PayoutTrack>(kv, trackKey(1))).toMatchObject({ status: 'sent' })
+    expect(await getJson<PayoutTrack>(kv, trackKey(CONTRACT, 1))).toMatchObject({ status: 'sent' })
   })
   it('a transient broadcast failure is retried next tick, not recorded as sent', async () => {
     const { d, kv } = setup(Object.assign(withPayouts([payout(1, { raw_tx: '0x02f8ac', nonce: 0 })]), { broadcastError: 'internal error' }))
     const log = await run(d)
     expect(log.steps.some((s) => s.ok === false)).toBe(true)
-    expect(await getJson(kv, trackKey(1))).toBeNull()
+    expect(await getJson(kv, trackKey(CONTRACT, 1))).toBeNull()
   })
   it('a tx stuck for 10 minutes is re-signed with a strictly higher maxFee, then the old hash is still watched', async () => {
     const raw = '0x02f8ad'
     const w = withPayouts([payout(1, { raw_tx: raw, nonce: 0, max_fee_per_gas: '300100000', gas_limit: 25200 })])
     const { d, calls, kv } = setup(w)
-    await putJson(kv, trackKey(1), { hash: txHashOf(raw), status: 'sent', at: NOW_MS - 11 * 60_000 } satisfies PayoutTrack)
+    await putJson(kv, trackKey(CONTRACT, 1), { hash: txHashOf(raw), status: 'sent', at: NOW_MS - 11 * 60_000 } satisfies PayoutTrack)
     ;(d.chain as any).season = async () => closed()
     await run(d)
     const c = calls.find((x) => x.method === 'sign_payout')!
     expect(BigInt(c.args.max_fee_per_gas)).toBeGreaterThan(300_100_000n)
     expect(BigInt(c.args.max_fee_per_gas) * 1000n).toBeGreaterThanOrEqual(300_100_000n * 1125n)
     expect(c.args.gas_limit).toBe(25_200)
-    expect(await getJson(kv, trackKey(1))).toMatchObject({ hash: txHashOf(raw), status: 'sent', prior: [txHashOf(raw)] })
+    expect(await getJson(kv, trackKey(CONTRACT, 1))).toMatchObject({ hash: txHashOf(raw), status: 'sent', prior: [txHashOf(raw)] })
   })
 })
 

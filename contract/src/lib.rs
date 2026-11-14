@@ -71,6 +71,8 @@ pub struct Contract {
     pub pending_allowlist: Option<(Vec<Addr>, u64)>,
     pub allowlist_delay_ns: u64,
     pub forge_mode: ForgeMode,
+    /// Staged `set_request` / `set_forge_mode` change (timelocked like the allowlist).
+    pub pending_config: Option<PendingConfig>,
     pub relayers: Vec<AccountId>,
     /// OutLayer VRF ed25519 key; when set, the callback verifies every VRF proof against it.
     pub vrf_pubkey: Option<[u8; 32]>,

@@ -1,6 +1,6 @@
 //! Challenge creation, the OutLayer request, the callback, relayer submit and expiry.
 use crate::codes::*;
-use crate::economy::clean_sentence;
+use crate::economy::{clean_sentence, storage_charge};
 use crate::events::{emit, hex32};
 use crate::forge_out::{self, ParseError};
 use crate::types::*;
@@ -47,6 +47,11 @@ impl Contract {
         c.relayer = self.forge_mode == ForgeMode::Relayer;
         c.need_compile = !self.fighters.contains_key(&c.hash);
         self.stats.challenges += 1;
+        self.stats.forging += 1;
+        if c.kind == ChallengeKind::Opener {
+            // The promoter attached this fee: it came in outside `deposit`, so `owed()` counts it as an inflow.
+            self.stats.opener_fees += c.fee;
+        }
         emit(
             if c.kind == ChallengeKind::Opener { "opener" } else { "challenge" },
             json!({ "challenge_id": id, "belt_id": c.belt_id, "season_id": c.season_id, "challenger": c.challenger,
@@ -70,6 +75,9 @@ impl Contract {
 
     /// Terminal bookkeeping shared by every outcome: pending flags and season counters.
     pub fn finish_challenge(&mut self, c: &mut Challenge, status: Status) {
+        if c.status == Status::Forging {
+            self.stats.forging = self.stats.forging.saturating_sub(1);
+        }
         c.status = status;
         if c.kind == ChallengeKind::Challenge {
             if self.pending.get(&c.challenger) == Some(c.id) {
@@ -82,39 +90,52 @@ impl Contract {
         }
     }
 
-    /// Refund `toll - fee` to the challenger's balance and record `Refunded{code}`. Soft: never panics.
-    pub fn refund(&mut self, mut c: Challenge, code: &str, detail: &str) -> Status {
-        self.return_toll(&c);
-        let status = Status::Refunded { code: code.to_string() };
+    /// Refund `toll - fee - storage` to the challenger's balance and record `Refunded{code}`. Soft: never panics.
+    /// `before` is the `env::storage_usage()` reading taken when this call started (see `fail_challenge`).
+    pub fn refund(&mut self, c: Challenge, code: &str, detail: &str, before: u64) -> Status {
         self.stats.refunds += 1;
-        emit("refunded", json!({ "challenge_id": c.id, "challenger": c.challenger, "code": code, "detail": detail,
-                                 "amount": U128(c.toll.saturating_sub(c.fee)) }));
-        self.finish_challenge(&mut c, status.clone());
-        self.challenges.insert(c.id, c);
-        status
+        self.fail_challenge(c, Status::Refunded { code: code.to_string() }, "refunded", detail, before)
     }
 
-    pub fn reject(&mut self, mut c: Challenge, code: &str, detail: &str) -> Status {
-        self.return_toll(&c);
-        let status = Status::Rejected { code: code.to_string(), detail: detail.to_string() };
+    pub fn reject(&mut self, c: Challenge, code: &str, detail: &str, before: u64) -> Status {
         self.stats.rejected += 1;
-        emit("rejected", json!({ "challenge_id": c.id, "challenger": c.challenger, "code": code, "detail": detail,
-                                 "amount": U128(c.toll.saturating_sub(c.fee)) }));
-        self.finish_challenge(&mut c, status.clone());
-        self.challenges.insert(c.id, c);
-        status
+        self.fail_challenge(c, Status::Rejected { code: code.to_string(), detail: detail.to_string() }, "rejected", detail, before)
     }
 
-    fn return_toll(&mut self, c: &Challenge) {
+    /// A failed challenge still leaves storage behind (its record, and a fighter when the compile succeeded before a
+    /// resolution guard refunded it). Those bytes are measured exactly as for a bout and charged to the toll, with the same
+    /// cap (50% of `toll - fee`), before the rest is refunded. An opener has no toll: its storage is `storage_debt`.
+    fn fail_challenge(&mut self, mut c: Challenge, status: Status, event: &str, detail: &str, before: u64) -> Status {
         if c.kind == ChallengeKind::Opener {
-            self.abort_opener(c);
-            return;
+            self.abort_opener(&c);
         }
-        let back = c.toll.saturating_sub(c.fee);
+        let code = match &status {
+            Status::Refunded { code } | Status::Rejected { code, .. } => code.clone(),
+            _ => String::new(),
+        };
+        self.finish_challenge(&mut c, status.clone());
+        self.challenges.insert(c.id, c.clone());
+        if c.kind == ChallengeKind::Challenge {
+            self.credit(&c.challenger, 0);
+        }
+        let measured = (self.bytes_since(before) + c.storage_bytes as i64).max(0) as u64;
+        let cost = env::storage_byte_cost().as_yoctonear();
+        let r = if c.kind == ChallengeKind::Opener { 0 } else { c.toll.saturating_sub(c.fee) };
+        let charge = storage_charge(r, measured, cost);
+        self.stats.storage_charged += charge;
+        self.stats.storage_debt += (measured as u128).saturating_mul(cost).saturating_sub(charge);
+        let back = r - charge;
         if back > 0 {
             self.credit(&c.challenger, back);
             self.stats.refunded += back;
         }
+        if charge > 0 {
+            c.storage_charge = charge;
+            self.challenges.insert(c.id, c.clone());
+        }
+        emit(event, json!({ "challenge_id": c.id, "challenger": c.challenger, "code": code, "detail": detail,
+                            "amount": U128(back), "storage": U128(charge), "storage_bytes": measured }));
+        status
     }
 }
 
@@ -170,6 +191,7 @@ impl Contract {
             fee: belt.forge_fee,
             relayer: false,
             storage_bytes: 0,
+            storage_charge: 0,
         };
         let id = self.start_forge(c);
         self.pending.insert(who, id);
@@ -208,7 +230,7 @@ impl Contract {
             return false;
         }
         check(now() >= c.created_at + FORGE_TIMEOUT_NS, E_TOO_EARLY);
-        self.refund(c, E_TIMEOUT, "forge timed out");
+        self.refund(c, E_TIMEOUT, "forge timed out", env::storage_usage());
         true
     }
 }

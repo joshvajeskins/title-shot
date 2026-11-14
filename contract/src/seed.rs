@@ -28,8 +28,16 @@ pub fn vrf_entropy(vrf: &VrfOut, pubkey: &Option<[u8; 32]>, challenge_id: u64) -
     if let Some(pk) = pubkey {
         let alpha = vrf.alpha.as_deref().ok_or("missing alpha")?;
         let sig = vrf.signature.as_ref().ok_or("missing signature_hex")?;
-        if !alpha.starts_with("vrf:") || !alpha.ends_with(&format!(":titleshot-challenge-{challenge_id}")) {
+        // alpha must be exactly `vrf:{request_id}:{this contract}:titleshot-challenge-{id}`: a proof made for another
+        // OutLayer caller (same seed string, other sender) is refused.
+        let mid = alpha.strip_prefix("vrf:").and_then(|a| a.strip_suffix(&format!(":titleshot-challenge-{challenge_id}")));
+        let Some(mid) = mid else {
             return Err("alpha is not for this challenge");
+        };
+        let me = env::current_account_id();
+        match mid.split_once(':') {
+            Some((req, sender)) if !req.is_empty() && req.bytes().all(|b| b.is_ascii_digit()) && sender == me.as_str() => {}
+            _ => return Err("alpha is not from this contract"),
         }
         if !env::ed25519_verify(sig, alpha.as_bytes(), pk) {
             return Err("proof does not verify");

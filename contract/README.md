@@ -66,8 +66,9 @@ NOT RUN: a live testnet forge over 1 KB (no NEAR AI key); the path is read from 
   `Refunded{E_FORGE_FAILED|E_FORGE_OUTPUT|E_VRF|E_TIMEOUT|E_SELF|E_CLOSED|E_SAME_SENTENCE|E_STATE}`.
 - **Fee accounting.** Outlayer mode: the forge fee leaves the contract as the OutLayer deposit (`stats.fees_spent`); OutLayer refunds the unused part
   to the contract when it settles (execution.rs "Refund excess NEAR payment"), which is not tracked and only adds to the endowment. Relayer mode: nothing is
-  spent, the fee is credited to the protocol balance at challenge time. Either way a refund is `toll - fee`. `protocol_balance` is withdrawn by
-  `withdraw_protocol(to, amount?)` (owner, 1 yocto).
+  spent, the fee is credited to the protocol balance at challenge time. Either way a refund is `toll - fee - storage` (see "Storage"). `protocol_balance`
+  is withdrawn by `withdraw_protocol(to, amount?)` (owner, 1 yocto). An opener's fee is attached by the promoter, so it is counted as money in
+  (`stats.opener_fees`) and `owed()` stays exact (Opus review).
 - **Storage component** (review fix): see "Storage" below.
 - **Belt ids start at 1**; `create_belt` mints `belt-{id}` to the promoter. A new season's opener moves the belt back to the promoter.
   `open_season` with an empty sentence carries the current champion (and holder) into the new season with no forge and no fee; a sentence whose
@@ -107,8 +108,9 @@ the bytes of the challenge record and pending flag, the callback measures the re
 `env::storage_byte_cost()` out of the toll before the 60/25/10/5 split: `T = F + S + champion + promoter + side_pot + protocol`, exact to the yocto, with
 `S = min(bytes x price, 50% of (T - F))`. `store.rs` writes through, so `env::storage_usage()` is exact at every point of a call. Measured: about 1,150 B
 (0.0115 NEAR, 13% of a 0.1 NEAR toll) for a bout with a new fighter, about 600 B for a cached fighter. If the cap ever bites, the unbilled part is `stats.storage_debt`
-(reported by `get_solvency`, never taken from players). A refunded or rejected challenge pays no storage component; its record (about 400 B) is covered by the forge-fee surplus OutLayer
-returns (relayer mode: the fee is protocol share, which `withdraw_protocol` holds back against the storage deficit). `get_solvency.equity` = balance - storage staking - owed;
+(reported by `get_solvency`, never taken from players). A refunded or rejected challenge (Opus review) pays its storage the same way, out of its refund: its
+record (about 400 B), plus the fighter when a compile was stored before a resolution guard (`E_SELF`, `E_VRF`, ...) refunded it; `get_challenge.storage_charge`
+shows it. Nothing depends on how much of the fee OutLayer gives back. An opener has no toll: its bytes go to `storage_debt`. `get_solvency.equity` = balance - storage staking - owed;
 `t21_storage_solvency` proves it does not fall over 11 bouts (9 new fighters, 2 cached) and over 6 failed forges, and that the bytes the bouts measured equal the account's real storage growth.
 
 ## Deploy gate (review fix, LOW)
@@ -148,22 +150,35 @@ OutLayer settlement callback's own gas (it runs in OutLayer's contract, with 50 
 | String-wrapped forge output branch removed | 419,708 |
 | `raw_value` feature for views (+2.4 KB), hand-written hex (-1.2 KB), shorter gate texts, `get_evm_address` removed (-1.5 KB) | **419,134** |
 
-Final: `res/titleshot.wasm` 419,134 B (about 4.2 NEAR of storage), sha256 `8967df44d93c4e6819aee9a0eea7b142bd53a7c4aecc17c6f02673c346748653`. Biggest remaining parts (twiggy): the exported
+Final (after the Opus review fixes, +8.1 KB): `res/titleshot.wasm` 427,280 B (about 4.3 NEAR of storage), sha256 `1e12d6f3a51131f5aeae31ae309954aae54ab9f2b86e32f7398042ace2732283`. Biggest remaining parts (twiggy): the exported
 methods (~130 KB, each carries its own argument decoding), `settle` 28 KB, the `f64` formatter 15 KB (serde error paths), `on_signed` 10 KB, `bout-sim`'s own `sha2` 7.5 KB.
 Not reproducible-build: `build.sh` is `cargo near build non-reproducible-wasm` plus a local `wasm-opt` pass (Binaryen 133); a different Binaryen gives a different hash.
-Test counts of the final run: native 45/45 (`cargo test --lib`), sandbox 63/63 (t01-t22).
+Test counts of the final run: native 54/54 (`cargo test --lib`), sandbox 66/66 (t01-t24).
 
 ## Known limits (honest)
 - **Payout gas (fixed after review)**: only the payee's own `sign_payout` parameters are used as given. Anyone else (the bell worker)
   can still sign a payout, but the max fee is lowered so `gas_limit * max_fee` stays within 1% of the payout, and the payee can replace such
-  a tx with any parameters (even a lower fee). A stranger can never override a tx the payee signed (`E_NOT_PAYEE`). The payee replacing their
-  own tx still needs a strictly higher fee. Re-signing keeps the nonce. A stranger-signed tx is cheap but may be underpriced if Base Sepolia
-  fees spike above the clamp: the payee then bumps it.
+  a tx with any parameters (even a lower fee). The payee replacing their own tx still needs a strictly higher fee. Re-signing keeps the nonce.
+- **Payout liveness (Opus review, HIGH)**: purse nonces are sequential, so one unmineable tx would block every later payout. The payee's own max fee
+  must be at least 0.001 gwei (`E_GAS`), and 30 minutes after a nonce was first signed anyone may replace even a payee-signed tx at a strictly
+  higher, still 1%-clamped fee (re-signing never restarts that clock). Shares below 0.00001 ETH are folded into the holder's payout at the bell so
+  the clamp always leaves a realistic fee (>= 0.0048 gwei at 21000 gas). Left open: if Base Sepolia's base fee stays above a payout's 1% clamp,
+  only its payee can pay more; a payee re-signing a lower fee over a stranger's tx is allowed (the stranger's higher-fee tx was broadcast first).
+- **Payee privilege without a deposit (LOW, not reachable today)**: `sign_payout` treats the caller as the payee by account alone. A function-call key
+  with an empty method list would carry that privilege; guest keys are `["challenge"]` only. Requiring 1 yocto for the payee path would change
+  the worker and test interface, so it is left documented.
+- **Purse defence farming (LOW, documented)**: a holder's own sybil challenges that lose count as defences and move part of the pro-rata half
+  of the purse (each account still capped at 25%). The "self-dealing is strictly negative" property covers the NEAR toll only, not the purse.
 - **Purse cap**: `open_season` refuses a purse above 1e24 wei (`E_AMOUNT`), so the purse plan cannot overflow and the bell always rings.
 - **Purse address** freezes only once a payout is signing or signed, so a wrong address (first sign fails `recovered_address_mismatch`) can be corrected.
 - **Relayer mode seed** is the block seed (weaker than the VRF).
-- **Owner trust points without a timelock** (documented, not a bug): `set_forge_mode`, `add_relayer`, `set_request`, `set_vrf_pubkey` take effect
-  at once; only the signer allowlist is timelocked. The owner's full-access key can redeploy the contract anyway.
+- **Owner trust points** (Opus review): `set_request` and `set_forge_mode` are now staged behind the allowlist timelock and applied by
+  `apply_config` (a request change also waits for no forging challenge). Still instant: `add_relayer` (only acts on relayer-mode challenges,
+  and switching to relayer mode is timelocked), `set_vrf_pubkey`, `set_forge_secrets`. The owner's full-access key can redeploy the contract anyway.
+- **VRF binding**: with a pinned key the alpha must name this contract as sender; OutLayer's request id is checked for shape only (the contract
+  does not learn it), and the forge `version_key` is not pinned.
+- **State layout changed** in this pass (new fields on `Contract`, `Stats`, `Challenge`, `Payout`, `SignedTx`): deploy to a fresh account,
+  never over an existing initialised one.
 - **Small edge cases (bounded)**: a late MPC callback after `reset_payout_signing` plus a fresh higher-fee sign wastes one signature, no money
   moves; `MAX_DEFENDERS` (64) can be saturated by sybil defenders paying tolls; opener challenge ids are not in `get_pending` (read events).
 - **Not done**: the float formatter (`core::fmt` for `f64`, ~15 KB) stays in the wasm because serde's error paths reference it; the `bout-sim` crate's own `sha2` (~7.5 KB)

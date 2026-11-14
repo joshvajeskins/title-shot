@@ -17,6 +17,8 @@ interface Net {
   /** the chain already holds a tx with this base64 once it was 'ok'-ed, or when `landedDespiteDown` */
   landedDespiteDown?: boolean
   txKnown?: 'yes' | 'no' | 'error'
+  /** answers to successive tx-status lookups (overrides txKnown): a lagging node says 'no' before one that is ahead says 'yes' */
+  txSeq?: ('yes' | 'no')[]
 }
 
 function rig(net: Net) {
@@ -41,13 +43,14 @@ function rig(net: Net) {
       return ok({})
     }
     if (method === 'tx') {
+      if (net.txSeq?.length) return net.txSeq.shift() === 'yes' ? ok({ final_execution_status: 'INCLUDED', status: { SuccessValue: '' }, transaction: {} }) : err('UNKNOWN_TRANSACTION')
       if (net.txKnown === 'error') return new Response('bad gateway', { status: 502 })
       return net.txKnown === 'yes' ? ok({ final_execution_status: 'INCLUDED', status: { SuccessValue: '' }, transaction: {} }) : err('UNKNOWN_TRANSACTION')
     }
     return err('UNKNOWN_METHOD', method)
   }) as unknown as typeof fetch
   const rpc = new Rpc({ fetchFn, urls: ['https://a.test'] })
-  const signer = new Signer(SPONSOR, generateKeyPair(), rpc)
+  const signer = new Signer(SPONSOR, generateKeyPair(), rpc, { confirmGapMs: 5 })
   return { signer, sends }
 }
 
@@ -76,6 +79,13 @@ describe('Signer retries after RpcUnavailable', () => {
     await signer.send(CONTRACT, deposit())
     expect(new Set(sends).size).toBe(2)
     expect(nonceOf(sends[2]!)).toBeGreaterThan(nonceOf(sends[0]!))
+  })
+
+  it('a lagging node answering UNKNOWN_TRANSACTION is not proof: the ambiguous hash is looked up again before a second tx is signed', async () => {
+    const { signer, sends } = rig({ send: (n) => (n === 1 ? 'down' : 'nonce'), landedDespiteDown: true, txSeq: ['no', 'no', 'yes'] })
+    const hash = await signer.send(CONTRACT, deposit())
+    expect(new Set(sends).size).toBe(1) // the deposit was never signed twice
+    expect(hash).toBeTruthy()
   })
 
   it('if the chain cannot say whether the earlier send landed, it gives up with the error instead of signing on a guess', async () => {

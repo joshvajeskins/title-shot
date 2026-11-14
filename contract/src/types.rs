@@ -138,6 +138,8 @@ pub struct Challenge {
     pub relayer: bool,
     /// Bytes this challenge stored when it was created (record, pending flag); billed to its bout.
     pub storage_bytes: u32,
+    /// Storage component taken from the refund of a refunded or rejected challenge (0 otherwise).
+    pub storage_charge: u128,
 }
 
 #[near(serializers = [borsh])]
@@ -189,6 +191,9 @@ pub struct SignedTx {
     pub attempt: u32,
     /// Signed with the payee's own gas parameters (a stranger's tx is clamped and the payee may replace it freely).
     pub by_payee: bool,
+    /// When this nonce was first signed (kept across re-signs): `PAYEE_GRACE_NS` later a stranger may replace a
+    /// payee-signed tx at a strictly higher fee.
+    pub signed_at: u64,
 }
 
 #[near(serializers = [borsh])]
@@ -204,6 +209,27 @@ pub struct Payout {
     pub signed: Option<SignedTx>,
     /// A signing request is in flight: (params, started_at_ns).
     pub signing: Option<(TxParams, u64)>,
+    /// Who asked for the request in flight (read by `on_signed`, never taken from the callback arguments).
+    pub signing_by_payee: bool,
+}
+
+/// Compile request parts (model, prefix/suffix bytes, signature kind).
+#[near(serializers = [borsh])]
+#[derive(Clone)]
+pub struct RequestParts {
+    pub model_id: String,
+    pub prefix: Vec<u8>,
+    pub suffix: Vec<u8>,
+    pub gateway: bool,
+}
+
+/// An owner change staged behind the same timelock as the signer allowlist (`apply_config` after `activates_at`).
+#[near(serializers = [borsh])]
+#[derive(Clone)]
+pub struct PendingConfig {
+    pub request: Option<RequestParts>,
+    pub mode: Option<ForgeMode>,
+    pub activates_at: u64,
 }
 
 #[near(serializers = [borsh])]
@@ -221,6 +247,10 @@ pub struct Stats {
     pub storage_charged: u128,
     /// Storage that bouts stored beyond what the cap let them charge.
     pub storage_debt: u128,
+    /// Forge fees the promoter attached to openers (money that came in outside `deposit`).
+    pub opener_fees: u128,
+    /// Challenges (openers included) still `Forging`.
+    pub forging: u64,
     pub challenges: u64,
     pub bouts: u64,
     pub forged: u64,

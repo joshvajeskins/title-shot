@@ -42,6 +42,11 @@ async fn recorded_signature_vectors_are_accepted_or_refused_exactly_as_the_spike
     for f in files {
         let vec: Value = serde_json::from_str(&std::fs::read_to_string(&f)?)?;
         let name = f.file_name().unwrap().to_string_lossy().to_string();
+        if vec.get("cases").is_none() || vec.get("prefix_b64").is_none() {
+            // A single recorded compile (`nearai-real-*`), not a spike case table: replayed by t24_review_fixes.
+            println!("VECTOR {name}: single recording, replayed by t24");
+            continue;
+        }
         let w = World::with(Opts { delay_sec: 0, ..Opts::default() }).await?;
         w.deposit(&w.bob, 20 * NEAR).await?;
         let (o_s, o_raw) = archetype("hedgehog in samurai armor");

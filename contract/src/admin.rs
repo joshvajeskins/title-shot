@@ -25,6 +25,33 @@ fn check_request(model_id: &str, prefix: &[u8], suffix: &[u8], kind: &str) {
     check(Kind::parse(kind).is_some(), E_CONFIG);
 }
 
+impl Contract {
+    /// The staged change to add to (a new proposal restarts the timelock for everything staged).
+    fn stage_config(&self) -> PendingConfig {
+        self.pending_config.clone().unwrap_or(PendingConfig { request: None, mode: None, activates_at: 0 })
+    }
+
+    fn propose_config(&mut self, mut p: PendingConfig) {
+        p.activates_at = now() + self.allowlist_delay_ns;
+        let req = p.request.as_ref().map(|r| self.request_json(&r.model_id, &r.prefix, &r.suffix, r.gateway));
+        emit("config_proposed", json!({ "request": req, "forge_mode": p.mode.map(|m| m.name()), "activates_at": p.activates_at.to_string() }));
+        let now_ok = self.allowlist_delay_ns == 0 && (p.request.is_none() || self.stats.forging == 0);
+        self.pending_config = Some(p);
+        if now_ok {
+            self.apply_config();
+        }
+    }
+
+    pub fn request_json(&self, model_id: &str, prefix: &[u8], suffix: &[u8], gateway: bool) -> crate::json::Raw {
+        json!({
+            "model_id": model_id,
+            "prefix_sha256": crate::hex::encode(env::sha256_array(prefix)),
+            "suffix_sha256": crate::hex::encode(env::sha256_array(suffix)),
+            "signature_kind": if gateway { "gateway" } else { "provider_tee" },
+        })
+    }
+}
+
 #[near]
 impl Contract {
     #[init]
@@ -60,6 +87,7 @@ impl Contract {
             pending_allowlist: None,
             allowlist_delay_ns: allowlist_delay_sec * ONE_SEC_NS,
             forge_mode: mode,
+            pending_config: None,
             relayers: vec![],
             vrf_pubkey: None,
             secrets: None,
@@ -103,12 +131,36 @@ impl Contract {
         emit("allowlist_applied", json!({ "addrs": addrs }));
     }
 
+    /// Staged behind the allowlist timelock (`apply_config`); with a zero delay it applies at once. Challenges already
+    /// forging keep the mode they were created in.
     #[payable]
     pub fn set_forge_mode(&mut self, mode: String) {
         assert_one_yocto();
         self.assert_owner();
-        self.forge_mode = ForgeMode::parse(&mode).unwrap_or_else(|| fail(E_CONFIG));
-        emit("forge_mode", json!({ "mode": mode }));
+        let m = ForgeMode::parse(&mode).unwrap_or_else(|| fail(E_CONFIG));
+        let mut p = self.stage_config();
+        p.mode = Some(m);
+        self.propose_config(p);
+    }
+
+    /// Anyone, once the timelock has passed. A request change also waits until no challenge is forging
+    /// (`E_PENDING_BOUTS`), so no compile in flight is checked against bytes it was not sent with.
+    pub fn apply_config(&mut self) {
+        let p = self.pending_config.clone().unwrap_or_else(|| fail(E_TIMELOCK));
+        check(now() >= p.activates_at, E_TIMELOCK);
+        check(p.request.is_none() || self.stats.forging == 0, E_PENDING_BOUTS);
+        self.pending_config = None;
+        if let Some(m) = p.mode {
+            self.forge_mode = m;
+            emit("forge_mode", json!({ "mode": m.name() }));
+        }
+        if let Some(r) = p.request {
+            self.model_id = r.model_id;
+            self.req_prefix = r.prefix;
+            self.req_suffix = r.suffix;
+            self.gateway_kind = r.gateway;
+            emit("request_changed", self.request_json(&self.model_id, &self.req_prefix, &self.req_suffix, r.gateway));
+        }
     }
 
     #[payable]
@@ -150,26 +202,17 @@ impl Contract {
         self.secrets = if profile.is_empty() { None } else { Some((profile, owner)) };
     }
 
-    /// Change the compile request (model, prefix/suffix bytes, signature kind). Existing fighters keep
-    /// their stored specs. Emits the new hashes so the change is visible.
+    /// Change the compile request (model, prefix/suffix bytes, signature kind). Staged behind the allowlist timelock and
+    /// applied by `apply_config` (at once when the delay is zero and nothing is forging). Existing fighters keep their
+    /// stored specs. The staged hashes are published (`config_proposed`, `get_config.pending_config`).
     #[payable]
     pub fn set_request(&mut self, model_id: String, req_prefix: B64, req_suffix: B64, signature_kind: String) {
         assert_one_yocto();
         self.assert_owner();
         check_request(&model_id, &req_prefix.0, &req_suffix.0, &signature_kind);
-        self.model_id = model_id;
-        self.req_prefix = req_prefix.0;
-        self.req_suffix = req_suffix.0;
-        self.gateway_kind = signature_kind == "gateway";
-        emit(
-            "request_changed",
-            json!({
-                "model_id": self.model_id,
-                "prefix_sha256": crate::hex::encode(env::sha256_array(&self.req_prefix)),
-                "suffix_sha256": crate::hex::encode(env::sha256_array(&self.req_suffix)),
-                "signature_kind": signature_kind,
-            }),
-        );
+        let mut p = self.stage_config();
+        p.request = Some(RequestParts { model_id, prefix: req_prefix.0, suffix: req_suffix.0, gateway: signature_kind == "gateway" });
+        self.propose_config(p);
     }
 
     /// Creates the belt and mints its NFT to the promoter. Ids start at 1.

@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { belt, challenge, ns, NOW_MS, payout, season } from './fixtures'
+import { belt, challenge, ns, NOW_MS, payout, season, CONTRACT } from './fixtures'
 import { run, setup, world, methods } from './tick-rig'
 import { trackKey } from '../functions/_lib/tickPayouts'
 import { txHashOf } from '../functions/_lib/evm'
 import { bumpedFees } from '../functions/_lib/fees'
-import { getJson, putJson } from '../functions/_lib/cache'
+import { getJson, putJson, scoped } from '../functions/_lib/cache'
 import type { PayoutTrack } from '../functions/_lib/tickTypes'
 import type { RawChallenge, RawPayout, RawSeason } from '../src/game/chain/views'
 import { MAX_FEE_CAP_WEI } from '../src/game/chain/config'
@@ -31,8 +31,8 @@ describe('a stuck payout is replaced with both fee cap and tip raised', () => {
     const raw = '0x02f8b1'
     const w = withPayouts([payout(1, { raw_tx: raw, nonce: 0, max_fee_per_gas: '300100000', gas_limit: 25200 })])
     const { d, calls, kv } = setup(w)
-    await putJson(kv, trackKey(1), { hash: txHashOf(raw), status: 'sent', at: NOW_MS - 11 * MIN } satisfies PayoutTrack)
-    await putJson(kv, 'payoutfee:1', { maxFee: '300100000', priority: '1000000' })
+    await putJson(kv, trackKey(CONTRACT, 1), { hash: txHashOf(raw), status: 'sent', at: NOW_MS - 11 * MIN } satisfies PayoutTrack)
+    await putJson(kv, scoped(CONTRACT, 'payoutfee:1'), { maxFee: '300100000', priority: '1000000' })
     ;(d.chain as any).season = async () => closed()
     await run(d)
     const c = calls.find((x) => x.method === 'sign_payout')!
@@ -44,8 +44,8 @@ describe('a stuck payout is replaced with both fee cap and tip raised', () => {
     const raw = '0x02f8b2'
     const w = withPayouts([payout(1, { raw_tx: raw, nonce: 0, max_fee_per_gas: '300100000', gas_limit: 25200 })])
     const { d, calls, kv } = setup(w)
-    await putJson(kv, trackKey(1), { hash: txHashOf(raw), status: 'sent', at: NOW_MS - 11 * MIN } satisfies PayoutTrack)
-    await putJson(kv, 'payoutfee:1', { maxFee: '5', priority: '1' })
+    await putJson(kv, trackKey(CONTRACT, 1), { hash: txHashOf(raw), status: 'sent', at: NOW_MS - 11 * MIN } satisfies PayoutTrack)
+    await putJson(kv, scoped(CONTRACT, 'payoutfee:1'), { maxFee: '5', priority: '1' })
     ;(d.chain as any).season = async () => closed()
     await run(d)
     const c = calls.find((x) => x.method === 'sign_payout')!
@@ -55,10 +55,10 @@ describe('a stuck payout is replaced with both fee cap and tip raised', () => {
     const raw = '0x02f8b3'
     const w = withPayouts([payout(1, { raw_tx: raw, nonce: 0, max_fee_per_gas: '300100000', gas_limit: 25200 })])
     const { d, kv } = setup(w)
-    await putJson(kv, trackKey(1), { hash: txHashOf(raw), status: 'sent', at: NOW_MS - 11 * MIN } satisfies PayoutTrack)
+    await putJson(kv, trackKey(CONTRACT, 1), { hash: txHashOf(raw), status: 'sent', at: NOW_MS - 11 * MIN } satisfies PayoutTrack)
     ;(d.chain as any).season = async () => closed()
     await run(d)
-    expect(await getJson<PayoutTrack>(kv, trackKey(1))).toMatchObject({ hash: txHashOf(raw), status: 'sent', at: NOW_MS, prior: [txHashOf(raw)] })
+    expect(await getJson<PayoutTrack>(kv, trackKey(CONTRACT, 1))).toMatchObject({ hash: txHashOf(raw), status: 'sent', at: NOW_MS, prior: [txHashOf(raw)] })
   })
   it('the original tx mined after a bump is found: tracked as mined, never bumped or re-sent again', async () => {
     const oldRaw = '0x02f8c1'
@@ -66,9 +66,9 @@ describe('a stuck payout is replaced with both fee cap and tip raised', () => {
     const w = withPayouts([payout(1, { raw_tx: newRaw, nonce: 0, max_fee_per_gas: '400000000', gas_limit: 25200 })])
     w.receipts[txHashOf(oldRaw)] = { status: '0x1' }
     const { d, calls, sent, kv } = setup(w, { vance: false })
-    await putJson(kv, trackKey(1), { hash: txHashOf(oldRaw), status: 'sent', at: NOW_MS - 30 * MIN, prior: [txHashOf(oldRaw)] } satisfies PayoutTrack)
+    await putJson(kv, trackKey(CONTRACT, 1), { hash: txHashOf(oldRaw), status: 'sent', at: NOW_MS - 30 * MIN, prior: [txHashOf(oldRaw)] } satisfies PayoutTrack)
     const log = await run(d)
-    expect(await getJson<PayoutTrack>(kv, trackKey(1))).toMatchObject({ hash: txHashOf(oldRaw), status: 'mined' })
+    expect(await getJson<PayoutTrack>(kv, trackKey(CONTRACT, 1))).toMatchObject({ hash: txHashOf(oldRaw), status: 'mined' })
     expect(log.steps.find((s) => s.action === 'payout#1')).toMatchObject({ ok: true, detail: 'mined', tx: txHashOf(oldRaw) })
     w.now += 40 * MIN
     await run(d)
@@ -80,13 +80,13 @@ describe('a stuck payout is replaced with both fee cap and tip raised', () => {
     const newRaw = '0x02f8d2'
     const w = withPayouts([payout(1, { raw_tx: newRaw, nonce: 0, max_fee_per_gas: '400000000', gas_limit: 25200 })])
     const { d, sent, kv } = setup(w)
-    await putJson(kv, trackKey(1), { hash: txHashOf(oldRaw), status: 'sent', at: NOW_MS - 2 * MIN, prior: [txHashOf(oldRaw)] } satisfies PayoutTrack)
+    await putJson(kv, trackKey(CONTRACT, 1), { hash: txHashOf(oldRaw), status: 'sent', at: NOW_MS - 2 * MIN, prior: [txHashOf(oldRaw)] } satisfies PayoutTrack)
     await run(d)
     expect(sent).toEqual([newRaw])
-    expect(await getJson<PayoutTrack>(kv, trackKey(1))).toMatchObject({ hash: txHashOf(newRaw), status: 'sent', prior: [txHashOf(oldRaw)] })
+    expect(await getJson<PayoutTrack>(kv, trackKey(CONTRACT, 1))).toMatchObject({ hash: txHashOf(newRaw), status: 'sent', prior: [txHashOf(oldRaw)] })
     w.receipts[txHashOf(newRaw)] = { status: '0x1' }
     await run(d)
-    expect(await getJson<PayoutTrack>(kv, trackKey(1))).toMatchObject({ hash: txHashOf(newRaw), status: 'mined' })
+    expect(await getJson<PayoutTrack>(kv, trackKey(CONTRACT, 1))).toMatchObject({ hash: txHashOf(newRaw), status: 'mined' })
   })
 })
 
@@ -96,7 +96,7 @@ describe('a signing request whose MPC callback was lost is reset', () => {
     const { d, calls, kv } = setup(w, { vance: false })
     await run(d)
     expect(methods(calls)).toEqual([])
-    expect(await getJson(kv, 'signing:1')).toBe(NOW_MS)
+    expect(await getJson(kv, scoped(CONTRACT, 'signing:1'))).toBe(NOW_MS)
     w.now = NOW_MS + 9 * MIN
     await run(d)
     expect(methods(calls)).toEqual([])
@@ -105,23 +105,23 @@ describe('a signing request whose MPC callback was lost is reset', () => {
     const c = calls.find((x) => x.method === 'reset_payout_signing')!
     expect(c).toMatchObject({ who: 'play.titleshot.testnet', args: { id: 1 } })
     expect(log.steps.find((s) => s.action === 'reset_signing#1')).toMatchObject({ ok: true })
-    expect(await getJson(kv, 'signing:1')).toBeNull()
+    expect(await getJson(kv, scoped(CONTRACT, 'signing:1'))).toBeNull()
   })
   it('a failed reset (E_TOO_EARLY) is logged and retried, the clock is kept', async () => {
     const w = withPayouts([payout(1, { signing: true })])
     w.failures.reset_payout_signing = 'Smart contract panicked: E_TOO_EARLY'
     const { d, kv } = setup(w)
-    await putJson(kv, 'signing:1', NOW_MS - 11 * MIN)
+    await putJson(kv, scoped(CONTRACT, 'signing:1'), NOW_MS - 11 * MIN)
     const log = await run(d)
     expect(log.steps.find((s) => s.action === 'reset_signing#1')).toMatchObject({ ok: false, detail: 'E_TOO_EARLY' })
-    expect(await getJson(kv, 'signing:1')).toBe(NOW_MS - 11 * MIN)
+    expect(await getJson(kv, scoped(CONTRACT, 'signing:1'))).toBe(NOW_MS - 11 * MIN)
   })
   it('once signing is over the marker is cleared, so a later re-sign gets a fresh 10 minutes', async () => {
     const w = withPayouts([payout(1, { raw_tx: '0x02f8e1', nonce: 0 })])
     const { d, kv } = setup(w)
-    await putJson(kv, 'signing:1', NOW_MS - 30 * MIN)
+    await putJson(kv, scoped(CONTRACT, 'signing:1'), NOW_MS - 30 * MIN)
     await run(d)
-    expect(await getJson(kv, 'signing:1')).toBeNull()
+    expect(await getJson(kv, scoped(CONTRACT, 'signing:1'))).toBeNull()
   })
   it('a re-sign in flight (signing and a raw tx) is not broadcast or bumped meanwhile', async () => {
     const w = withPayouts([payout(1, { signing: true, raw_tx: '0x02f8e2', nonce: 0 })])
@@ -132,7 +132,7 @@ describe('a signing request whose MPC callback was lost is reset', () => {
   it('after the reset the payout is signed again on the next tick', async () => {
     const w = withPayouts([payout(1, { signing: true })])
     const { d, calls, kv } = setup(w, { vance: false })
-    await putJson(kv, 'signing:1', NOW_MS - 11 * MIN)
+    await putJson(kv, scoped(CONTRACT, 'signing:1'), NOW_MS - 11 * MIN)
     await run(d)
     w.payouts['1:2'] = [payout(1)]
     w.now += 30_000
@@ -162,12 +162,12 @@ describe('the sweep does not drop a failed relay or expiry', () => {
     const { d, calls, kv } = setup(w, { relayer: true })
     await run(d)
     expect(calls.filter((c) => c.method === 'submit_forge').map((c) => c.args.challenge_id)).toEqual([0])
-    expect(await getJson(kv, 'sweep:cursor')).toBe(0)
+    expect(await getJson(kv, scoped(CONTRACT, 'sweep:cursor'))).toBe(0)
     delete w.failures.submit_forge
     w.now += 25_000
     await run(d)
     expect(calls.filter((c) => c.method === 'submit_forge').map((c) => c.args.challenge_id)).toEqual([0, 0, 1])
-    expect(await getJson(kv, 'sweep:cursor')).toBe(2)
+    expect(await getJson(kv, scoped(CONTRACT, 'sweep:cursor'))).toBe(2)
   })
   it('a compile that throws (NEAR AI down) holds the cursor, logs the failure and moves on after expiry', async () => {
     const w = world({ belts: [], forgeMode: 'relayer', nextChallenge: 1, challenges: { 0: forging(0, 5000, { relayer: true, need_compile: true, sentence: 'a goose with a mortgage' }) } })
@@ -175,11 +175,11 @@ describe('the sweep does not drop a failed relay or expiry', () => {
     d.env.NEARAI_API_KEY = 'k'
     const log = await run(d)
     expect(log.steps.find((s) => s.action.startsWith('relay#0'))).toMatchObject({ ok: false })
-    expect(await getJson(kv, 'sweep:cursor')).toBe(0)
+    expect(await getJson(kv, scoped(CONTRACT, 'sweep:cursor'))).toBe(0)
     w.now += 11 * MIN
     await run(d)
     expect(calls.filter((c) => c.method === 'expire_challenge').map((c) => c.args.id)).toEqual([0])
-    expect(await getJson(kv, 'sweep:cursor')).toBe(1)
+    expect(await getJson(kv, scoped(CONTRACT, 'sweep:cursor'))).toBe(1)
   })
   it('in relayer mode an old forging challenge is expired instead of relayed', async () => {
     const w = world({ belts: [], forgeMode: 'relayer', nextChallenge: 1, challenges: { 0: forging(0, 11 * MIN, { relayer: true, need_compile: false }) } })
@@ -192,11 +192,11 @@ describe('the sweep does not drop a failed relay or expiry', () => {
     w.failures.expire_challenge = 'E_TOO_EARLY'
     const { d, calls, kv } = setup(w)
     await run(d)
-    expect(await getJson(kv, 'sweep:cursor')).toBe(0)
+    expect(await getJson(kv, scoped(CONTRACT, 'sweep:cursor'))).toBe(0)
     delete w.failures.expire_challenge
     w.now += 25_000
     await run(d)
     expect(calls.filter((c) => c.method === 'expire_challenge').length).toBe(2)
-    expect(await getJson(kv, 'sweep:cursor')).toBe(1)
+    expect(await getJson(kv, scoped(CONTRACT, 'sweep:cursor'))).toBe(1)
   })
 })

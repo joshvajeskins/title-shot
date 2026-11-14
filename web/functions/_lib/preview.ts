@@ -5,7 +5,7 @@ import { cleanSentence } from '../../src/game/client'
 import { mapFighter, sentenceHash } from '../../src/game/chain/views'
 import { toUiSpec, type Sim } from '../../src/sim'
 import type { Spec } from '../../src/game/types'
-import { cachedJson, getJson, putJson } from './cache'
+import { cachedJson, getJson, putJson, scoped } from './cache'
 import type { Chain } from './chain'
 import { DEFAULTS, type Env } from './env'
 import { ApiError } from './http'
@@ -37,7 +37,7 @@ export async function attest(d: PreviewDeps, signed: SignedResponse, verified: b
   if (!d.chain) return null
   const chain = d.chain
   try {
-    const [cfg, list] = await Promise.all([cachedJson(d.env.TS_KV, 'cfg:model', 300, () => chain.config()), cachedJson(d.env.TS_KV, 'cfg:allowlist', 300, () => chain.allowlist())])
+    const [cfg, list] = await Promise.all([cachedJson(d.env.TS_KV, scoped(chain.id, 'cfg:model'), 300, () => chain.config()), cachedJson(d.env.TS_KV, scoped(chain.id, 'cfg:allowlist'), 300, () => chain.allowlist())])
     const norm = (a: string) => (a.startsWith('0x') ? a : `0x${a}`).toLowerCase()
     return verified && cfg.signature_kind === signed.signature_kind && (list.active ?? []).map(norm).includes(norm(signed.signing_address))
   } catch { return null }
@@ -60,7 +60,7 @@ export async function runPreview(d: PreviewDeps, input: string): Promise<Preview
   const cached = await getJson<{ result: PreviewPayload }>(kv, previewKey(hash))
   if (cached && (cached.result.compiler ?? 'nearai') === compilerOf(d.env)) return cached.result // a compile from the other referee is not reused
 
-  const model = d.chain ? (await cachedJson(kv, 'cfg:model', 300, () => d.chain!.config())).model_id : isStandin(d.env) ? STANDIN_MODEL : d.env.NEARAI_MODEL ?? DEFAULTS.model
+  const model = d.chain ? (await cachedJson(kv, scoped(d.chain.id, 'cfg:model'), 300, () => d.chain!.config())).model_id : isStandin(d.env) ? STANDIN_MODEL : d.env.NEARAI_MODEL ?? DEFAULTS.model
   await spendCap(kv, CAPS.previewCompile) // uncached compiles only: cache hits and canonical lookups above cost nothing
   const c = await compileFor(d.env, d.sim, model, sentence, d.fetchFn)
   const n = d.sim.normalize(c.raw)

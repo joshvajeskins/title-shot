@@ -187,7 +187,7 @@ async fn relayer_mode_forge_nobody_answers_expires_with_refund_minus_fee() -> Re
     w.advance_secs(605).await?;
     w.ok(&w.carol, "expire_challenge", json!({"id": id}), 0).await?;
     let after = snap(&w, belt, &[&w.bob, &w.promoter]).await?;
-    titleshot_it::snap::assert_refund_minus_fee_relayer(&before, &after, w.opts.forge_fee, &w.bob);
+    titleshot_it::snap::assert_refund_minus_fee_relayer(&before, &after, w.opts.toll, w.opts.forge_fee, &w.bob);
     assert_clean_refund(&w, id, &c_s, &w.bob).await?;
     // and a relayer answer after expiry is refused (not Forging any more)
     let (_, raw) = archetype("raccoon running a casino");

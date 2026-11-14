@@ -33,7 +33,7 @@ impl Contract {
         let storage_before = env::storage_usage();
         let status = match input {
             Ok(out) => self.settle_output(c, out, storage_before),
-            Err(e) => self.refund(c, e.code, &e.detail),
+            Err(e) => self.refund(c, e.code, &e.detail, storage_before),
         };
         label(&status).to_string()
     }
@@ -42,8 +42,8 @@ impl Contract {
         if !self.fighters.contains_key(&c.hash) {
             if let Err(f) = self.compile_fighter(&c, &out) {
                 return match f {
-                    Fail::Refund(code, d) => self.refund(c, code, &d),
-                    Fail::Reject(code, d) => self.reject(c, code, &d),
+                    Fail::Refund(code, d) => self.refund(c, code, &d, storage_before),
+                    Fail::Reject(code, d) => self.reject(c, code, &d, storage_before),
                 };
             }
         }
@@ -96,34 +96,34 @@ impl Contract {
     fn bout(&mut self, c: Challenge, out: ForgeOutput, storage_before: u64) -> Status {
         let belt = self.belt(c.belt_id);
         let Some(mut season) = self.season_of(c.belt_id, c.season_id) else {
-            return self.refund(c, E_CLOSED, "season missing");
+            return self.refund(c, E_CLOSED, "season missing", storage_before);
         };
         let holder = self.holder(c.belt_id);
         if holder == c.challenger {
-            return self.refund(c, E_SELF, "challenger holds the belt");
+            return self.refund(c, E_SELF, "challenger holds the belt", storage_before);
         }
         if season.state != SeasonState::Open {
-            return self.refund(c, E_CLOSED, "season closed");
+            return self.refund(c, E_CLOSED, "season closed", storage_before);
         }
         let Some(champ_hash) = belt.champion else {
-            return self.refund(c, E_NO_CHAMPION, "no champion");
+            return self.refund(c, E_NO_CHAMPION, "no champion", storage_before);
         };
         if champ_hash == c.hash {
-            return self.refund(c, E_SAME_SENTENCE, "champion's own sentence");
+            return self.refund(c, E_SAME_SENTENCE, "champion's own sentence", storage_before);
         }
         let (entropy, src) = if c.relayer {
             (block_entropy(c.id), SeedSource::Block)
         } else {
             match out.vrf.as_ref().ok_or("no vrf").and_then(|v| vrf_entropy(v, &self.vrf_pubkey, c.id)) {
                 Ok(e) => (e, SeedSource::Vrf),
-                Err(why) => return self.refund(c, E_VRF, why),
+                Err(why) => return self.refund(c, E_VRF, why, storage_before),
             }
         };
         let (Some(champ), Some(chall)) = (self.load_spec(&champ_hash), self.load_spec(&c.hash)) else {
-            return self.refund(c, E_STATE, "stored spec failed validation");
+            return self.refund(c, E_STATE, "stored spec failed validation", storage_before);
         };
         if split_toll(c.toll, c.fee).is_none() {
-            return self.refund(c, E_STATE, "toll below fee");
+            return self.refund(c, E_STATE, "toll below fee", storage_before);
         }
         let seed = derive_seed(&entropy, c.id);
         let rule = match season.rule {

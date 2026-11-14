@@ -26,6 +26,8 @@ export interface RawFight {
   id: number; challenge_id: number; belt_id: number; season_id: number; champion_hash: string; challenger_hash: string
   holder: string; challenger: string; seed: string; seed_source: string; rule: number; winner: string; winner_code: 0 | 1 | 2
   state_hash: string; split: { champion: string; promoter: string; side_pot: string; protocol: string }; at: string
+  /** the bout's storage charge, taken from the toll before the split (absent on contracts before the storage fix) */
+  storage?: string; storage_bytes?: number
 }
 export interface RawChallenge {
   id: number; belt_id: number; season_id: number; challenger: string; sentence: string; hash: string
@@ -88,8 +90,18 @@ export function mapSeason(s: RawSeason | null, rb: Rulebook): Season {
   }
 }
 
-/** Champion share of one toll (60% of toll minus forge fee), the contract's `split_toll`. */
-export const championShare = (toll: bigint, fee: bigint): bigint => ((toll - fee) * 60n) / 100n
+/** Mirror of the contract's `preview_split` storage estimate: ESTIMATE_BOUT_BYTES x storage byte cost, capped at 50% of toll - fee. */
+const ESTIMATE_BOUT_BYTES = 1_200n
+const STORAGE_BYTE_COST = 10n ** 19n
+export const storageEstimate = (toll: bigint, fee: bigint): bigint => {
+  const r = toll > fee ? toll - fee : 0n
+  const est = ESTIMATE_BOUT_BYTES * STORAGE_BYTE_COST
+  const cap = (r / 100n) * 50n
+  return est < cap ? est : cap
+}
+
+/** Champion share of one toll: 60% of what is left after the forge fee and the bout's storage (estimated, as `preview_split`). */
+export const championShare = (toll: bigint, fee: bigint): bigint => ((toll - fee - storageEstimate(toll, fee)) * 60n) / 100n
 
 export type ChainBelt = Belt & { numericId: number; seasonState: RawSeason['state'] | 'None'; holder: string | null; promoter: string; forgeFeeYocto: string }
 
@@ -107,8 +119,9 @@ export function mapBelt(raw: RawBelt, rb: Rulebook): ChainBelt | null {
   }
 }
 
-export function mapSplit(raw: RawFight['split'], forgeFee: string): TollSplit {
-  return { champion: raw.champion, promoter: raw.promoter, sidePot: raw.side_pot, protocol: raw.protocol, forgeFee }
+/** The toll of one bout: forge fee + storage + the four shares add up to the toll exactly. */
+export function mapSplit(raw: RawFight['split'], forgeFee: string, storage = '0'): TollSplit & { storage: string } {
+  return { champion: raw.champion, promoter: raw.promoter, sidePot: raw.side_pot, protocol: raw.protocol, forgeFee, storage }
 }
 
 export function mapFightSummary(f: RawFight, names: { champion: string; challenger: string }, toll: string): FightSummary {

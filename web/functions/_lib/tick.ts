@@ -6,11 +6,18 @@ import { compileFor } from './compiler'
 import { getJson, putJson } from './cache'
 import { fixPurseAddress, needsOpening, openStep } from './tickOpen'
 import { payoutsStep } from './tickPayouts'
-import { detailOf, type Log, type StepLog, type TickDeps, type TickLog } from './tickTypes'
+import { detailOf, tickKey, type Log, type StepLog, type TickDeps, type TickLog } from './tickTypes'
 
 export const THROTTLE_MS = 20_000
 const SWEEP_BATCH = 12
 const FORGE_TIMEOUT_MS = 10 * 60_000 + 5_000
+const SWEEP_WINDOW = 30 // challenges older than this many ids are never revisited
+
+/** The sweep cursor, clamped to [next - SWEEP_WINDOW, next]: a cursor from elsewhere can neither freeze nor rewind the sweep. */
+export const clampCursor = (stored: number | null, next: number): number => {
+  const lo = Math.max(0, next - SWEEP_WINDOW)
+  return typeof stored === 'number' && Number.isInteger(stored) ? Math.min(Math.max(stored, lo), next) : lo
+}
 
 const safe = async (log: Log, belt: number | undefined, action: string, f: () => Promise<void>) => {
   try { await f() } catch (e) { log({ belt, action, ok: false, detail: String(e instanceof Error ? e.message : e).slice(0, 140) }) }
@@ -46,7 +53,7 @@ async function sweepStep(d: TickDeps, log: Log): Promise<void> {
   const kv = d.env.TS_KV
   const stats = await d.chain.stats()
   const next = stats.next_challenge_id
-  let cursor = (await getJson<number>(kv, 'sweep:cursor')) ?? Math.max(0, next - 30)
+  let cursor = clampCursor(await getJson<number>(kv, tickKey(d, 'sweep:cursor')), next)
   const cfg = await d.chain.config()
   try {
     for (let n = 0; n < SWEEP_BATCH && cursor < next; n++) {
@@ -70,7 +77,7 @@ async function sweepStep(d: TickDeps, log: Log): Promise<void> {
       break // still young: look again next tick
     }
   } finally {
-    await putJson(kv, 'sweep:cursor', cursor)
+    await putJson(kv, tickKey(d, 'sweep:cursor'), cursor)
   }
 }
 
@@ -81,15 +88,15 @@ export async function runTick(d: TickDeps, opts: { force?: boolean } = {}): Prom
   const log: Log = (s) => steps.push(s)
   const finish = async (skipped?: string): Promise<TickLog> => {
     const out: TickLog = { at: t0, ms: d.now() - t0, steps, ...(skipped ? { skipped } : {}) }
-    if (!skipped) await putJson(kv, 'tick:last', out)
+    if (!skipped) await putJson(kv, tickKey(d, 'tick:last'), out)
     return out
   }
-  const last = await getJson<number>(kv, 'tick:last_at')
+  const last = await getJson<number>(kv, tickKey(d, 'tick:last_at'))
   if (!opts.force && last && t0 - last < THROTTLE_MS) return finish('throttled')
-  const lock = await getJson<number>(kv, 'tick:lock')
+  const lock = await getJson<number>(kv, tickKey(d, 'tick:lock'))
   if (lock && t0 - lock < 60_000) return finish('running')
-  await putJson(kv, 'tick:lock', t0, 60)
-  await putJson(kv, 'tick:last_at', t0)
+  await putJson(kv, tickKey(d, 'tick:lock'), t0, 60)
+  await putJson(kv, tickKey(d, 'tick:last_at'), t0)
   try {
     const belts = await d.chain.belts()
     for (const belt of belts) {
@@ -109,7 +116,7 @@ export async function runTick(d: TickDeps, opts: { force?: boolean } = {}): Prom
   } catch (e) {
     log({ action: 'tick', ok: false, detail: String(e instanceof Error ? e.message : e).slice(0, 140) })
   } finally {
-    await putJson(kv, 'tick:lock', 0, 60)
+    await putJson(kv, tickKey(d, 'tick:lock'), 0, 60)
   }
   return finish()
 }

@@ -4,6 +4,7 @@ import type { Signer } from '../../src/game/chain/signer'
 import type { Sim } from '../../src/sim'
 import type { Chain } from './chain'
 import type { Env } from './env'
+import { scoped } from './cache'
 
 export interface StepLog { belt?: number; action: string; ok: boolean; detail?: string; tx?: string }
 export interface TickLog { at: number; ms: number; steps: StepLog[]; skipped?: string }
@@ -23,6 +24,9 @@ export interface TickDeps {
 }
 
 export type Log = (s: StepLog) => void
+
+/** Every tick record lives under the contract id (see `scoped`): staging and production share one KV namespace. */
+export const tickKey = (d: { chain: { id: string } }, key: string): string => scoped(d.chain.id, key)
 
 /** Contract call outcome -> a short log detail with the stable E_ code when there is one. */
 export function detailOf(out: { failure: string | null }): string | undefined {

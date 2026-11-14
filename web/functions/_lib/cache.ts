@@ -32,3 +32,8 @@ export async function putJson(kv: KVLike, key: string, value: unknown, ttlSec?: 
 export async function putJsonStrict(kv: KVLike, key: string, value: unknown, ttlSec?: number): Promise<void> {
   await kv.put(key, JSON.stringify(value), ttlSec ? { expirationTtl: Math.max(60, ttlSec) } : undefined)
 }
+/**
+ * The KV key of state that belongs to one contract. Staging and production share one KV namespace, and payout and challenge
+ * ids restart at 1 on every new contract, so every tick record and contract-derived cache is prefixed with the contract id.
+ */
+export const scoped = (contract: string | null | undefined, key: string): string => (contract ? `${contract}:${key}` : key)

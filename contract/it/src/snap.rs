@@ -56,23 +56,33 @@ pub fn assert_bout_money(before: &Snap, after: &Snap, sp: &Split, toll: u128, fe
     assert_eq!(sp.champion + sp.promoter + sp.side_pot + sp.protocol + fee + storage, toll, "split + fee + storage must equal the toll");
 }
 
+/// Storage component a failed challenge paid out of its refund (review fix): measured, non-zero, capped at 50% of
+/// `toll - fee`, and no longer owed to anyone.
+fn refund_storage(before: &Snap, after: &Snap, toll: u128, fee: u128) -> u128 {
+    let st = after.storage_charged - before.storage_charged;
+    assert!(st > 0 && st <= (toll - fee) / 2, "a failed challenge pays its storage, capped: {st}");
+    st
+}
+
 /// Relayer mode: the forge fee is not paid to OutLayer, it is credited to the protocol at request time, so a refund
-/// still returns toll minus fee to the challenger and the fee shows up as protocol revenue.
-pub fn assert_refund_minus_fee_relayer(before: &Snap, after: &Snap, fee: u128, challenger: &Account) {
+/// returns toll minus fee minus the storage the failed challenge left, and the fee shows up as protocol revenue.
+pub fn assert_refund_minus_fee_relayer(before: &Snap, after: &Snap, toll: u128, fee: u128, challenger: &Account) {
+    let st = refund_storage(before, after, toll, fee);
     let mut exp = before.bal.clone();
-    *exp.get_mut(challenger.id().as_str()).unwrap() -= fee;
-    assert_eq!(after.bal, exp, "challenger gets toll - fee back; every other balance is untouched");
+    *exp.get_mut(challenger.id().as_str()).unwrap() -= fee + st;
+    assert_eq!(after.bal, exp, "challenger gets toll - fee - storage back; every other balance is untouched");
     assert_eq!(after.protocol, before.protocol + fee, "the relayer-mode fee is protocol revenue");
     assert_eq!(after.side_pot, before.side_pot, "no side-pot credit on a refund");
 }
 
-/// A refused/failed forge returns the toll minus the fee (the fee paid OutLayer): nobody else is paid.
+/// A refused/failed forge returns the toll minus the fee (the fee paid OutLayer) minus the storage the failed challenge
+/// left behind: nobody else is paid.
 pub fn assert_refund_minus_fee(before: &Snap, after: &Snap, toll: u128, fee: u128, challenger: &Account) {
+    let st = refund_storage(before, after, toll, fee);
     let mut exp = before.bal.clone();
-    *exp.get_mut(challenger.id().as_str()).unwrap() -= fee;
-    assert_eq!(after.bal, exp, "challenger gets toll - fee back; every other balance is untouched");
+    *exp.get_mut(challenger.id().as_str()).unwrap() -= fee + st;
+    assert_eq!(after.bal, exp, "challenger gets toll - fee - storage back; every other balance is untouched");
     assert_eq!(after.side_pot, before.side_pot, "no side-pot credit on a refund");
     assert_eq!(after.protocol, before.protocol, "no protocol credit on a refund");
     assert_eq!(after.fees_spent, before.fees_spent + fee, "the fee is spent");
-    let _ = toll;
 }

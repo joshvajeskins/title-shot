@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { archetypes, env, mpcSign, recordedExchange, sim, TEST_ADDRESS } from './helpers'
-import { belt, challenge, FEE, NOW_MS, ns, payout, season } from './fixtures'
+import { belt, challenge, FEE, NOW_MS, ns, payout, season, CONTRACT } from './fixtures'
 import { run, setup, world, methods, type World } from './tick-rig'
 import { needsOpening } from '../functions/_lib/tickOpen'
 import { fundPurse, parseMpcSignature, pursePlan } from '../functions/_lib/purse'
 import { tidyOpener, openerOk, writeOpener, FALLBACK_OPENERS } from '../functions/_lib/opener'
-import { getJson, putJson } from '../functions/_lib/cache'
+import { getJson, putJson, scoped } from '../functions/_lib/cache'
 import type { RawBelt, RawChallenge } from '../src/game/chain/views'
 import { fromHex } from '../src/game/chain/bytes'
 
@@ -80,7 +80,7 @@ describe('Vance opens the next season', () => {
   })
   it('an aborted opener reopens with the next season id; a belt of another promoter is left alone', async () => {
     const { d, calls, kv } = setup(openW({ belts: [belt({ season: season({ id: 4, state: 'Aborted' }) })] }))
-    await putJson(kv, 'aborts:1', { seasonId: 4, count: 1, at: NOW_MS - 6 * 60_000 })
+    await putJson(kv, scoped(CONTRACT, 'aborts:1'), { seasonId: 4, count: 1, at: NOW_MS - 6 * 60_000 })
     await run(d)
     expect(calls.find((c) => c.method === 'set_purse_address')!.args.season).toBe(5)
     const other = setup(openW({ belts: [closedBelt({ promoter: 'someone-else.testnet' })] }))
@@ -95,32 +95,32 @@ describe('Vance opens the next season', () => {
     expect(log.steps.find((x) => x.action === 'open_backoff')).toMatchObject({ ok: false })
     expect(a.sent).toEqual([])
     expect(methods(a.calls)).toEqual([])
-    expect(await getJson(a.kv, 'aborts:1')).toMatchObject({ seasonId: 4, count: 1 })
+    expect(await getJson(a.kv, scoped(CONTRACT, 'aborts:1'))).toMatchObject({ seasonId: 4, count: 1 })
     // still inside 5 minutes: still waiting, and the count is not bumped again by every tick
     const w = abortedW()
     const b = setup(w)
-    await putJson(b.kv, 'aborts:1', { seasonId: 4, count: 1, at: NOW_MS - 4 * 60_000 })
+    await putJson(b.kv, scoped(CONTRACT, 'aborts:1'), { seasonId: 4, count: 1, at: NOW_MS - 4 * 60_000 })
     await run(b.d)
     expect(methods(b.calls)).toEqual([])
-    expect(await getJson(b.kv, 'aborts:1')).toMatchObject({ count: 1 })
+    expect(await getJson(b.kv, scoped(CONTRACT, 'aborts:1'))).toMatchObject({ count: 1 })
     // second abort (count 2): 10 minutes
     const c = setup(abortedW())
-    await putJson(c.kv, 'aborts:1', { seasonId: 3, count: 1, at: NOW_MS - 3600_000 })
+    await putJson(c.kv, scoped(CONTRACT, 'aborts:1'), { seasonId: 3, count: 1, at: NOW_MS - 3600_000 })
     await run(c.d)
-    expect(await getJson(c.kv, 'aborts:1')).toMatchObject({ seasonId: 4, count: 2 })
+    expect(await getJson(c.kv, scoped(CONTRACT, 'aborts:1'))).toMatchObject({ seasonId: 4, count: 2 })
     expect(methods(c.calls)).toEqual([])
     // the fourth in a row pauses for hours
     const e = setup(abortedW())
-    await putJson(e.kv, 'aborts:1', { seasonId: 3, count: 3, at: NOW_MS - 3600_000 })
+    await putJson(e.kv, scoped(CONTRACT, 'aborts:1'), { seasonId: 3, count: 3, at: NOW_MS - 3600_000 })
     const el = await run(e.d)
     expect(methods(e.calls)).toEqual([])
     expect(el.steps.find((x) => x.action === 'open_backoff')!.detail).toMatch(/4 in a row/)
   })
   it('a season that closes normally clears the abort count', async () => {
     const { d, kv } = setup(openW({ belts: [closedBelt()] }))
-    await putJson(kv, 'aborts:1', { seasonId: 1, count: 3, at: NOW_MS - 3600_000 })
+    await putJson(kv, scoped(CONTRACT, 'aborts:1'), { seasonId: 1, count: 3, at: NOW_MS - 3600_000 })
     await run(d)
-    expect(await getJson(kv, 'aborts:1')).toBeNull()
+    expect(await getJson(kv, scoped(CONTRACT, 'aborts:1'))).toBeNull()
   })
   it('no Vance key: nothing happens', async () => {
     const { d, calls } = setup(world({ belts: [closedBelt()] }), { vance: false })
@@ -130,7 +130,7 @@ describe('Vance opens the next season', () => {
   it('a funding tx a previous tick already broadcast is awaited, never sent twice', async () => {
     const w = world({ belts: [closedBelt()] })
     const { d, calls, sent, kv } = setup(w)
-    await putJson(kv, 'fund:1:3', { hash: '0x' + '77'.repeat(32), purse: '1500000000000000' })
+    await putJson(kv, scoped(CONTRACT, 'fund:1:3'), { hash: '0x' + '77'.repeat(32), purse: '1500000000000000' })
     w.receipts['0x' + '77'.repeat(32)] = { status: '0x1' }
     await run(d)
     expect(sent.length).toBe(0)
@@ -219,7 +219,7 @@ describe('the challenge sweep: expiry and the relayer fallback', () => {
     const { d, calls, kv } = setup(w)
     await run(d)
     expect(calls.filter((c) => c.method === 'expire_challenge').map((c) => c.args.id)).toEqual([1])
-    expect(await getJson(kv, 'sweep:cursor')).toBe(2)
+    expect(await getJson(kv, scoped(CONTRACT, 'sweep:cursor'))).toBe(2)
   })
   it('in relayer mode the relayer delivers the signed NEAR AI compile via submit_forge', async () => {
     const ex = recordedExchange(sim(), 'Qwen/Qwen3.8-27B', 'a pigeon with a law degree', JSON.stringify(archetypes()[0]!.raw))

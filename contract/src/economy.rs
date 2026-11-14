@@ -114,6 +114,25 @@ pub fn clamp_stranger_fee(amount_wei: u128, gas_limit: u64, max_fee: u128, max_p
     (fee, max_prio.min(fee))
 }
 
+/// Lowest `max_fee_per_gas` a payee may choose for their own payout (0.001 gwei): refuses a deliberately unmineable tx.
+pub const MIN_PAYEE_FEE_PER_GAS: u128 = 1_000_000;
+/// A purse share below this (0.00001 ETH) cannot pay its own gas within the 1% stranger clamp at a realistic fee
+/// (1% / 21000 gas = 0.0048 gwei); it is folded into the final holder's payout so no payout is unpayable.
+pub const MIN_PAYOUT_WEI: u128 = 10_000_000_000_000;
+
+/// Folds every non-first payout below `min` into the first (the final holder's); the sum is unchanged.
+pub fn fold_dust(mut plan: Vec<(AccountId, u128)>, min: u128) -> Vec<(AccountId, u128)> {
+    if plan.len() < 2 {
+        return plan;
+    }
+    let dust: u128 = plan[1..].iter().filter(|(_, a)| *a < min).map(|(_, a)| *a).sum();
+    plan[0].1 += dust;
+    let head = plan.remove(0);
+    let mut out = vec![head];
+    out.extend(plan.into_iter().filter(|(_, a)| *a >= min));
+    out
+}
+
 /// Gas parameter bounds for `sign_payout`.
 pub fn gas_params_ok(max_fee: u128, max_prio: u128, gas_limit: u64) -> bool {
     (MIN_GAS_LIMIT..=MAX_GAS_LIMIT).contains(&gas_limit)

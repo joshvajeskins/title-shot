@@ -77,6 +77,7 @@ async fn a_small_output_rides_inline_and_an_oversized_one_is_refunded_with_a_sta
     w.finish(st, id).await?;
     let ch = w.challenge_view(id).await?;
     assert!(ch["status"] == "Refunded" && ch["code"] == "E_FORGE_OUTPUT", "{ch}");
-    assert_eq!(w.bal(&w.bob).await?, before - w.opts.forge_fee, "toll minus fee back");
+    assert!(u(&ch["storage_charge"]) > 0, "the failed challenge pays its storage");
+    assert_eq!(w.bal(&w.bob).await?, before - w.opts.forge_fee - u(&ch["storage_charge"]), "toll minus fee and storage back");
     Ok(())
 }

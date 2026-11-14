@@ -1,7 +1,7 @@
 //! Chain Signatures payouts: build an EIP-1559 Base Sepolia transfer, have the MPC signer sign it, verify the
 //! signature recovers to the purse address, store the raw tx for anyone to broadcast.
 use crate::codes::*;
-use crate::economy::{clamp_stranger_fee, gas_params_ok, payout_value, take_nonce};
+use crate::economy::{clamp_stranger_fee, gas_params_ok, payout_value, take_nonce, MIN_PAYEE_FEE_PER_GAS};
 use crate::events::emit;
 use crate::signer::{ext_signer, hex32, purse_path, Payload, SignRequest, SignatureResponse};
 use crate::tx::{signed_bytes, unsigned_bytes, TxParams};
@@ -44,7 +44,9 @@ impl Contract {
     /// The payee's own parameters are used as given. Anyone else (the bell worker) may sign too, but the max fee is
     /// lowered so the gas burn stays within 1% of the payout, and the payee can always replace such a tx with any
     /// parameters. The same parameters again return the stored raw tx; a stuck tx is re-signed with the same nonce
-    /// only with a strictly higher `max_fee_per_gas` (the payee replacing a stranger's tx is exempt).
+    /// only with a strictly higher `max_fee_per_gas` (the payee replacing a stranger's tx is exempt). The payee's own
+    /// max fee is at least 0.001 gwei, and 30 minutes after a nonce was first signed anyone may replace even a
+    /// payee-signed tx (higher fee, 1% clamp), so no payee can hold the later nonces of the purse hostage.
     pub fn sign_payout(
         &mut self,
         payout_id: u64,
@@ -61,6 +63,7 @@ impl Contract {
         check(p.signing.is_none(), E_SIGNING);
         let by_payee = env::predecessor_account_id() == p.payee;
         let (max_fee_per_gas, max_priority_fee_per_gas) = if by_payee {
+            check(max_fee_per_gas.0 >= MIN_PAYEE_FEE_PER_GAS, E_GAS);
             (max_fee_per_gas, max_priority_fee_per_gas)
         } else {
             let (f, pr) = clamp_stranger_fee(p.amount_wei, gas_limit, max_fee_per_gas.0, max_priority_fee_per_gas.0);
@@ -81,15 +84,20 @@ impl Contract {
             if st.params == params {
                 return PromiseOrValue::Value(Some(to_hex(&st.raw_tx)));
             }
-            // A stranger never overrides the payee's choice; the payee overrides a stranger's tx with anything.
-            check(by_payee || !st.by_payee, E_NOT_PAYEE);
-            if by_payee == st.by_payee {
+            // The payee overrides a stranger's tx with anything. A stranger overrides the payee's choice only once it has
+            // stood for `PAYEE_GRACE_NS` without being replaced (a stuck nonce must not block the later payouts), and only
+            // with a strictly higher fee, still clamped to 1%. Same-kind replacements need a strictly higher fee.
+            if st.by_payee && !by_payee {
+                check(now() >= st.signed_at + PAYEE_GRACE_NS, E_NOT_PAYEE);
+            }
+            if !by_payee || st.by_payee {
                 check(params.max_fee_per_gas > st.params.max_fee_per_gas, E_FEE_NOT_HIGHER);
             }
         }
         let digest = env::keccak256_array(&unsigned_bytes(&params));
         let (belt_id, season_id) = (p.belt_id, p.season_id);
         p.signing = Some((params, now()));
+        p.signing_by_payee = by_payee;
         self.payouts.insert(payout_id, p);
         self.seasons.insert((belt_id, season_id), season);
         let request = SignRequest {
@@ -107,10 +115,13 @@ impl Contract {
     }
 
     /// Soft: any failure clears the signing flag (the payout can be retried) and logs `payout_sign_failed`.
+    /// `_by_payee` is ignored: after `reset_payout_signing` a late callback may belong to an older request, so who asked
+    /// is read from the request in flight (`signing_by_payee`), like its parameters.
     #[private]
-    pub fn on_signed(&mut self, payout_id: u64, by_payee: bool) -> Option<String> {
+    pub fn on_signed(&mut self, payout_id: u64, _by_payee: bool) -> Option<String> {
         let mut p = self.payouts.get(&payout_id)?;
         let (params, _) = p.signing.take()?;
+        let by_payee = p.signing_by_payee;
         let (r, s, rec) = match decode_signature(env::promise_result(0)) {
             Ok(x) => x,
             Err(why) => return self.sign_failed(p, why),
@@ -135,7 +146,9 @@ impl Contract {
                     "nonce": params.nonce, "to": addr_hex(&params.to), "value_wei": U128(params.value),
                     "max_fee_per_gas": U128(params.max_fee_per_gas), "gas_limit": params.gas_limit, "attempt": attempt, "raw_tx": hex_tx }),
         );
-        p.signed = Some(SignedTx { params, raw_tx: raw, attempt, by_payee });
+        // The grace clock starts at the first signature of this nonce: re-signing (even +1 wei) never restarts it.
+        let signed_at = p.signed.as_ref().map(|s| s.signed_at).unwrap_or_else(now);
+        p.signed = Some(SignedTx { params, raw_tx: raw, attempt, by_payee, signed_at });
         self.payouts.insert(payout_id, p);
         Some(hex_tx)
     }

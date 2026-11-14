@@ -122,7 +122,8 @@ async fn pinned_vrf_key_every_proof_is_verified_wrong_challenge_forged_proof_and
         let ch = w.challenge_view(run.id).await?;
         assert!(ch["status"] == "Refunded" || ch["status"] == "Rejected", "{name}: {ch}");
         assert_eq!(ch["code"], "E_VRF", "{name}: {ch}");
-        assert_eq!(w.bal(&w.bob).await?, before - w.opts.forge_fee, "{name}: toll minus fee back");
+        assert!(u(&ch["storage_charge"]) > 0, "{name}: the failed challenge pays its storage");
+        assert_eq!(w.bal(&w.bob).await?, before - w.opts.forge_fee - u(&ch["storage_charge"]), "{name}: toll minus fee and storage back");
         assert_eq!(w.stats().await?["bouts"], 0, "{name}: no bout from an unproven seed");
     }
     // a genuine proof for this very challenge resolves, and the seed comes from sha256(proof)

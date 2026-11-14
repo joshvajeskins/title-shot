@@ -54,3 +54,15 @@ export function bumpedFees(prev: { maxFee: bigint; priority?: bigint | null }): 
   if (priority > maxFee) priority = maxFee
   return { maxFee, priority }
 }
+
+/**
+ * Mirror of the contract's `clamp_stranger_fee`: a caller who is not the payee gets `maxFee` lowered so the gas burn
+ * (`gasLimit * maxFee`) stays within 1% of the payout (never below 1 wei), and the tip follows it down.
+ */
+export function strangerFees(amountWei: bigint, gasLimit: bigint, maxFee: bigint, priority: bigint): { maxFee: bigint; priority: bigint } {
+  const cap = amountWei / 100n
+  let allowed = cap / (gasLimit > 0n ? gasLimit : 1n)
+  if (allowed < 1n) allowed = 1n
+  const fee = maxFee < allowed ? maxFee : allowed
+  return { maxFee: fee, priority: priority < fee ? priority : fee }
+}

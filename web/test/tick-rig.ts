@@ -15,8 +15,10 @@ export interface World {
   now: number; autoMine: boolean
   /** sign_payout succeeds but the MPC callback failed: the call returns null instead of the raw tx */
   softSign: boolean
+  /** blocking deploy gates the contract reports (get_deploy_gates); empty = ready */
+  blockingGates: string[]
 }
-export const world = (over: Partial<World> = {}): World => ({ belts: [belt()], payouts: {}, seasons: {}, challenges: {}, nextChallenge: 0, forgeMode: 'outlayer', failures: {}, receipts: {}, baseBalance: 10n ** 16n, broadcastError: null, now: NOW_MS, autoMine: false, softSign: false, ...over })
+export const world = (over: Partial<World> = {}): World => ({ belts: [belt()], payouts: {}, seasons: {}, challenges: {}, nextChallenge: 0, forgeMode: 'outlayer', failures: {}, receipts: {}, baseBalance: 10n ** 16n, broadcastError: null, now: NOW_MS, autoMine: false, softSign: false, blockingGates: [], ...over })
 
 export function setup(w: World, opts: { sponsor?: boolean; vance?: boolean; relayer?: boolean; fetchFn?: typeof fetch } = {}) {
   const calls: Call[] = []
@@ -46,6 +48,7 @@ export function setup(w: World, opts: { sponsor?: boolean; vance?: boolean; rela
     challenge: async (id: number) => w.challenges[id] ?? null,
     stats: async () => ({ next_challenge_id: w.nextChallenge, challenges: w.nextChallenge }),
     config: async () => ({ model_id: 'Qwen/Qwen3.8-27B', forge_mode: w.forgeMode }),
+    deployGates: async () => ({ ok: !w.blockingGates.length, ready: !w.blockingGates.length, failing: w.blockingGates.map((gate) => ({ gate, why: 'test', blocking: true })) }),
   }
   const near = { view: async (_c: string, m: string) => { if (m === 'derived_public_key') return TEST_DERIVED_KEY; throw new Error('no view ' + m) }, balance: async () => 10n ** 24n }
   const base = {

@@ -38,6 +38,17 @@ const MESSAGES: Record<string, (c: ErrorCtx) => string> = {
   E_DUP_MOVE: () => 'The AI repeated a move, so the fighter was rejected.',
   E_BAD_STATS: () => 'The fighter broke the 100-point budget, so it was rejected.',
   E_STATE: () => 'The belt changed while your fight was forging. Your toll was refunded minus the forge fee.',
+  E_NOT_READY: () => 'The arena is not open yet: the contract is still being set up. Your balance was not touched; try again later.',
+  E_EMPTY_FIELD: () => 'The AI left part of the fighter blank, so it was rejected.',
+  E_BAD_SCHOOL: () => 'The AI picked a fighting school that is not in the rulebook, so the fighter was rejected.',
+  E_BAD_STYLE: () => 'The AI picked a fighting style that is not in the rulebook, so the fighter was rejected.',
+  E_BAD_CHAR: () => 'The AI wrote characters the rulebook does not allow, so the fighter was rejected.',
+  E_BAD_JSON: () => 'The AI answer was not a readable fighter, so it was rejected.',
+  E_MOVE_COUNT: () => 'The AI did not pick exactly three moves, so the fighter was rejected.',
+  E_ADDRESS: () => 'Enter a Base address: 0x followed by 40 hex characters.',
+  E_BAD_ADDRESS: () => 'That is not a valid Base address.',
+  E_NOT_PAYEE: () => 'Only the winner of this payout can claim it.',
+  E_ALREADY: () => 'That payout already has an address.',
 }
 
 /**
@@ -47,12 +58,18 @@ const MESSAGES: Record<string, (c: ErrorCtx) => string> = {
 const REFUND_MESSAGES: Record<string, () => string> = {
   E_SELF: () => 'The belt changed hands while your fighter was forging; your toll came back minus the forge fee.',
   E_CLOSED: () => 'The season closed while your fighter was forging; your toll came back minus the forge fee.',
+  E_SAME_SENTENCE: () => 'Someone crowned this very sentence while yours was forging; write a different one. Your toll came back minus the forge fee.',
+  E_NO_CHAMPION: () => 'The belt lost its champion while your fighter was forging; your toll came back minus the forge fee.',
+  E_NO_SEASON: () => 'The season ended while your fighter was forging; your toll came back minus the forge fee.',
 }
+const REFUND_NOTE = 'Your toll was refunded minus the forge fee.'
 
-/** The message for a challenge that failed after forging (status Rejected or Refunded). */
+/** The message for a challenge that failed after forging (status Rejected or Refunded): it always says the toll came back. */
 export function refundMessageFor(code: string | null | undefined, ctx: ErrorCtx = {}): string {
   const m = code ? REFUND_MESSAGES[code] : undefined
-  return m ? m() : messageFor(code, ctx)
+  if (m) return m()
+  const base = code && MESSAGES[code] ? messageFor(code, ctx) : `The forge was refused (${code ?? 'unknown reason'}).`
+  return /refunded|came back/i.test(base) ? base : `${base} ${REFUND_NOTE}`
 }
 
 export function messageFor(code: string | null | undefined, ctx: ErrorCtx = {}): string {

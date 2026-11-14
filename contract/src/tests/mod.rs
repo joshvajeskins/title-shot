@@ -1,9 +1,11 @@
 //! Native tests. `economy_tests`: pure rules. The others drive the real contract through the mocked
 //! blockchain in relayer mode (and outlayer mode where noted) with a throwaway signer that plays NEAR AI.
 mod economy_tests;
+mod fix_tests;
 mod flow_tests;
 mod gate_tests;
 mod guard_tests;
+mod opus_review_tests;
 mod review_tests;
 mod season_tests;
 mod storage_tests;
@@ -136,6 +138,13 @@ impl Env {
 
     pub fn bal(&self, who: &str) -> u128 {
         self.c.balance(&acct(who))
+    }
+
+    /// Storage component a failed challenge paid out of its refund: measured, non-zero and capped at 50% of toll - fee.
+    pub fn charged(&self, id: u64) -> u128 {
+        let c = self.c.challenges.get(&id).unwrap();
+        assert!(c.storage_charge > 0 && c.storage_charge <= (c.toll - c.fee) / 2, "refund storage {} is measured and capped", c.storage_charge);
+        c.storage_charge
     }
 
     /// A signed forge output as OutLayer would return it. `ai` false = VRF only (cached sentence).

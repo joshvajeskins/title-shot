@@ -12,7 +12,7 @@ import { computeOdds } from './chain/odds'
 import { assembleFight, mapBelt, mapFighter, mapFightSummary, mapSplit, ruleOf, type ChainBelt, type RawBelt, type RawChallenge, type RawFight, type RawFighter } from './chain/views'
 import { toChainSpec, loadSim, simIfReady, type Sim } from '../sim'
 import { Api, type ApiState } from './nearApi'
-import { archiveStored, browserStore, loadStored, newGuestKeys, saveStoredIfFree, type KeyStore } from './nearKeys'
+import { archiveStored, browserStore, clearPending, loadStored, pendingOrNewKeys, saveStoredIfFree, type KeyStore } from './nearKeys'
 
 export interface NearClientOptions {
   contractId: string
@@ -28,6 +28,10 @@ export interface NearClientOptions {
 }
 
 const defaultSleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
+const evmAddr = (a: string): string => {
+  if (!/^0x[0-9a-fA-F]{40}$/.test(a.trim())) throw new GameError('E_ADDRESS', 'Enter a Base address: 0x followed by 40 hex characters.')
+  return a.trim().toLowerCase()
+}
 
 export class NearClient implements GameClient {
   readonly mode = 'testnet' as const
@@ -83,14 +87,30 @@ export class NearClient implements GameClient {
   private async makeGuest(): Promise<Account> {
     const existing = await this.account()
     if (existing) return existing
-    const keys = newGuestKeys()
+    // saved before the request and reused by a retry: the server resumes the same account instead of funding a second one
+    const keys = pendingOrNewKeys(this.store)
     const { accountId } = await this.api.guest(keys.fullPublic, keys.sessionPublic)
     // another tab may have stored an account while this request was out: its keys are never overwritten
     saveStoredIfFree(this.store, keys, accountId)
+    clearPending(this.store)
     return (await this.account())!
   }
 
   async signOut(): Promise<void> { archiveStored(this.store) }
+
+  // ---- bell payouts (Base Sepolia): the full-access key signs, since these need 1 yocto and the session key cannot ----
+  /** Register the Base address that receives this account's future purse payouts. Returns the tx hash. */
+  async setPayoutAddress(addr: string): Promise<string> { return this.fullKeyCall('set_evm_address', { addr: evmAddr(addr) }) }
+  /** Give a payout that was created without an address (claimable) the address it is paid to. Returns the tx hash. */
+  async claimPayout(payoutId: number, addr: string): Promise<string> { return this.fullKeyCall('claim_payout', { payout_id: payoutId, addr: evmAddr(addr) }) }
+
+  private async fullKeyCall(method: string, args: unknown): Promise<string> {
+    const st = this.stored()
+    if (!st) throw new GameError('E_NO_ACCOUNT', 'Create your guest corner first.')
+    const out = await new Signer(st.accountId, parseSecretKey(st.fullKey), this.rpc).call(this.contract, method, args, 30_000_000_000_000n, 1n).catch((e) => { throw networkError(e) })
+    if (out.failure) throw gameErrorFor(contractCode(out.failure) ?? 'E_TX_FAILED')
+    return out.hash
+  }
 
   // ---- reads ----
   private getState(): Promise<ApiState> {
@@ -181,7 +201,7 @@ export class NearClient implements GameClient {
     const tx = this.challengeTx.get(raw.challenge_id)
     const receipts = tx ? [{ label: 'challenge', tx, url: txUrl(tx) }] : []
     const rule = ruleOf(raw.rule, rb) ?? { id: raw.rule, name: `Rule ${raw.rule}`, desc: '' }
-    const f = assembleFight(raw, champion, challenger, rule, replay.fight.events, mapSplit(raw.split, beltRaw.forge_fee), receipts)
+    const f = assembleFight(raw, champion, challenger, rule, replay.fight.events, mapSplit(raw.split, beltRaw.forge_fee, raw.storage), receipts)
     return { ...f, verified }
   }
 

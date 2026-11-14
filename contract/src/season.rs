@@ -1,6 +1,6 @@
 //! Seasons: opening (the promoter's opener forge), the bell (`close_season`), purse address and payout creation.
 use crate::codes::*;
-use crate::economy::{clean_sentence, plan_purse, MAX_PURSE_WEI};
+use crate::economy::{clean_sentence, fold_dust, plan_purse, MAX_PURSE_WEI, MIN_PAYOUT_WEI};
 use crate::events::{emit, hex32};
 use crate::types::*;
 use crate::util::*;
@@ -90,7 +90,7 @@ impl Contract {
                 json!({ "payout_id": id, "belt_id": belt_id, "season_id": season_id, "payee": payee, "amount_wei": U128(amount),
                         "to": to.map(|a| addr_hex(&a)) }),
             );
-            self.payouts.insert(id, Payout { id, belt_id, season_id, payee, amount_wei: amount, to, nonce: None, signed: None, signing: None });
+            self.payouts.insert(id, Payout { id, belt_id, season_id, payee, amount_wei: amount, to, nonce: None, signed: None, signing: None, signing_by_payee: false });
             ids.push(id);
         }
         ids
@@ -136,7 +136,7 @@ impl Contract {
         if forge_needed {
             let c = Challenge {
                 id: 0, belt_id, season_id, challenger: who.clone(), sentence, hash, status: Status::Forging,
-                created_at: now(), need_compile: true, kind: ChallengeKind::Opener, toll: 0, fee: belt.forge_fee, relayer: false, storage_bytes: 0,
+                created_at: now(), need_compile: true, kind: ChallengeKind::Opener, toll: 0, fee: belt.forge_fee, relayer: false, storage_bytes: 0, storage_charge: 0,
             };
             self.start_forge(c);
         } else {
@@ -161,7 +161,7 @@ impl Contract {
         check(now() >= season.closes_at, E_TOO_EARLY);
         check(season.pending == 0, E_PENDING_BOUTS);
         let holder = self.holder(belt_id);
-        let plan = plan_purse(season.purse_wei, &belt.promoter, &holder, &season.defenders, season.bouts);
+        let plan = fold_dust(plan_purse(season.purse_wei, &belt.promoter, &holder, &season.defenders, season.bouts), MIN_PAYOUT_WEI);
         if season.side_pot > 0 {
             self.credit(&holder, season.side_pot);
         }

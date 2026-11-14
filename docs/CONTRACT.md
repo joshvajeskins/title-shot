@@ -22,6 +22,12 @@ new(owner, outlayer: AccountId /*outlayer.testnet*/, forge_project: String, mpc_
 - `propose_allowlist(addrs)` (owner, 1 yocto) → pending until `now + allowlist_delay_sec`; `apply_allowlist()` anyone after the delay.
   `E_TIMELOCK` if early. Publish both in views: the trust point is visible and slow to change.
 - `set_forge_mode(mode)`, `add_relayer(acct)`, `remove_relayer(acct)` (owner, 1 yocto).
+- **Timelocked config (Opus review):** `set_request(...)` and `set_forge_mode(mode)` only **stage** the change (event `config_proposed`
+  with the request hashes, `get_config.pending_config` = `{request:{model_id,prefix_sha256,suffix_sha256,signature_kind}|null,
+  forge_mode|null, activates_at}`); `apply_config()` (anyone) applies it after `allowlist_delay_sec` (`E_TIMELOCK` if early), and a request
+  change also waits until no challenge or opener is forging (`E_PENDING_BOUTS`; `stats.forging`). With a zero delay the call applies at once
+  when nothing blocks it (staging). A new proposal restarts the clock for everything staged. Relayers stay instant: `submit_forge` only
+  resolves challenges created in relayer mode, and switching to it is timelocked.
 - `create_belt(name, promoter, toll: U128, forge_fee: U128, purse_chain_id: u64)` (owner, 1 yocto) → `belt_id: u32`.
   `E_FEE`: forge_fee must be < toll and ≥ `MIN_FORGE_FEE` (covers OutLayer deposit + storage, 0.01 NEAR default).
 
@@ -57,15 +63,18 @@ status: Forging, created_at, need_compile}`; `need_compile = !fighters.contains(
      `{sentence, spec, writer: challenger, forged_at, signer, record}` keyed by hash (**first paid forge of a sentence is final**).
   2. if `!need_compile` and the output carries a compile anyway → ignore it (the stored fighter wins).
   3. resolution guards (soft refunds): challenger is now the belt holder → `E_SELF`; season was closed → `E_CLOSED`.
-  4. seed = `sha256("titleshot:seed:" ‖ vrf_output ‖ challenge_id_le)`. If the season's rule is unset (sealed), set
+  4. With a pinned VRF key the proof's alpha must be exactly `vrf:{digits}:{this contract}:titleshot-challenge-{id}` (another sender's
+     proof → `E_VRF` refund). seed = `sha256("titleshot:seed:" ‖ vrf_output ‖ challenge_id_le)`. If the season's rule is unset (sealed), set
      `rule = seed[0] % 8` now and log `rule_revealed`.
   5. `bout_sim::simulate(champion_spec, challenger_spec, seed, rule)` → winner, state_hash.
   6. **Storage component (review fix).** Every byte a bout leaves behind (challenge record and pending flag, fighter, fight, indexes) is
      measured with `env::storage_usage()` and billed to its toll: `S = min(bytes × env::storage_byte_cost(), 50% of (T − F))`, taken out of
      the toll before the split and no longer owed to anyone (`stats.storage_charged`; the cap's shortfall, if any, is `stats.storage_debt`).
-     A refunded or rejected challenge is not charged: its record is paid by the forge-fee surplus OutLayer returns to the contract (relayer
-     mode: by the fee, which is protocol share, held back against the storage deficit). So `get_solvency.equity` (balance − storage staking −
-     owed) does not fall with play. The fight record and `bout` event carry `storage`.
+     **A refunded or rejected challenge pays its storage too (Opus review):** the bytes it leaves (its record, plus a fighter when the
+     compile was stored before a resolution guard refunded it) are measured the same way and `S` (same cap) is taken from the refund, so a
+     refund is `T − F − S`, not `T − F`. `get_challenge` shows it as `storage_charge`; the `refunded`/`rejected` events carry `amount` (what
+     came back), `storage` and `storage_bytes`. An opener (no toll) records its bytes as `storage_debt`. So `get_solvency.equity` (balance −
+     storage staking − owed) does not fall with play, whatever OutLayer refunds. The fight record and `bout` event carry `storage`.
      Split the toll `T` with fee `F` and storage `S`: `R = T − F − S`; champion holder `R*60/100`, promoter `R*25/100`, season side-pot
      `R*10/100`, protocol `R − the three` (exact integer remainder, so the sum is exactly `T`: `F + S + shares = T`). Credit balances (holder,
      promoter), add to side-pot, add to protocol. The champion share goes to **whoever held the belt when the bout resolved,
@@ -74,7 +83,7 @@ status: Forging, created_at, need_compile}`; `need_compile = !fighters.contains(
      `defences = 0`. Champion or draw → `defences += 1` and `season.defence_count[holder] += 1` (a draw is a defence).
   8. Store `Fight{id, belt_id, season_id, champion_hash, challenger_hash, holder, challenger, seed, rule, winner, state_hash,
      split}`; status `Resolved{fight_id}`; update both fighters' w/l/d; log NEP-297 `bout`.
-- `expire_challenge(id)` (anyone) after `FORGE_TIMEOUT` (10 min) while still `Forging` → refund minus fee. Soft no-op if
+- `expire_challenge(id)` (anyone) after `FORGE_TIMEOUT` (10 min) while still `Forging` → refund minus fee and storage. Soft no-op if
   already resolved. A late callback after expiry is a no-op (status check).
 - Double callback / callback for an unknown id → no-op (status check). Callback from anyone but self → rejected by #[private].
 - One pending challenge per account is cleared on every terminal status.
@@ -106,9 +115,16 @@ status: Forging, created_at, need_compile}`; `need_compile = !fighters.contains(
   re-signed with the same nonce only with a strictly higher `max_fee_per_gas` (`E_FEE_NOT_HIGHER`). Pending callback lost →
   `reset_payout_signing(id)` after 10 min. **Payee vs stranger (review fix):** the payee's parameters are used as given; a caller who
   is not the payee gets the max fee lowered so the gas burn is at most 1% of the payout; the payee may replace a stranger-signed tx
-  with any parameters, a stranger can never replace a payee-signed tx (`E_NOT_PAYEE`). `open_season` refuses `purse_wei` > 1e24
+  with any parameters. **Liveness (Opus review):** the payee's own `max_fee_per_gas` must be ≥ 0.001 gwei (1e6 wei, else `E_GAS`); a
+  stranger cannot replace a payee-signed tx for 30 min after that nonce was **first** signed (`E_NOT_PAYEE`; the payee re-signing does not
+  restart the clock), after which anyone may, at a strictly higher fee that is still 1%-clamped, so a payee can never hold the later nonces of
+  the purse hostage. `on_signed` takes payee-vs-stranger from the request in flight (`signing_by_payee`), never from its arguments. At the bell
+  every non-holder share below 1e13 wei (0.00001 ETH, too small to pay its own gas within the 1% clamp) is folded into the final holder's
+  payout (sum unchanged). `open_season` refuses `purse_wei` > 1e24
   (`E_AMOUNT`). `set_purse_address` is frozen only once a payout of the season is signing or signed. `withdraw_protocol` pays only the
-  protocol share beyond the storage deficit (`get_solvency`); `get_deploy_gates` lists unmet deploy conditions.
+  protocol share beyond the storage deficit (`get_solvency`); `get_deploy_gates` lists unmet deploy conditions. Opener forge fees the
+  promoter attaches count as money in (`stats.opener_fees`), so spending them on OutLayer or withdrawing them as protocol share never makes
+  `owed()` smaller than what players hold.
 - Anyone broadcasts `raw_tx` (the relayer/worker does it automatically).
 
 ## Belt token (NEP-171)

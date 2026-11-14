@@ -77,7 +77,7 @@ fn reject_case(label: &str, tweak: impl FnOnce(&mut near_sdk::serde_json::Value,
     let v = e.c.get_challenge(id).unwrap();
     assert_eq!(v["status"], "Rejected", "{label}");
     assert_eq!(v["code"], code, "{label}: {}", v["detail"]);
-    assert_eq!(e.bal("alice.testnet"), before - FEE, "{label}: refund minus the fee");
+    assert_eq!(e.bal("alice.testnet"), before - FEE - e.charged(id), "{label}: refund minus the fee and its storage");
     assert!(e.c.get_fighter_by_sentence(s).is_none(), "{label}: nothing is stored for a rejected compile");
     assert!(e.c.get_pending(acct("alice.testnet")).is_none());
     assert_eq!(e.c.stats()["rejected"], 1);
@@ -234,7 +234,7 @@ fn outlayer_callback_without_a_vrf_refunds_and_a_pinned_key_rejects_a_forged_pro
     o.as_object_mut().unwrap().remove("vrf");
     assert_eq!(e.c.settle(id, crate::forge_out::parse_str(&o.to_string()), false), "Refunded");
     assert_eq!(e.c.get_challenge(id).unwrap()["code"], "E_VRF");
-    assert_eq!(e.bal("alice.testnet"), before - FEE);
+    assert_eq!(e.bal("alice.testnet"), before - FEE - e.charged(id));
     // The key is pinned: the helper's fake proof, and a genuine proof made for another challenge, are refused.
     let s2 = "alice with a fake proof";
     let id2 = e.challenge("alice.testnet", s2);
@@ -282,5 +282,5 @@ fn challenger_who_becomes_holder_before_resolution_is_refunded_not_paid() {
     let before = e.bal("alice.testnet");
     assert_eq!(e.deliver(id, s), "Refunded");
     assert_eq!(e.c.get_challenge(id).unwrap()["code"], "E_SELF");
-    assert_eq!(e.bal("alice.testnet"), before + TOLL - FEE);
+    assert_eq!(e.bal("alice.testnet"), before + TOLL - FEE - e.charged(id));
 }

@@ -131,7 +131,8 @@ async fn relayer_mode_only_listed_relayers_resolve_once_and_the_event_flags_the_
 
 #[tokio::test]
 async fn forge_mode_is_owner_only_and_a_switch_applies_to_new_challenges_only() -> Result<()> {
-    let w = World::new().await?;
+    // Zero timelock so the switch applies at once (the timelocked path: t24_review_fixes).
+    let w = World::with(Opts { delay_sec: 0, ..Opts::default() }).await?;
     w.deposit(&w.bob, 3 * NEAR).await?;
     assert_code(&w.call(&w.bob, "set_forge_mode", json!({"mode": "relayer"}), 1).await?, "E_NOT_OWNER", "non-owner switching mode");
     assert!(w.call(&w.owner, "set_forge_mode", json!({"mode": "relayer"}), 0).await?.is_failure(), "1 yocto required");

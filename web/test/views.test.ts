@@ -53,7 +53,7 @@ describe('contract views map to the UI types', () => {
     expect(beltStyle('Mystery Belt', 7).art).toMatch(/belt-/)
   })
   it('the writer-earned estimate is the champion share times defences, only for the champion writer', () => {
-    expect(championShare(10n ** 23n, 10n ** 22n)).toBe(54n * 10n ** 21n)
+    expect(championShare(10n ** 23n, 10n ** 22n)).toBe(468n * 10n ** 20n) // (0.1 - 0.01 - 0.012 storage estimate) x 60%
     expect(mapBelt(belt({ holder: 'otto-ink.testnet', defences: 3 }), rb)!.writerEarnedYocto).toBe((championShare(BigInt(TOLL), BigInt(FEE)) * 3n).toString())
     expect(mapBelt(belt({ holder: 'someone.testnet' }), rb)!.writerEarnedYocto).toBe('0')
   })
@@ -63,6 +63,7 @@ describe('contract views map to the UI types', () => {
     expect(sum).toMatchObject({ id: '3', beltId: '1', winner: f.winner_code, championName: 'Counselor Coo', tollYocto: TOLL })
     expect(sum.at).toBe(nsToMs(f.at))
     expect(mapSplit(f.split, FEE).forgeFee).toBe(FEE)
+    expect(mapSplit(f.split, FEE, '7').storage).toBe('7')
   })
   it('spec conversion round trips and keeps library move ids', () => {
     const f = fighter(2)
