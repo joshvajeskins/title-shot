@@ -4,7 +4,7 @@ import { archetypes, sim } from './helpers'
 import { toHex, utf8 } from '../src/game/chain/bytes'
 import { cleanSentence } from '../src/game/client'
 import type { RawBelt, RawChallenge, RawFight, RawFighter, RawPayout, RawSeason } from '../src/game/chain/views'
-import type { ChainSpec } from '../src/sim'
+import { winnerCode, type ChainSpec } from '../src/sim'
 
 export const CONTRACT = 'titleshot.testnet'
 export const NEAR = 10n ** 24n
@@ -43,7 +43,7 @@ export function fightRow(id = 1, champ = 0, chall = 1, over: Partial<RawFight> =
   const seed = '11'.repeat(32)
   const r = s.simulate(c.spec, h.spec, seed, 2)
   if (!r.ok) throw new Error('sim failed')
-  const winner = r.fight.winner
+  const winner = winnerCode(r.fight.winner) // the wasm names the winner; the contract stores 0 | 1 | 2
   return {
     id, challenge_id: 5, belt_id: 1, season_id: 2, champion_hash: c.hash, challenger_hash: h.hash, holder: 'otto-ink.testnet', challenger: 'mara-quill.testnet', seed, seed_source: 'Vrf', rule: 2,
     winner: ['champion', 'challenger', 'draw'][winner]!, winner_code: winner, state_hash: r.fight.state_hash,

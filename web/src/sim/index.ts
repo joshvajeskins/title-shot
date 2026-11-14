@@ -11,7 +11,10 @@ export interface ChainSpec {
   stats: { power: number; guard: number; speed: number; grit: number }
 }
 export type SimError = { code: string; field?: string | null }
-export interface SimFight { rounds: number; events: any[]; winner: 0 | 1 | 2; rounds_won: [number, number]; state_hash: string }
+/** The wasm reports the match winner as a word ('champion' | 'challenger' | 'draw'); round events carry 0 | 1 | 2. */
+export interface SimFight { rounds: number; events: any[]; winner: 'champion' | 'challenger' | 'draw' | 0 | 1 | 2; rounds_won: [number, number]; state_hash: string }
+/** The contract's winner_code for a sim winner in either form: 0 champion, 1 challenger, 2 draw. */
+export const winnerCode = (w: unknown): 0 | 1 | 2 => (w === 1 || w === 'challenger' ? 1 : w === 2 || w === 'draw' ? 2 : 0)
 
 /** Counts from the wasm: `champion`/`challenger` are bout wins, `n` bouts were simulated. */
 export interface SimOdds { n: number; champion: number; draw: number; challenger: number; champion_pct: number; draw_pct: number; challenger_pct: number }

@@ -10,7 +10,7 @@ import { challengeGas, txUrl } from './chain/config'
 import { describeChallenge, formatNear, gameErrorFor, networkError } from './chain/errors'
 import { computeOdds } from './chain/odds'
 import { assembleFight, mapBelt, mapFighter, mapFightSummary, mapSplit, ruleOf, type ChainBelt, type RawBelt, type RawChallenge, type RawFight, type RawFighter } from './chain/views'
-import { toChainSpec, loadSim, simIfReady, type Sim } from '../sim'
+import { toChainSpec, loadSim, simIfReady, winnerCode, type Sim } from '../sim'
 import { Api, type ApiState } from './nearApi'
 import { evmAddr, fullKeyCall, readPayoutAddress, writePayoutAddress } from './chain/payout'
 import { archiveStored, browserStore, clearPending, loadStored, pendingOrNewKeys, saveStoredIfFree, type KeyStore } from './nearKeys'
@@ -197,7 +197,8 @@ export class NearClient implements GameClient {
     const rb = sim.rulebook()
     const replay = sim.simulate(toChainSpec(champion.spec), toChainSpec(challenger.spec), raw.seed, raw.rule)
     if (!replay.ok) throw new GameError('E_SIM', 'The fight could not be replayed here.')
-    const verified = replay.fight.state_hash === raw.state_hash && replay.fight.winner === raw.winner_code
+    // The wasm names the winner ('challenger'); the contract stores a code (1). Comparing them raw made every replay "mismatch".
+    const verified = replay.fight.state_hash === raw.state_hash && winnerCode(replay.fight.winner) === raw.winner_code
     const tx = this.challengeTx.get(raw.challenge_id)
     const receipts = tx ? [{ label: 'challenge', tx, url: txUrl(tx) }] : []
     const rule = ruleOf(raw.rule, rb) ?? { id: raw.rule, name: `Rule ${raw.rule}`, desc: '' }
