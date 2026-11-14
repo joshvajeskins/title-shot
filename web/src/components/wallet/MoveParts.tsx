@@ -16,7 +16,7 @@ export function MoveReview({ plan, walletName }: { plan: MovePlan; walletName: s
         <small><Icon name="check" size={12} /> Proved yours with a signed message in {walletName}</small>
       </div>
       <ul className="wm-lines">
-        <li><span>Game balance</span><b className="num">{near(plan.balance, 4)} NEAR</b><em>withdrawn, then sent</em></li>
+        <li><span>Game balance</span><b className="num">{near(plan.balance, 4)} NEAR</b><em>{plan.balance > 0n ? 'withdrawn, then sent' : 'nothing to withdraw'}</em></li>
         <li>
           <span>Belts</span>
           <b>{plan.belts.length ? plan.belts.map((b) => b.name).join(', ') : 'None held'}</b>
@@ -34,7 +34,7 @@ export function MoveReview({ plan, walletName }: { plan: MovePlan; walletName: s
 }
 
 const LABEL: Record<MoveStepId, (p: MovePlan) => string> = {
-  withdraw: (p) => `Withdraw ${near(p.balance, 4)} NEAR game balance`,
+  withdraw: (p) => (p.balance > 0n ? `Withdraw ${near(p.balance, 4)} NEAR game balance` : 'Withdraw the game balance'),
   belts: (p) => (p.belts.length ? `Transfer ${p.belts.map((b) => b.name).join(', ')}` : 'Transfer belts'),
   near: (p) => `Send the account's NEAR to ${p.target}`,
 }

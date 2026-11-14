@@ -14,7 +14,11 @@ import { NearMark } from './WalletTicket'
 import { isEmpty, MoveReview, MoveSteps } from './MoveParts'
 import './wallet.css'
 
-type Phase = 'connect' | 'connecting' | 'proving' | 'planning' | 'review' | 'moving' | 'done' | 'playing'
+/** Fight money "Play from my wallet" deposits: the game balance just moved, or 0.2 NEAR when that was less. */
+const DEFAULT_BACK = 10n ** 24n / 5n
+const fightMoneyBack = (p: MovePlan): bigint => (p.balance >= DEFAULT_BACK ? p.balance : DEFAULT_BACK)
+
+type Phase ='connect' | 'connecting' | 'proving' | 'planning' | 'review' | 'moving' | 'done' | 'playing'
 
 const mods = () => Promise.all([import('../../game/wallet/connector'), import('../../game/wallet/prove'), import('../../game/wallet/move'), import('../../game/chain/rpc')])
 
@@ -75,9 +79,8 @@ export function MoveDialog({ onClose }: { onClose: () => void }) {
     if (!conn) return
     setErr(null); setPhase('playing')
     try {
-      const [[{ contractId }], { setupWallet, FIRST_DEPOSIT_MIN }] = await Promise.all([mods(), import('../../game/wallet/setup')])
-      const moved = plan ? plan.balance : 0n
-      await setupWallet({ wallet: conn.wallet, accountId: conn.accountId, walletId: conn.walletId, contract: contractId(), deposit: moved >= FIRST_DEPOSIT_MIN ? moved : 0n })
+      const [[{ contractId }], { setupWallet }] = await Promise.all([mods(), import('../../game/wallet/setup')])
+      await setupWallet({ wallet: conn.wallet, accountId: conn.accountId, walletId: conn.walletId, contract: contractId(), deposit: plan ? fightMoneyBack(plan) : DEFAULT_BACK })
       await refreshAccount(); sound.play('bell_ding'); onClose()
     } catch (e) { fail(e, 'done') }
   }
@@ -115,7 +118,7 @@ export function MoveDialog({ onClose }: { onClose: () => void }) {
           )}
           {phase === 'done' && (err || receipts.length === 0) && <button className="btn btn-ghost btn-sm" onClick={onClose}>Close</button>}
         </div>
-        {phase === 'done' && !err && plan && <p className="wm-note">Play from {conn?.accountId} adds a challenge-only session key in one wallet approval{plan.balance > 0n ? ` and deposits the ${near(plan.balance, 3)} NEAR fight money back` : ''}. This guest's keys stay in this browser's archive.</p>}
+        {phase === 'done' && !err && plan && <p className="wm-note">Play from {conn?.accountId} adds a challenge-only session key in one wallet approval and deposits {near(fightMoneyBack(plan), 3)} NEAR of fight money{plan.balance >= DEFAULT_BACK ? ' (the balance you just moved)' : ''}. This guest's keys stay in this browser's archive.</p>}
       </div>
     </div>,
     document.body,
