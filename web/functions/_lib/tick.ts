@@ -6,6 +6,8 @@ import { compileFor } from './compiler'
 import { getJson, putJson } from './cache'
 import { fixPurseAddress, needsOpening, openStep } from './tickOpen'
 import { payoutsStep } from './tickPayouts'
+import { forgeChargeStep } from './tickForge'
+import { Ledger } from './ledger'
 import { detailOf, tickKey, type Log, type StepLog, type TickDeps, type TickLog } from './tickTypes'
 
 export const THROTTLE_MS = 20_000
@@ -37,6 +39,14 @@ async function relay(d: TickDeps, log: Log, id: number, sentence: string, model:
   if (!d.relayer) return false
   let output: Record<string, unknown> = { ok: true }
   if (needCompile) {
+    // The relayed compile is counted by the contract (get_compile_caps) and charged by forgeChargeStep, so it is not
+    // metered twice; but the key's hard stop still holds: past it, nothing is compiled (the challenge expires and refunds).
+    const ledger = Ledger.of(d.env, { fetchFn: d.fetchFn, now: d.now })
+    if (ledger) {
+      const hold = await ledger.reserve('compile', model, 'tick').catch(() => null)
+      if (!hold) { log({ action: `relay#${id}`, ok: false, detail: 'FORGE_CLOSED: NEAR AI budget used up' }); return false }
+      await ledger.settle(hold, 'free')
+    }
     const c = await compileFor(d.env, d.sim, model, sentence, d.fetchFn)
     output = { ok: true, response: c.response, signature: c.signed.signature, signing_address: c.signed.signing_address, signing_algo: c.signed.signing_algo, signature_kind: c.signed.signature_kind, text: c.signed.text }
   }
@@ -112,6 +122,7 @@ export async function runTick(d: TickDeps, opts: { force?: boolean } = {}): Prom
       }
       if (needsOpening(belt, t0)) await safe(log, belt.id, 'open', () => openStep(d, log, belt))
     }
+    await safe(log, undefined, 'forge_charge', () => forgeChargeStep(d, log))
     await safe(log, undefined, 'sweep', () => sweepStep(d, log))
   } catch (e) {
     log({ action: 'tick', ok: false, detail: String(e instanceof Error ? e.message : e).slice(0, 140) })

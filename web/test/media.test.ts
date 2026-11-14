@@ -3,7 +3,7 @@ import { env, MemKV } from './helpers'
 import { cryFor, portraitFor } from '../functions/_lib/media'
 import { previewKey } from '../functions/_lib/lookup'
 import { pickVoice } from '../functions/_lib/voices'
-import { PORTRAIT_STYLE, pickImageModel, sniffImage } from '../functions/_lib/nearai'
+import { PORTRAIT_MODEL, portraitPrompt, sniffImage } from '../functions/_lib/portraitGen'
 import type { Env } from '../functions/_lib/env'
 import { ApiError } from '../functions/_lib/http'
 
@@ -22,7 +22,7 @@ function imageApi(over: { models?: unknown; image?: () => Response } = {}) {
   const log: { url: string; body?: any }[] = []
   const fetchFn = (async (url: string, init?: RequestInit) => {
     log.push({ url, body: init?.body ? JSON.parse(String(init.body)) : undefined })
-    if (url.endsWith('/v1/models')) return new Response(JSON.stringify(over.models ?? { data: [{ id: 'Qwen/Qwen3.8-27B' }, { id: 'black-forest-labs/FLUX.1-schnell' }] }))
+    if (url.endsWith('/v1/models')) return new Response(JSON.stringify(over.models ?? { data: [{ id: 'z-ai/glm-5.3-flash' }, { id: PORTRAIT_MODEL }] }))
     if (url.endsWith('/v1/images/generations')) return over.image ? over.image() : new Response(JSON.stringify({ data: [{ b64_json: b64(PNG) }] }))
     return new Response('?', { status: 404 })
   }) as unknown as typeof fetch
@@ -38,8 +38,11 @@ describe('GET /api/portrait: generate once, then serve from KV', () => {
     expect(img.type).toBe('image/png')
     expect(img.bytes.length).toBe(PNG.length)
     const gen = log.find((l) => l.url.endsWith('/v1/images/generations'))!.body
-    expect(gen.model).toBe('black-forest-labs/FLUX.1-schnell')
-    expect(gen.prompt.startsWith(PORTRAIT_STYLE)).toBe(true)
+    expect(gen.model).toBe('black-forest-labs/FLUX.2-klein-4B')
+    expect(gen.size).toBe('768x960')
+    expect(gen.response_format).toBe('b64_json')
+    expect(gen.prompt).toBe(portraitPrompt('a plump pigeon in a tiny barrister wig'))
+    expect(gen.prompt.startsWith('Cartoon mascot character, a single non-human character')).toBe(true)
     expect(gen.prompt).toContain('plump pigeon')
     expect(gen.seed).toBe(parseInt('0a1b2c3d', 16))
     const calls = log.length
@@ -52,13 +55,10 @@ describe('GET /api/portrait: generate once, then serve from KV', () => {
     await withFighter(e)
     await expect(portraitFor(e, null, HASH, closed, imageApi().fetchFn)).rejects.toMatchObject({ status: 429 })
   })
-  it('no API key, no image model or a failed generation is a clean 404 NO_PORTRAIT, remembered for a while', async () => {
+  it('no API key or a failed generation is a clean 404 NO_PORTRAIT, remembered for a while', async () => {
     const noKey = env()
     await withFighter(noKey)
     await expect(portraitFor(noKey, null, HASH, open, imageApi().fetchFn)).rejects.toMatchObject({ status: 404, code: 'NO_PORTRAIT' })
-    const noModel = env({ NEARAI_API_KEY: 'k' })
-    await withFighter(noModel)
-    await expect(portraitFor(noModel, null, HASH, open, imageApi({ models: { data: [{ id: 'Qwen/Qwen3.8-27B' }] } }).fetchFn)).rejects.toMatchObject({ code: 'NO_PORTRAIT' })
     const failing = env({ NEARAI_API_KEY: 'k' })
     await withFighter(failing)
     const api = imageApi({ image: () => new Response('boom', { status: 500 }) })
@@ -87,9 +87,7 @@ describe('GET /api/portrait: generate once, then serve from KV', () => {
     await Promise.all([portraitFor(e, null, HASH, open, fetchFn), portraitFor(e, null, HASH, open, fetchFn), portraitFor(e, null, HASH, open, fetchFn)])
     expect(log.filter((l) => l.url.endsWith('/v1/images/generations')).length).toBe(1)
   })
-  it('model choice prefers FLUX, then any image model, and sniffing knows png/jpeg/webp', async () => {
-    expect(await pickImageModel(imageApi({ models: { data: [{ id: 'a/text' }, { id: 'b/sdxl-turbo' }, { id: 'c/flux-dev' }] } }).fetchFn)).toBe('c/flux-dev')
-    expect(await pickImageModel(imageApi({ models: { data: [{ id: 'a/text' }, { id: 'x/y', output_modalities: ['image'] }] } }).fetchFn)).toBe('x/y')
+  it('sniffing knows png/jpeg/webp', async () => {
     expect(sniffImage(PNG)).toBe('image/png')
     expect(sniffImage(Uint8Array.from([0xff, 0xd8, 0xff]))).toBe('image/jpeg')
     expect(sniffImage(Uint8Array.from([0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0, 0x57, 0x45]))).toBe('image/webp')

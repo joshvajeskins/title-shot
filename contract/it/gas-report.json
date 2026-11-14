@@ -15,22 +15,22 @@
     {
       "callback_tgas": 6.8,
       "path": "challenge: cached fighter + bout",
-      "tx_tree_tgas": 17.4
+      "tx_tree_tgas": 17.5
     },
     {
       "callback_tgas": 9.0,
       "path": "challenge: compile + bout, title change",
-      "tx_tree_tgas": 19.8
+      "tx_tree_tgas": 19.9
     },
     {
       "callback_tgas": 4.8,
       "path": "challenge: tampered response -> refund",
-      "tx_tree_tgas": 15.6
+      "tx_tree_tgas": 15.7
     },
     {
       "callback_tgas": 8.8,
       "path": "challenge: 3 KB forge output (stored-output path)",
-      "tx_tree_tgas": 20.0
+      "tx_tree_tgas": 20.1
     }
   ],
   "tx_budget_tgas": 300.0

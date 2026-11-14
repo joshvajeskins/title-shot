@@ -11,7 +11,7 @@ import { loadSimSync } from '../web/src/sim'
 import { standinAddress } from '../web/functions/_lib/standinKey'
 
 const STANDIN_MODEL = 'standin/compiler-v1'
-const DEFAULT_MODEL = 'Qwen/Qwen3.8-27B'
+const DEFAULT_MODEL = 'z-ai/glm-5.3-flash'
 const OWNER = 'titleshot.testnet'
 const PROJECT = 'titleshot.testnet/titleshot-forge'
 const PURSE_CHAIN = 84532 // Base Sepolia

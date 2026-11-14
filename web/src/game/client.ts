@@ -34,6 +34,10 @@ export interface GameClient {
   challenge(beltId: string, sentence: string, onProgress: (p: ForgeProgress) => void): Promise<Fight>
   fight(id: string): Promise<Fight>
   history(beltId?: string): Promise<FightSummary[]>
+  /** The Base address registered for purse payouts (lowercase), or null. Optional: absent on clients without a chain. */
+  payoutAddress?(): Promise<string | null>
+  /** Register the Base address for purse payouts (0x + 40 hex, any casing). Throws GameError E_ADDRESS on a bad address. */
+  setPayoutAddress?(addr: string): Promise<void>
 }
 
 export class GameError extends Error {

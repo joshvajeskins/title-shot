@@ -7,6 +7,7 @@ import { sha256 } from '@noble/hashes/sha2.js'
 import type { Ctx } from '../functions/_lib/http'
 import type { Env, KVLike } from '../functions/_lib/env'
 import { resetRateMemory } from '../functions/_lib/ratelimit'
+import { resetLedgerMemory } from '../functions/_lib/ledger'
 import { loadSimSync, type Sim } from '../src/sim'
 import { concat, fromHex, toHex, utf8 } from '../src/game/chain/bytes'
 import { eip191Digest, sha256Hex } from '../src/game/chain/signature'
@@ -19,7 +20,7 @@ export class MemKV implements KVLike {
   store = new Map<string, string | ArrayBuffer>()
   puts = 0
   /** a new fake KV is a new world: the in-isolate rate-limit counters start empty, like a cold isolate */
-  constructor() { resetRateMemory() }
+  constructor() { resetRateMemory(); resetLedgerMemory() }
   async get(key: string, type?: 'arrayBuffer'): Promise<any> {
     const v = this.store.get(key)
     if (v === undefined) return null

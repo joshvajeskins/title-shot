@@ -8,3 +8,5 @@ pub mod request;
 mod compile_tests;
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod vector_tests;

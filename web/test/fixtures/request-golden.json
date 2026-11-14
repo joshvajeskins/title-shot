@@ -2,50 +2,50 @@
   "cases": [
     {
       "escaped": "a pigeon with a law degree",
-      "request_len": 11747,
-      "request_sha256": "055de10221f8a4f9a385b0ebfb1ec08f7233e0c68940f827427544fe86a87fbf",
+      "request_len": 11796,
+      "request_sha256": "0dd840941a506864ab40f56cb0846c40e9cbb30373a6645ba59d9cb4d4a6790a",
       "sentence": "a pigeon with a law degree"
     },
     {
       "escaped": "she said \\\"no\\\" and left",
-      "request_len": 11745,
-      "request_sha256": "0924131cabcfef9dbb139ed9fc223eecedd409428da2829073e319a515674100",
+      "request_len": 11794,
+      "request_sha256": "1208b82ea6a4f05a7f5284d31b7f9d73d608ba1ff58d2d710255cc3823716b06",
       "sentence": "she said \"no\" and left"
     },
     {
       "escaped": "back\\\\slash and /slash",
-      "request_len": 11743,
-      "request_sha256": "7cd49ced482d2e82e479ea2b46f6a64c8e26e6094d7aa464a75d3ded76fc4a6b",
+      "request_len": 11792,
+      "request_sha256": "d8e03fa49055da799db9ec97f3071308a6c41026de1b7ce8c3143b6544362a9a",
       "sentence": "back\\slash and /slash"
     },
     {
       "escaped": "ctrl \\u0001 \\u001f chars",
-      "request_len": 11745,
-      "request_sha256": "8b371bf2ca438e4bd034ff6b0b738917e7d1aea71bf75cca74a1ebe0e347b268",
+      "request_len": 11794,
+      "request_sha256": "a37000e8cfd570d73eb76f8812c88820fcc239410c45c7e0b30555800c49fd1a",
       "sentence": "ctrl \u0001 \u001f chars"
     },
     {
       "escaped": "emoji 🥊 and 🏆 日本語 éè",
-      "request_len": 11755,
-      "request_sha256": "aa8532247f0037e439816033f0772dfbc3be19bc2b458f54435bd7bc7d87f831",
+      "request_len": 11804,
+      "request_sha256": "45dff832b8b6ea6ecd5c81e9c711a0c96f2104345a274491f44c7b005be60ec9",
       "sentence": "emoji 🥊 and 🏆 日本語 éè"
     },
     {
       "escaped": "tab\\there\\nnewline",
-      "request_len": 11739,
-      "request_sha256": "f816d323716b779ba39a33c50c94e43a30305f064f32305c20ff26dfed02d8c7",
+      "request_len": 11788,
+      "request_sha256": "5742757d57bee55122f5e7380cc834442f33d0f392b42498c26e1827a82c5346",
       "sentence": "tab\there\nnewline"
     },
     {
       "escaped": "<script>alert(1)</script> & 'quotes'",
-      "request_len": 11757,
-      "request_sha256": "0058a0930bb3b7954766df3d1ea41bd6c871b5f58bb367f65dce10c2b8647e87",
+      "request_len": 11806,
+      "request_sha256": "2dc16df6e5574466eb99bfadef25186c66f106570a635d7b08a186d1877b92b3",
       "sentence": "<script>alert(1)</script> & 'quotes'"
     },
     {
       "escaped": "line sep   para   del ",
-      "request_len": 11748,
-      "request_sha256": "1bbcaa2d731948c1b061da87ab5f45bbd7c708c9cb04ee28abe28ad4c3f425eb",
+      "request_len": 11797,
+      "request_sha256": "b86cfcf192a3781d1c8b1bec562625cea98ad6ec9f8238c824f0be21a3d7a8d7",
       "sentence": "line sep   para   del "
     }
   ],
@@ -53,6 +53,6 @@
   "prefix_len": 10044,
   "prefix_sha256": "8f51336cd4e00e35d96a8d842df393f8ed24634ed00d1d5b9fe4211accff4c2c",
   "rulebook_hash": "61ec96b27661f09562445f749400ce92c546e01f22e95885d240422f464fae1c",
-  "suffix_len": 1677,
-  "suffix_sha256": "6d5bcb2ec1e200110e1e5d69d297ef602edaf7101bdec3d43646a9070bb79f01"
+  "suffix_len": 1726,
+  "suffix_sha256": "404fc576956fe5eae8479685093e8a24681be2c8b1e2db544574ed61772c963e"
 }

@@ -47,7 +47,7 @@ export function setup(w: World, opts: { sponsor?: boolean; vance?: boolean; rela
     season: async (b: number, s: number) => w.seasons[`${b}:${s}`] ?? null,
     challenge: async (id: number) => w.challenges[id] ?? null,
     stats: async () => ({ next_challenge_id: w.nextChallenge, challenges: w.nextChallenge }),
-    config: async () => ({ model_id: 'Qwen/Qwen3.8-27B', forge_mode: w.forgeMode }),
+    config: async () => ({ model_id: 'z-ai/glm-5.3-flash', forge_mode: w.forgeMode }),
     deployGates: async () => ({ ok: !w.blockingGates.length, ready: !w.blockingGates.length, failing: w.blockingGates.map((gate) => ({ gate, why: 'test', blocking: true })) }),
   }
   const near = { view: async (_c: string, m: string) => { if (m === 'derived_public_key') return TEST_DERIVED_KEY; throw new Error('no view ' + m) }, balance: async () => 10n ** 24n }

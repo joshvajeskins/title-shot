@@ -14,6 +14,8 @@ import { compilerOf, isStandin, STANDIN_MODEL } from './standin'
 import type { SignedResponse } from '../../src/game/chain/signature'
 import { missKey, previewKey, type FighterLook } from './lookup'
 import { CAPS, spendCap } from './ratelimit'
+import { Ledger, LedgerClosed, type LedgerDeps, type Who } from './ledger'
+import type { Usage } from './pricing'
 
 export const previewBody = z.object({ sentence: z.string().min(1).max(400) }).strict()
 
@@ -30,7 +32,30 @@ export interface PreviewPayload {
   requestSha256?: string; responseSha256?: string
 }
 
-export interface PreviewDeps { env: Env; sim: Sim; chain: Chain | null; fetchFn: typeof fetch }
+/** `who`: 'owner' when the request carried the tick secret (skips only the public spend caps). */
+export interface PreviewDeps { env: Env; sim: Sim; chain: Chain | null; fetchFn: typeof fetch; who?: Who; ledger?: LedgerDeps }
+
+const forgeClosed = (e: LedgerClosed) => new ApiError(503, 'FORGE_CLOSED', e.reason === 'public_daily'
+  ? 'Free previews are paused for today: the AI budget is used up. They come back at midnight UTC; forged fighters still work.'
+  : 'Free previews are paused: the AI budget is used up. Forged fighters still work.')
+
+/** Compile through the spend ledger: reserve the worst case, settle to the usage NEAR AI reports (stand-in: free, no ledger). */
+async function meteredCompile(d: PreviewDeps, model: string, sentence: string) {
+  const ledger = isStandin(d.env) ? null : Ledger.of(d.env, { fetchFn: d.fetchFn, ...d.ledger })
+  if (!ledger) return compileFor(d.env, d.sim, model, sentence, d.fetchFn)
+  let hold
+  try { hold = await ledger.reserve('compile', model, d.who ?? 'public') } catch (e) { throw e instanceof LedgerClosed ? forgeClosed(e) : e }
+  const seen: { answered: boolean; usage: Usage | null } = { answered: false, usage: null }
+  try {
+    const c = await compileFor(d.env, d.sim, model, sentence, d.fetchFn, (usage) => { seen.answered = true; seen.usage = usage })
+    await ledger.settle(hold, seen.usage ?? 'worst')
+    return c
+  } catch (e) {
+    // answered 200 = billed (usage if it had one); an error status = not billed; no answer at all = maybe billed (worst case)
+    await ledger.settle(hold, seen.answered ? seen.usage ?? 'worst' : e instanceof ApiError && (e.code === 'AI_STATUS' || e.code === 'AI_UNAVAILABLE') ? 'free' : 'worst')
+    throw e
+  }
+}
 
 /** Would the contract accept this address and signature kind? Reads the same config and list the paid forge checks. */
 export async function attest(d: PreviewDeps, signed: SignedResponse, verified: boolean): Promise<boolean | null> {
@@ -62,7 +87,7 @@ export async function runPreview(d: PreviewDeps, input: string): Promise<Preview
 
   const model = d.chain ? (await cachedJson(kv, scoped(d.chain.id, 'cfg:model'), 300, () => d.chain!.config())).model_id : isStandin(d.env) ? STANDIN_MODEL : d.env.NEARAI_MODEL ?? DEFAULTS.model
   await spendCap(kv, CAPS.previewCompile) // uncached compiles only: cache hits and canonical lookups above cost nothing
-  const c = await compileFor(d.env, d.sim, model, sentence, d.fetchFn)
+  const c = await meteredCompile(d, model, sentence)
   const n = d.sim.normalize(c.raw)
   if (!n.ok) {
     if (n.error.code === 'E_REFUSED') throw new ApiError(422, 'REFUSED', 'The referee refused this sentence. Try a different one.')

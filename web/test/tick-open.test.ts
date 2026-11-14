@@ -222,7 +222,7 @@ describe('the challenge sweep: expiry and the relayer fallback', () => {
     expect(await getJson(kv, scoped(CONTRACT, 'sweep:cursor'))).toBe(2)
   })
   it('in relayer mode the relayer delivers the signed NEAR AI compile via submit_forge', async () => {
-    const ex = recordedExchange(sim(), 'Qwen/Qwen3.8-27B', 'a pigeon with a law degree', JSON.stringify(archetypes()[0]!.raw))
+    const ex = recordedExchange(sim(), 'z-ai/glm-5.3-flash', 'a pigeon with a law degree', JSON.stringify(archetypes()[0]!.raw))
     const fetchFn = (async (url: string) => {
       if (url.includes('/chat/completions')) return new Response(ex.response)
       return new Response(JSON.stringify({ text: ex.text, signature: ex.signature, signing_address: ex.signing_address, signing_algo: 'ecdsa', signature_kind: 'provider_tee' }))

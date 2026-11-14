@@ -126,6 +126,9 @@ impl Contract {
         let cached = !carry && self.fighters.contains_key(&hash);
         let forge_needed = !carry && !cached;
         check(!forge_needed || attached >= belt.forge_fee, E_FEE);
+        if forge_needed {
+            self.check_compile_open();
+        }
 
         let state = if forge_needed { SeasonState::Opening } else { SeasonState::Open };
         let mut b = belt.clone();

@@ -52,8 +52,8 @@ A run that OutLayer itself fails (access denied, worker gone, trap) reaches the 
 
 ```bash
 cd forge
-cargo test --lib                                   # 18 host tests, no network
-CARGO_TARGET_WASM32_WASIP2_RUNNER="wasmtime run -S http" cargo test --lib --target wasm32-wasip2   # same 18, inside wasm
+cargo test --lib                                   # 20 host tests, no network
+CARGO_TARGET_WASM32_WASIP2_RUNNER="wasmtime run -S http" cargo test --lib --target wasm32-wasip2   # same 20, inside wasm
 cargo build --target wasm32-wasip2 --release       # target/wasm32-wasip2/release/titleshot-forge.wasm (~440 KB)
 
 # OutLayer CLI (~/.cargo/bin/outlayer). Credentials live in ~/.outlayer/testnet (login once; key piped, never printed):

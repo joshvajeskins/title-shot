@@ -182,8 +182,8 @@ describe('client selection and key storage', () => {
 
 /** get_config as contract/src/views.rs emits it: no rulebook hash, only the sha256 of the stored request prefix and suffix. */
 const configRaw = (over: Record<string, unknown> = {}) => {
-  const p = sim().requestParts('Qwen/Qwen3.8-27B')
-  return { forge_mode: 'outlayer', model_id: 'Qwen/Qwen3.8-27B', signature_kind: 'provider_tee', prefix_sha256: sha256Hex(utf8(p.prefix)), suffix_sha256: sha256Hex(utf8(p.suffix)), ...over }
+  const p = sim().requestParts('z-ai/glm-5.3-flash')
+  return { forge_mode: 'outlayer', model_id: 'z-ai/glm-5.3-flash', signature_kind: 'provider_tee', prefix_sha256: sha256Hex(utf8(p.prefix)), suffix_sha256: sha256Hex(utf8(p.suffix)), ...over }
 }
 
 describe('GET /api/state builds the whole lobby from the contract', () => {

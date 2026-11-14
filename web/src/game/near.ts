@@ -12,6 +12,7 @@ import { computeOdds } from './chain/odds'
 import { assembleFight, mapBelt, mapFighter, mapFightSummary, mapSplit, ruleOf, type ChainBelt, type RawBelt, type RawChallenge, type RawFight, type RawFighter } from './chain/views'
 import { toChainSpec, loadSim, simIfReady, type Sim } from '../sim'
 import { Api, type ApiState } from './nearApi'
+import { evmAddr, fullKeyCall, readPayoutAddress, writePayoutAddress } from './chain/payout'
 import { archiveStored, browserStore, clearPending, loadStored, pendingOrNewKeys, saveStoredIfFree, type KeyStore } from './nearKeys'
 
 export interface NearClientOptions {
@@ -28,10 +29,6 @@ export interface NearClientOptions {
 }
 
 const defaultSleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
-const evmAddr = (a: string): string => {
-  if (!/^0x[0-9a-fA-F]{40}$/.test(a.trim())) throw new GameError('E_ADDRESS', 'Enter a Base address: 0x followed by 40 hex characters.')
-  return a.trim().toLowerCase()
-}
 
 export class NearClient implements GameClient {
   readonly mode = 'testnet' as const
@@ -99,17 +96,20 @@ export class NearClient implements GameClient {
   async signOut(): Promise<void> { archiveStored(this.store) }
 
   // ---- bell payouts (Base Sepolia): the full-access key signs, since these need 1 yocto and the session key cannot ----
-  /** Register the Base address that receives this account's future purse payouts. Returns the tx hash. */
-  async setPayoutAddress(addr: string): Promise<string> { return this.fullKeyCall('set_evm_address', { addr: evmAddr(addr) }) }
+  /** The Base address registered for this account's purse payouts (lowercase), or null (none yet, or no guest corner). */
+  async payoutAddress(): Promise<string | null> {
+    const st = this.stored()
+    return st ? readPayoutAddress(this.rpc, this.contract, st.accountId) : null
+  }
+  /** Register the Base address that receives this account's future purse payouts (set_evm_address, full-access key, 1 yocto). */
+  async setPayoutAddress(addr: string): Promise<void> { const a = evmAddr(addr); await writePayoutAddress(this.rpc, this.contract, ...this.fullKey(), a) }
   /** Give a payout that was created without an address (claimable) the address it is paid to. Returns the tx hash. */
-  async claimPayout(payoutId: number, addr: string): Promise<string> { return this.fullKeyCall('claim_payout', { payout_id: payoutId, addr: evmAddr(addr) }) }
+  async claimPayout(payoutId: number, addr: string): Promise<string> { const a = evmAddr(addr); return fullKeyCall(this.rpc, this.contract, ...this.fullKey(), 'claim_payout', { payout_id: payoutId, addr: a }) }
 
-  private async fullKeyCall(method: string, args: unknown): Promise<string> {
+  private fullKey(): [string, string] {
     const st = this.stored()
     if (!st) throw new GameError('E_NO_ACCOUNT', 'Create your guest corner first.')
-    const out = await new Signer(st.accountId, parseSecretKey(st.fullKey), this.rpc).call(this.contract, method, args, 30_000_000_000_000n, 1n).catch((e) => { throw networkError(e) })
-    if (out.failure) throw gameErrorFor(contractCode(out.failure) ?? 'E_TX_FAILED')
-    return out.hash
+    return [st.accountId, st.fullKey]
   }
 
   // ---- reads ----

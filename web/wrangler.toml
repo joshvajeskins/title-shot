@@ -20,7 +20,9 @@ RELAYER_ID = "relay.titleshot.testnet"
 MPC_SIGNER = "v1.signer-prod.testnet"
 NEAR_RPC_URLS = "https://near-testnet.drpc.org,https://test.rpc.fastnear.com,https://rpc.testnet.fastnear.com"
 BASE_RPC_URLS = "https://sepolia.base.org,https://base-sepolia-rpc.publicnode.com"
-NEARAI_MODEL = "Qwen/Qwen3.8-27B"
+NEARAI_MODEL = "z-ai/glm-5.3-flash"
+# NEARAI_BUDGET_USD / NEARAI_PUBLIC_DAILY_USD / NEARAI_PUBLIC_TOTAL_USD are NOT set here: scripts/rotate-nearai-key.sh pushes
+# them as Pages secrets with each key (a [vars] entry of the same name would clash). Unset = 2.5 / 0.05 / 0.25.
 PURSE_WEI = "2000000000000000"
 SEASON_SEC = "21600"
 SPONSOR_FLOOR_NEAR = "0.8"

@@ -7,7 +7,7 @@ import { publicDetail, publicTick, type TickLog } from '../functions/_lib/tickTy
 import { cleanSentence } from '../src/game/client'
 import { z } from 'zod'
 
-const MODEL = 'Qwen/Qwen3.8-27B'
+const MODEL = 'z-ai/glm-5.3-flash'
 const SENTENCE = 'a pigeon with a law degree'
 
 describe('preview attested = verified AND allowlisted signer AND the contract signature kind', () => {

@@ -28,6 +28,17 @@ new(owner, outlayer: AccountId /*outlayer.testnet*/, forge_project: String, mpc_
   change also waits until no challenge or opener is forging (`E_PENDING_BOUTS`; `stats.forging`). With a zero delay the call applies at once
   when nothing blocks it (staging). A new proposal restarts the clock for everything staged. Relayers stay instant: `submit_forge` only
   resolves challenges created in relayer mode, and switching to it is timelocked.
+- **Compile cap (docs/BUDGET.md, `contract/src/compile_cap.rs`).** `set_compile_caps(daily: u32, total: u32)` and
+  `reset_compile_counter()` (owner, 1 yocto; the reset zeroes both counters on NEAR AI key rotation). Defaults at `new`: daily 60,
+  total 250. Every `challenge`/`open_season` that requests a compile (`need_compile`, any forge mode) counts one at request time;
+  a later refund or rejection does not un-count it. When `today >= daily` (UTC day index `block_timestamp / 86400 s`, rolls over
+  on its own) or `used >= total`, such a call panics `E_FORGE_CLOSED` before any toll is debited or season created (the
+  promoter's attached fee comes back with the panic). Cached and carried-over sentences never compile and are never blocked.
+  View `get_compile_caps` → `{daily, total, today, used, day, open}`; the worker's tick charges `used` deltas to its ledger.
+- **Request parts.** `bout_sim::rulebook::request_parts(model)` puts a model-specific reasoning control immediately before
+  `"temperature"`: `"reasoning_effort":"low",` for `z-ai/glm-5.3*`, `"chat_template_kwargs":{"enable_thinking":false},` for
+  `Qwen/Qwen3*`, nothing otherwise (the rulebook hash is unchanged). Deploy with the parts for the configured model; the real
+  glm-5.3-flash `-low` recordings in `vectors/` verify and are accepted on chain (sandbox t24).
 - `create_belt(name, promoter, toll: U128, forge_fee: U128, purse_chain_id: u64)` (owner, 1 yocto) → `belt_id: u32`.
   `E_FEE`: forge_fee must be < toll and ≥ `MIN_FORGE_FEE` (covers OutLayer deposit + storage, 0.01 NEAR default).
 
@@ -44,6 +55,7 @@ new(owner, outlayer: AccountId /*outlayer.testnet*/, forge_project: String, mpc_
 signer allowlist or unset request parts — so a misconfigured deploy never runs an unverified seed), `E_NO_BELT`, `E_NO_SEASON` (no open season or `now >= closes_at`), `E_NO_CHAMPION` (opener not forged yet),
 `E_SENTENCE` (after trim + whitespace collapse: 3..=120 chars, no control chars), `E_SELF` (caller is the belt holder),
 `E_SAME_SENTENCE` (sentence hash equals the champion's), `E_PENDING` (caller already has a pending challenge anywhere),
+`E_FORGE_CLOSED` (the sentence needs a compile and the compile cap is reached, see below; a cached sentence is never blocked),
 `E_BALANCE` (balance < toll). Then: debit toll, create `Challenge{id, belt_id, season_id, challenger, sentence, hash,
 status: Forging, created_at, need_compile}`; `need_compile = !fighters.contains(hash)`.
 - forge_mode `outlayer`: `outlayer.request_execution(...)` with the forge_fee as deposit (shape from `spikes/forge-callback`,
@@ -90,7 +102,7 @@ status: Forging, created_at, need_compile}`; `need_compile = !fighters.contains(
 
 ## Seasons and the bell
 - `open_season(belt_id, opener_sentence, duration_sec, purse_wei: U128)` (belt promoter only, **payable**: attaches the
-  forge fee) → `E_NOT_PROMOTER`, `E_SEASON_OPEN`, `E_DURATION` (60 s ..= 30 days). Forges the opener through the same path
+  forge fee) → `E_NOT_PROMOTER`, `E_SEASON_OPEN`, `E_DURATION` (60 s ..= 30 days), `E_FORGE_CLOSED` (a new opener needs a compile and the cap is reached). Forges the opener through the same path
   (challenge kind `Opener`; on success the opener becomes champion with **no fight**, belt NFT minted/transferred to the
   promoter; refund path as above). Season gets `id+1`, `opens_at`, `closes_at`, `rule: None` (sealed), purse
   `{chain_id, path: "belt-{id}-s{season}", amount_wei: purse_wei}`, side_pot 0. The purse's EVM address is derived off-chain
@@ -140,7 +152,7 @@ belt art URL. `nft_transfer` by the holder is allowed (a title can be gifted/sol
 defence_count top list), `get_fighter(hash_hex)`, `get_fighter_by_sentence(sentence)`, `get_challenge(id)`,
 `get_pending(account)`, `get_fight(id)`, `get_fights(belt_id, from, limit)` (newest first), `balance_of`, `get_payouts(belt,
 season)`, `get_allowlist` (+pending, activates_at), `preview_split(belt_id)` (after the storage component, with `storage_estimate`), `stats` (totals:
-tolls, protocol, challenges, storage_charged), `get_solvency` (equity, storage_debt, protocol_withdrawable), `get_deploy_gates` (`ok`, `ready`,
+tolls, protocol, challenges, storage_charged), `get_solvency` (equity, storage_debt, protocol_withdrawable), `get_compile_caps` (daily, total, today, used, day, open), `get_deploy_gates` (`ok`, `ready`,
 failing gates with `blocking`). Views return JSON written by `contract/src/json.rs` (key order is insertion order, not alphabetical).
 
 ## Events (NEP-297, `standard:"titleshot"`, `version:"1.0.0"`)

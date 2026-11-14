@@ -46,6 +46,9 @@ impl Contract {
         c.id = id;
         c.relayer = self.forge_mode == ForgeMode::Relayer;
         c.need_compile = !self.fighters.contains_key(&c.hash);
+        if c.need_compile {
+            self.count_compile();
+        }
         self.stats.challenges += 1;
         self.stats.forging += 1;
         if c.kind == ChallengeKind::Opener {
@@ -169,6 +172,10 @@ impl Contract {
         check(self.holder(belt_id) != who, E_SELF);
         check(hash != champion, E_SAME_SENTENCE);
         check(!self.pending.contains_key(&who), E_PENDING);
+        // A sentence that needs a paid compile is refused once the NEAR AI cap is reached; a cached one always plays.
+        if !self.fighters.contains_key(&hash) {
+            self.check_compile_open();
+        }
         check(self.balance(&who) >= belt.toll, E_BALANCE);
         self.debit(&who, belt.toll);
         self.stats.tolls += belt.toll;

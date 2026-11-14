@@ -146,6 +146,19 @@ pub fn json_escape(s: &str) -> String {
     q[1..q.len() - 1].to_string()
 }
 
+/// Model-specific reasoning control, placed immediately before `"temperature"` (empty for other models).
+/// glm-5.3 without it spends the whole token budget reasoning (`finish_reason: "length"`, null content);
+/// Qwen3 thinks by default unless the chat template disables it.
+pub fn reasoning_control(model_id: &str) -> &'static str {
+    if model_id.starts_with("z-ai/glm-5.3") {
+        "\"reasoning_effort\":\"low\","
+    } else if model_id.starts_with("Qwen/Qwen3") {
+        "\"chat_template_kwargs\":{\"enable_thinking\":false},"
+    } else {
+        ""
+    }
+}
+
 /// `body = prefix ++ json_escape(sentence) ++ suffix` for the NEAR AI chat-completions request.
 pub fn request_parts(model_id: &str) -> (Vec<u8>, Vec<u8>) {
     let q = |s: &str| serde_json::to_string(s).unwrap_or_default();
@@ -155,8 +168,9 @@ pub fn request_parts(model_id: &str) -> (Vec<u8>, Vec<u8>) {
         q(&system_prompt())
     );
     let suffix = format!(
-        "\"}}],\"response_format\":{{\"type\":\"json_schema\",\"json_schema\":{{\"name\":\"fighter\",\"strict\":true,\"schema\":{}}}}},\"temperature\":0,\"max_tokens\":{},\"stream\":false}}",
+        "\"}}],\"response_format\":{{\"type\":\"json_schema\",\"json_schema\":{{\"name\":\"fighter\",\"strict\":true,\"schema\":{}}}}},{}\"temperature\":0,\"max_tokens\":{},\"stream\":false}}",
         schema_string(),
+        reasoning_control(model_id),
         MAX_TOKENS
     );
     (prefix.into_bytes(), suffix.into_bytes())

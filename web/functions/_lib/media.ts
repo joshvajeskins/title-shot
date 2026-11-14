@@ -5,8 +5,12 @@ import type { Env, KVLike } from './env'
 import { ApiError } from './http'
 import { lookupFighter, MISS_TTL_SEC, missKey } from './lookup'
 import { CAPS, spendCap } from './ratelimit'
-import { generatePortrait, sniffImage } from './nearai'
+import { generatePortrait, PORTRAIT_MODEL, sniffImage, type PortraitMeta } from './portraitGen'
+import { Ledger, LedgerClosed, type LedgerDeps, type Who } from './ledger'
 import { cleanCry, pickVoice } from './voices'
+
+export const portraitMetaKey = (hash: string) => `portrait-meta:${hash}`
+const budgetClosed = () => new ApiError(404, 'PORTRAIT_BUDGET', 'Portraits are paused: today\'s AI budget is used up. The fighter shows its school emblem.')
 
 const inflight = new Map<string, Promise<unknown>>()
 const once = <T>(key: string, f: () => Promise<T>): Promise<T> => {
@@ -38,7 +42,10 @@ async function knownFighter(kv: KVLike, chain: Chain | null, hash: string, kind:
 
 export interface Media { bytes: Uint8Array; type: string }
 
-export async function portraitFor(env: Env, chain: Chain | null, hash: string, gate: () => Promise<void>, fetchFn: typeof fetch = fetch): Promise<Media> {
+export interface PortraitOpts { who?: Who; ledger?: LedgerDeps; wait?: (ms: number) => Promise<void> }
+
+/** The fighter's portrait: KV hit, or one paid generation (rate limited, metered by the spend ledger) stored with its signature. */
+export async function portraitFor(env: Env, chain: Chain | null, hash: string, gate: () => Promise<void>, fetchFn: typeof fetch = fetch, o: PortraitOpts = {}): Promise<Media> {
   const kv = env.TS_KV
   const hit = await getBytes(kv, `portrait:${hash}`)
   if (hit) return { bytes: hit, type: sniffImage(hit) }
@@ -47,16 +54,27 @@ export async function portraitFor(env: Env, chain: Chain | null, hash: string, g
   return once(`portrait:${hash}`, async () => {
     await gate()
     await spendCap(kv, CAPS.portraitGen)
+    const ledger = Ledger.of(env, { fetchFn, ...o.ledger })
+    let hold
+    try { hold = ledger ? await ledger.reserve('portrait', PORTRAIT_MODEL, o.who ?? 'public') : null } catch (e) {
+      if (e instanceof LedgerClosed) throw budgetClosed() // not cached as "no portrait": it comes back when the budget does
+      throw e
+    }
     const look = fighter.look.replace(/[^\p{L}\p{N} .,'’-]/gu, ' ').replace(/\s+/g, ' ').trim().slice(0, 160)
-    const img = await generatePortrait(env, look, hash, fetchFn).catch(() => null)
-    if (!img) {
+    const r = await generatePortrait(env, look, hash, fetchFn, o.wait).catch(() => ({ img: null, billed: 'unknown' as const }))
+    if (hold) await ledger!.settle(hold, r.billed === 'image' ? { images: 1 } : r.billed === 'free' ? 'free' : 'worst')
+    if (!r.img) {
       await putJson(kv, `portrait-none:${hash}`, 1, 300)
       throw new ApiError(404, 'NO_PORTRAIT', 'No portrait available.')
     }
-    await putBytes(kv, `portrait:${hash}`, img.bytes)
-    return img
+    await putBytes(kv, `portrait:${hash}`, r.img.bytes)
+    await putJson(kv, portraitMetaKey(hash), r.img.meta)
+    return { bytes: r.img.bytes, type: r.img.type }
   })
 }
+
+/** How a cached portrait was made, with NEAR AI's signature (null when the portrait was never generated here). */
+export const portraitMeta = (kv: KVLike, hash: string): Promise<PortraitMeta | null> => getJson<PortraitMeta>(kv, portraitMetaKey(hash))
 
 export async function cryFor(env: Env, chain: Chain | null, hash: string, gate: () => Promise<void>, fetchFn: typeof fetch = fetch): Promise<Media> {
   const kv = env.TS_KV

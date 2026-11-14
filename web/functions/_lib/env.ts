@@ -23,6 +23,10 @@ export interface Env {
   GUEST_GAS_NEAR?: string // default 0.1: transferred to a new guest account for gas (also the session key's allowance)
   MPC_SIGNER?: string
   COMPILER_MODE?: string // 'standin' = staging referee (only when NEARAI_API_KEY is absent)
+  // NEAR AI spend (docs/BUDGET.md), set per key by scripts/rotate-nearai-key.sh as Pages secrets
+  NEARAI_BUDGET_USD?: string // lifetime hard stop for the current key, default 2.5
+  NEARAI_PUBLIC_DAILY_USD?: string // public (non-owner) spend per UTC day, default 0.05
+  NEARAI_PUBLIC_TOTAL_USD?: string // public spend over the key's lifetime, default 0.25
   // secrets
   NEARAI_API_KEY?: string
   STANDIN_SIGNER_KEY?: string // 32-byte hex private key of the staging stand-in referee
@@ -38,7 +42,7 @@ export const DEFAULTS = {
   vanceId: 'vance.titleshot.testnet',
   relayerId: 'relay.titleshot.testnet',
   mpcSigner: 'v1.signer-prod.testnet',
-  model: 'Qwen/Qwen3.8-27B',
+  model: 'z-ai/glm-5.3-flash',
   purseWei: 2_000_000_000_000_000n, // 0.002 ETH
   seasonSec: 6 * 3600,
   sponsorFloorNear: 0.8,

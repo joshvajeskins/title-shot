@@ -7,7 +7,7 @@ import type { Chain } from '../functions/_lib/chain'
 import { ApiError } from '../functions/_lib/http'
 import { sha256Hex } from '../src/game/chain/signature'
 
-const MODEL = 'Qwen/Qwen3.8-27B'
+const MODEL = 'z-ai/glm-5.3-flash'
 const SENTENCE = 'a pigeon with a law degree'
 const content = (over: Record<string, unknown> = {}) => JSON.stringify({ ...archetypes()[0]!.raw, ...over })
 

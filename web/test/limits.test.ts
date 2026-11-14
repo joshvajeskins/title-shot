@@ -118,7 +118,7 @@ describe('global daily caps (all callers together)', () => {
     await expect(spendCap(down(new MemKV()), CAPS.portraitGen, T)).rejects.toMatchObject({ status: 429, code: 'RATE_LIMITED' })
   })
 
-  const ex = () => recordedExchange(sim(), 'Qwen/Qwen3.8-27B', 'a pigeon with a law degree', JSON.stringify(archetypes()[0]!.raw))
+  const ex = () => recordedExchange(sim(), 'z-ai/glm-5.3-flash', 'a pigeon with a law degree', JSON.stringify(archetypes()[0]!.raw))
   it('/api/preview: the 601st uncached compile of the day is DAILY_CAP and never reaches the AI; cached and canonical results still serve', async () => {
     const kv = new MemKV()
     await kv.put(capKey(CAPS.previewCompile), '600')
@@ -178,7 +178,7 @@ describe('unknown fighter hashes are cached for 60 s', () => {
     const sentence = 'a pigeon with a law degree'
     const hash = hashOf(sentence)
     await kv.put(missKey('portrait', hash), '1')
-    const e = recordedExchange(sim(), 'Qwen/Qwen3.8-27B', sentence, JSON.stringify(archetypes()[0]!.raw))
+    const e = recordedExchange(sim(), 'z-ai/glm-5.3-flash', sentence, JSON.stringify(archetypes()[0]!.raw))
     const fetchFn = (async (u: string) => (u.includes('/v1/signature/') ? new Response(JSON.stringify({ text: e.text, signature: e.signature, signing_address: e.signing_address, signing_algo: 'ecdsa', signature_kind: e.kind })) : new Response(e.response))) as unknown as typeof fetch
     await runPreview({ env: { TS_KV: kv, NEARAI_API_KEY: 'k' }, sim: sim(), chain: null, fetchFn }, sentence)
     expect(await kv.get(missKey('portrait', hash))).toBeNull()

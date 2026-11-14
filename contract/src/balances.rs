@@ -79,4 +79,9 @@ impl Contract {
         self.evm_addrs.insert(env::predecessor_account_id(), a);
         emit("evm_address", json!({ "account": env::predecessor_account_id(), "address": verify::addr_hex(&a) }));
     }
+
+    /// The Base/EVM address registered for `account`, as 0x-prefixed lowercase hex, or null.
+    pub fn get_evm_address(&self, account: AccountId) -> Option<String> {
+        self.evm_addrs.get(&account).map(|a| verify::addr_hex(&a))
+    }
 }

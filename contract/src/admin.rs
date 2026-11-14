@@ -107,6 +107,7 @@ impl Contract {
             next_payout: 1,
             evm_addrs: Map::new(Key::EvmAddrs),
             stats: Stats::default(),
+            compile_cap: crate::compile_cap::CompileCap::new(crate::compile_cap::DEFAULT_DAILY, crate::compile_cap::DEFAULT_TOTAL),
         }
     }
 

@@ -2,6 +2,9 @@
 import { sentenceProblem, cleanSentence } from '../../src/game/client'
 import type { Env } from './env'
 import { chatText } from './nearai'
+import { ApiError } from './http'
+import { Ledger, type LedgerDeps } from './ledger'
+import type { Usage } from './pricing'
 import { isStandin } from './standin'
 import { STANDIN_OPENERS } from './standinSpec'
 
@@ -30,20 +33,29 @@ export const openerOk = (s: string): boolean => sentenceProblem(s) === null && s
 
 export interface OpenerCtx { seasonId: number; recent: string[] }
 
-export async function writeOpener(env: Env, model: string, ctx: OpenerCtx, fetchFn: typeof fetch = fetch): Promise<{ sentence: string; source: 'nearai' | 'fallback' | 'standin' }> {
+export async function writeOpener(env: Env, model: string, ctx: OpenerCtx, fetchFn: typeof fetch = fetch, ledgerDeps: LedgerDeps = {}): Promise<{ sentence: string; source: 'nearai' | 'fallback' | 'standin' }> {
   const used = new Set(ctx.recent.map((s) => s.toLowerCase()))
   if (isStandin(env)) { // staging: exact roster sentences, no model call
     const n = STANDIN_OPENERS.length
     const pick = Array.from({ length: n }, (_, i) => STANDIN_OPENERS[(ctx.seasonId + i) % n]!).find((s) => !used.has(s.toLowerCase())) ?? STANDIN_OPENERS[ctx.seasonId % n]!
     return { sentence: pick, source: 'standin' }
   }
-  if (env.NEARAI_API_KEY) {
-    try {
-      const avoid = ctx.recent.slice(-6).join('; ')
-      const raw = await chatText(env, model, SYSTEM, `Season ${ctx.seasonId}. Write a fresh fighter that is not similar to: ${avoid || 'nothing yet'}.`, fetchFn)
-      const s = tidyOpener(raw)
-      if (openerOk(s) && !used.has(s.toLowerCase())) return { sentence: s, source: 'nearai' }
-    } catch { /* fall through to the curated list */ }
+  const ledger = Ledger.of(env, { fetchFn, ...ledgerDeps })
+  if (ledger) {
+    // the tick's own spend: skips the public caps, never the hard stop (a closed ledger means the curated list)
+    const hold = await ledger.reserve('opener', model, 'tick').catch(() => null)
+    if (hold) {
+      const seen: { answered: boolean; usage: Usage | null } = { answered: false, usage: null }
+      try {
+        const avoid = ctx.recent.slice(-6).join('; ')
+        const raw = await chatText(env, model, SYSTEM, `Season ${ctx.seasonId}. Write a fresh fighter that is not similar to: ${avoid || 'nothing yet'}.`, fetchFn, (u) => { seen.answered = true; seen.usage = u })
+        await ledger.settle(hold, seen.usage ?? 'worst')
+        const s = tidyOpener(raw)
+        if (openerOk(s) && !used.has(s.toLowerCase())) return { sentence: s, source: 'nearai' }
+      } catch (e) {
+        await ledger.settle(hold, seen.answered ? seen.usage ?? 'worst' : e instanceof ApiError && e.code === 'AI_STATUS' ? 'free' : 'worst')
+      }
+    }
   }
   const pool = FALLBACK_OPENERS.filter((s) => !used.has(s.toLowerCase()))
   const list = pool.length ? pool : FALLBACK_OPENERS

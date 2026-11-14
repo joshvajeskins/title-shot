@@ -1,5 +1,6 @@
 //! Native tests. `economy_tests`: pure rules. The others drive the real contract through the mocked
 //! blockchain in relayer mode (and outlayer mode where noted) with a throwaway signer that plays NEAR AI.
+mod compile_cap_tests;
 mod economy_tests;
 mod fix_tests;
 mod flow_tests;

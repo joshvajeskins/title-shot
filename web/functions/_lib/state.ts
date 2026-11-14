@@ -13,6 +13,7 @@ import { deriveEvmAddress, getBalance } from './evm'
 import { DEFAULTS, type Env } from './env'
 import { VANCE_PATH } from './purse'
 import { compilerOf } from './standin'
+import { forgeStatus, type ForgeState } from './ledgerStatus'
 import { trackKey } from './tickPayouts'
 import { publicTick, type PayoutTrack, type TickLog } from './tickTypes'
 
@@ -30,6 +31,8 @@ export interface StateResponse {
   /** false = the wasm's request prefix/suffix differ from the ones stored in the contract (sha256 compared), so replays and previews would not match the paid forge */
   rulebookMatch: boolean
   belts: ChainBelt[]; fights: FightSummary[]; payouts: PayoutState[]; wallets: Wallet[]; tick: TickLog | null
+  /** NEAR AI spend (docs/BUDGET.md): forge = can a public preview compile run now; portraits = can a new portrait be generated */
+  forge: ForgeState['forge']; portraits: ForgeState['portraits']
 }
 
 type Tracks = Map<number, PayoutTrackLite | null>
@@ -108,6 +111,7 @@ export async function buildState(env: Env, sim: Sim, near: Rpc, base: Rpc, now =
 
   return {
     at: now, contract: chain.id, forgeMode: cfg.forge_mode, model: cfg.model_id, compiler: compilerOf(env), rulebookHash: rb.hash, rulebookMatch: requestMatches(sim, cfg),
+    ...(await forgeStatus(env, cfg.model_id)),
     belts, fights, payouts, wallets: await cachedJson(env.TS_KV, scoped(chain.id, 'wallets'), 20, () => wallets(env, near, base), 40), tick: publicTick(await getJson<TickLog>(env.TS_KV, scoped(chain.id, 'tick:last'))),
   }
 }

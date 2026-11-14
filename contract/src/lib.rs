@@ -12,6 +12,7 @@ pub mod b64;
 pub mod balances;
 pub mod challenge;
 pub mod codes;
+pub mod compile_cap;
 pub mod economy;
 pub mod events;
 pub mod forge_out;
@@ -97,4 +98,6 @@ pub struct Contract {
     pub next_payout: u64,
     pub evm_addrs: Map<AccountId, Addr>,
     pub stats: Stats,
+    /// NEAR AI compile cap and counters (docs/BUDGET.md).
+    pub compile_cap: compile_cap::CompileCap,
 }
