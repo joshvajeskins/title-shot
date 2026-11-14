@@ -50,7 +50,7 @@ export function WalletTicket({ connected, amount, onAmount, locked, onSwitch }: 
     <section className="wt paper" aria-label="Your wallet corner pass">
       <header className="wt-head">
         <span className="wt-eyebrow">Corner pass · NEAR testnet</span>
-        <button className="wt-switch" onClick={onSwitch} disabled={locked}>Use a different wallet</button>
+        <button className="wt-switch" onClick={onSwitch} disabled={locked}>Switch wallet</button>
       </header>
       <div className="wt-who">
         <span className="wt-mark"><NearMark size={22} /></span>

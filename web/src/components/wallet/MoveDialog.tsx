@@ -11,7 +11,7 @@ import type { Receipt } from '../../game/wallet/setup'
 import { near } from '../../lib/format'
 import { Icon } from '../Icon'
 import { NearMark } from './WalletTicket'
-import { MoveReview, MoveSteps } from './MoveParts'
+import { isEmpty, MoveReview, MoveSteps } from './MoveParts'
 import './wallet.css'
 
 type Phase = 'connect' | 'connecting' | 'proving' | 'planning' | 'review' | 'moving' | 'done' | 'playing'
@@ -103,7 +103,7 @@ export function MoveDialog({ onClose }: { onClose: () => void }) {
         <div className="wm-actions">
           {phase === 'review' && plan && (
             <>
-              <button className="btn btn-red" onClick={move} disabled={plan.pending}>Move everything <Icon name="arrow" /></button>
+              <button className="btn btn-red" onClick={move} disabled={plan.pending || isEmpty(plan)}>Move everything <Icon name="arrow" /></button>
               <button className="btn btn-ghost btn-sm" onClick={onClose}>Cancel</button>
             </>
           )}
