@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
+import { JudgeMode } from './components/JudgeMode'
 import { Shell } from './components/Shell'
 import { GameProvider } from './game/context'
 import { match, usePath } from './lib/router'
@@ -12,6 +13,7 @@ const Book = lazy(() => import('./screens/Book').then((m) => ({ default: m.Book 
 const How = lazy(() => import('./screens/How').then((m) => ({ default: m.How })))
 const Promoter = lazy(() => import('./screens/Promoter').then((m) => ({ default: m.Promoter })))
 const Legal = lazy(() => import('./screens/Legal').then((m) => ({ default: m.Legal })))
+const Proof = lazy(() => import('./screens/Proof').then((m) => ({ default: m.Proof })))
 
 function Routes() {
   const path = usePath()
@@ -28,6 +30,7 @@ function Routes() {
   else if (path === '/play/book') screen = <Book />
   else if (path === '/play/how') screen = <How />
   else if (path === '/play/promoter') screen = <Promoter />
+  else if (path === '/play/proof') screen = <Proof />
   else screen = <NotFound />
   return <Shell>{screen}</Shell>
 }
@@ -45,6 +48,7 @@ export default function App() {
         <Suspense fallback={<div className="page"><div className="skeleton" style={{ height: 320 }} /></div>}>
           <Routes />
         </Suspense>
+        <JudgeMode />
       </div>
     </GameProvider>
   )

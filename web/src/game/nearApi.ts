@@ -9,6 +9,25 @@ export interface ApiState {
   payouts: unknown[]; wallets: unknown[]; tick: unknown
 }
 
+/** /api/state as the proof page reads it (wallets and payouts typed). */
+export interface ApiStateFull extends Omit<ApiState, 'payouts' | 'wallets'> {
+  payouts: { id: number; beltId: number; seasonId: number; payee: string; amountWei: string; to: string | null; status: string; txHash?: string; explorer?: string }[]
+  wallets: { account: string; role: 'sponsor' | 'promoter' | 'relayer'; nearYocto: string; baseAddress?: string; baseWei?: string }[]
+  forge?: { open: boolean; spentUsd?: number; budgetUsd?: number }
+}
+
+/** /api/proof (functions/api/proof.ts): contract-level facts read live from NEAR testnet. */
+export interface ApiProof {
+  at: number; contract: string; codeHash: { hex: string; b58: string } | null
+  model: string; signatureKind: string; forgeMode: string; forgeProject: string; mpcSigner: string; owner: string
+  pending: { forgeMode: string | null; requestChange: boolean; activatesAt: number } | null
+  allowlist: string[]; allowlistDelaySec: number; relayers: string[]; vrfPinned: boolean
+  request: { prefixSha256: string; suffixSha256: string; matchesSite: boolean }
+  gates: { ok: boolean; ready: boolean; failing: { gate: string; why: string; blocking: boolean }[] }
+  solvency: { balance: string; storage_cost: string; owed: string; endowment: string; deficit: string; players_covered: boolean }
+  caps: { daily: number; total: number; today: number; used: number; open: boolean }
+}
+
 export interface ApiPreview {
   spec: import('./types').Spec; canonical: boolean; portrait: string | null; hash: string; signer?: string; verified?: boolean
   raw?: string; signature?: { text: string; signing_address: string; signature: string; kind: string }
@@ -44,6 +63,8 @@ export class Api {
   }
 
   state = () => this.request<ApiState>('/api/state')
+  proof = () => this.request<ApiProof>('/api/proof')
+  stateFull = () => this.request<ApiStateFull>('/api/state')
   preview = (sentence: string) => this.request<ApiPreview>('/api/preview', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sentence }) })
   guest = (publicKey: string, sessionKey: string) => this.request<{ accountId: string }>('/api/guest', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ publicKey, sessionKey }) })
 }

@@ -1,0 +1,38 @@
+/* Tale of the tape: a fight card's stat sheet, one row per claim, verdict stamped on the right. */
+.proof .page-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.tape-banner { margin: 0; padding: 12px 14px; border-radius: var(--radius-s); background: var(--ink-2); box-shadow: 0 0 0 1px var(--gold) inset; color: var(--paper-dim); font-size: 13px; }
+.tape-counters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.tape-counter { padding: 16px; display: grid; gap: 4px; }
+.tape-counter b { font-size: 40px; line-height: 1; color: var(--gold); font-variant-numeric: tabular-nums; }
+.tape-counter span { font-size: 12.5px; color: var(--paper-dim); }
+.tape-sec { display: grid; gap: 4px; }
+.tape { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--paper); }
+.tape-row { display: grid; grid-template-columns: 180px minmax(0, 1fr) 92px; gap: 16px; align-items: start; padding: 14px 4px; border-bottom: 1px solid var(--line); }
+.tape-label { font-family: var(--font-display); font-weight: 800; font-size: 15px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--paper); padding-top: 2px; }
+.tape-value { min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 14px; }
+.tape-value code { overflow-wrap: anywhere; }
+.tape-note { flex-basis: 100%; margin: 2px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--paper-faint); max-width: 70ch; }
+.tape-note a, .tape-value a { color: var(--gold); }
+.tape-dim { color: var(--paper-faint); font-size: 12.5px; }
+.tape-verdict { justify-self: end; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; box-shadow: 0 0 0 1px currentColor inset; white-space: nowrap; }
+.v-pass .tape-verdict { color: var(--ok); }
+.v-warn .tape-verdict { color: var(--gold); }
+.v-fail .tape-verdict { color: var(--red); }
+.v-info .tape-verdict { color: var(--paper-faint); }
+.tape-empty { padding: 16px 4px; color: var(--paper-faint); font-size: 13.5px; border-bottom: 1px solid var(--line); }
+.hash { display: inline-flex; align-items: center; gap: 4px; min-width: 0; max-width: 100%; }
+.hash code, .hash a { font-size: 12.5px; overflow-wrap: anywhere; word-break: break-all; }
+.hash-copy { flex: none; display: inline-grid; place-items: center; width: 26px; height: 26px; border: 0; border-radius: 6px; background: transparent; color: var(--paper-faint); cursor: pointer; transition: color var(--t-fast) ease, background-color var(--t-fast) ease; }
+.hash-copy:hover { color: var(--paper); background: var(--ink-3); }
+.hash-copy:active { transform: scale(0.94); }
+.tape-links { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 8px; }
+@media (max-width: 860px) {
+  .tape-counters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tape-row { grid-template-columns: 140px minmax(0, 1fr); }
+  .tape-verdict { grid-column: 2; justify-self: start; grid-row: 2; }
+}
+@media (max-width: 520px) {
+  .tape-row { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .tape-verdict { grid-column: 1; grid-row: auto; }
+  .tape-counter b { font-size: 32px; }
+}

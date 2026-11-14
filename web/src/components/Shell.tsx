@@ -18,6 +18,7 @@ const NAV: { group: string; items: { href: string; label: string; icon: string; 
   { group: 'The house', items: [
     { href: '/play/promoter', label: 'The promoter', icon: 'mic', match: (p) => p.startsWith('/play/promoter') },
     { href: '/play/how', label: 'How it works', icon: 'info', match: (p) => p.startsWith('/play/how') },
+    { href: '/play/proof', label: 'Tale of the tape', icon: 'shield', match: (p) => p.startsWith('/play/proof') },
   ] },
 ]
 
@@ -73,7 +74,7 @@ export function Shell({ children, bare = false }: { children: ReactNode; bare?: 
         {NAV.flatMap((g) => g.items).map((it) => (
           <Link key={it.href} href={it.href} className={`tab ${it.match(path) ? 'is-active' : ''}`}>
             <Icon name={it.icon} size={20} />
-            <span>{it.label.replace('The ', '').replace('How it works', 'How')}</span>
+            <span>{it.label.replace('Tale of the tape', 'Proof').replace('The ', '').replace('How it works', 'How')}</span>
           </Link>
         ))}
         <button className="tab" onClick={toggleSound} aria-pressed={!muted}>
