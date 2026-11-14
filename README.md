@@ -119,7 +119,7 @@ cd web && pnpm i && pnpm test && pnpm build
 `web` client + Cloudflare Pages Functions (preview compile, guest accounts, promoter tick) · `spikes` de-risk proofs ·
 `assets` art prompts and audio pipeline · `docs` architecture and interface contracts.
 
-Art: generated with an image model from prompts in `assets/art/prompts`. Voice, music and sound effects: ElevenLabs.
+Art: generated through ChatGPT's image generation (via Codex CLI's image tool) from the prompts in `assets/art/prompts`. Each image carries an OpenAI C2PA content credential naming the generator `ChatGPT` / `gpt-image`; neither the credential nor ChatGPT's interface shows a version number, so we don't state one. Voice, music and sound effects: ElevenLabs.
 
 ## License
 
