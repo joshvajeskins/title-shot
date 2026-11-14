@@ -142,9 +142,16 @@ wording matters more than luck.
   [CwxCsJyY…](https://testnet.nearblocks.io/txns/CwxCsJyYLViCRS5mDEzqHoPQ67SBvJRdVEzTvLLUwTei), a popup-free challenge
   [BmoWk4Ah…](https://testnet.nearblocks.io/txns/BmoWk4Ahv6w4E5b9vcQhVpRJr1kbdajiW7sXjKjd6EMn), a demo account's move
   [GLnuuZrT…](https://testnet.nearblocks.io/txns/GLnuuZrTkg44yd7EyzaWq48ZJP2gwC1Vs114siAkzT8A)) and a scripted EIP-1193 wallet
-  ([Hw1Hm7sx…](https://testnet.nearblocks.io/txns/Hw1Hm7sxrV4ktBBv5F1u1e4woYwho67DBTKL4YiLfZzC)). Real wallet apps (Meteor,
-  Intear, MetaMask, Rabby…) were not in our automated tests; whether a given wallet accepts the session-key request in a
-  batch, or NEP-413 message signing, is up to that wallet. Moving a belt with `nft_transfer` is unit-tested, not run live.
+  ([Hw1Hm7sx…](https://testnet.nearblocks.io/txns/Hw1Hm7sxrV4ktBBv5F1u1e4woYwho67DBTKL4YiLfZzC)). With a real
+  **Meteor Wallet (web)** on testnet, the one approval added the session key
+  ([AN3X35jr…](https://testnet.nearblocks.io/txns/AN3X35jroFSCBWTpokiK1CsxocALQ45ycKRg9PWuN3dj)) and deposited
+  ([8SW5Pkyh…](https://testnet.nearblocks.io/txns/8SW5PkyhGWvEDWu8wC4E6HqAL7eiDdGSXAUDducvhpkb)), a challenge went through
+  with no wallet popup ([58oocFZk…](https://testnet.nearblocks.io/txns/58oocFZkQwVfNwooXoJVksJWMZCSis3ywfrGrziwxj6n), bout
+  #33) and the withdrawal was approved in Meteor
+  ([EQ1eN7EZ…](https://testnet.nearblocks.io/txns/EQ1eN7EZahVMTv3QDjePonzmE1CNTYGB5kQPLUU3m7ws)). Every wallet tap reaches the
+  wallet with no network wait first, because web wallets open their sign tab with `window.open`, which browsers block a few
+  seconds after a tap. Intear, Nightly, Ledger, MetaMask and Rabby were not tried with their real apps; whether a given
+  wallet accepts the session-key request in a batch, or NEP-413 message signing, is up to that wallet. Moving a belt with `nft_transfer` is unit-tested, not run live.
   Smart-contract EVM wallets cannot sign the ownership message, so they use the paste path. Not integrated: FastAuth social
   login (on 14 Nov the shared testnet Auth0 client accepted only `http://localhost:3000` as a callback and answered 403
   "Callback URL mismatch" for this site, and testnet has no public FastAuth relayer), HOT Kit and WalletConnect (they need
