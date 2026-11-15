@@ -23,3 +23,19 @@ Setup: \`cheat.titleshot.testnet\` created by near-cli with 0.3 NEAR from \`titl
 ([3he9qrYj…](https://testnet.nearblocks.io/txns/3he9qrYj1FmxYE8BpQi3aT8BQ7JLfXm6TCTURTWAtZpR)), then \`deposit\` 0.2 NEAR (game balance
 0.195 after the 0.005 account storage). Cost of the whole run to the challenger: 0.0879 NEAR of game balance (3 × 0.0126 kept by
 refusals + one 0.05 toll in the real bout) plus gas; game balance left 0.1071 NEAR.
+
+## Try it yourself (live panel, 15 Nov)
+
+`/play/proof#cheat` lets any signed-in player send four cheating calls from their own account (`web/src/game/cheats.ts`;
+the exact calls are pinned by `contract/src/tests/cheat_panel_tests.rs`). First live run on production, read back from
+near-testnet.drpc.org: every call `Failure`, code from the failed receipt, 0.00021 NEAR of gas each, the 1 yoctoNEAR refunded.
+
+| call | judge demo account (signed in the browser) | NEAR wallet account (wallet approves) | code |
+|---|---|---|---|
+| `submit_forge` as a non-relayer | [Ej1LVBzT…](https://testnet.near.rocks/tx/Ej1LVBzTbbag7NoGw8jeXUy9XRYgM5KLeuKVjn15K59r) | [78CzPPgk…](https://testnet.near.rocks/tx/78CzPPgkDeNF6MTeRY5RY17yjK6rn61qnPwEMCjrhN7q) | `E_NOT_RELAYER` |
+| `claim_payout` on payout #29 (payee vance) | [9QrxV9gF…](https://testnet.near.rocks/tx/9QrxV9gF6ZNr1PPQdqfacogxS82ixG435Kcnas7aw8GM) | [FkSjGiUs…](https://testnet.near.rocks/tx/FkSjGiUsKgEWMxZ1psJYva8pw1jzHYNHtGJzewPY815E) | `E_NOT_PAYEE` |
+| `nft_transfer` of belt-1 to oneself | [AFWFwwgG…](https://testnet.near.rocks/tx/AFWFwwgGXGdxzkynyPod8xskCzGgFXZbxA6WXW94R9oo) | [5XviVdPD…](https://testnet.near.rocks/tx/5XviVdPDzJjPnFzVz5ReujtJVYPCrXKRgN99oopLXUCi) | `E_NOT_HOLDER` |
+| `withdraw` u128::MAX | [4FMGPkQ2…](https://testnet.near.rocks/tx/4FMGPkQ2sgXMQRGXfHRPtAptxD9Z4d8VnfHBuACv1htD) | [FzjhgUM5…](https://testnet.near.rocks/tx/FzjhgUM5add9ZEdfxRhaNx8tn6tNmYuraHYBhKB5zrJy) | `E_BALANCE` |
+
+After the run belt-1 was still held by house-a.titleshot.testnet and payout #29 still paid vance's address. The wallet
+column used a NEAR Connect debug wallet we control (as in the README's wallet notes), not a third-party wallet.
