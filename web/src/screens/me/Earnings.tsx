@@ -28,12 +28,12 @@ export function Earnings({ data, self, onChanged }: { data: CornerData; self: bo
       <div className="mc-earn paper">
         <div className="mc-earn-row">
           <b>Champion's share</b>
-          <span>{e.championBouts ? `60% of the toll after fees, from ${plural(e.championBouts, 'challenge')} against a belt you held` : 'Paid to the holder of a belt for every challenge, win or lose'}</span>
+          <span>{e.championBouts ? `60% of the toll after fees, from ${plural(e.championBouts, 'challenge')} against a belt ${self ? 'you' : 'this corner'} held` : 'Paid to the holder of a belt for every challenge, win or lose'}</span>
           <span className="num">+{near(e.championYocto, 4)} NEAR</span>
         </div>
         <div className="mc-earn-row">
           <b>Season side-pots</b>
-          <span>{e.sidePotSeasons ? `Credited at the bell of ${plural(e.sidePotSeasons, 'season')} you closed holding the belt` : 'Credited to whoever holds the belt when the bell rings'}</span>
+          <span>{e.sidePotSeasons ? `Credited at the bell of ${plural(e.sidePotSeasons, 'season')} ${self ? 'you' : 'this corner'} closed holding the belt` : 'Credited to whoever holds the belt when the bell rings'}</span>
           <span className="num">+{near(e.sidePotYocto, 4)} NEAR</span>
         </div>
         <div className="mc-earn-row is-total">
