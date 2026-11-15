@@ -42,8 +42,8 @@ export function Book() {
       {hist.error && <div className="state-box panel"><span className="serif-i">The book is stuck shut.</span><span>{hist.error}</span><button className="btn btn-ghost btn-sm" onClick={hist.reload}>Try again</button></div>}
       {!hist.loading && !hist.error && rows.length === 0 && (
         <div className="state-box panel">
-          <span className="serif-i">No bouts here yet.</span>
-          <span>{mine ? "You haven't taken a shot yet." : 'Be the first challenger of the season.'}</span>
+          <span className="serif-i">{mine ? 'None of yours here.' : 'No bouts here yet.'}</span>
+          <span>{mine ? (belt === 'all' ? "You haven't taken a shot yet." : 'You have not fought for this belt yet.') : 'Be the first challenger of the season.'}</span>
           <Link href="/play" className="btn btn-red btn-sm">Pick a belt</Link>
         </div>
       )}
