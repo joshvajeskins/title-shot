@@ -95,8 +95,8 @@ after 10 minutes and anyone can refund it (toll back minus the forge fee).
 - **Toll** 0.05 NEAR per challenge. The forge fee (0.01 NEAR, the AI compile and its delivery) comes off first, then the bytes
   the bout stores; of the rest **60% to the belt holder** (win or lose: they are paid for being the target), 25% to the promoter,
   10% to the season side-pot, 5% house. Exact to the yoctoNEAR, property-tested.
-- **Purse at the bell:** 50% to the final holder, 50% split by successful defences, **capped at 25% of the purse per account**;
-  a season with no challenges refunds the promoter. Seasons last 3 hours on testnet.
+- **Purse at the bell:** 50% to the final holder, 50% split by successful defences, **each defender's share capped at 25% of the purse**
+  (what the cap leaves goes to the final holder); a season with no challenges refunds the promoter. Seasons last 3 hours on testnet.
 - **No token, no emissions.** Seasons are funded up front by the promoter.
 - **Self-dealing loses money:** an alt-account challenge returns at most 95% of the remainder to the same person; the forge fee
   and the house share never come back (property test).

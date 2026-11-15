@@ -66,7 +66,7 @@ export function BellCinematic({ bell, beltName, onClose }: { bell: Bell; beltNam
               )
             })}
           </ul>
-          <p className="bellc-note">Half the purse goes to whoever holds the belt at the bell, half by successful defences, at most 25% per account. The season side-pot of {near(bell.sidePotYocto, 3)} NEAR went to the final holder's balance.</p>
+          <p className="bellc-note">Half the purse goes to whoever holds the belt at the bell; the other half is split by successful defences, at most 25% of the purse per defender, and whatever that cap leaves goes to the holder too. The season side-pot of {near(bell.sidePotYocto, 3)} NEAR went to the final holder's balance.</p>
         </section>
       )}
       {claiming ? <PayoutAddressDialog claim={claiming} onClose={() => setClaiming(null)} /> : null}

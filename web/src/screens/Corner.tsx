@@ -73,7 +73,7 @@ export function Corner({ beltId }: { beltId: string }) {
     navigate(`/play/bout/${beltId}`)
   }
 
-  if (error) return <div className="page"><div className="state-box panel"><span className="serif-i">This belt isn't on the card.</span><span>{error}</span><button className="btn btn-ghost btn-sm" onClick={reload}>Try again</button></div></div>
+  if (error) return <div className="page"><div className="state-box panel"><span className="serif-i">This belt isn't on the card.</span><span>{error}</span><div className="corner-actions"><Link href="/play" className="btn btn-red btn-sm">Back to the belts</Link><button className="btn btn-ghost btn-sm" onClick={reload}>Try again</button></div></div></div>
   if (!belt) return <div className="page"><div className="skeleton" style={{ height: 520 }} /></div>
 
   const champ = belt.champion
