@@ -46,12 +46,15 @@ export function JudgeMode() {
     if (hit.length) setDone((d) => { const n = [...d, ...hit]; write(DONE, JSON.stringify(n)); return n })
   }, [on, path, account, done])
 
+  // A bout is full screen and its controls (speed, Skip, the result's buttons) sit where the card would: step out of the way
+  // there. The bout step still ticks itself (above), and the card is back on the next page.
+  const bout = path.startsWith('/play/bout/')
   useEffect(() => {
-    document.documentElement.classList.toggle('judge-open', on && open)
+    document.documentElement.classList.toggle('judge-open', on && open && !bout)
     return () => document.documentElement.classList.remove('judge-open')
-  }, [on, open])
+  }, [on, open, bout])
 
-  if (!on) return null
+  if (!on || bout) return null
   const toggle = (id: string) => setDone((d) => { const n = d.includes(id) ? d.filter((x) => x !== id) : [...d, id]; write(DONE, JSON.stringify(n)); return n })
   const exit = () => { write(ON, null); setOn(false) }
   const count = STEPS.filter((s) => done.includes(s.id)).length
