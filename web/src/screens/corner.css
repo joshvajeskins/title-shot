@@ -113,3 +113,7 @@
 .forge-closed b { display: block; color: var(--paper); font-weight: 600; margin-bottom: 2px; }
 .corner-holds { display: grid; gap: 18px; padding: 22px 0 6px; }
 .corner-write .tu { padding: 0; }
+.corner-sig { margin: 0; display: grid; grid-template-columns: 14px 1fr; gap: 8px; align-items: start; font-family: var(--font-mono); font-size: 11.5px; line-height: 1.55; color: var(--paper-dim); }
+.corner-sig svg { margin-top: 3px; color: var(--ok); }
+.corner-sig code { color: var(--gold); font-family: inherit; }
+.corner-sig a { color: var(--paper); text-decoration: underline; text-underline-offset: 3px; }

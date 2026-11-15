@@ -153,6 +153,12 @@ export function Corner({ beltId }: { beltId: string }) {
                 {odds && <OddsMeter odds={odds} champName={champ.spec.name} />}
                 <StatBars spec={preview.spec} compact />
                 <MoveList spec={preview.spec} names={moveInfo} />
+                {preview.signer && (
+                  <p className="corner-sig">
+                    <Icon name="check" size={12} stroke={2.4} />
+                    <span>{preview.canonical ? 'Forged on chain from a compile signed by' : 'Compiled and signed in NEAR AI\'s enclave by'} <code title={preview.signer}>{preview.signer.slice(0, 6)}…{preview.signer.slice(-4)}</code>. The contract accepts a forge only from a signer on <Link href="/play/proof">its allowlist</Link>.</span>
+                  </p>
+                )}
                 <p className="corner-note">
                   {preview.canonical
                     ? 'This sentence was already forged on chain, so this is exactly the fighter you will get.'

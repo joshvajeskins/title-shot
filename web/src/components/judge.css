@@ -20,6 +20,11 @@
 .judge:not(.is-open) { width: auto; }
 /* Wide screens: the page steps aside so the checklist never covers a verdict. */
 @media (min-width: 1100px) { html.judge-open main .page { padding-right: 372px; } }
+/* ...which leaves 372px less for the page: multi-column grids step down a column until the screen is wide enough again
+   (at 1440 the three belt cards and the corner's two columns overlapped each other). */
+@media (min-width: 1100px) and (max-width: 1731px) { html.judge-open .belt-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) and (max-width: 1383px) { html.judge-open .belt-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (min-width: 1100px) and (max-width: 1471px) { html.judge-open .corner-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 760px) {
   .judge { bottom: calc(var(--tabbar-h) + 12px + env(safe-area-inset-bottom, 0px)); }
 }
