@@ -2,6 +2,9 @@
 
 **Write one sentence. NEAR AI forges it into a fighter. Pay the toll, fight the champion, take the belt.**
 
+> Submitted version: tag `hackathon-submission` (5a685af). Later commits are post-deadline fixes from a readiness pass:
+> https://github.com/joshvajeskins/title-shot/compare/hackathon-submission...main
+
 A game for the NEAR HACKATHON (Games With Real Economies). Players turn sentences like *"a sleep-deprived lighthouse keeper
 who fights with foghorn screams"* into fighters, pay a small toll to challenge the reigning champion sentence of a belt, and
 get paid while their own sentence holds the belt. Every challenger pays the champion's writer, win or lose. When the season bell
@@ -11,7 +14,7 @@ rings, the NEAR contract pays the purse out on Base Sepolia through Chain Signat
   One approval, then no popups between fights. No wallet extension? Use the **judge demo** on the same page.
 - **Judge mode:** https://title-shot.pages.dev/play?judge (a 3-minute checklist that follows you through the game)
 - **Proof page:** https://title-shot.pages.dev/play/proof (deployed code hash, AI signer allowlist, solvency, Base purses, read live)
-- **Demo video:** _added with the submission_
+- **Demo video:** https://x.com/JeskinsJoshva/status/2121748171827360096
 - **Network:** NEAR **testnet** (`ring.titleshot.testnet`) + Base **Sepolia**. Testnet tokens have no cash value.
 
 ## For judges: 3 minutes
