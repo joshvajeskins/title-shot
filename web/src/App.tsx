@@ -4,8 +4,9 @@ import { Shell } from './components/Shell'
 import { GameProvider } from './game/context'
 import { match, usePath } from './lib/router'
 import { Lobby } from './screens/Lobby'
+// The landing is the first screen a stranger sees: bundled with the app, not a lazy chunk fetched after it.
+import { Landing } from './screens/Landing'
 
-const Landing = lazy(() => import('./screens/Landing').then((m) => ({ default: m.Landing })))
 const Enter = lazy(() => import('./screens/Enter').then((m) => ({ default: m.Enter })))
 const Corner = lazy(() => import('./screens/Corner').then((m) => ({ default: m.Corner })))
 const Bout = lazy(() => import('./screens/Bout').then((m) => ({ default: m.Bout })))

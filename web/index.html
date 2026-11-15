@@ -7,12 +7,35 @@
     <title>TITLE SHOT — one sentence, one belt</title>
     <meta name="description" content="Write one sentence. An attested AI forges it into a fighter. Pay the toll, fight the champion, take the belt. A NEAR game with a real economy." />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="preload" as="image" href="/art/keyart.webp" fetchpriority="high" />
+    <!--
+      First paint without waiting for JavaScript: the landing's first screen is also written below as static HTML (same
+      classes as screens/Landing.tsx, styled by the app's own CSS). It stays hidden for 450 ms, so a normal load goes straight
+      to the React hero and its title slam; on a slow network it shows instead of a blank page until React replaces it.
+    -->
+    <style>
+      html, body { background: #0E0D12; }
+      #prepaint { visibility: hidden; animation: prepaint-show 0s linear 450ms forwards; }
+      @keyframes prepaint-show { to { visibility: visible; } }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><div class="landing" id="prepaint">
+      <header class="land-nav">
+        <span class="display print wordmark" style="font-size: 28px">Title<span class="wordmark-shot">Shot</span></span>
+        <nav><a href="#loop">How it plays</a><a href="#money">The money</a><a href="/play/proof#fair">Fair play</a><a href="/enter" class="btn btn-red btn-sm">Play</a></nav>
+      </header>
+      <section class="hero">
+        <div class="hero-art" aria-hidden="true"><img src="/art/keyart.webp" alt="" /></div>
+        <div class="hero-copy">
+          <span class="eyebrow">A NEAR game with a real economy · live on testnet</span>
+          <h1 class="display hero-title"><span class="slam-word print">Title </span><span class="slam-word hero-shot">Shot</span></h1>
+          <p class="hero-sub">Write one sentence. An attested AI forges it into a fighter. Pay the toll, fight the champion, take the belt. Win or lose, your toll pays the champ.</p>
+          <div class="hero-cta"><a href="/enter" class="btn btn-red btn-lg">Connect wallet and play</a><a href="#loop" class="btn btn-ghost btn-lg">How it plays</a></div>
+        </div>
+      </section>
+    </div></div>
+    <script>if (location.pathname !== '/') document.getElementById('prepaint').remove()</script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
