@@ -9,7 +9,6 @@ import './judge.css'
 // ?judge=0 turns it off. Progress is kept in this browser only (best effort: storage may be blocked).
 const ON = 'ts-judge'
 const DONE = 'ts-judge-done'
-const REPO = 'https://github.com/joshvajeskins/title-shot'
 
 interface Step { id: string; doThis: string; see: string; href?: string; external?: boolean; auto?: (path: string, hasAccount: boolean) => boolean }
 const STEPS: Step[] = [
@@ -19,7 +18,7 @@ const STEPS: Step[] = [
   { id: 'bout', doThis: 'Pay the toll and fight', see: 'The bout replayed from the contract, and "state hash matches chain".', auto: (p) => p.startsWith('/play/bout/') },
   { id: 'book', doThis: 'Open the book', see: 'Your challenge with its NEAR transactions and the toll split.', href: '/play/book', auto: (p) => p.startsWith('/play/book') },
   { id: 'proof', doThis: 'Read the tale of the tape', see: 'Deployed code hash, AI signer allowlist, solvency, purses on Base, all read live.', href: '/play/proof', auto: (p) => p.startsWith('/play/proof') },
-  { id: 'cheats', doThis: 'See cheats refused', see: 'Tampered fighters, swapped sentences and unknown signers, refused on testnet.', href: `${REPO}/blob/main/docs/CHEAT-RESULTS.md`, external: true },
+  { id: 'cheats', doThis: 'Try to cheat', see: 'Send real cheating transactions from your own account and watch the contract refuse each one on chain.', href: '/play/proof#cheat' },
 ]
 
 const read = (k: string): string | null => { try { return localStorage.getItem(k) } catch { return null } }

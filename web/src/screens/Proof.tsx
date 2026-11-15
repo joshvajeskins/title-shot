@@ -9,6 +9,7 @@ import { eth, near, shortHex } from '../lib/format'
 import './pages.css'
 import './proof.css'
 import { ProofFair } from './ProofFair'
+import { ProofCheats } from './ProofCheats'
 
 const REPO = 'https://github.com/joshvajeskins/title-shot'
 /** sha256 of contract/res/titleshot.wasm at the commit this site was built from. */
@@ -27,9 +28,9 @@ export function Proof() {
   const vance = s?.wallets.find((w) => w.role === 'promoter')
   const loading = proof.loading || state.loading
   const err = proof.error ?? state.error
-  // /play/proof#fair (the landing's "How we keep it fair"): jump once the live tape above has taken its height
+  // /play/proof#fair (the landing's "How we keep it fair") or #cheat (the judge checklist): jump once the live tape above has taken its height
   const settled = !!p || !!err
-  useEffect(() => { if (settled && location.hash === '#fair') document.getElementById('fair')?.scrollIntoView({ block: 'start' }) }, [settled])
+  useEffect(() => { if (settled && /^#(fair|cheat)$/.test(location.hash)) document.getElementById(location.hash.slice(1))?.scrollIntoView({ block: 'start' }) }, [settled])
 
   return (
     <div className="page pages proof">
@@ -118,9 +119,11 @@ export function Proof() {
             </ol>
           </section>
 
+          <ProofCheats proof={p} state={s} />
+
           <section className="tape-sec tape-links">
             <Link href="/play/book" className="btn btn-ghost btn-sm">Every bout, with its transactions <Icon name="arrow" size={14} /></Link>
-            <a className="btn btn-ghost btn-sm" href={`${REPO}/blob/main/docs/CHEAT-RESULTS.md`} target="_blank" rel="noreferrer">Cheats the contract refused <Icon name="external" size={13} /></a>
+            <a className="btn btn-ghost btn-sm" href={`${REPO}/blob/main/docs/CHEAT-RESULTS.md`} target="_blank" rel="noreferrer">Cheats the contract refused (recorded samples) <Icon name="external" size={13} /></a>
             <a className="btn btn-ghost btn-sm" href={REPO} target="_blank" rel="noreferrer">Source and tests <Icon name="external" size={13} /></a>
           </section>
         </>
