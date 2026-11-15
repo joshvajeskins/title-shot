@@ -38,7 +38,9 @@ export function Promoter() {
               <img src={b.art} alt="" />
               <div>
                 <b className="display">{b.name}</b>
-                <span className="serif-i">Opener: “{b.champion.writer.startsWith('velvet') ? b.champion.sentence : 'taken by a challenger'}”</span>
+                <span className="serif-i">{(b.promoter ? b.champion.writer === b.promoter : b.champion.writer.startsWith('velvet')) /* the mock's promoter is 'velvet…' */
+                  ? <>Opener: “{b.champion.sentence}”</>
+                  : <>Opener beaten: a challenger's sentence holds it now</>}</span>
                 <a href={b.season.purse.explorer} target="_blank" rel="noreferrer" className="mono">purse {shortHex(b.season.purse.address)} · {eth(b.season.purse.amountWei)} ETH <Icon name="external" size={11} /></a>
               </div>
             </li>

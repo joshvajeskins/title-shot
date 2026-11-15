@@ -86,6 +86,8 @@ export interface Belt {
   lastBell?: Bell | null
   /** who holds the belt token now (NEP-171 owner; it can differ from the champion's writer after a transfer). Live chain only. */
   holder?: string | null
+  /** the promoter account that writes this belt's season openers. Live chain only. */
+  promoter?: string
 }
 
 export type Outcome = 'hit' | 'crit' | 'miss' | 'blocked' | 'countered' | 'used'
