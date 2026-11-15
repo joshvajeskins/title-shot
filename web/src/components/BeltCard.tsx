@@ -58,7 +58,7 @@ export function BeltCard({ belt, index = 0 }: { belt: Belt; index?: number }) {
       </footer>
       {belt.lastBell && (
         <button className="beltcard-lastbell" onClick={() => setBellOpen(true)}>
-          <Icon name="bell" size={14} /> Season {belt.lastBell.seasonId} bell: {eth(belt.lastBell.purseWei)} ETH paid to {plural(belt.lastBell.payouts.length, 'corner')} on Base <span>Watch</span>
+          <Icon name="bell" size={14} /> Season {belt.lastBell.seasonId} bell: {eth(belt.lastBell.purseWei)} ETH {belt.lastBell.payouts.every((p) => p.status === 'mined') ? 'paid' : 'going'} to {plural(belt.lastBell.payouts.length, 'corner')} on Base <span>Watch</span>
         </button>
       )}
       {bellOpen && belt.lastBell && <BellCinematic bell={belt.lastBell} beltName={belt.name} onClose={() => setBellOpen(false)} />}
