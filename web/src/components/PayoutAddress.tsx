@@ -118,7 +118,7 @@ export function PayoutAddressDialog({ onClose, claim }: { onClose: () => void; c
               </button>}
               {current && <span className="pa-current">On file: <BaseName address={current} /></span>}
             </div>
-            <p className="pa-note">The contract stores the address, not the name: renaming later does not move your payout. Saving signs one transaction with your account key (not the session key). Testnet only: Base Sepolia ETH has no value.</p>
+            <p className="pa-note">The contract stores the address, not the name: renaming later does not move your payout. Saving is one transaction{account?.kind === 'wallet' ? ', approved in your NEAR wallet' : ' signed with this demo account\'s own key (not the session key)'}. Testnet only: Base Sepolia ETH has no value.</p>
           </>
         )}
       </div>
