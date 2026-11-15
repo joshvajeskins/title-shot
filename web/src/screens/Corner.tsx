@@ -12,6 +12,7 @@ import { navigate } from '../lib/router'
 import { moveInfo } from '../game/library'
 import { useDeployInfo } from '../game/compiler'
 import { TopUp } from '../components/wallet/TopUp'
+import { HealthBanner } from '../components/HealthBanner'
 import './corner.css'
 
 const IDEAS = ['a pigeon with a law degree', 'a toaster that believes it is a dragon', 'a librarian who bans noise', 'a snail with a rocket backpack', 'a ghost who haunts the DMV', 'the north wind in a bad mood']
@@ -83,6 +84,7 @@ export function Corner({ beltId }: { beltId: string }) {
         <Link href="/play" className="corner-back"><Icon name="back" size={16} /> The belts</Link>
         <div className="corner-belt"><img src={belt.art} alt="" /><span className="display">{belt.name}</span></div>
       </div>
+      <HealthBanner />
       <div className="corner-grid">
         <section className="corner-champ" aria-label="The champion">
           <span className="eyebrow">The champion · {plural(belt.defences, 'defence')}</span>

@@ -16,6 +16,7 @@ import { compilerOf } from './standin'
 import { forgeStatus, type ForgeState } from './ledgerStatus'
 import { trackKey } from './tickPayouts'
 import { publicTick, type PayoutTrack, type TickLog } from './tickTypes'
+import type { Health } from '../../src/game/health'
 
 export interface Wallet { account: string; role: 'sponsor' | 'promoter' | 'relayer'; nearYocto: string; baseAddress?: string; baseWei?: string }
 export interface PayoutState {
@@ -33,6 +34,8 @@ export interface StateResponse {
   belts: ChainBelt[]; fights: FightSummary[]; payouts: PayoutState[]; wallets: Wallet[]; tick: TickLog | null
   /** NEAR AI spend (docs/BUDGET.md): forge = can a public preview compile run now; portraits = can a new portrait be generated */
   forge: ForgeState['forge']; portraits: ForgeState['portraits']
+  /** runway health from the last tick (src/game/health.ts); null before the first tick wrote one */
+  health: Health | null
 }
 
 type Tracks = Map<number, PayoutTrackLite | null>
@@ -111,5 +114,6 @@ export async function buildState(env: Env, sim: Sim, near: Rpc, base: Rpc, now =
     at: now, contract: chain.id, forgeMode: cfg.forge_mode, model: cfg.model_id, compiler: compilerOf(env), rulebookHash: rb.hash, rulebookMatch: requestMatches(sim, cfg),
     ...(await forgeStatus(env, cfg.model_id)),
     belts, fights, payouts, wallets: await cachedJson(env.TS_KV, scoped(chain.id, 'wallets'), 20, () => wallets(env, near, base), 40), tick: publicTick(await getJson<TickLog>(env.TS_KV, scoped(chain.id, 'tick:last'))),
+    health: await getJson<Health>(env.TS_KV, scoped(chain.id, 'health:v1')),
   }
 }

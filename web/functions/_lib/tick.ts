@@ -1,5 +1,5 @@
 // The promoter NPC and the bell. Idempotent: every action is guarded by contract state, one run per 20 s.
-//   close_season -> sign_payout -> broadcast -> open the next season (Vance) -> relayer fallback / expiry sweep.
+//   close_season -> sign_payout -> broadcast -> open the next season (Vance) -> relayer fallback / expiry sweep -> runway health.
 import { TGAS } from '../../src/game/chain/signer'
 import type { RawBelt } from '../../src/game/chain/views'
 import { compileFor } from './compiler'
@@ -8,6 +8,7 @@ import { fixPurseAddress, needsOpening, openStep } from './tickOpen'
 import { payoutsStep } from './tickPayouts'
 import { forgeChargeStep } from './tickForge'
 import { houseStep } from './house'
+import { healthStep } from './health'
 import { Ledger } from './ledger'
 import { detailOf, tickKey, type Log, type StepLog, type TickDeps, type TickLog } from './tickTypes'
 
@@ -126,6 +127,7 @@ export async function runTick(d: TickDeps, opts: { force?: boolean } = {}): Prom
     await safe(log, undefined, 'forge_charge', () => forgeChargeStep(d, log))
     await safe(log, undefined, 'house', () => houseStep(d, log, belts)) // house challengers (docs/LIVENESS.md), before the relayer sweep
     await safe(log, undefined, 'sweep', () => sweepStep(d, log))
+    await safe(log, undefined, 'health', async () => { await healthStep(d, belts) }) // runway record for /api/state (reads only)
   } catch (e) {
     log({ action: 'tick', ok: false, detail: String(e instanceof Error ? e.message : e).slice(0, 140) })
   } finally {

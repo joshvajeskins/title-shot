@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { sound } from '../audio/sound'
 import { BeltCard } from '../components/BeltCard'
+import { HealthBanner } from '../components/HealthBanner'
 import { Icon } from '../components/Icon'
 import { Link, Wordmark } from '../components/Link'
 import { useAsync, useGame } from '../game/context'
@@ -26,6 +27,7 @@ export function Lobby() {
           <Icon name="arrow" size={16} />
         </Link>
       </header>
+      <HealthBanner />
       {loading && !belts && (
         <div className="belt-grid">{[0, 1, 2].map((i) => <div key={i} className="skeleton" style={{ height: 560 }} />)}</div>
       )}
