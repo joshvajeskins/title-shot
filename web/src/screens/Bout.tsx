@@ -19,7 +19,7 @@ const FINAL = new Set(['E_SELF', 'E_BALANCE', 'E_SAME_SENTENCE', 'E_SENTENCE', '
 
 /** /play/bout/:id — id is a belt id while a challenge is pending, else a fight id (replay). */
 export function Bout({ beltId: id }: { beltId: string }) {
-  const { client, pending, setPending, refreshAccount } = useGame()
+  const { client, account, pending, setPending, refreshAccount } = useGame()
   const [phase, setPhase] = useState<Phase>('loading')
   const [fight, setFight] = useState<Fight | null>(null)
   const [belt, setBelt] = useState<Belt | null>(null)
@@ -84,7 +84,7 @@ export function Bout({ beltId: id }: { beltId: string }) {
       {phase === 'intro' && fight && belt && <Intro fight={fight} beltArt={belt.art} beltName={belt.name} onDone={() => setPhase('fight')} />}
       {phase === 'fight' && fight && <Arena fight={fight} onDone={() => setPhase('result')} />}
       {phase === 'result' && fight && belt && (
-        <Result fight={fight} beltArt={belt.art} beltName={belt.name} verified={(fight as Fight & { verified?: boolean }).verified ?? null}
+        <Result fight={fight} beltArt={belt.art} beltName={belt.name} viewer={account?.id ?? null} verified={(fight as Fight & { verified?: boolean }).verified ?? null}
           onRematch={() => { setPending({ beltId: belt.id, sentence: fight.challenger.sentence }); started.current = false; void run(belt.id, fight.challenger.sentence) }}
           onRewrite={() => navigate(`/play/belt/${belt.id}`)} />
       )}

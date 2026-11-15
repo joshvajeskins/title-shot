@@ -134,6 +134,6 @@ export function mapFightSummary(f: RawFight, names: { champion: string; challeng
 export function assembleFight(raw: RawFight, champion: Fighter, challenger: Fighter, rule: Rule, events: Fight['events'], split: TollSplit, receipts: Fight['receipts']): Fight {
   return {
     id: String(raw.id), beltId: String(raw.belt_id), champion, challenger, seed: raw.seed, rule, events, winner: raw.winner_code,
-    stateHash: raw.state_hash, split, receipts, at: nsToMs(raw.at),
+    stateHash: raw.state_hash, split, receipts, at: nsToMs(raw.at), challengerAccount: raw.challenger,
   }
 }

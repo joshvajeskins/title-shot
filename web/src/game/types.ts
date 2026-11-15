@@ -142,6 +142,8 @@ export interface Fight {
   split: TollSplit
   receipts: Receipt[]
   at: number
+  /** the account that paid the toll (it can differ from the sentence's writer on a rematch). Live chain only. */
+  challengerAccount?: string
 }
 
 export type ForgeStage = 'toll' | 'tee' | 'compile' | 'verify' | 'fight' | 'done'

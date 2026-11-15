@@ -8,10 +8,14 @@ import type { Fight } from '../game/types'
 import { near, shortHex } from '../lib/format'
 import './result.css'
 
-interface Props { fight: Fight; beltArt: string; beltName: string; onRematch: () => void; onRewrite: () => void; verified: boolean | null }
+interface Props { fight: Fight; beltArt: string; beltName: string; onRematch: () => void; onRewrite: () => void; verified: boolean | null; viewer?: string | null }
 
-export function Result({ fight, beltArt, beltName, onRematch, onRewrite, verified }: Props) {
+export function Result({ fight, beltArt, beltName, onRematch, onRewrite, verified, viewer = null }: Props) {
   const won = fight.winner === 1
+  // A shared bout link is opened by people who did not fight it: they get the result in the third person and their own
+  // shot at the belt, not "The belt is yours" or a rematch with someone else's sentence.
+  const mine = !!viewer && viewer === (fight.challengerAccount ?? fight.challenger.writer)
+  const name = fight.challenger.spec.name
   const draw = fight.winner === 2
   const [copied, setCopied] = useState(false)
   const [payoutOpen, setPayoutOpen] = useState(false)
@@ -36,20 +40,22 @@ export function Result({ fight, beltArt, beltName, onRematch, onRewrite, verifie
         </div>
         <div className="result-copy">
           <span className="eyebrow">{beltName}</span>
-          <h1 className="display print result-h">{won ? 'The belt is yours' : draw ? 'The belt stays' : 'The champion holds'}</h1>
-          {won && <p className="result-p">Your sentence now holds the belt. From the next challenge on, every challenger pays <b>your</b> corner, even the one who takes it off you, and if you still hold it when the bell rings you take the purse.</p>}
+          <h1 className="display print result-h">{won ? (mine ? 'The belt is yours' : 'New champion') : draw ? 'The belt stays' : 'The champion holds'}</h1>
+          {won && !mine && <p className="result-p">{name} took the belt. From the next challenge on, every challenger pays that corner, and if it still holds the belt when the bell rings it takes the purse.</p>}
+          {won && mine && <p className="result-p">Your sentence now holds the belt. From the next challenge on, every challenger pays <b>your</b> corner, even the one who takes it off you, and if you still hold it when the bell rings you take the purse.</p>}
           {!won && !draw && (
             <div className="result-money">
               <span className="result-coin"><Icon name="coin" size={22} /></span>
               <span><b className="num">+{near(fight.split.champion)} NEAR</b> went to {champ}'s writer. That's the toll economy: the champion is paid for being the target.</span>
             </div>
           )}
-          {draw && <p className="result-p">A draw keeps the champion. Your toll still paid the champion's corner.</p>}
+          {draw && <p className="result-p">A draw keeps the champion. {mine ? 'Your' : 'The challenger\'s'} toll still paid the champion's corner.</p>}
           <div className="result-actions">
-            {!won && <button className="btn btn-red btn-lg" onClick={onRematch}>Rematch · same sentence</button>}
-            {!won && <button className="btn btn-ghost" onClick={onRewrite}>Rewrite it</button>}
-            {won && <Link href="/play" className="btn btn-gold btn-lg">See your belt</Link>}
-            {won && <button className="btn btn-ghost" onClick={() => setPayoutOpen(true)}><Icon name="coin" size={16} /> Where should the purse go?</button>}
+            {mine && !won && <button className="btn btn-red btn-lg" onClick={onRematch}>Rematch · same sentence</button>}
+            {mine && !won && <button className="btn btn-ghost" onClick={onRewrite}>Rewrite it</button>}
+            {mine && won && <Link href="/play" className="btn btn-gold btn-lg">See your belt</Link>}
+            {!mine && <Link href={`/play/belt/${fight.beltId}`} className="btn btn-red btn-lg">Take your shot at this belt</Link>}
+            {mine && won && <button className="btn btn-ghost" onClick={() => setPayoutOpen(true)}><Icon name="coin" size={16} /> Where should the purse go?</button>}
             <button className="btn btn-ghost" onClick={share}><Icon name="copy" size={16} /> {copied ? 'Link copied' : 'Share this bout'}</button>
           </div>
         </div>
