@@ -57,6 +57,7 @@ export function Result({ fight, beltArt, beltName, onRematch, onRewrite, verifie
             {!mine && <Link href={`/play/belt/${fight.beltId}`} className="btn btn-red btn-lg">Take your shot at this belt</Link>}
             {mine && won && <button className="btn btn-ghost" onClick={() => setPayoutOpen(true)}><Icon name="coin" size={16} /> Where should the purse go?</button>}
             <button className="btn btn-ghost" onClick={share}><Icon name="copy" size={16} /> {copied ? 'Link copied' : 'Share this bout'}</button>
+            {mine && <Link href="/play/me" className="btn btn-ghost"><Icon name="user" size={16} /> See your corner</Link>}
           </div>
         </div>
       </div>

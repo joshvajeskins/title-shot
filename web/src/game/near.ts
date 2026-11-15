@@ -47,7 +47,7 @@ export class NearClient implements GameClient {
   private memo: { at: number; p: Promise<ApiState> } | null = null
   private challengeTx = new Map<number, string>()
   private fighterNames = new Map<string, string>()
-  private contract: string
+  readonly contract: string
 
   constructor(o: NearClientOptions) {
     this.contract = o.contractId

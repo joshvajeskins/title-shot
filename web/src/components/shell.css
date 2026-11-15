@@ -10,7 +10,7 @@
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
   height: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
   padding-bottom: env(safe-area-inset-bottom);
-  display: grid; grid-template-columns: repeat(6, 1fr);
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
   background: rgba(14, 13, 18, 0.88);
   backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
@@ -24,6 +24,9 @@
 }
 .tab:active { transform: scale(0.94); }
 .tab.is-active { color: var(--paper); }
+/* seven tabs on a phone: tighter labels so "Promoter" fits a 55px column at 390 */
+@media (max-width: 480px) { .tab { font-size: 9px; letter-spacing: 0.04em; } }
+.tab span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tab.is-active svg { color: var(--red); }
 
 .guest-nudge {

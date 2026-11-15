@@ -10,6 +10,7 @@ import { Landing } from './screens/Landing'
 const Enter = lazy(() => import('./screens/Enter').then((m) => ({ default: m.Enter })))
 const Corner = lazy(() => import('./screens/Corner').then((m) => ({ default: m.Corner })))
 const Bout = lazy(() => import('./screens/Bout').then((m) => ({ default: m.Bout })))
+const MyCorner = lazy(() => import('./screens/MyCorner').then((m) => ({ default: m.MyCorner })))
 const Book = lazy(() => import('./screens/Book').then((m) => ({ default: m.Book })))
 const How = lazy(() => import('./screens/How').then((m) => ({ default: m.How })))
 const Promoter = lazy(() => import('./screens/Promoter').then((m) => ({ default: m.Promoter })))
@@ -29,6 +30,7 @@ function Routes() {
   else if (belt) screen = <Corner beltId={belt.id} />
   else if (bout) return <Shell bare><Bout beltId={bout.id} /></Shell>
   else if (path === '/play/book') screen = <Book />
+  else if (path === '/play/me') screen = <MyCorner />
   else if (path === '/play/how') screen = <How />
   else if (path === '/play/promoter') screen = <Promoter />
   else if (path === '/play/proof') screen = <Proof />

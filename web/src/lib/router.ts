@@ -23,6 +23,17 @@ export function usePath(): string {
   return path
 }
 
+/** pathname + search: re-renders when only the query changes (usePath does not, e.g. /play/me?account=…). */
+export function useHref(): string {
+  const [href, setHref] = useState(location.pathname + location.search)
+  useEffect(() => {
+    const l = () => setHref(location.pathname + location.search)
+    listeners.add(l)
+    return () => { listeners.delete(l) }
+  }, [])
+  return href
+}
+
 /** match('/play/belt/:id', '/play/belt/tide') -> { id: 'tide' } */
 export function match(pattern: string, path: string): Record<string, string> | null {
   const a = pattern.split('/').filter(Boolean)

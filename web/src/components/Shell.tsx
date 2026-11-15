@@ -18,6 +18,7 @@ const NAV: { group: string; items: { href: string; label: string; icon: string; 
   { group: 'Fight night', items: [
     { href: '/play', label: 'The belts', icon: 'ring', match: (p) => p === '/play' || p.startsWith('/play/belt') || p.startsWith('/play/bout') },
     { href: '/play/book', label: 'The book', icon: 'book', match: (p) => p.startsWith('/play/book') },
+    { href: '/play/me', label: 'My corner', icon: 'user', match: (p) => p.startsWith('/play/me') },
   ] },
   { group: 'The house', items: [
     { href: '/play/promoter', label: 'The promoter', icon: 'mic', match: (p) => p.startsWith('/play/promoter') },
@@ -84,7 +85,7 @@ export function Shell({ children, bare = false }: { children: ReactNode; bare?: 
         {NAV.flatMap((g) => g.items).map((it) => (
           <Link key={it.href} href={it.href} className={`tab ${it.match(path) ? 'is-active' : ''}`}>
             <Icon name={it.icon} size={20} />
-            <span>{it.label.replace('Tale of the tape', 'Proof').replace('The ', '').replace('How it works', 'How')}</span>
+            <span>{it.label.replace('Tale of the tape', 'Proof').replace('The ', '').replace('How it works', 'How').replace('My corner', 'Corner')}</span>
           </Link>
         ))}
         <button className="tab" onClick={toggleSound} aria-pressed={!muted}>
@@ -152,7 +153,7 @@ function IdentityBlock({ open, setOpen, onSignOut, down = false }: { open: boole
       {open && (
         <div className={`identity-menu panel ${down ? 'is-down' : ''}`} role="menu">
           {wallet && <p className="identity-wallet"><span className="identity-wallet-dot" aria-hidden="true" /> NEAR wallet connected<b title={account.id}>{account.id}</b></p>}
-          <Link href="/play/book" className="identity-menu-item" role="menuitem"><Icon name="book" size={16} /> My bouts</Link>
+          <Link href="/play/me" className="identity-menu-item" role="menuitem"><Icon name="user" size={16} /> My corner</Link>
           <Link href="/play/how" className="identity-menu-item" role="menuitem"><Icon name="info" size={16} /> How the money moves</Link>
           <button className="identity-menu-item" role="menuitem" onClick={() => setPayoutOpen(true)}><Icon name="coin" size={16} /> Purse payout address</button>
           {live && wallet && <TopUp />}

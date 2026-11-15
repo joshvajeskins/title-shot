@@ -7,6 +7,7 @@ import { eth, near, plural, shortAccount, shortHex } from '../lib/format'
 import { BaseName } from './BaseName'
 import { PayoutAddressDialog } from './PayoutAddress'
 import { Icon } from './Icon'
+import { Link } from './Link'
 import './bell.css'
 
 /** The season bell: purse split into Base Sepolia payouts signed by the contract through Chain Signatures. */
@@ -67,6 +68,7 @@ export function BellCinematic({ bell, beltName, onClose }: { bell: Bell; beltNam
             })}
           </ul>
           <p className="bellc-note">Half the purse goes to whoever holds the belt at the bell; the other half is split by successful defences, at most 25% of the purse per defender, and whatever that cap leaves goes to the holder too. The season side-pot of {near(bell.sidePotYocto, 3)} NEAR went to the final holder's balance.</p>
+          {account && <Link href="/play/me" className="bellc-corner" onClick={onClose}>{bell.payouts.some((p) => p.payee === account.id) ? 'Your share is in your corner' : 'See your corner'} <Icon name="arrow" size={13} /></Link>}
         </section>
       )}
       {claiming ? <PayoutAddressDialog claim={claiming} onClose={() => setClaiming(null)} /> : null}
